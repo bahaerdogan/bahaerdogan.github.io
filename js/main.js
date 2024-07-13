@@ -60,8 +60,10 @@ $(window).on('load', function () {
 
 	// Closes responsive menu when a scroll trigger link is clicked
 	$('.js-scroll').on("click", function () {
+	setTimeout(function(){
 		$('.navbar-collapse').collapse('hide');
-	});
+	}, 1000);
+});
 
 	// Activate scrollspy to add active class to navbar items on scroll
 	$('body').scrollspy({
