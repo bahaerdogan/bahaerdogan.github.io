@@ -1281,3 +1281,73 @@ footer .credits a {
     bottom: 15px;
   }
 }
+
+.navbar {
+  background-color: #333; /* Change to your preferred color */
+  transition: background-color 0.3s ease;
+}
+
+.navbar.scrolled {
+  background-color: #333; /* Change to your preferred color */
+}
+
+/* Add this to your CSS file */
+
+.post-box {
+  margin-bottom: 30px;
+  border: 1px solid #ddd;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.post-thumb img {
+  width: 100%;
+  height: auto;
+  margin-bottom: 15px;
+}
+
+.post-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.post-date {
+  color: #999;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.post-text {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.sidebar {
+  margin-top: 30px;
+}
+
+.sidebar h3 {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  margin-bottom: 10px;
+}
+
+.sidebar ul li a {
+  color: #333;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.sidebar ul li a:hover {
+  color: #007bff;
+}
