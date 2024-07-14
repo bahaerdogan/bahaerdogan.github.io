@@ -1283,12 +1283,12 @@ footer .credits a {
 }
 
 .navbar {
-  background-color: #AFF3FB; /* Change to your preferred color */
+  background-color: #FF9B00; /* Change to your preferred color */
   transition: background-color 0.3s ease;
 }
 
 .navbar.scrolled {
-  background-color: #AFF3FB; /* Change to your preferred color */
+  background-color: #FF9B00; /* Change to your preferred color */
 }
 
 /* Add this to your CSS file */
