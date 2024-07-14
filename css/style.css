@@ -1293,6 +1293,10 @@ footer .credits a {
 
 /* Add this to your CSS file */
 
+.navbar-b, .navbar-trans {
+  background-color: transparent !important;
+}
+
 .post-box {
   margin-bottom: 30px;
   border: 1px solid #ddd;
