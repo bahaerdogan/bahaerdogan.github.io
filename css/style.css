@@ -1286,12 +1286,12 @@ footer .credits a {
   background-color: #BDBCAF;  Change to your preferred color 
    transition: background-color 0.3s ease; 
 }
-
+*/
 .navbar.scrolled {
-  background-color: #BDBCAF;  Change to your preferred color 
+  background-color: #e1e1dd;  Change to your preferred color 
 } */
 
-/* Add this to your CSS file */
+/* Add this to your CSS file 
 
 .navbar-b, .navbar-trans {
   background-color: transparent !important;
