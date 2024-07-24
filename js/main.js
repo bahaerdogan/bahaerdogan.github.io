@@ -237,3 +237,34 @@
 	});
 
 })(jQuery);
+
+<script src="lib/jquery/jquery.min.js"></script>
+<script src="lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Custom Script -->
+<script>
+  $(document).ready(function() {
+    // Smooth scrolling
+    $('a.js-scroll[href*="#"]:not([href="#"])').click(function() {
+      if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+        var target = $(this.hash);
+        target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+        if (target.length) {
+          $('html, body').animate({
+            scrollTop: target.offset().top
+          }, 1000);
+          return false;
+        }
+      }
+    });
+
+    // Navbar background color change on scroll
+    $(window).scroll(function() {
+      if ($("#mainNav").offset().top > 50) {
+        $("#mainNav").removeClass("navbar-trans");
+      } else {
+        $("#mainNav").addClass("navbar-trans");
+      }
+    });
+  });
+</script>
