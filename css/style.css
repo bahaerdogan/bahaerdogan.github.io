@@ -1355,3 +1355,116 @@ footer .credits a {
 .sidebar ul li a:hover {
   color: #007bff;
 }
+
+
+
+/* Ek CSS dosyasına bu kısımları ekleyin */
+
+/* Sidebar widgetlerinin düzenlenmesi */
+.widget-sidebar {
+  margin-bottom: 30px;
+}
+
+/* Sidebar başlıklarının düzenlenmesi */
+.sidebar-title {
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #333;
+}
+
+/* Sidebar içeriklerinin düzenlenmesi */
+.sidebar-content ul.list-sidebar {
+  padding: 0;
+  list-style: none;
+}
+
+.sidebar-content ul.list-sidebar li {
+  margin-bottom: 10px;
+}
+
+/* Arama butonunun düzenlenmesi */
+.sidebar-search .input-group {
+  display: flex;
+}
+
+.sidebar-search .form-control {
+  flex: 1;
+}
+
+.sidebar-search .btn-search {
+  background-color: #333;
+  color: #fff;
+}
+
+/* Yorum kutusunun düzenlenmesi */
+.box-comments {
+  margin-top: 30px;
+}
+
+.title-comments {
+  margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.list-comments {
+  list-style: none;
+  padding: 0;
+}
+
+.list-comments li {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.comment-avatar {
+  margin-right: 20px;
+}
+
+.comment-avatar img {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+}
+
+.comment-details {
+  flex: 1;
+}
+
+.comment-author {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+/* Yorum formunun düzenlenmesi */
+.form-comments {
+  margin-top: 30px;
+}
+
+.title-left {
+  margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.form-mf .form-group {
+  margin-bottom: 20px;
+}
+
+.form-mf .input-mf {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.form-mf .button {
+  background-color: #333;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+}
