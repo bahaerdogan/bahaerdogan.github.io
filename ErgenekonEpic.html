@@ -166,46 +166,53 @@
 
 
 
-            <div class="form-comments">
+            <div class="box-comments">
               <div class="title-box-2">
-                <h3 class="title-left">Leave a Reply</h3>
+                <h4 class="title-comments title-left">Comments</h4>
               </div>
-              <form id="contact-form">
-                <div class="row">
-                  <div class="col-md-6 mb-3">
-                    <div class="form-group">
-                      <input type="text" class="form-control" name="name" placeholder="Your Name" required>
+              <ul class="list-comments">
+                <div class="form-comments">
+                  <div class="title-box-2">
+                    <h3 class="title-left">Leave a Reply</h3>
+                  </div>
+                  <form id="contact-form">
+                    <div class="row">
+                      <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                          <input type="text" class="form-control" name="name" placeholder="Your Name" required>
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                          <input type="email" class="form-control" name="email" placeholder="Your Email" required>
+                        </div>
+                      </div>
+                      <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                          <textarea class="form-control" name="message" rows="5" placeholder="Your Comment" required></textarea>
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <button type="submit" class="btn btn-primary">Send</button>
+                      </div>
                     </div>
-                  </div>
-                  <div class="col-md-6 mb-3">
-                    <div class="form-group">
-                      <input type="email" class="form-control" name="email" placeholder="Your Email" required>
-                    </div>
-                  </div>
-                  <div class="col-md-12 mb-3">
-                    <div class="form-group">
-                      <textarea class="form-control" name="message" rows="5" placeholder="Your Comment" required></textarea>
-                    </div>
-                  </div>
-                  <div class="col-md-12">
-                    <button type="submit" class="btn btn-primary">Send</button>
-                  </div>
+                  </form>
                 </div>
-              </form>
-            </div>
-          
-            <script type="text/javascript">
-              document.getElementById('contact-form').addEventListener('submit', function(event) {
-                event.preventDefault(); // Formun varsayılan gönderme işlemini durdur
-                emailjs.sendForm('sr9_9CUgd0L641ObN', 'template_bha2val', this)
-                  .then(function() {
-                    alert('Message sent successfully!');
-                  }, function(error) {
-                    alert('Failed to send the message. Error: ' + error);
+            
+                <script type="text/javascript">
+                  document.getElementById('contact-form').addEventListener('submit', function(event) {
+                    event.preventDefault(); // Prevent default form submission
+                    emailjs.sendForm('sr9_9CUgd0L641ObN', 'template_bha2val', this)
+                      .then(function() {
+                        alert('Message sent successfully!');
+                      }, function(error) {
+                        alert('Failed to send the message. Error: ' + error);
+                      });
                   });
-              });
-            </script>
-          </body>
+                </script>
+              </ul>
+            </div>
+            
             
 
 
