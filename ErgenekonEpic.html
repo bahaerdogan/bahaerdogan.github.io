@@ -169,24 +169,25 @@
            
             <form id="form">
               <div class="field">
-                <label for="from_name">From Name</label>
-                <input type="text" name="from_name" id="from_name" required>
+                <label for="first_name">İsim</label>
+                <input type="text" name="first_name" id="first_name" required>
               </div>
               <div class="field">
-                <label for="to_name">To Name</label>
-                <input type="text" name="to_name" id="to_name" required>
+                <label for="last_name">Soyisim</label>
+                <input type="text" name="last_name" id="last_name" required>
               </div>
               <div class="field">
-                <label for="message">Message</label>
-                <input type="text" name="message" id="message" required>
+                <label for="email">E-posta</label>
+                <input type="email" name="email" id="email" required>
               </div>
               <div class="field">
-                <label for="reply_to">Reply To</label>
-                <input type="email" name="reply_to" id="reply_to" required>
+                <label for="response">Gönderilecek Cevap</label>
+                <input type="text" name="response" id="response" required>
               </div>
             
-              <input type="submit" id="button" value="Send Email">
+              <input type="submit" id="button" value="E-posta Gönder">
             </form>
+            
             
             <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
             <script type="text/javascript">
