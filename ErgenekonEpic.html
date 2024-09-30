@@ -166,7 +166,7 @@
               document.getElementById('contact-form').addEventListener('submit', function(event) {
               event.preventDefault(); // Formun varsayılan gönderimini engelle
 
-              emailjs.sendForm('sr9_9CUgd0L641ObN', 'template_bha2val', this).then(function(response) {
+              emailjs.sendForm('service_lhjdfqw', 'template_bha2val', this).then(function(response) {
               alert('Your message has been sent successfully!');
               }, function(error) {
              alert('There was an error sending your message: ' + JSON.stringify(error));
