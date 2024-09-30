@@ -164,13 +164,15 @@
             </form>
             <script>
               document.getElementById('contact-form').addEventListener('submit', function(event) {
-                event.preventDefault();
-                emailjs.sendForm('sr9_9CUgd0L641ObN', 'template_bha2val', this).then(function() {
-                  alert('Your message has been sent!');
-                }, function(error) {
-                  alert('Error sending message: ' + JSON.stringify(error));
-                });
+              event.preventDefault(); // Formun varsayılan gönderimini engelle
+
+              emailjs.sendForm('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', this).then(function(response) {
+              alert('Your message has been sent successfully!');
+              }, function(error) {
+             alert('There was an error sending your message: ' + JSON.stringify(error));
               });
+           });
+
             </script>
           </div>
         </aside>
