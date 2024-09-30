@@ -148,33 +148,30 @@
           <div class="widget">
             <h5 class="widget-title">Contact</h5>
             <form id="contact-form">
-              <div class="form-group">
-                <label for="name">Name</label>
-                <input type="text" class="form-control" id="name" required>
-              </div>
-              <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" class="form-control" id="email" required>
-              </div>
-              <div class="form-group">
-                <label for="message">Message</label>
-                <textarea class="form-control" id="message" rows="5" required></textarea>
-              </div>
-              <button type="submit" class="btn btn-primary">Send Message</button>
+              <input type="text" name="to_name" placeholder="Recipient's Name" required />
+              <input type="text" name="from_name" placeholder="Your Name" required />
+              <textarea name="message" placeholder="Your Message" required></textarea>
+              <button type="submit">Send</button>
             </form>
+            
             <script>
-              document.getElementById('contact-form').addEventListener('submit', function(event) {
-              event.preventDefault(); // Formun varsayılan gönderimini engelle
-
-              emailjs.sendForm('service_lhjdfqw', 'template_bha2val', this).then(function(response) {
-              alert('Your message has been sent successfully!');
-              }, function(error) {
-             alert('There was an error sending your message: ' + JSON.stringify(error));
-              });
-           });
-
+            document.getElementById('contact-form').addEventListener('submit', function(event) {
+                event.preventDefault(); // Varsayılan form gönderimini engelle
+            
+                // Form verilerini al
+                const formData = new FormData(this);
+                console.log('Form Data:', Object.fromEntries(formData));
+            
+                // EmailJS ile gönder
+                emailjs.sendForm('sr9_9CUgd0L641ObN', 'template_bha2val', this)
+                .then(function() {
+                    console.log('SUCCESS! Email sent.');
+                }, function(error) {
+                    console.log('FAILED...', error);
+                });
+            });
             </script>
-          </div>
+                      </div>
         </aside>
       </div>
     </div>
