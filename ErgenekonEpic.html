@@ -42,12 +42,17 @@
   <!-- Main Stylesheet File -->
   <link href="css/style.css" rel="stylesheet">
 
-  <!-- =======================================================
-    Theme Name: DevFolio
-    Theme URL: https://bootstrapmade.com/devfolio-bootstrap-portfolio-html-template/
-    Author: BootstrapMade.com
-    License: https://bootstrapmade.com/license/
-  ======================================================= -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Baha Erdoğan Blog</title>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2.6.4/dist/email.min.js"></script>
+  <script type="text/javascript">
+    (function() {
+      emailjs.init("sr9_9CUgd0L641ObN"); // EmailJS public key (user ID)
+    })();
+  </script>
+
+
 </head>
 
 <body>
@@ -165,67 +170,45 @@
               <h4 class="title-comments title-left">Comments</h4>
             </div>
             <ul class="list-comments">
-              <!-- <li>
-                <div class="comment-avatar">
-                  <img src="img/testimonial-2.jpg" alt="">
+              <div class="form-comments">
+                <div class="title-box-2">
+                  <h3 class="title-left">Leave a Reply</h3>
                 </div>
-                <div class="comment-details">
-                  <h4 class="comment-author">Oliver Colmenares</h4>
-                  <span>18 Sep 2017</span>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores reprehenderit, provident cumque
-                    ipsam temporibus maiores
-                    quae natus libero optio, at qui beatae ducimus placeat debitis voluptates amet corporis.
-                  </p>
-                  <a href="3">Reply</a>
-                </div>
-              </li> -->
-              <!-- <li>
-                <div class="comment-avatar">
-                  <img src="img/testimonial-4.jpg" alt="">
-                </div>
-                <div class="comment-details">
-                  <h4 class="comment-author">Carmen Vegas</h4>
-                  <span>18 Sep 2017</span>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores reprehenderit, provident cumque
-                    ipsam temporibus maiores
-                    quae natus libero optio, at qui beatae ducimus placeat debitis voluptates amet corporis,
-                    veritatis deserunt.
-                  </p>
-                  <a href="3">Reply</a>
-                </div>
-              </li> -->
-              <!-- <li class="comment-children">
-                <div class="comment-avatar">
-                  <img src="img/testimonial-2.jpg" alt="">
-                </div>
-                <div class="comment-details">
-                  <h4 class="comment-author">Oliver Colmenares</h4>
-                  <span>18 Sep 2017</span>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores reprehenderit, provident cumque
-                    ipsam temporibus maiores
-                    quae.
-                  </p>
-                  <a href="3">Reply</a>
-                </div>
-              </li> -->
-              <!-- <li>
-                <div class="comment-avatar">
-                  <img src="img/testimonial-2.jpg" alt="">
-                </div>
-                <div class="comment-details">
-                  <h4 class="comment-author">Oliver Colmenares</h4>
-                  <span>18 Sep 2017</span>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores reprehenderit, provident cumque
-                    ipsam temporibus maiores
-                    quae natus libero optio.
-                  </p>
-                  <a href="3">Reply</a>
-                </div>
-              </li> -->
+                <form id="contact-form">
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <div class="form-group">
+                        <input type="text" class="form-control" name="name" placeholder="Your Name" required>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <div class="form-group">
+                        <input type="email" class="form-control" name="email" placeholder="Your Email" required>
+                      </div>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                      <div class="form-group">
+                        <textarea class="form-control" name="message" rows="5" placeholder="Your Comment" required></textarea>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <button type="submit" class="btn btn-primary">Send</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            
+              <script type="text/javascript">
+                document.getElementById('contact-form').addEventListener('submit', function(event) {
+                  event.preventDefault(); // Formun varsayılan gönderme işlemini durdur
+                  emailjs.sendForm('sr9_9CUgd0L641ObN', 'template_bha2val', this)
+                    .then(function() {
+                      alert('Message sent successfully!');
+                    }, function(error) {
+                      alert('Failed to send the message. Error: ' + error);
+                    });
+                });
+              </script>
             </ul>
           </div>
           <div class="form-comments">
