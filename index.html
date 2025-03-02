@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <title>Bahaerdogan</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="" name="keywords">
-    <meta content="" name="description">
+    <meta content="Baha Erdoğan, Computer Engineer, AI Enthusiast, Software Developer, Technology Professional" name="keywords">
+    <meta content="Personal portfolio of Baha Erdoğan - Computer Engineer specializing in AI, software development, and technology innovation." name="description">
 
 
     <!-- Google tag (gtag.js) -->
@@ -22,7 +22,7 @@
     <!-- Open Graph Meta Tags for LinkedIn -->
     <meta property="og:title" content="Baha Erdoğan">
     <meta property="og:description" content="Baha Erdoğan - Computer Engineer, AI Enthusiast, Entrepreneur. Explore my professional journey and projects.">
-    <meta property="og:image" content="https://imgur.com/EsFTJMa"> <!-- Replace with your image URL -->
+    <meta property="og:image" content="https://bahaerdogan.com/img/profile.jpg">
     <meta property="og:url" content="https://bahaerdogan.com"> <!-- Replace with your website URL -->
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Bahaerdogan">
@@ -33,7 +33,7 @@
   <link href="img/favicon.png" rel="icon">
   <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
 
-  <!-- Bootstrap CSS File -->
+  <!-- Bootstrap CSS File -->     
   <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
   <!-- Libraries CSS Files -->
@@ -466,31 +466,31 @@
                   </h5>
                 </div>
                 <div>
-                    <form action="" method="post" role="form" class="contactForm">
-                    <div id="sendmessage">Your message has been sent. Thank you!</div>
-                    <div id="errormessage"></div>
+                    <form action="https://formspree.io/f/your-formspree-id" method="POST" class="contactForm">
+                    <div id="sendmessage" class="alert alert-success d-none">Your message has been sent. Thank you!</div>
+                    <div id="errormessage" class="alert alert-danger d-none"></div>
                     <div class="row">
                       <div class="col-md-12 mb-3">
                         <div class="form-group">
-                          <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" data-rule="minlen:4" data-msg="Please enter at least 4 chars" />
+                          <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required minlength="4" />
                           <div class="validation"></div>
                         </div>
                       </div>
                       <div class="col-md-12 mb-3">
                         <div class="form-group">
-                          <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" data-rule="email" data-msg="Please enter a valid email" />
+                          <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required />
                           <div class="validation"></div>
                         </div>
                       </div>
                       <div class="col-md-12 mb-3">
                           <div class="form-group">
-                            <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" data-rule="minlen:4" data-msg="Please enter at least 8 chars of subject" />
+                            <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required minlength="4" />
                             <div class="validation"></div>
                           </div>
                       </div>
                       <div class="col-md-12 mb-3">
                         <div class="form-group">
-                          <textarea class="form-control" name="message" rows="5" data-rule="required" data-msg="Please write something for us" placeholder="Message"></textarea>
+                          <textarea class="form-control" name="message" rows="5" required placeholder="Message"></textarea>
                           <div class="validation"></div>
                         </div>
                       </div>
