@@ -262,6 +262,36 @@
   </section>
   <!--/ Section Blog-Single End /-->
 
+  <!-- Leave a Reply Section -->
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h3 class="mb-4 title-left">Leave a Reply</h3>
+            <form id="comment-form" class="comment-form">
+              <div id="comment-success" class="alert alert-success d-none">Your comment has been submitted. Thank you!</div>
+              <div id="comment-error" class="alert alert-danger d-none">There was an error submitting your comment. Please try again.</div>
+              <div class="form-group mb-3">
+                <label for="comment-name">Name *</label>
+                <input type="text" class="form-control input-mf" id="comment-name" name="from_name" required>
+              </div>
+              <div class="form-group mb-3">
+                <label for="comment-email">Email *</label>
+                <input type="email" class="form-control input-mf" id="comment-email" name="from_email" required>
+              </div>
+              <div class="form-group mb-3">
+                <label for="comment-text">Comment *</label>
+                <textarea class="form-control input-mf" id="comment-text" name="message" rows="5" required></textarea>
+              </div>
+              <button type="submit" class="button button-a button-big button-rouded">Submit Comment</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Comments Display Section -->
   <div class="container mt-5 mb-5">
     <div class="row">
