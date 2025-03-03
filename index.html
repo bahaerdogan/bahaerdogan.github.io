@@ -474,19 +474,19 @@
                   </h5>
                 </div>
                 <div>
-                    <form action="https://formspree.io/f/your-formspree-id" method="POST" class="contactForm">
+                    <form id="contact-form" class="contactForm">
                     <div id="sendmessage" class="alert alert-success d-none">Your message has been sent. Thank you!</div>
                     <div id="errormessage" class="alert alert-danger d-none"></div>
                     <div class="row">
                       <div class="col-md-12 mb-3">
                         <div class="form-group">
-                          <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required minlength="4" />
+                          <input type="text" name="from_name" class="form-control" id="name" placeholder="Your Name" required minlength="4" />
                           <div class="validation"></div>
                         </div>
                       </div>
                       <div class="col-md-12 mb-3">
                         <div class="form-group">
-                          <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required />
+                          <input type="email" class="form-control" name="from_email" id="email" placeholder="Your Email" required />
                           <div class="validation"></div>
                         </div>
                       </div>
@@ -498,7 +498,7 @@
                       </div>
                       <div class="col-md-12 mb-3">
                         <div class="form-group">
-                          <textarea class="form-control" name="message" rows="5" required placeholder="Message"></textarea>
+                          <textarea class="form-control" name="message" id="message" rows="5" required placeholder="Message"></textarea>
                           <div class="validation"></div>
                         </div>
                       </div>
@@ -571,7 +571,7 @@
 <script src="lib/lightbox/js/lightbox.min.js"></script>
 <script src="lib/typed/typed.min.js"></script>
 <!-- Contact Form JavaScript File -->
-<script src="contactform/contactform.js"></script>
+<script src="js/contact.js"></script>
 
 <!-- Template Main Javascript File -->
 <script src="js/main.js"></script>
