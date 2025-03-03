@@ -236,11 +236,11 @@
           <div class="widget-sidebar sidebar-search">
             <h5 class="sidebar-title">Search</h5>
             <div class="sidebar-content">
-              <form>
+              <form id="search-form" onsubmit="return handleSearch(event)">
                 <div class="input-group">
-                  <input type="text" class="form-control" placeholder="Search for..." aria-label="Search for...">
+                  <input type="text" id="search-input" class="form-control" placeholder="Search for..." aria-label="Search for...">
                   <span class="input-group-btn">
-                    <button class="btn btn-secondary btn-search" type="button">
+                    <button class="btn btn-secondary btn-search" type="submit">
                       <span class="ion-android-search"></span>
                     </button>
                   </span>
@@ -514,5 +514,40 @@
 
   <!-- Template Main Javascript File -->
   <script src="js/main.js"></script>
+
+  <script>
+    const blogPosts = [
+      { title: "One of the precious metals, Data", url: "PreciousMetalData.html", keywords: ["data", "technology", "ai", "artificial intelligence", "precious"] },
+      { title: "Why is knowing history important?", url: "WhyToLearnHistory.html", keywords: ["history", "learning", "knowledge", "importance"] },
+      { title: "The Role of Artificial Intelligence in Defense Technologies", url: "AI-Defense.html", keywords: ["ai", "artificial intelligence", "defense", "technology", "security"] },
+      { title: "Are AI Models Making Us Earn Money We Don't Deserve?", url: "DeservingMoney.html", keywords: ["ai", "money", "work", "technology", "earnings"] },
+      { title: "Ergenekon epic", url: "ErgenekonEpic.html", keywords: ["ergenekon", "epic", "history", "story"] },
+      { title: "Mac shortcuts guide", url: "MacShortcuts.html", keywords: ["mac", "shortcuts", "guide", "productivity"] }
+    ];
+
+    function handleSearch(event) {
+      event.preventDefault();
+      const searchTerm = document.getElementById('search-input').value.toLowerCase();
+      
+      if (!searchTerm.trim()) {
+        return false;
+      }
+
+      const results = blogPosts.filter(post => {
+        const titleMatch = post.title.toLowerCase().includes(searchTerm);
+        const keywordMatch = post.keywords.some(keyword => keyword.includes(searchTerm));
+        return titleMatch || keywordMatch;
+      });
+
+      if (results.length > 0) {
+        // Redirect to the first matching result
+        window.location.href = results[0].url;
+      } else {
+        alert('No matching posts found.');
+      }
+
+      return false;
+    }
+  </script>
 </body>
 </html>
