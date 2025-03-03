@@ -251,12 +251,11 @@
               const email = document.getElementById('email').value;
               const message = document.getElementById('message').value;
               
-              emailjs.send("service_k0om5bc", "template_zt7h4xj", {
+              emailjs.send('service_lhjdfqw', 'template_bha2val', {
                 from_name: name,
                 from_email: email,
                 message: message,
-                to_name: "Baha",
-                page_url: window.location.href
+                blog_title: "Are AI Models Making Us Earn Money We Don't Deserve?"
               }).then(
                 function() {
                   document.getElementById('comment-success').classList.remove('d-none');
