@@ -43,6 +43,14 @@
   <!-- Main Stylesheet File -->
   <link href="css/style.css" rel="stylesheet">
 
+  <!-- EmailJS Library -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script type="text/javascript">
+    (function() {
+      emailjs.init("sr9_9CUgd0L641ObN");
+    })();
+  </script>
+
   <!-- =======================================================
     Theme Name: DevFolio
     Theme URL: https://bootstrapmade.com/devfolio-bootstrap-portfolio-html-template/
@@ -89,7 +97,7 @@
   <!--/ Nav End /-->
 
   <!--/ Intro Skew Star /-->
-  <div class="intro intro-single route bg-image" style="background-image: url(img/image (21).png)">
+  <div class="intro intro-single route bg-image" style="background-image: url('img/image\ \(21\).png')">
     <div class="overlay-mf"></div>
     <div class="intro-content display-table">
       <div class="table-cell">
@@ -375,7 +383,7 @@
   <!--/ Section Blog-Single End /-->
 
   <!--/ Section Contact-Footer Star /-->
-  <section class="paralax-mf footer-paralax bg-image sect-mt4 route" style="background-image: url(img/overlay-bg.jpg)">
+  <section class="paralax-mf footer-paralax bg-image sect-mt4 route" style="background-image: url('img/overlay-bg.jpg')">
     <div class="overlay-mf"></div>
     <footer>
       <div class="container">
