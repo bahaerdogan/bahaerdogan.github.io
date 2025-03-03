@@ -154,44 +154,6 @@
             So, let's take a lesson from the donkeys and not forget to learn history. By doing so, we can improve our decision-making abilities, gain valuable insights into the world around us, and develop a deeper appreciation for the rich tapestry of human history.        </p>
             </div>
           </div>
-
-          <!-- Leave a Reply Section -->
-          <div class="container mt-5">
-            <div class="row">
-              <div class="col-md-8 offset-md-2">
-                <h3 class="mb-4">Leave a Reply</h3>
-                <form id="comment-form" class="comment-form">
-                  <div id="comment-success" class="alert alert-success d-none">Your comment has been submitted. Thank you!</div>
-                  <div id="comment-error" class="alert alert-danger d-none">There was an error submitting your comment. Please try again.</div>
-                  <div class="form-group mb-3">
-                    <label for="comment-name">Name *</label>
-                    <input type="text" class="form-control" id="comment-name" name="from_name" required>
-                  </div>
-                  <div class="form-group mb-3">
-                    <label for="comment-email">Email *</label>
-                    <input type="email" class="form-control" id="comment-email" name="from_email" required>
-                  </div>
-                  <div class="form-group mb-3">
-                    <label for="comment-text">Comment *</label>
-                    <textarea class="form-control" id="comment-text" name="message" rows="5" required></textarea>
-                  </div>
-                  <button type="submit" class="btn btn-primary">Submit Comment</button>
-                </form>
-              </div>
-            </div>
-          </div>
-
-          <!-- Comments Display Section -->
-          <div class="container mt-5">
-            <div class="row">
-              <div class="col-md-8 offset-md-2">
-                <h3 class="mb-4">Comments</h3>
-                <div id="comments-container">
-                  <!-- Comments will be displayed here -->
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
         <div class="col-md-4">
           <div class="widget-sidebar sidebar-search">
@@ -296,6 +258,52 @@
   </section>
   <!--/ Section Blog-Single End /-->
 
+  <!-- Leave a Reply Section -->
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h3 class="mb-4 title-left">Leave a Reply</h3>
+            <form id="comment-form" class="comment-form">
+              <div id="comment-success" class="alert alert-success d-none">Your comment has been submitted. Thank you!</div>
+              <div id="comment-error" class="alert alert-danger d-none">There was an error submitting your comment. Please try again.</div>
+              <div class="form-group mb-3">
+                <label for="comment-name">Name *</label>
+                <input type="text" class="form-control input-mf" id="comment-name" name="from_name" required>
+              </div>
+              <div class="form-group mb-3">
+                <label for="comment-email">Email *</label>
+                <input type="email" class="form-control input-mf" id="comment-email" name="from_email" required>
+              </div>
+              <div class="form-group mb-3">
+                <label for="comment-text">Comment *</label>
+                <textarea class="form-control input-mf" id="comment-text" name="message" rows="5" required></textarea>
+              </div>
+              <button type="submit" class="button button-a button-big button-rouded">Submit Comment</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Comments Display Section -->
+  <div class="container mt-5 mb-5">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h3 class="mb-4 title-left">Comments</h3>
+            <div id="comments-container">
+              <!-- Comments will be displayed here -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!--/ Section Contact-Footer Star /-->
   <section class="paralax-mf footer-paralax bg-image sect-mt4 route" style="background-image: url('img/overlay-bg.jpg')">
     <div class="overlay-mf"></div>
@@ -368,6 +376,12 @@
           const date = new Date().toLocaleDateString();
           const blogTitle = "Why is knowing history important?"; // Update for each blog post
           
+          // Show loading state
+          const submitButton = commentForm.querySelector('button[type="submit"]');
+          const originalButtonText = submitButton.textContent;
+          submitButton.textContent = "Submitting...";
+          submitButton.disabled = true;
+          
           // Prepare email template parameters
           const templateParams = {
             from_name: name,
@@ -390,10 +404,19 @@
               
               // Reset form
               commentForm.reset();
+              
+              // Reset button
+              submitButton.textContent = originalButtonText;
+              submitButton.disabled = false;
             })
             .catch(function(error) {
               console.error('EmailJS Error:', error);
+              errorMessage.textContent = "There was an error submitting your comment: " + error.text;
               errorMessage.classList.remove('d-none');
+              
+              // Reset button
+              submitButton.textContent = originalButtonText;
+              submitButton.disabled = false;
             });
         });
       }
