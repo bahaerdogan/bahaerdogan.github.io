@@ -172,74 +172,6 @@
             </div>
           </div>
 
-          <div class="box-comments">
-            <div class="title-box-2">
-              <h4 class="title-comments title-left">Comments</h4>
-            </div>
-            <ul class="list-comments">
-              <!-- <li>
-                <div class="comment-avatar">
-                  <img src="img/testimonial-2.jpg" alt="">
-                </div>
-                <div class="comment-details">
-                  <h4 class="comment-author">Oliver Colmenares</h4>
-                  <span>18 Sep 2017</span>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores reprehenderit, provident cumque
-                    ipsam temporibus maiores
-                    quae natus libero optio, at qui beatae ducimus placeat debitis voluptates amet corporis.
-                  </p>
-                  <a href="3">Reply</a>
-                </div>
-              </li> -->
-              <!-- <li>
-                <div class="comment-avatar">
-                  <img src="img/testimonial-4.jpg" alt="">
-                </div>
-                <div class="comment-details">
-                  <h4 class="comment-author">Carmen Vegas</h4>
-                  <span>18 Sep 2017</span>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores reprehenderit, provident cumque
-                    ipsam temporibus maiores
-                    quae natus libero optio, at qui beatae ducimus placeat debitis voluptates amet corporis,
-                    veritatis deserunt.
-                  </p>
-                  <a href="3">Reply</a>
-                </div>
-              </li> -->
-              <!-- <li class="comment-children">
-                <div class="comment-avatar">
-                  <img src="img/testimonial-2.jpg" alt="">
-                </div>
-                <div class="comment-details">
-                  <h4 class="comment-author">Oliver Colmenares</h4>
-                  <span>18 Sep 2017</span>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores reprehenderit, provident cumque
-                    ipsam temporibus maiores
-                    quae.
-                  </p>
-                  <a href="3">Reply</a>
-                </div>
-              </li> -->
-              <!-- <li>
-                <div class="comment-avatar">
-                  <img src="img/testimonial-2.jpg" alt="">
-                </div>
-                <div class="comment-details">
-                  <h4 class="comment-author">Oliver Colmenares</h4>
-                  <span>18 Sep 2017</span>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores reprehenderit, provident cumque
-                    ipsam temporibus maiores
-                    quae natus libero optio.
-                  </p>
-                  <a href="3">Reply</a>
-                </div>
-              </li> -->
-            </ul>
-          </div>
           <div class="form-comments">
             <div class="title-box-2">
               <h3 class="title-left">
@@ -252,26 +184,58 @@
               <div class="row">
                 <div class="col-md-6 mb-3">
                   <div class="form-group">
-                    <input type="text" class="form-control input-mf" id="comment-name" placeholder="Name *" required>
+                    <input type="text" class="form-control input-mf" id="name" name="name" placeholder="Name *" required>
                   </div>
                 </div>
                 <div class="col-md-6 mb-3">
                   <div class="form-group">
-                    <input type="email" class="form-control input-mf" id="comment-email" placeholder="Email *" required>
+                    <input type="email" class="form-control input-mf" id="email" name="email" placeholder="Email *" required>
                   </div>
                 </div>
                 <div class="col-md-12 mb-3">
                   <div class="form-group">
-                    <textarea id="comment-text" class="form-control input-mf" placeholder="Comment *" name="message"
-                      cols="45" rows="8" required></textarea>
+                    <textarea id="message" class="form-control input-mf" placeholder="Comment *" name="message" cols="45" rows="8" required></textarea>
                   </div>
                 </div>
                 <div class="col-md-12">
-                  <button type="submit" class="button button-a button-big button-rouded">Submit Comment</button>
+                  <button type="submit" class="button button-a button-big button-rouded">Send Message</button>
                 </div>
               </div>
             </form>
           </div>
+
+          <div id="comments-display">
+            <!-- Comments will be displayed here -->
+          </div>
+
+          <script>
+            document.getElementById('comment-form').addEventListener('submit', function(event) {
+              event.preventDefault();
+              
+              const name = document.getElementById('name').value;
+              const email = document.getElementById('email').value;
+              const message = document.getElementById('message').value;
+              
+              emailjs.send("service_k0om5bc", "template_zt7h4xj", {
+                from_name: name,
+                from_email: email,
+                message: message,
+                to_name: "Baha",
+                page_url: window.location.href
+              }).then(
+                function() {
+                  document.getElementById('comment-success').classList.remove('d-none');
+                  document.getElementById('comment-error').classList.add('d-none');
+                  document.getElementById('comment-form').reset();
+                },
+                function(error) {
+                  document.getElementById('comment-error').classList.remove('d-none');
+                  document.getElementById('comment-success').classList.add('d-none');
+                  console.error("Error:", error);
+                }
+              );
+            });
+          </script>
         </div>
         <div class="col-md-4">
           <div class="widget-sidebar sidebar-search">
@@ -382,52 +346,6 @@
   </section>
   <!--/ Section Blog-Single End /-->
 
-  <!-- Leave a Reply Section -->
-  <div class="container mt-5">
-    <div class="row">
-      <div class="col-md-8 offset-md-2">
-        <div class="card shadow-sm">
-          <div class="card-body">
-            <h3 class="mb-4 title-left">Leave a Reply</h3>
-            <form id="comment-form" class="comment-form">
-              <div id="comment-success" class="alert alert-success d-none">Your comment has been submitted. Thank you!</div>
-              <div id="comment-error" class="alert alert-danger d-none">There was an error submitting your comment. Please try again.</div>
-              <div class="form-group mb-3">
-                <label for="comment-name">Name *</label>
-                <input type="text" class="form-control input-mf" id="comment-name" name="from_name" required>
-              </div>
-              <div class="form-group mb-3">
-                <label for="comment-email">Email *</label>
-                <input type="email" class="form-control input-mf" id="comment-email" name="from_email" required>
-              </div>
-              <div class="form-group mb-3">
-                <label for="comment-text">Comment *</label>
-                <textarea class="form-control input-mf" id="comment-text" name="message" rows="5" required></textarea>
-              </div>
-              <button type="submit" class="button button-a button-big button-rouded">Submit Comment</button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Comments Display Section -->
-  <div class="container mt-5 mb-5">
-    <div class="row">
-      <div class="col-md-8 offset-md-2">
-        <div class="card shadow-sm">
-          <div class="card-body">
-            <h3 class="mb-4 title-left">Comments</h3>
-            <div id="comments-container">
-              <!-- Comments will be displayed here -->
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!--/ Section Contact-Footer Star /-->
   <section class="paralax-mf footer-paralax bg-image sect-mt4 route" style="background-image: url('img/overlay-bg.jpg')">
     <div class="overlay-mf"></div>
@@ -473,113 +391,6 @@
 
   <!-- Template Main Javascript File -->
   <script src="js/main.js"></script>
-
-  <!-- JavaScript for handling comments -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const commentForm = document.getElementById('comment-form');
-      const successMessage = document.getElementById('comment-success');
-      const errorMessage = document.getElementById('comment-error');
-      const commentsContainer = document.getElementById('comments-container');
-      
-      // Load existing comments from localStorage
-      loadComments();
-      
-      if (commentForm) {
-        commentForm.addEventListener('submit', function(event) {
-          event.preventDefault();
-          
-          // Hide messages
-          successMessage.classList.add('d-none');
-          errorMessage.classList.add('d-none');
-          
-          // Get form data
-          const name = document.getElementById('comment-name').value;
-          const email = document.getElementById('comment-email').value;
-          const comment = document.getElementById('comment-text').value;
-          const date = new Date().toLocaleDateString();
-          const blogTitle = "One of the precious metals, Data"; // Update for each blog post
-          
-          // Show loading state
-          const submitButton = commentForm.querySelector('button[type="submit"]');
-          const originalButtonText = submitButton.textContent;
-          submitButton.textContent = "Submitting...";
-          submitButton.disabled = true;
-          
-          // Prepare email template parameters
-          const templateParams = {
-            from_name: name,
-            from_email: email,
-            message: comment,
-            blog_title: blogTitle
-          };
-          
-          // Send email using EmailJS
-          emailjs.send('service_lhjdfqw', 'template_bha2val', templateParams, 'sr9_9CUgd0L641ObN')
-            .then(function() {
-              // Show success message
-              successMessage.classList.remove('d-none');
-              
-              // Save comment to localStorage
-              saveComment(name, comment, date);
-              
-              // Display the new comment
-              displayComment(name, comment, date);
-              
-              // Reset form
-              commentForm.reset();
-              
-              // Reset button
-              submitButton.textContent = originalButtonText;
-              submitButton.disabled = false;
-            })
-            .catch(function(error) {
-              console.error('EmailJS Error:', error);
-              errorMessage.textContent = "There was an error submitting your comment: " + error.text;
-              errorMessage.classList.remove('d-none');
-              
-              // Reset button
-              submitButton.textContent = originalButtonText;
-              submitButton.disabled = false;
-            });
-        });
-      }
-      
-      // Function to save comment to localStorage
-      function saveComment(name, comment, date) {
-        const blogId = window.location.pathname.split('/').pop().replace('.html', '');
-        let comments = JSON.parse(localStorage.getItem(`comments-${blogId}`) || '[]');
-        comments.push({ name, comment, date });
-        localStorage.setItem(`comments-${blogId}`, JSON.stringify(comments));
-      }
-      
-      // Function to load comments from localStorage
-      function loadComments() {
-        const blogId = window.location.pathname.split('/').pop().replace('.html', '');
-        const comments = JSON.parse(localStorage.getItem(`comments-${blogId}`) || '[]');
-        
-        if (comments.length === 0) {
-          commentsContainer.innerHTML = '<p>No comments yet. Be the first to comment!</p>';
-        } else {
-          commentsContainer.innerHTML = '';
-          comments.forEach(comment => {
-            displayComment(comment.name, comment.comment, comment.date);
-          });
-        }
-      }
-      
-      // Function to display a comment in the comments section
-      function displayComment(name, comment, date) {
-        const commentElement = document.createElement('div');
-        commentElement.className = 'comment mb-4 p-3 border-bottom';
-        commentElement.innerHTML = `
-          <h5>${name} <small class="text-muted">${date}</small></h5>
-          <p>${comment}</p>
-        `;
-        commentsContainer.appendChild(commentElement);
-      }
-    });
-  </script>
 
 </body>
 </html>
