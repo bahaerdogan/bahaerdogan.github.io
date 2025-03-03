@@ -149,7 +149,7 @@
                   <p class="mb-0">The question of who truly controls the vast arsenals in this relentless arms race and who will emerge victorious becomes more complex. A country cannot be deemed powerful if its own defense systems can be turned against it. The most advanced AI, or its controllers, may prove mightier than the strongest military force.</p>
                 </blockquote>
               </p>
-              The time is drawing near when we may not physically jump 10 meters, but we should prepare for AI that vastly enhances our cognitive capabilities. The day when seemingly impenetrable software firewalls are breached may not be too far off.          </div>
+              The time is drawing near when we may not physically jump 10 meters, but we should prepare for AI that vastly enhances our cognitive capabilities. The day when seemingly impenetrable software firewalls are breached may not be too far off.          </div>
             </div>
     
 
@@ -289,7 +289,7 @@
                   <a href="AI-Defense.html">The Role of Artificial Intelligence in Defense Technologies</a>
                 </li>
                 <li>
-                  <a href="DeservingMoney.html">Are AI Models Making Us Earn Money We Don’t Deserve?</a>
+                  <a href="DeservingMoney.html">Are AI Models Making Us Earn Money We Don't Deserve?</a>
                 </li>
                 <li>
                   <a href="ErgenekonEpic.html">Ergenekon epic.</a>
@@ -317,7 +317,7 @@
                   <a href="AI-Defense.html">The Role of Artificial Intelligence in Defense Technologies</a>
                 </li>
                 <li>
-                  <a href="DeservingMoney.html">Are AI Models Making Us Earn Money We Don’t Deserve?</a>
+                  <a href="DeservingMoney.html">Are AI Models Making Us Earn Money We Don't Deserve?</a>
                 </li>
                 <li>
                   <a href="ErgenekonEpic.html">Ergenekon epic.</a>
@@ -407,6 +407,136 @@
 
   <!-- Template Main Javascript File -->
   <script src="js/main.js"></script>
+
+  <!-- Leave a Reply Section -->
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <h3 class="mb-4">Leave a Reply</h3>
+        <form id="comment-form" class="comment-form">
+          <div id="comment-success" class="alert alert-success d-none">Your comment has been submitted. Thank you!</div>
+          <div id="comment-error" class="alert alert-danger d-none">There was an error submitting your comment. Please try again.</div>
+          <div class="form-group mb-3">
+            <label for="comment-name">Name *</label>
+            <input type="text" class="form-control" id="comment-name" name="from_name" required>
+          </div>
+          <div class="form-group mb-3">
+            <label for="comment-email">Email *</label>
+            <input type="email" class="form-control" id="comment-email" name="from_email" required>
+          </div>
+          <div class="form-group mb-3">
+            <label for="comment-text">Comment *</label>
+            <textarea class="form-control" id="comment-text" name="message" rows="5" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit Comment</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Comments Display Section -->
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <h3 class="mb-4">Comments</h3>
+        <div id="comments-container">
+          <!-- Comments will be displayed here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript for handling comments -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const commentForm = document.getElementById('comment-form');
+      const successMessage = document.getElementById('comment-success');
+      const errorMessage = document.getElementById('comment-error');
+      const commentsContainer = document.getElementById('comments-container');
+      
+      // Load existing comments from localStorage
+      loadComments();
+      
+      if (commentForm) {
+        commentForm.addEventListener('submit', function(event) {
+          event.preventDefault();
+          
+          // Hide messages
+          successMessage.classList.add('d-none');
+          errorMessage.classList.add('d-none');
+          
+          // Get form data
+          const name = document.getElementById('comment-name').value;
+          const email = document.getElementById('comment-email').value;
+          const comment = document.getElementById('comment-text').value;
+          const date = new Date().toLocaleDateString();
+          const blogTitle = "The Role of AI in Defense Technologies"; // Update for each blog post
+          
+          // Prepare email template parameters
+          const templateParams = {
+            from_name: name,
+            from_email: email,
+            message: comment,
+            blog_title: blogTitle
+          };
+          
+          // Send email using EmailJS
+          emailjs.send('service_lhjdfqw', 'template_bha2val', templateParams, 'sr9_9CUgd0L641ObN')
+            .then(function() {
+              // Show success message
+              successMessage.classList.remove('d-none');
+              
+              // Save comment to localStorage
+              saveComment(name, comment, date);
+              
+              // Display the new comment
+              displayComment(name, comment, date);
+              
+              // Reset form
+              commentForm.reset();
+            })
+            .catch(function(error) {
+              console.error('EmailJS Error:', error);
+              errorMessage.classList.remove('d-none');
+            });
+        });
+      }
+      
+      // Function to save comment to localStorage
+      function saveComment(name, comment, date) {
+        const blogId = window.location.pathname.split('/').pop().replace('.html', '');
+        let comments = JSON.parse(localStorage.getItem(`comments-${blogId}`) || '[]');
+        comments.push({ name, comment, date });
+        localStorage.setItem(`comments-${blogId}`, JSON.stringify(comments));
+      }
+      
+      // Function to load comments from localStorage
+      function loadComments() {
+        const blogId = window.location.pathname.split('/').pop().replace('.html', '');
+        const comments = JSON.parse(localStorage.getItem(`comments-${blogId}`) || '[]');
+        
+        if (comments.length === 0) {
+          commentsContainer.innerHTML = '<p>No comments yet. Be the first to comment!</p>';
+        } else {
+          commentsContainer.innerHTML = '';
+          comments.forEach(comment => {
+            displayComment(comment.name, comment.comment, comment.date);
+          });
+        }
+      }
+      
+      // Function to display a comment in the comments section
+      function displayComment(name, comment, date) {
+        const commentElement = document.createElement('div');
+        commentElement.className = 'comment mb-4 p-3 border-bottom';
+        commentElement.innerHTML = `
+          <h5>${name} <small class="text-muted">${date}</small></h5>
+          <p>${comment}</p>
+        `;
+        commentsContainer.appendChild(commentElement);
+      }
+    });
+  </script>
 
 </body>
 </html>
