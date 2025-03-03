@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import emailjs from '@emailjs/browser';
 import { motion } from 'framer-motion';
 import { styles } from '../styles';
@@ -17,6 +17,11 @@ const Contact = () => {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
 
+  // Initialize EmailJS when component mounts
+  useEffect(() => {
+    emailjs.init('sr9_9CUgd0L641ObN');
+  }, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
@@ -28,15 +33,23 @@ const Contact = () => {
     setSuccess(false);
     setError(false);
 
+    // Prepare template parameters
+    const templateParams = {
+      from_name: form.name,
+      from_email: form.email,
+      message: form.message,
+    };
+
     emailjs
-      .sendForm(
+      .send(
         'service_lhjdfqw', // Service ID
         'template_bha2val', // Template ID
-        formRef.current,
+        templateParams,
         'sr9_9CUgd0L641ObN' // Public Key
       )
       .then(
-        () => {
+        (response) => {
+          console.log('SUCCESS!', response.status, response.text);
           setLoading(false);
           setSuccess(true);
           setForm({
@@ -45,10 +58,10 @@ const Contact = () => {
             message: '',
           });
         },
-        (error) => {
+        (err) => {
+          console.error('FAILED...', err);
           setLoading(false);
           setError(true);
-          console.error('EmailJS Error:', error);
         }
       );
   };
