@@ -17,6 +17,13 @@
   gtag('config', 'G-ZGTWHSMVV7');
 </script>
 
+  <!-- EmailJS Library -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script type="text/javascript">
+    (function() {
+      emailjs.init("sr9_9CUgd0L641ObN");
+    })();
+  </script>
 
   <!-- Favicons -->
   <link href="img/favicon.png" rel="icon">
@@ -81,7 +88,7 @@
   <!--/ Nav End /-->
 
   <!--/ Intro Skew Star /-->
-  <div class="intro intro-single route bg-image" style="background-image: url(img/image (21).png)">
+  <div class="intro intro-single route bg-image" style="background-image: url('img/image\ \(21\).png')">
     <div class="overlay-mf"></div>
     <div class="intro-content display-table">
       <div class="table-cell">
@@ -229,34 +236,7 @@
                 Leave a Reply
               </h3>
             </div>
-            <form class="form-mf">
-              <div class="row">
-                <div class="col-md-6 mb-3">
-                  <div class="form-group">
-                    <input type="text" class="form-control input-mf" id="inputName" placeholder="Name *" required>
-                  </div>
-                </div>
-                <div class="col-md-6 mb-3">
-                  <div class="form-group">
-                    <input type="email" class="form-control input-mf" id="inputEmail1" placeholder="Email *" required>
-                  </div>
-                </div>
-                <div class="col-md-12 mb-3">
-                  <div class="form-group">
-                    <input type="url" class="form-control input-mf" id="inputUrl" placeholder="Website">
-                  </div>
-                </div>
-                <div class="col-md-12 mb-3">
-                  <div class="form-group">
-                    <textarea id="textMessage" class="form-control input-mf" placeholder="Comment *" name="message"
-                      cols="45" rows="8" required></textarea>
-                  </div>
-                </div>
-                <div class="col-md-12">
-                  <button type="submit" class="button button-a button-big button-rouded">Send Message</button>
-                </div>
-              </div>
-            </form>
+            <p>Please use the comment form at the bottom of the page to leave your reply.</p>
           </div>
         </div>
         <div class="col-md-4">
@@ -363,7 +343,7 @@
   <!--/ Section Blog-Single End /-->
 
   <!--/ Section Contact-Footer Star /-->
-  <section class="paralax-mf footer-paralax bg-image sect-mt4 route" style="background-image: url(img/overlay-bg.jpg)">
+  <section class="paralax-mf footer-paralax bg-image sect-mt4 route" style="background-image: url('img/overlay-bg.jpg')">
     <div class="overlay-mf"></div>
     <footer>
       <div class="container">
@@ -412,35 +392,43 @@
   <div class="container mt-5">
     <div class="row">
       <div class="col-md-8 offset-md-2">
-        <h3 class="mb-4">Leave a Reply</h3>
-        <form id="comment-form" class="comment-form">
-          <div id="comment-success" class="alert alert-success d-none">Your comment has been submitted. Thank you!</div>
-          <div id="comment-error" class="alert alert-danger d-none">There was an error submitting your comment. Please try again.</div>
-          <div class="form-group mb-3">
-            <label for="comment-name">Name *</label>
-            <input type="text" class="form-control" id="comment-name" name="from_name" required>
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h3 class="mb-4 title-left">Leave a Reply</h3>
+            <form id="comment-form" class="comment-form">
+              <div id="comment-success" class="alert alert-success d-none">Your comment has been submitted. Thank you!</div>
+              <div id="comment-error" class="alert alert-danger d-none">There was an error submitting your comment. Please try again.</div>
+              <div class="form-group mb-3">
+                <label for="comment-name">Name *</label>
+                <input type="text" class="form-control input-mf" id="comment-name" name="from_name" required>
+              </div>
+              <div class="form-group mb-3">
+                <label for="comment-email">Email *</label>
+                <input type="email" class="form-control input-mf" id="comment-email" name="from_email" required>
+              </div>
+              <div class="form-group mb-3">
+                <label for="comment-text">Comment *</label>
+                <textarea class="form-control input-mf" id="comment-text" name="message" rows="5" required></textarea>
+              </div>
+              <button type="submit" class="button button-a button-big button-rouded">Submit Comment</button>
+            </form>
           </div>
-          <div class="form-group mb-3">
-            <label for="comment-email">Email *</label>
-            <input type="email" class="form-control" id="comment-email" name="from_email" required>
-          </div>
-          <div class="form-group mb-3">
-            <label for="comment-text">Comment *</label>
-            <textarea class="form-control" id="comment-text" name="message" rows="5" required></textarea>
-          </div>
-          <button type="submit" class="btn btn-primary">Submit Comment</button>
-        </form>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- Comments Display Section -->
-  <div class="container mt-5">
+  <div class="container mt-5 mb-5">
     <div class="row">
       <div class="col-md-8 offset-md-2">
-        <h3 class="mb-4">Comments</h3>
-        <div id="comments-container">
-          <!-- Comments will be displayed here -->
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h3 class="mb-4 title-left">Comments</h3>
+            <div id="comments-container">
+              <!-- Comments will be displayed here -->
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -472,6 +460,12 @@
           const date = new Date().toLocaleDateString();
           const blogTitle = "The Role of AI in Defense Technologies"; // Update for each blog post
           
+          // Show loading state
+          const submitButton = commentForm.querySelector('button[type="submit"]');
+          const originalButtonText = submitButton.textContent;
+          submitButton.textContent = "Submitting...";
+          submitButton.disabled = true;
+          
           // Prepare email template parameters
           const templateParams = {
             from_name: name,
@@ -494,10 +488,19 @@
               
               // Reset form
               commentForm.reset();
+              
+              // Reset button
+              submitButton.textContent = originalButtonText;
+              submitButton.disabled = false;
             })
             .catch(function(error) {
               console.error('EmailJS Error:', error);
+              errorMessage.textContent = "There was an error submitting your comment: " + error.text;
               errorMessage.classList.remove('d-none');
+              
+              // Reset button
+              submitButton.textContent = originalButtonText;
+              submitButton.disabled = false;
             });
         });
       }
