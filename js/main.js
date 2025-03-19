@@ -175,10 +175,11 @@
 $(document).ready(function() {
 	// Initialize the blog carousel
 	$(".blog-carousel").owlCarousel({
-	  autoplay: true,
-	  dots: true,
 	  loop: true,
 	  margin: 20,
+	  autoplay: true,
+	  autoplayTimeout: 5000,
+	  autoplayHoverPause: true,
 	  responsive: {
 		0: {
 		  items: 1
@@ -189,6 +190,8 @@ $(document).ready(function() {
 		992: {
 		  items: 3
 		}
-	  }
+	  },
+	  nav: true,
+	  navText: ['<i class="ion-ios-arrow-back"></i>', '<i class="ion-ios-arrow-forward"></i>']
 	});
   });
