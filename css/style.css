@@ -1264,78 +1264,7 @@ footer .credits a {
   }
 }
 
-/* Add this to your style.css file */
-.blog-carousel .owl-dots {
-  margin-top: 20px;
-  text-align: center;
-}
 
-.blog-carousel .owl-dot {
-  display: inline-block;
-  margin: 0 5px;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background-color: #ddd;
-}
-
-.blog-carousel .owl-dot.active {
-  background-color: #0078ff;
-}
-
-.blog-carousel .item {
-  padding: 15px;
-}
-
-.blog-carousel .card-blog {
-  margin-bottom: 0;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.blog-carousel .card-body {
-  flex: 1;
-}
-
-.blog-carousel .card-img img {
-  height: 200px;
-  object-fit: cover;
-}
-
-.blog-carousel .owl-nav {
-  margin-top: 20px;
-  text-align: center;
-}
-
-.blog-carousel .owl-nav button {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: #0078ff !important;
-  color: #fff !important;
-  margin: 0 5px;
-}
-
-.blog-carousel .owl-nav button:hover {
-  background: #006be6 !important;
-}
-
-.blog-carousel .card-blog {
-  margin-bottom: 0;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.blog-carousel .card-blog .card-body {
-  flex: 1;
-}
-
-.blog-carousel .card-img img {
-  height: 200px;
-  object-fit: cover;
-}
 
 
 
