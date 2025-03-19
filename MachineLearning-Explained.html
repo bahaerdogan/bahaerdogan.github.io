@@ -1,33 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Machine Learning Explained</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-    h1, h2, h3 {
-      color: #333;
-    }
-    .emphasis {
-      font-style: italic;
-    }
-    .divider {
-      border-top: 1px solid #ccc;
-      margin: 20px 0;
-    }
-    .footnote {
-      font-size: 0.9em;
-      font-style: italic;
-      margin-top: 30px;
-    }
-  </style>
+  <meta charset="utf-8">
+  <title>Bahaerdogan</title>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+  <meta name="theme-color" content="#0078ff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta content="" name="keywords">
+  <meta content="" name="description">
 
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZGTWHSMVV7"></script>
@@ -70,6 +51,124 @@
     Author: BootstrapMade.com
     License: https://bootstrapmade.com/license/
   ======================================================= -->
+
+  <style>
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+      .post-box {
+        margin-bottom: 2rem;
+      }
+      
+      .post-thumb img {
+        width: 100%;
+        height: auto;
+      }
+      
+      .article-title {
+        font-size: 1.8rem;
+        line-height: 1.3;
+      }
+      
+      .article-content {
+        font-size: 1rem;
+        line-height: 1.6;
+        padding: 0 1rem;
+      }
+      
+      .blockquote {
+        margin: 1rem 0;
+        padding: 1rem;
+        font-size: 1.1rem;
+      }
+      
+      .widget-sidebar {
+        margin-top: 2rem;
+      }
+      
+      .comment-form {
+        padding: 1rem;
+      }
+      
+      .navbar-b.navbar-reduce {
+        padding: 15px 0;
+      }
+      
+      .navbar-b.navbar-trans .nav-item {
+        padding-left: 0;
+      }
+      
+      .container {
+        padding-left: 15px;
+        padding-right: 15px;
+      }
+      
+      .navbar-toggler {
+        margin-right: 0;
+      }
+      
+      .intro-single {
+        padding-top: 8rem;
+        padding-bottom: 2rem;
+      }
+      
+      .sect-pt4 {
+        padding-top: 3rem;
+      }
+      
+      .widget-sidebar {
+        padding: 1rem;
+      }
+      
+      .list-sidebar {
+        padding-left: 0;
+      }
+      
+      .button-big {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+      }
+      
+      .paralax-mf {
+        padding: 4rem 0;
+      }
+    }
+
+    /* Improve readability on small screens */
+    @media (max-width: 576px) {
+      .article-title {
+        font-size: 1.5rem;
+      }
+      
+      .post-meta ul {
+        flex-wrap: wrap;
+      }
+      
+      .post-meta ul li {
+        margin-bottom: 0.5rem;
+      }
+      
+      .intro-title {
+        font-size: 1.8rem;
+      }
+      
+      .breadcrumb {
+        font-size: 0.9rem;
+      }
+    }
+    
+    /* Touch-friendly improvements */
+    @media (hover: none) {
+      .nav-item a,
+      .button,
+      .sidebar-content a {
+        padding: 0.8rem;
+      }
+      
+      .widget-sidebar .sidebar-content ul li {
+        margin-bottom: 1rem;
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -118,12 +217,12 @@
           <h2 class="intro-title mb-4">Blog Details</h2>
           <ol class="breadcrumb d-flex justify-content-center">
             <li class="breadcrumb-item">
-              <a href="#">Home</a>
+              <a href="index.html">Home</a>
             </li>
             <li class="breadcrumb-item">
-              <a href="#">Library</a>
+              <a href="index.html#blog">Blog</a>
             </li>
-            <li class="breadcrumb-item active">Data</li>
+            <li class="breadcrumb-item active">Oğuz Kağan Epic</li>
           </ol>
         </div>
       </div>
@@ -135,10 +234,10 @@
   <section class="blog-wrapper sect-pt4" id="blog">
     <div class="container">
       <div class="row">
-        <div class="col-md-8">
+        <div class="col-lg-8 col-md-12">
           <div class="post-box">
             <div class="post-thumb">
-              <img src="img/machinelearning1.jpeg" class="img-fluid" alt="">
+              <img src="img/machinelearning.jpeg" class="img-fluid" alt="">
             </div>
             <div class="post-meta">
               <h1 class="article-title">What is Machine Learning?</h1>
@@ -149,7 +248,7 @@
                 </li>
                 <li>
                   <span class="ion-pricetag"></span>
-                  <a href="#">Artificial intelligence</a>
+                  <a href="#">History</a>
                 </li>
                 <li>
                   <span class="ion-chatbox"></span>
@@ -158,76 +257,72 @@
               </ul>
             </div>
             <div class="article-content">
-                <h2>What is Machine Learning?</h2>
-                <p class="emphasis">A Simple Breakdown of How Machines "Learn" Through Mathematical Formulas Rather Than Real Learning</p>
-                
-                <div class="divider"></div>
-                
-                <p>If you've ever wondered how Netflix recommends shows, how your email knows which messages are spam, or how self-driving cars recognize stop signs, you've already encountered machine learning in action. But what exactly is machine learning? And is it really "learning" in the way humans understand it?</p>
-                
-                <h2>Machines Don't Learn—They Calculate</h2>
-                
-                <p>Let's start with the truth: machines don't actually learn. At least, not in the way humans or animals do. When we think of learning, we imagine a process of absorbing information, adapting to new experiences, and applying knowledge creatively. Machines, on the other hand, don't have intuition or understanding. What they do have is a way to process vast amounts of data, identify patterns, and use mathematical formulas to make predictions.</p>
-                
-                <p>As Andriy Burkov states in <cite>The Hundred-Page Machine Learning Book</cite>, what a machine learning model truly does is find a mathematical function that, when applied to a set of inputs, produces the desired outputs. This function works well most of the time—especially when dealing with inputs that are similar to the data it was trained on. But if you change the inputs slightly, the results can become completely incorrect. This is why a machine trained to recognize handwritten numbers might struggle if given letters instead. Unlike a human, it doesn't generalize well outside its training data unless explicitly designed to do so.</p>
-                
-                <h2>The Three Main Types of Machine Learning</h2>
-                
-                <p>Machine learning isn't just one thing—it comes in different forms depending on the problem being solved. The three main types are:</p>
-                
-                <h3>1. Supervised Learning</h3>
-                <p>Imagine a student learning from a textbook with an answer key. In supervised learning, the machine is given labeled examples (input-output pairs). For instance, if you want a program to recognize cats in pictures, you provide it with thousands of images labeled "cat" or "not cat." The machine uses these examples to learn the pattern and then applies that knowledge to new images. This method is widely used in spam detection, medical diagnosis, and speech recognition.</p>
-                
-                <h3>2. Unsupervised Learning</h3>
-                <p>Now, imagine a student given a pile of books without any instructions. They have to figure out the categories on their own. In unsupervised learning, the machine is given raw data without labels and must find patterns by itself. A common application is customer segmentation—where a business groups its customers based on purchasing behavior without knowing in advance what the groups will be.</p>
-                
-                <h3>3. Reinforcement Learning</h3>
-                <p>This is like trial-and-error learning. A reinforcement learning model interacts with an environment, receiving rewards or penalties based on its actions. Think of a self-learning chess program: it makes a move, sees if it won or lost points, and adjusts its strategy accordingly. This method powers AI in robotics, gaming, and self-driving cars.</p>
-                
-                <h2>How a Machine Learns from Data</h2>
-                
-                <p>At its core, machine learning is about finding mathematical relationships in data. Consider a spam filter. Here's how it might work:</p>
-                
-                <ol>
-                  <li><strong>Data Collection</strong>: The system gathers thousands of emails, each labeled as "spam" or "not spam."</li>
-                  <li><strong>Feature Extraction</strong>: It breaks down each email into measurable features (e.g., presence of certain words, length of the message, presence of links).</li>
-                  <li><strong>Model Training</strong>: The system uses an algorithm, such as a decision tree or a neural network, to find patterns in these features and build a mathematical model.</li>
-                  <li><strong>Prediction</strong>: When a new email arrives, the model applies its learned function to decide if it's spam or not.</li>
-                  <li><strong>Improvement</strong>: Over time, as more emails are classified, the system updates its model to improve accuracy.</li>
-                </ol>
-                
-                <p>This process is similar to a student taking multiple practice tests, recognizing question patterns, and getting better at predicting correct answers. But remember, the machine isn't <em>understanding</em>—it's just following an optimized mathematical path.</p>
-                
-                <h2>Why the Term "Learning" Can Be Misleading</h2>
-                
-                <p>Arthur Samuel, an early pioneer of artificial intelligence, coined the term <em>machine learning</em> in 1959. However, as Burkov points out, this was more of a marketing term than a literal description. Just as "artificial intelligence" doesn't mean true intelligence, "machine learning" doesn't mean true learning. A better way to describe it would be "automated pattern recognition" or "statistical approximation."</p>
-                
-                <h3>Human Learning vs. Machine Learning</h3>
-                <ul>
-                  <li><strong>Humans:</strong> Can understand context, make logical leaps, and adapt to entirely new situations.</li>
-                  <li><strong>Machines:</strong> Can detect patterns in data and optimize responses but lack understanding, reasoning, and adaptability beyond what they're trained for.</li>
-                </ul>
-                
-                <p>This distinction is crucial, especially when considering the limitations of AI. A self-driving car trained on sunny California roads might struggle on snowy roads if it has never seen them before. A chatbot might fail to understand sarcasm because it lacks real-world experience.</p>
-                
-                <h2>The Power and Limits of Machine Learning</h2>
-                
-                <p>Machine learning is incredibly powerful—it has revolutionized fields from medicine to finance to entertainment. But it's also just a tool. Like a calculator, it can process numbers faster than any human, but it doesn't <em>know</em> what those numbers mean.</p>
-                
-                <p>Understanding this helps us set realistic expectations. Machines won't become sentient or creative just because they process more data. But by using well-designed algorithms, careful data selection, and human oversight, we can harness their power to solve real-world problems efficiently.</p>
-                
-                <h2>Conclusion</h2>
-                
-                <p>Machine learning isn't magic—it's math. It doesn't think, feel, or learn like we do, but it can recognize patterns and make decisions based on data. By understanding what machine learning is (and isn't), we can appreciate its capabilities and limitations without falling for hype.</p>
-                
-                <p>The next time you see an AI-powered recommendation, a voice assistant answering your questions, or a self-driving car on the road, you'll know: it's not really learning. It's just following a very sophisticated mathematical formula, optimized through experience—but only within its programmed limits.</p>
-                
-                <hr>
-                
-                <p class="footnote">Inspired by concepts from Andriy Burkov's <cite>The Hundred-Page Machine Learning Book</cite>.</p>
-              </div>
-              </div>
-        <div class="col-md-4">
+              <p>If you've ever wondered how Netflix recommends shows, how your email knows which messages are spam, or how self-driving cars recognize stop signs, you've already encountered machine learning in action. But what exactly is machine learning? And is it really "learning" in the way humans understand it?</p>
+
+              <h2>Machines Don't Learn—They Calculate</h2>
+              
+              <p>Let's start with the truth: machines don't actually learn. At least, not in the way humans or animals do. When we think of learning, we imagine a process of absorbing information, adapting to new experiences, and applying knowledge creatively. Machines, on the other hand, don't have intuition or understanding. What they do have is a way to process vast amounts of data, identify patterns, and use mathematical formulas to make predictions.</p>
+              
+              <p>As Andriy Burkov states in <em>The Hundred-Page Machine Learning Book</em>, what a machine learning model truly does is find a mathematical function that, when applied to a set of inputs, produces the desired outputs. This function works well most of the time—especially when dealing with inputs that are similar to the data it was trained on. But if you change the inputs slightly, the results can become completely incorrect. This is why a machine trained to recognize handwritten numbers might struggle if given letters instead. Unlike a human, it doesn't generalize well outside its training data unless explicitly designed to do so.</p>
+
+              <h2>The Three Main Types of Machine Learning</h2>
+              
+              <p>Machine learning isn't just one thing—it comes in different forms depending on the problem being solved. The three main types are:</p>
+              
+              <h3>1. Supervised Learning</h3>
+              <p>Imagine a student learning from a textbook with an answer key. In supervised learning, the machine is given labeled examples (input-output pairs). For instance, if you want a program to recognize cats in pictures, you provide it with thousands of images labeled "cat" or "not cat." The machine uses these examples to learn the pattern and then applies that knowledge to new images. This method is widely used in spam detection, medical diagnosis, and speech recognition.</p>
+              
+              <h3>2. Unsupervised Learning</h3>
+              <p>Now, imagine a student given a pile of books without any instructions. They have to figure out the categories on their own. In unsupervised learning, the machine is given raw data without labels and must find patterns by itself. A common application is customer segmentation—where a business groups its customers based on purchasing behavior without knowing in advance what the groups will be.</p>
+              
+              <h3>3. Reinforcement Learning</h3>
+              <p>This is like trial-and-error learning. A reinforcement learning model interacts with an environment, receiving rewards or penalties based on its actions. Think of a self-learning chess program: it makes a move, sees if it won or lost points, and adjusts its strategy accordingly. This method powers AI in robotics, gaming, and self-driving cars.</p>
+
+              <h2>How a Machine Learns from Data</h2>
+              
+              <p>At its core, machine learning is about finding mathematical relationships in data. Consider a spam filter. Here's how it might work:</p>
+              
+              <ol>
+                <li><strong>Data Collection</strong>: The system gathers thousands of emails, each labeled as "spam" or "not spam."</li>
+                <li><strong>Feature Extraction</strong>: It breaks down each email into measurable features (e.g., presence of certain words, length of the message, presence of links).</li>
+                <li><strong>Model Training</strong>: The system uses an algorithm, such as a decision tree or a neural network, to find patterns in these features and build a mathematical model.</li>
+                <li><strong>Prediction</strong>: When a new email arrives, the model applies its learned function to decide if it's spam or not.</li>
+                <li><strong>Improvement</strong>: Over time, as more emails are classified, the system updates its model to improve accuracy.</li>
+              </ol>
+              
+              <p>This process is similar to a student taking multiple practice tests, recognizing question patterns, and getting better at predicting correct answers. But remember, the machine isn't <em>understanding</em>—it's just following an optimized mathematical path.</p>
+
+              <h2>Why the Term "Learning" Can Be Misleading</h2>
+              
+              <p>Arthur Samuel, an early pioneer of artificial intelligence, coined the term <em>machine learning</em> in 1959. However, as Burkov points out, this was more of a marketing term than a literal description. Just as "artificial intelligence" doesn't mean true intelligence, "machine learning" doesn't mean true learning. A better way to describe it would be "automated pattern recognition" or "statistical approximation."</p>
+              
+              <h3>Human Learning vs. Machine Learning</h3>
+              <ul>
+                <li><strong>Humans:</strong> Can understand context, make logical leaps, and adapt to entirely new situations.</li>
+                <li><strong>Machines:</strong> Can detect patterns in data and optimize responses but lack understanding, reasoning, and adaptability beyond what they're trained for.</li>
+              </ul>
+              
+              <p>This distinction is crucial, especially when considering the limitations of AI. A self-driving car trained on sunny California roads might struggle on snowy roads if it has never seen them before. A chatbot might fail to understand sarcasm because it lacks real-world experience.</p>
+
+              <h2>The Power and Limits of Machine Learning</h2>
+              
+              <p>Machine learning is incredibly powerful—it has revolutionized fields from medicine to finance to entertainment. But it's also just a tool. Like a calculator, it can process numbers faster than any human, but it doesn't <em>know</em> what those numbers mean.</p>
+              
+              <p>Understanding this helps us set realistic expectations. Machines won't become sentient or creative just because they process more data. But by using well-designed algorithms, careful data selection, and human oversight, we can harness their power to solve real-world problems efficiently.</p>
+
+              <h2>Conclusion</h2>
+              
+              <p>Machine learning isn't magic—it's math. It doesn't think, feel, or learn like we do, but it can recognize patterns and make decisions based on data. By understanding what machine learning is (and isn't), we can appreciate its capabilities and limitations without falling for hype.</p>
+              
+              <p>The next time you see an AI-powered recommendation, a voice assistant answering your questions, or a self-driving car on the road, you'll know: it's not really learning. It's just following a very sophisticated mathematical formula, optimized through experience—but only within its programmed limits.</p>
+              
+              <hr>
+              
+              <p class="footnote"><em>Inspired by concepts from Andriy Burkov's</em> The Hundred-Page Machine Learning Book.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-12">
           <div class="widget-sidebar sidebar-search">
             <h5 class="sidebar-title">Search</h5>
             <div class="sidebar-content">
@@ -304,22 +399,19 @@
             <div class="sidebar-content">
               <ul>
                 <li>
-                  <a href="#">Artificial intelligence</a>
-                </li>
-                <li>
-                  <a href="#">Data</a>
-                </li>
-                <li>
-                  <a href="#">Engineering</a>
-                </li>
-                <li>
                   <a href="#">History</a>
                 </li>
                 <li>
-                  <a href="#">Art</a>
+                  <a href="#">Epic</a>
                 </li>
                 <li>
-                  <a href="#">Defense industry</a>
+                  <a href="#">Turkish Culture</a>
+                </li>
+                <li>
+                  <a href="#">Legend</a>
+                </li>
+                <li>
+                  <a href="#">Heritage</a>
                 </li>
               </ul>
             </div>
@@ -333,7 +425,7 @@
   <!-- Leave a Reply Section -->
   <div class="container mt-5">
     <div class="row">
-      <div class="col-md-8 offset-md-2">
+      <div class="col-lg-8 col-md-10 mx-auto">
         <div class="card shadow-sm">
           <div class="card-body">
             <h3 class="mb-4 title-left">Leave a Reply</h3>
@@ -363,7 +455,7 @@
   <!-- Comments Display Section -->
   <div class="container mt-5 mb-5">
     <div class="row">
-      <div class="col-md-8 offset-md-2">
+      <div class="col-lg-8 col-md-10 mx-auto">
         <div class="card shadow-sm">
           <div class="card-body">
             <h3 class="mb-4 title-left">Comments</h3>
@@ -446,7 +538,7 @@
           const email = document.getElementById('comment-email').value;
           const comment = document.getElementById('comment-text').value;
           const date = new Date().toLocaleDateString();
-          const blogTitle = "Why is knowing history important?"; // Update for each blog post
+          const blogTitle = "Oğuz Kağan Epic";
           
           // Show loading state
           const submitButton = commentForm.querySelector('button[type="submit"]');
@@ -536,6 +628,7 @@
       { title: "The Role of Artificial Intelligence in Defense Technologies", url: "AI-Defense.html", keywords: ["ai", "artificial intelligence", "defense", "technology", "security"] },
       { title: "Are AI Models Making Us Earn Money We Don't Deserve?", url: "DeservingMoney.html", keywords: ["ai", "money", "work", "technology", "earnings"] },
       { title: "Ergenekon epic", url: "ErgenekonEpic.html", keywords: ["ergenekon", "epic", "history", "story"] },
+      { title: "Oğuz Kağan Epic", url: "OguzKaganEpic.html", keywords: ["oğuz kağan", "epic", "history", "turkish", "legend"] },
       { title: "Mac shortcuts guide", url: "MacShortcuts.html", keywords: ["mac", "shortcuts", "guide", "productivity"] }
     ];
 
@@ -566,12 +659,3 @@
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
