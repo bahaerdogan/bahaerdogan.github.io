@@ -1264,7 +1264,43 @@ footer .credits a {
   }
 }
 
+/* Add this to your style.css file */
+.blog-carousel .owl-dots {
+  margin-top: 20px;
+  text-align: center;
+}
 
+.blog-carousel .owl-dot {
+  display: inline-block;
+  margin: 0 5px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #ddd;
+}
+
+.blog-carousel .owl-dot.active {
+  background-color: #0078ff;
+}
+
+.blog-carousel .item {
+  padding: 10px;
+}
+
+.blog-carousel .card-blog {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.blog-carousel .card-body {
+  flex: 1;
+}
+
+.blog-carousel .card-img img {
+  height: 200px;
+  object-fit: cover;
+}
 
 
 
