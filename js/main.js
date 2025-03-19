@@ -168,3 +168,27 @@
 	});
 
 })(jQuery);
+
+
+
+// Add this to your main.js file
+$(document).ready(function() {
+	// Initialize the blog carousel
+	$(".blog-carousel").owlCarousel({
+	  autoplay: true,
+	  dots: true,
+	  loop: true,
+	  margin: 20,
+	  responsive: {
+		0: {
+		  items: 1
+		},
+		768: {
+		  items: 2
+		},
+		992: {
+		  items: 3
+		}
+	  }
+	});
+  });
