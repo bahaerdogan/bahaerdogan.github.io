@@ -1361,6 +1361,19 @@ footer .credits a {
   background: #0078ff !important;
 }
 
+.card-blog .card-img {
+  position: relative;
+  overflow: hidden;
+  height: 200px;
+}
+
+.card-blog .card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
 
 
 
