@@ -176,7 +176,9 @@ $(document).ready(function() {
 	// Initialize the blog carousel
 	$(".blog-carousel").owlCarousel({
 	  loop: true,
-	  margin: 30,
+	  margin: 20,
+	  nav: true,
+	  dots: true,
 	  autoplay: true,
 	  autoplayTimeout: 5000,
 	  autoplayHoverPause: true,
@@ -190,8 +192,6 @@ $(document).ready(function() {
 		992: {
 		  items: 3
 		}
-	  },
-	  nav: false,
-	  dots: true
+	  }
 	});
   });

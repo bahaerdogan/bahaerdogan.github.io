@@ -191,11 +191,9 @@ a:hover {
 }
 
 .box-shadow-full {
-  padding: 3rem 1.25rem;
-  position: relative;
-  background-color: #fff;
+  padding: 2rem;
   margin-bottom: 3rem;
-  z-index: 2;
+  background-color: #fff;
   box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.06), 0 2px 5px 0 rgba(0, 0, 0, 0.2);
 }
 
@@ -866,8 +864,33 @@ a:hover {
 //--//-->   BLOG
 ======================================*/
 
+.card-blog {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 30px;
+}
+
 .card-blog .card-body {
-  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-blog .card-description {
+  flex: 1;
+}
+
+.card-blog .card-img {
+  height: 200px;
+  overflow: hidden;
+}
+
+.card-blog .card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 .card-blog .card-category-box {
@@ -901,10 +924,6 @@ a:hover {
 .card-blog .card-title {
   font-size: 1.3rem;
   margin-top: .6rem;
-}
-
-.card-blog .card-description {
-  color: #4e4e4e;
 }
 
 .card-blog .post-author {
@@ -1284,7 +1303,7 @@ footer .credits a {
 }
 
 .blog-carousel .item {
-  padding: 15px;
+  padding: 10px;
 }
 
 .blog-carousel .card-blog {
@@ -1304,37 +1323,28 @@ footer .credits a {
 }
 
 .blog-carousel .owl-nav {
-  margin-top: 20px;
-  text-align: center;
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  transform: translateY(-50%);
 }
 
-.blog-carousel .owl-nav button {
+.blog-carousel .owl-prev,
+.blog-carousel .owl-next {
+  position: absolute;
   width: 40px;
   height: 40px;
+  background: #48abec !important;
   border-radius: 50%;
-  background: #0078ff !important;
   color: #fff !important;
-  margin: 0 5px;
 }
 
-.blog-carousel .owl-nav button:hover {
-  background: #006be6 !important;
+.blog-carousel .owl-prev {
+  left: -20px;
 }
 
-.blog-carousel .card-blog {
-  margin-bottom: 0;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.blog-carousel .card-blog .card-body {
-  flex: 1;
-}
-
-.blog-carousel .card-img img {
-  height: 200px;
-  object-fit: cover;
+.blog-carousel .owl-next {
+  right: -20px;
 }
 
 /* Blog Carousel Styles */
