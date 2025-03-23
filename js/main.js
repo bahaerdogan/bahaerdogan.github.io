@@ -167,87 +167,50 @@
 		}, 250);
 	});
 
-})(jQuery);
-
-
-
-// Add this to your main.js file
-$(document).ready(function() {
 	// Initialize the blog carousel
 	$(".blog-carousel").owlCarousel({
-	  loop: true,
-	  margin: 20,
-	  nav: true,
-	  dots: true,
-	  autoplay: true,
-	  autoplayTimeout: 5000,
-	  autoplayHoverPause: true,
-	  responsive: {
-		0: {
-		  items: 1
-		},
-		768: {
-		  items: 2
-		},
-		992: {
-		  items: 3
+		loop: true,
+		margin: 20,
+		nav: true,
+		dots: true,
+		autoplay: true,
+		autoplayTimeout: 5000,
+		autoplayHoverPause: true,
+		responsive: {
+			0: {
+				items: 1
+			},
+			768: {
+				items: 2
+			},
+			992: {
+				items: 3
+			}
 		}
-	  }
 	});
-  });
 
-
-
-
-
-
-
-
-
-  // Language handling functionality
-document.addEventListener('DOMContentLoaded', function() {
-	// Set default language or get from localStorage
-	let currentLang = localStorage.getItem('preferredLanguage') || 'en';
+	// Language toggle functionality
+	const languageToggle = $('#language-toggle');
 	
-	// Apply initial language
-	applyLanguage(currentLang);
-	
-	// Language switcher event listeners
-	document.querySelectorAll('.lang-switch').forEach(item => {
-	  item.addEventListener('click', function(e) {
-		e.preventDefault();
-		const newLang = this.getAttribute('data-lang');
-		localStorage.setItem('preferredLanguage', newLang);
-		applyLanguage(newLang);
-	  });
-	});
-	
-	function applyLanguage(lang) {
-	  // Update active state in dropdown
-	  document.querySelectorAll('.lang-switch').forEach(el => {
-		el.classList.remove('active');
-		if (el.getAttribute('data-lang') === lang) {
-		  el.classList.add('active');
-		}
-	  });
-	  
-	  // Apply translations to all elements with data-i18n attribute
-	  document.querySelectorAll('[data-i18n]').forEach(el => {
-		const key = el.getAttribute('data-i18n');
-		if (translations[lang] && translations[lang][key]) {
-		  el.innerHTML = translations[lang][key];
-		}
-	  });
-	  
-	  // For input placeholders
-	  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-		const key = el.getAttribute('data-i18n-placeholder');
-		if (translations[lang] && translations[lang][key]) {
-		  el.setAttribute('placeholder', translations[lang][key]);
-		}
-	  });
-	  
-	  // Update HTML lang attribute
-	  document.documentElement.lang = lang;
+	if (languageToggle.length) {
+		languageToggle.on('click', function(e) {
+			e.preventDefault();
+			
+			// Get current page URL
+			const currentPath = window.location.pathname;
+			const filename = currentPath.split('/').pop();
+			
+			// Check if this is already the Turkish version
+			if (filename.includes('TR.html')) {
+				// If Turkish, switch to English
+				const englishVersion = filename.replace('TR.html', '.html');
+				window.location.href = englishVersion;
+			} else {
+				// If English, switch to Turkish
+				const turkishVersion = filename.replace('.html', 'TR.html');
+				window.location.href = turkishVersion;
+			}
+		});
 	}
-  });
+
+})(jQuery);
