@@ -195,3 +195,59 @@ $(document).ready(function() {
 	  }
 	});
   });
+
+
+
+
+
+
+
+
+
+  // Language handling functionality
+document.addEventListener('DOMContentLoaded', function() {
+	// Set default language or get from localStorage
+	let currentLang = localStorage.getItem('preferredLanguage') || 'en';
+	
+	// Apply initial language
+	applyLanguage(currentLang);
+	
+	// Language switcher event listeners
+	document.querySelectorAll('.lang-switch').forEach(item => {
+	  item.addEventListener('click', function(e) {
+		e.preventDefault();
+		const newLang = this.getAttribute('data-lang');
+		localStorage.setItem('preferredLanguage', newLang);
+		applyLanguage(newLang);
+	  });
+	});
+	
+	function applyLanguage(lang) {
+	  // Update active state in dropdown
+	  document.querySelectorAll('.lang-switch').forEach(el => {
+		el.classList.remove('active');
+		if (el.getAttribute('data-lang') === lang) {
+		  el.classList.add('active');
+		}
+	  });
+	  
+	  // Apply translations to all elements with data-i18n attribute
+	  document.querySelectorAll('[data-i18n]').forEach(el => {
+		const key = el.getAttribute('data-i18n');
+		if (translations[lang] && translations[lang][key]) {
+		  el.innerHTML = translations[lang][key];
+		}
+	  });
+	  
+	  // For input placeholders
+	  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+		const key = el.getAttribute('data-i18n-placeholder');
+		if (translations[lang] && translations[lang][key]) {
+		  el.setAttribute('placeholder', translations[lang][key]);
+		}
+	  });
+	  
+	  // Update HTML lang attribute
+	  document.documentElement.lang = lang;
+	}
+  });

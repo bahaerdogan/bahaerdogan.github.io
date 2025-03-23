@@ -1,0 +1,42 @@
+const translations = {
+    'en': {
+      'nav_home': 'Home',
+      'nav_about': 'About',
+      'nav_blog': 'Blog',
+      'nav_voluntary': 'Voluntary',
+      'nav_projects': 'Projects',
+      'nav_contact': 'Contact',
+      'blog_details': 'Blog Details',
+      'search': 'Search',
+      'search_for': 'Search for...',
+      'recent_post': 'Recent Post',
+      'archives': 'Archives',
+      'tags': 'Tags',
+      'leave_reply': 'Leave a Reply',
+      'submit_comment': 'Submit Comment',
+      'comments': 'Comments',
+      'no_comments': 'No comments yet. Be the first to comment!',
+      'article_title': 'Machine Learning Explained: The Math, the Myths, and the Reality',
+      // Add all article content translations here
+    },
+    'tr': {
+      'nav_home': 'Ana Sayfa',
+      'nav_about': 'Hakkında',
+      'nav_blog': 'Blog',
+      'nav_voluntary': 'Gönüllülük',
+      'nav_projects': 'Projeler',
+      'nav_contact': 'İletişim',
+      'blog_details': 'Blog Detayları',
+      'search': 'Ara',
+      'search_for': 'Arama...',
+      'recent_post': 'Son Yazılar',
+      'archives': 'Arşiv',
+      'tags': 'Etiketler',
+      'leave_reply': 'Yorum Bırakın',
+      'submit_comment': 'Yorumu Gönder',
+      'comments': 'Yorumlar',
+      'no_comments': 'Henüz yorum yok. İlk yorumu siz yapın!',
+      'article_title': 'Makine Öğrenimi Açıklandı: Matematik, Mitler ve Gerçek',
+      // Add all article content translations here
+    }
+  };

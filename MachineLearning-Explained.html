@@ -9,6 +9,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta content="" name="keywords">
   <meta content="" name="description">
+  <link rel="alternate" hreflang="en" href="https://bahaerdogan.com/MachineLearningExplained.html">
+<link rel="alternate" hreflang="tr" href="https://bahaerdogan.com/tr/MachineLearningExplained.html">
 
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZGTWHSMVV7"></script>
@@ -185,8 +187,14 @@
       <div class="navbar-collapse collapse justify-content-end" id="navbarDefault">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link js-scroll" href="index.html">Home</a>
+            <a class="nav-link js-scroll" href="index.html" data-i18n="nav_home">Home</a>
           </li>
+          
+          <!-- Example for section title -->
+          <h2 class="intro-title mb-4" data-i18n="blog_details">Blog Details</h2>
+          
+          <!-- For input placeholders -->
+          <input type="text" id="search-input" class="form-control" data-i18n-placeholder="search_for" placeholder="Search for..." aria-label="Search for...">
           <li class="nav-item">
             <a class="nav-link js-scroll" href="index.html#about">About</a>
           </li>
@@ -207,6 +215,31 @@
     </div>
   </nav>
   <!--/ Nav End /-->
+
+
+
+
+
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <i class="fa fa-globe"></i> Language
+    </a>
+    <div class="dropdown-menu" aria-labelledby="languageDropdown">
+      <a class="dropdown-item lang-switch" href="#" data-lang="en">English</a>
+      <a class="dropdown-item lang-switch" href="#" data-lang="tr">Türkçe</a>
+    </div>
+  </li>
+
+
+
+
+
+
+
+
+
+
+
 
   <!--/ Intro Skew Star /-->
   <div class="intro intro-single route bg-image" style="background-image: url('img/image\ \(21\).png')">
@@ -656,6 +689,11 @@
       return false;
     }
   </script>
+
+<script src="js/translations.js"></script>
+<script src="js/language.js"></script>
+
+
 
 </body>
 </html>
