@@ -81,21 +81,381 @@
               </ul>
             </div>
             <div class="article-content">
-              <p>Netflix'in size dizi önerileri yapmasını, e-postalarınızın spam olup olmadığını anlamasını veya sürücüsüz araçların dur işaretlerini nasıl tanıdığını merak ettiyseniz, makine öğrenimi ile tanışmışsınızdır...</p>
-              <h2>Makinalar Gerçekte Öğrenmez, Hesaplar</h2>
-              <p>Makinalar aslında öğrenmezler. İnsanların veya hayvanların yaptığı gibi bilgiyi içselleştirmezler...</p>
+              <p>Eğer Netflix'in size nasıl dizi önerdiğini, e-postanızın hangi mesajların spam olduğunu nasıl bildiğini veya kendi kendine giden arabaların dur işaretlerini nasıl tanıdığını hiç merak ettiyseniz, makine öğrenimini zaten eylem halinde gördünüz demektir. Peki, makine öğrenimi tam olarak nedir? Ve gerçekten insanların anladığı anlamda bir "öğrenme" midir?</p>
+              <h2>Makineler Öğrenmez—Hesaplama Yaparlar</h2>
+              <p>Öncelikle gerçeği kabul edelim: Makineler aslında öğrenmez. En azından insanlar veya hayvanlar gibi öğrenmezler. Öğrenmeyi düşündüğümüzde, bilgiyi özümseme, yeni deneyimlere uyum sağlama ve bilgiyi yaratıcı bir şekilde uygulama sürecini hayal ederiz. Ancak makinelerin sezgisi veya anlayışı yoktur. Sahip oldukları şey, büyük miktarda veriyi işleyebilme, kalıpları tanımlayabilme ve matematiksel formüller kullanarak tahmin yapabilme yeteneğidir.</p>
+              <p>Andriy Burkov'un <em>The Hundred-Page Machine Learning Book</em> adlı kitabında belirttiği gibi, bir makine öğrenimi modeli aslında girdilere uygulandığında istenen çıktıları üreten bir matematiksel fonksiyon bulur. Bu fonksiyon, özellikle eğitim aldığı verilerle benzer girdilerle karşılaştığında genellikle iyi çalışır. Ancak girdileri biraz değiştirirseniz, sonuçlar tamamen yanlış olabilir. Örneğin, el yazısı rakamları tanımak için eğitilmiş bir makine, harflerle karşılaştığında zorlanabilir. İnsanların aksine, eğitim verilerinin dışındaki durumları genellemekte zorlanır—bunun için özel olarak tasarlanmadıkça.</p>
+              <h2>Üç Ana Makine Öğrenimi Türü</h2>
+              <p>Makine öğrenimi tek bir şey değildir—çözülmesi gereken probleme bağlı olarak farklı türleri vardır. Üç ana tür şunlardır:</p>
+              <h3>1. Denetimli Öğrenme</h3>
+              <p>Bir öğrencinin cevap anahtarlı bir ders kitabından öğrenmesini hayal edin. Denetimli öğrenmede, makineye etiketli örnekler (girdi-çıktı çiftleri) verilir. Örneğin, bir programın resimlerde kedileri tanımasını istiyorsanız, ona "kedi" veya "kedi değil" olarak etiketlenmiş binlerce resim sağlarsınız. Makine bu örnekleri kullanarak deseni öğrenir ve yeni resimlere bu bilgiyi uygular. Bu yöntem spam tespiti, tıbbi teşhis ve konuşma tanıma gibi alanlarda yaygın olarak kullanılır.</p>
+              <h3>2. Denetimsiz Öğrenme</h3>
+              <p>Şimdi, bir öğrenciye hiçbir talimat verilmeden bir yığın kitap verildiğini düşünün. Kategorileri kendi başına bulmak zorundadır. Denetimsiz öğrenmede, makineye etiketlenmemiş veriler verilir ve kendi başına desenleri bulması beklenir. Yaygın bir uygulama müşteri segmentasyonudur—bir işletmenin müşterilerini satın alma davranışlarına göre gruplandırması, ancak önceden hangi grupların olacağını bilmemesidir.</p>
+              <h3>3. Pekiştirmeli Öğrenme</h3>
+              <p>Bu, deneme-yanılma yoluyla öğrenmeye benzer. Bir pekiştirmeli öğrenme modeli, bir ortamla etkileşime girer, eylemlerine göre ödüller veya cezalar alır. Bir satranç programını düşünün: Bir hamle yapar, puan kazanıp kaybettiğini görür ve buna göre stratejisini ayarlar. Bu yöntem robotik, oyunlar ve otonom araçlar gibi alanlarda kullanılır.</p>
+              <h2>Bir Makine Verilerden Nasıl Öğrenir?</h2>
+              <p>Makine öğrenimi temelde verilerdeki matematiksel ilişkileri bulmaktır. Bir spam filtresini ele alalım. Şöyle çalışabilir:</p>
+              <ol>
+                 <li><strong>Veri Toplama</strong>: Sistem, "spam" veya "spam değil" olarak etiketlenmiş binlerce e-posta toplar.</li>
+                 <li><strong>Özellik Çıkarma</strong>: Her e-postayı ölçülebilir özelliklere ayırır (belirli kelimelerin varlığı, mesajın uzunluğu, bağlantıların bulunması gibi).</li>
+                 <li><strong>Model Eğitimi</strong>: Sistem, karar ağacı veya sinir ağı gibi bir algoritma kullanarak bu özelliklerdeki desenleri bulur ve matematiksel bir model oluşturur.</li>
+                 <li><strong>Tahmin</strong>: Yeni bir e-posta geldiğinde, model öğrendiği fonksiyonu uygular ve spam olup olmadığına karar verir.</li>
+                 <li><strong>Geliştirme</strong>: Zamanla daha fazla e-posta sınıflandırıldıkça, sistem doğruluğunu artırmak için modelini günceller.</li>
+              </ol>
+              <p>Bu süreç, bir öğrencinin birçok deneme sınavı çözerek soru kalıplarını tanımasına ve doğru cevapları tahmin etmede daha iyi hale gelmesine benzer. Ancak unutmayın, makine <em>anlamıyor</em>—sadece optimize edilmiş bir matematiksel yolu takip ediyor.</p>
+              <h2>"Öğrenme" Terimi Neden Yanıltıcı Olabilir?</h2>
+              <p>Yapay zeka öncülerinden Arthur Samuel, 1959'da <em>makine öğrenimi</em> terimini ortaya attı. Ancak Burkov'un belirttiği gibi, bu terim daha çok bir pazarlama stratejisiydi. Tıpkı "yapay zeka"nın gerçek zeka anlamına gelmediği gibi, "makine öğrenimi" de gerçek öğrenme anlamına gelmez. Daha doğru bir tanım "otomatik desen tanıma" veya "istatistiksel yaklaştırma" olabilir.</p>
+              <h3>İnsan Öğrenmesi vs. Makine Öğrenmesi</h3>
+              <ul>
+                 <li><strong>İnsanlar:</strong> Bağlamı anlayabilir, mantıksal sıçramalar yapabilir ve tamamen yeni durumlara uyum sağlayabilir.</li>
+                 <li><strong>Makineler:</strong> Verilerdeki desenleri tespit edebilir ve yanıtlarını optimize edebilir, ancak anlama, akıl yürütme ve eğitim aldığı şeylerin ötesine geçme yeteneği yoktur.</li>
+              </ul>
+              <p>Bu ayrım önemlidir, özellikle de yapay zekanın sınırlamalarını göz önünde bulundurduğumuzda. Örneğin, güneşli Kaliforniya yollarında eğitilmiş bir otonom araç, daha önce hiç görmediği karlı yollarda zorlanabilir. Bir sohbet botu, gerçek dünya deneyimi olmadığı için alaycı ifadeleri anlayamayabilir.</p>
+              <h2>Makine Öğreniminin Gücü ve Sınırları</h2>
+              <p>Makine öğrenimi son derece güçlüdür—tıptan finansa, eğlenceye kadar birçok alanı dönüştürmüştür. Ancak sonuçta sadece bir araçtır. Bir hesap makinesi sayıları insandan daha hızlı işleyebilir, ancak bu sayıların ne anlama geldiğini <em>bilmez</em>.</p>
+              <p>Bunu anlamak, gerçekçi beklentiler belirlememize yardımcı olur. Makineler, yalnızca daha fazla veri işledikleri için bilinçli veya yaratıcı hale gelmeyeceklerdir. Ancak iyi tasarlanmış algoritmalar, dikkatli veri seçimi ve insan gözetimi ile onların gücünden gerçek dünya problemlerini verimli bir şekilde çözmek için yararlanabiliriz.</p>
+              <h2>Sonuç</h2>
+              <p>Makine öğrenimi sihir değil—matematiktir. Düşünmez, hissetmez veya bizim gibi öğrenmez, ancak desenleri tanıyabilir ve veriye dayalı kararlar alabilir. Makine öğreniminin ne olduğunu (ve ne olmadığını) anlayarak, onun yeteneklerini ve sınırlamalarını abartıya kapılmadan değerlendirebiliriz.</p>
+              <p>Bir dahaki sefere yapay zeka destekli bir öneri, bir sesli asistanın sorularınızı yanıtlaması veya yolda bir otonom araç gördüğünüzde şunu bilin: Gerçekten öğrenmiyor. Sadece, deneyimle optimize edilmiş ancak yalnızca programlandığı sınırlar içinde çalışan son derece sofistike bir matematiksel formülü takip ediyor.</p>
+              <hr>
+              <p class="footnote"><em>Andriy Burkov'un</em> The Hundred-Page Machine Learning Book <em>adlı kitabındaki kavramlardan esinlenilmiştir.</em></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="widget-sidebar sidebar-search">
+            <h5 class="sidebar-title">Search</h5>
+            <div class="sidebar-content">
+              <form id="search-form" onsubmit="return handleSearch(event)">
+                <div class="input-group">
+                  <input type="text" id="search-input" class="form-control" placeholder="Search for..." aria-label="Search for...">
+                  <span class="input-group-btn">
+                    <button class="btn btn-secondary btn-search" type="submit">
+                      <span class="ion-android-search"></span>
+                    </button>
+                  </span>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="widget-sidebar">
+            <h5 class="sidebar-title">Recent Post</h5>
+            <div class="sidebar-content">
+              <ul class="list-sidebar">
+                <li>
+                  <a href="MacShortcuts.html">Mac shortcuts guide</a>
+                </li>
+                <li>
+                  <a href="OguzKaganEpic.html">Oğuz Kağan Epic</a>
+                </li>
+                <li>
+                  <a href="ErgenekonEpic.html">Ergenekon epic</a>
+                </li>
+                <li>
+                  <a href="DeservingMoney.html">Are AI Models Making Us Earn Money We Don't Deserve?</a>
+                </li>
+                <li>
+                  <a href="AI-Defense.html">The Role of Artificial Intelligence in Defense Technologies</a>
+                </li>
+                <li>
+                  <a href="WhyToLearnHistory.html">Why is knowing history important?</a>
+                </li>
+                <li>
+                  <a href="PreciousMetalData.html">One of the precious metals, Data</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="widget-sidebar">
+            <h5 class="sidebar-title">Archives</h5>
+            <div class="sidebar-content">
+              <ul class="list-sidebar">
+                <li>
+                  <a href="MacShortcuts.html">Mac shortcuts guide</a>
+                </li>
+                <li>
+                  <a href="OguzKaganEpic.html">Oğuz Kağan Epic</a>
+                </li>
+                <li>
+                  <a href="ErgenekonEpic.html">Ergenekon epic</a>
+                </li>
+                <li>
+                  <a href="DeservingMoney.html">Are AI Models Making Us Earn Money We Don't Deserve?</a>
+                </li>
+                <li>
+                  <a href="AI-Defense.html">The Role of Artificial Intelligence in Defense Technologies</a>
+                </li>
+                <li>
+                  <a href="WhyToLearnHistory.html">Why is knowing history important?</a>
+                </li>
+                <li>
+                  <a href="PreciousMetalData.html">One of the precious metals, Data</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="widget-sidebar widget-tags">
+            <h5 class="sidebar-title">Tags</h5>
+            <div class="sidebar-content">
+              <ul>
+                <li>
+                  <a href="#">History</a>
+                </li>
+                <li>
+                  <a href="#">Epic</a>
+                </li>
+                <li>
+                  <a href="#">Turkish Culture</a>
+                </li>
+                <li>
+                  <a href="#">Legend</a>
+                </li>
+                <li>
+                  <a href="#">Heritage</a>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
       </div>
     </div>
   </section>
+  <!--/ Section Blog-Single End /-->
 
-  <!-- Footer -->
-  <footer>
-    <div class="container">
-      <p class="copyright">&copy; Baha Erdoğan. Tüm Hakları Saklıdır.</p>
+  <!-- Leave a Reply Section -->
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h3 class="mb-4 title-left">Leave a Reply</h3>
+            <form id="comment-form" class="comment-form">
+              <div id="comment-success" class="alert alert-success d-none">Your comment has been submitted. Thank you!</div>
+              <div id="comment-error" class="alert alert-danger d-none">There was an error submitting your comment. Please try again.</div>
+              <div class="form-group mb-3">
+                <label for="comment-name">Name *</label>
+                <input type="text" class="form-control input-mf" id="comment-name" name="from_name" required>
+              </div>
+              <div class="form-group mb-3">
+                <label for="comment-email">Email *</label>
+                <input type="email" class="form-control input-mf" id="comment-email" name="from_email" required>
+              </div>
+              <div class="form-group mb-3">
+                <label for="comment-text">Comment *</label>
+                <textarea class="form-control input-mf" id="comment-text" name="message" rows="5" required></textarea>
+              </div>
+              <button type="submit" class="button button-a button-big button-rouded">Submit Comment</button>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
-  </footer>
+  </div>
+
+  <!-- Comments Display Section -->
+  <div class="container mt-5 mb-5">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h3 class="mb-4 title-left">Comments</h3>
+            <div id="comments-container">
+              <!-- Comments will be displayed here -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--/ Section Contact-Footer Star /-->
+  <section class="paralax-mf footer-paralax bg-image sect-mt4 route" style="background-image: url('img/overlay-bg.jpg')">
+    <div class="overlay-mf"></div>
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="copyright-box">
+              <p class="copyright">&copy; Copyright <strong>Bahaerdogan</strong>. All Rights Reserved</p>
+              <div class="credits">
+                <!--
+                  All the links in the footer should remain intact.
+                  You can delete the links only if you purchased the pro version.
+                  Licensing information: https://bootstrapmade.com/license/
+                  Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=DevFolio
+                -->
+                <!-- Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </section>
+  <!--/ Section Contact-footer End /-->
+
+  <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+  <div id="preloader"></div>
+
+  <!-- JavaScript Libraries -->
+  <script src="lib/jquery/jquery.min.js"></script>
+  <script src="lib/jquery/jquery-migrate.min.js"></script>
+  <script src="lib/popper/popper.min.js"></script>
+  <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+  <script src="lib/easing/easing.min.js"></script>
+  <script src="lib/counterup/jquery.waypoints.min.js"></script>
+  <script src="lib/counterup/jquery.counterup.js"></script>
+  <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+  <script src="lib/lightbox/js/lightbox.min.js"></script>
+  <script src="lib/typed/typed.min.js"></script>
+  <!-- Contact Form JavaScript File -->
+  <script src="contactform/contactform.js"></script>
+
+  <!-- Template Main Javascript File -->
+  <script src="js/main.js"></script>
+
+  <!-- JavaScript for handling comments -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const commentForm = document.getElementById('comment-form');
+      const successMessage = document.getElementById('comment-success');
+      const errorMessage = document.getElementById('comment-error');
+      const commentsContainer = document.getElementById('comments-container');
+      
+      // Load existing comments from localStorage
+      loadComments();
+      
+      if (commentForm) {
+        commentForm.addEventListener('submit', function(event) {
+          event.preventDefault();
+          
+          // Hide messages
+          successMessage.classList.add('d-none');
+          errorMessage.classList.add('d-none');
+          
+          // Get form data
+          const name = document.getElementById('comment-name').value;
+          const email = document.getElementById('comment-email').value;
+          const comment = document.getElementById('comment-text').value;
+          const date = new Date().toLocaleDateString();
+          const blogTitle = "Oğuz Kağan Epic";
+          
+          // Show loading state
+          const submitButton = commentForm.querySelector('button[type="submit"]');
+          const originalButtonText = submitButton.textContent;
+          submitButton.textContent = "Submitting...";
+          submitButton.disabled = true;
+          
+          // Prepare email template parameters
+          const templateParams = {
+            from_name: name,
+            from_email: email,
+            message: comment,
+            blog_title: blogTitle
+          };
+          
+          // Send email using EmailJS
+          emailjs.send('service_lhjdfqw', 'template_bha2val', templateParams, 'sr9_9CUgd0L641ObN')
+            .then(function() {
+              // Show success message
+              successMessage.classList.remove('d-none');
+              
+              // Save comment to localStorage
+              saveComment(name, comment, date);
+              
+              // Display the new comment
+              displayComment(name, comment, date);
+              
+              // Reset form
+              commentForm.reset();
+              
+              // Reset button
+              submitButton.textContent = originalButtonText;
+              submitButton.disabled = false;
+            })
+            .catch(function(error) {
+              console.error('EmailJS Error:', error);
+              errorMessage.textContent = "There was an error submitting your comment: " + error.text;
+              errorMessage.classList.remove('d-none');
+              
+              // Reset button
+              submitButton.textContent = originalButtonText;
+              submitButton.disabled = false;
+            });
+        });
+      }
+      
+      // Function to save comment to localStorage
+      function saveComment(name, comment, date) {
+        const blogId = window.location.pathname.split('/').pop().replace('.html', '');
+        let comments = JSON.parse(localStorage.getItem(`comments-${blogId}`) || '[]');
+        comments.push({ name, comment, date });
+        localStorage.setItem(`comments-${blogId}`, JSON.stringify(comments));
+      }
+      
+      // Function to load comments from localStorage
+      function loadComments() {
+        const blogId = window.location.pathname.split('/').pop().replace('.html', '');
+        const comments = JSON.parse(localStorage.getItem(`comments-${blogId}`) || '[]');
+        
+        if (comments.length === 0) {
+          commentsContainer.innerHTML = '<p>No comments yet. Be the first to comment!</p>';
+        } else {
+          commentsContainer.innerHTML = '';
+          comments.forEach(comment => {
+            displayComment(comment.name, comment.comment, comment.date);
+          });
+        }
+      }
+      
+      // Function to display a comment in the comments section
+      function displayComment(name, comment, date) {
+        const commentElement = document.createElement('div');
+        commentElement.className = 'comment mb-4 p-3 border-bottom';
+        commentElement.innerHTML = `
+          <h5>${name} <small class="text-muted">${date}</small></h5>
+          <p>${comment}</p>
+        `;
+        commentsContainer.appendChild(commentElement);
+      }
+    });
+  </script>
+
+  <script>
+    const blogPosts = [
+      { title: "One of the precious metals, Data", url: "PreciousMetalData.html", keywords: ["data", "technology", "ai", "artificial intelligence", "precious"] },
+      { title: "Why is knowing history important?", url: "WhyToLearnHistory.html", keywords: ["history", "learning", "knowledge", "importance"] },
+      { title: "The Role of Artificial Intelligence in Defense Technologies", url: "AI-Defense.html", keywords: ["ai", "artificial intelligence", "defense", "technology", "security"] },
+      { title: "Are AI Models Making Us Earn Money We Don't Deserve?", url: "DeservingMoney.html", keywords: ["ai", "money", "work", "technology", "earnings"] },
+      { title: "Ergenekon epic", url: "ErgenekonEpic.html", keywords: ["ergenekon", "epic", "history", "story"] },
+      { title: "Oğuz Kağan Epic", url: "OguzKaganEpic.html", keywords: ["oğuz kağan", "epic", "history", "turkish", "legend"] },
+      { title: "Mac shortcuts guide", url: "MacShortcuts.html", keywords: ["mac", "shortcuts", "guide", "productivity"] }
+    ];
+
+    function handleSearch(event) {
+      event.preventDefault();
+      const searchTerm = document.getElementById('search-input').value.toLowerCase();
+      
+      if (!searchTerm.trim()) {
+        return false;
+      }
+
+      const results = blogPosts.filter(post => {
+        const titleMatch = post.title.toLowerCase().includes(searchTerm);
+        const keywordMatch = post.keywords.some(keyword => keyword.includes(searchTerm));
+        return titleMatch || keywordMatch;
+      });
+
+      if (results.length > 0) {
+        // Redirect to the first matching result
+        window.location.href = results[0].url;
+      } else {
+        alert('No matching posts found.');
+      }
+
+      return false;
+    }
+  </script>
+
 </body>
 </html>
