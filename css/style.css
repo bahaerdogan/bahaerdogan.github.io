@@ -701,38 +701,31 @@ a:hover {
 ======================================*/
 
 .service-box {
-  background-color: #fff;
-  padding: 2.5rem 1.3rem;
-  border-radius: 1rem;
-  margin-bottom: 3rem;
-}
-
-.service-box:hover .ico-circle {
-  transition: all 500ms ease;
-  color: #fff;
-  background-color: #48abec;
-  box-shadow: 0 0 0 10px #d7ebf8;
-}
-
-.service-box .service-ico {
+  padding: 1rem;
   margin-bottom: 1rem;
-  color: #1e1e1e;
-}
-
-.service-box .ico-circle {
-  transition: all 500ms ease;
-  font-size: 4rem;
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
 }
 
 .service-box .s-title {
-  font-size: 1.4rem;
-  text-transform: uppercase;
-  text-align: center;
-  padding: .4rem 0;
+  font-size: 1.2rem;
+  margin-bottom: 0.8rem;
+}
+
+.service-box .s-title a {
+  color: #1e1e1e;
+  text-decoration: none;
+}
+
+.service-box .s-title a:hover {
+  color: #0078ff;
 }
 
 .service-box .s-description {
-  color: #4e4e4e;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin-bottom: 0;
 }
 
 /*======================================
