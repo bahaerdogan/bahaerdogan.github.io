@@ -213,4 +213,106 @@
 		});
 	}
 
+	// Google Analytics initialization
+	const initGoogleAnalytics = () => {
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+		gtag('config', 'G-ZGTWHSMVV7');
+	};
+
+	// EmailJS initialization
+	const initEmailJS = () => {
+		emailjs.init("sr9_9CUgd0L641ObN");
+	};
+
+	// Blog search functionality
+	const initBlogSearch = () => {
+		const blogPosts = [
+			{ title: "One of the precious metals, Data", url: "PreciousMetalData.html", keywords: ["data", "technology", "ai", "artificial intelligence", "precious"] },
+			{ title: "Why is knowing history important?", url: "WhyToLearnHistory.html", keywords: ["history", "learning", "knowledge", "importance"] },
+			// ... existing blog posts ...
+		];
+
+		window.handleSearch = (event) => {
+			event.preventDefault();
+			const searchTerm = document.getElementById('search-input').value.toLowerCase();
+			
+			if (!searchTerm.trim()) {
+				return false;
+			}
+
+			const results = blogPosts.filter(post => {
+				const titleMatch = post.title.toLowerCase().includes(searchTerm);
+				const keywordMatch = post.keywords.some(keyword => keyword.includes(searchTerm));
+				return titleMatch || keywordMatch;
+			});
+
+			if (results.length > 0) {
+				window.location.href = results[0].url;
+			} else {
+				alert('No matching posts found.');
+			}
+
+			return false;
+		};
+	};
+
+	// Comment system functionality
+	const initCommentSystem = () => {
+		const commentForm = document.getElementById('comment-form');
+		const successMessage = document.getElementById('comment-success');
+		const errorMessage = document.getElementById('comment-error');
+		const commentsContainer = document.getElementById('comments-container');
+		
+		if (commentForm) {
+			commentForm.addEventListener('submit', handleCommentSubmission);
+		}
+		
+		loadComments();
+	};
+
+	const handleCommentSubmission = async (event) => {
+		event.preventDefault();
+		
+		const submitButton = event.target.querySelector('button[type="submit"]');
+		const originalButtonText = submitButton.textContent;
+		
+		try {
+			submitButton.textContent = "Submitting...";
+			submitButton.disabled = true;
+			
+			const formData = {
+				from_name: document.getElementById('comment-name').value,
+				from_email: document.getElementById('comment-email').value,
+				message: document.getElementById('comment-text').value,
+				blog_title: "What's machine learning, really?"
+			};
+			
+			await emailjs.send('service_lhjdfqw', 'template_bha2val', formData);
+			
+			saveComment(formData.from_name, formData.message, new Date().toLocaleDateString());
+			displayComment(formData.from_name, formData.message, new Date().toLocaleDateString());
+			
+			event.target.reset();
+			document.getElementById('comment-success').classList.remove('d-none');
+			
+		} catch (error) {
+			console.error('EmailJS Error:', error);
+			document.getElementById('comment-error').classList.remove('d-none');
+		} finally {
+			submitButton.textContent = originalButtonText;
+			submitButton.disabled = false;
+		}
+	};
+
+	// Initialize all components
+	document.addEventListener('DOMContentLoaded', () => {
+		initGoogleAnalytics();
+		initEmailJS();
+		initBlogSearch();
+		initCommentSystem();
+		// ... other existing initializations ...
+	});
+
 })(jQuery);
