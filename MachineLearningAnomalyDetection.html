@@ -143,7 +143,7 @@
                             <img src="img/post-2.png" class="img-fluid" alt="">
                         </div>
                         <div class="post-meta">
-                            <h1 class="article-title">What's machine learning, really?</h1>
+                            <h1 class="article-title">Anomaly Detection in Machine Learning: A Technical Overview</h1>
                             <ul>
                                 <li>
                                     <span class="ion-ios-person"></span>
@@ -161,67 +161,96 @@
                         </div>
                         <div class="article-content">
                             <h1>Anomaly Detection in Machine Learning: A Technical Overview</h1>
-                            
+    
                             <h2>Introduction</h2>
-                            <p>Anomaly detection is a key problem in machine learning, focused on identifying rare instances that stand out from the majority of data. It plays a crucial role in areas like fraud detection, cybersecurity, industrial defect detection, and predictive maintenance. Unlike traditional classification problems, anomaly detection deals with highly imbalanced datasets, which means standard supervised learning approaches often don’t work well.</p>
+                            <p>Anomaly detection is a fundamental problem in machine learning, involving the identification of rare instances that deviate significantly from the majority of data. It is widely applied in fraud detection, cybersecurity, industrial defect detection, and predictive maintenance. Unlike traditional supervised learning problems, anomaly detection typically deals with highly imbalanced datasets, requiring specialized methods to effectively model and detect outliers.</p>
+                            <p>This article presents a technical overview of anomaly detection, its methodologies, and its mathematical foundations, drawing from <em>The Hundred-Page Machine Learning Book</em> by Andriy Burkov.</p>
                             
-                            <p>This article breaks down the core concepts, techniques, and mathematical foundations of anomaly detection, with insights inspired by <em>The Hundred-Page Machine Learning Book</em> by Andriy Burkov.</p>
+                            <h2>Understanding Anomalies</h2>
+                            <p>Formally, let <code>X &sube; &reals;<sup>d</sup></code> be a dataset consisting of <code>N</code> independent observations <code>x<sub>1</sub>, x<sub>2</sub>, ..., x<sub>N</sub></code>. Anomalies are defined as instances <code>x<sub>i</sub> &in; X</code> that significantly deviate from the learned distribution of normal instances.</p>
                             
-                            <h2>What is an Anomaly?</h2>
-                            <p>Anomalies, or outliers, are data points that significantly differ from the expected pattern in a dataset.</p>
-                            
-                            <h3>Types of Anomalies</h3>
+                            <h3>Types of anomalies:</h3>
                             <ul>
-                                <li><strong>Point Anomalies</strong> – Individual data points that differ from most others.</li>
-                                <li><strong>Contextual Anomalies</strong> – Data points that are anomalous within a specific context.</li>
-                                <li><strong>Collective Anomalies</strong> – A set of data points that together indicate an abnormal pattern.</li>
+                                <li><strong>Point Anomalies:</strong> Individual points that deviate from the majority of the dataset. These are often modeled using probability distributions or distance metrics.</li>
+                                <li><strong>Contextual Anomalies:</strong> Instances that are considered anomalous within a specific context, often requiring temporal or spatial analysis.</li>
+                                <li><strong>Collective Anomalies:</strong> A group of observations that, when considered together, exhibit an abnormal pattern.</li>
                             </ul>
                             
-                            <h2>Mathematical Approach to Anomaly Detection</h2>
-                            <p>The goal of anomaly detection is to learn a function <code>f: X → {0,1}</code>, where:</p>
+                            <h2>Mathematical Formulation of Anomaly Detection</h2>
+                            <p>Given a dataset <code>X</code>, anomaly detection aims to learn a function:</p>
                             <pre>
-                            f(x) = { 1, if x is an anomaly
-                                     0, otherwise }
+                                f: X &rarr; {0,1}
+                                f(x) = 1, if x is an anomaly
+                                       0, otherwise
+                            </pre>
+                            <p>Depending on the availability of labeled data, methods can be categorized as supervised, unsupervised, or semi-supervised.</p>
+                            
+                            <h3>1. Supervised Anomaly Detection</h3>
+                            <p>Supervised learning relies on labeled training data <code>{(x<sub>i</sub>, y<sub>i</sub>)}<sub>i=1</sub><sup>N</sup></code>, where <code>y<sub>i</sub> &in; {0,1}</code> indicates whether an instance is anomalous. Traditional classification models such as logistic regression, decision trees, and neural networks can be used:</p>
+                            <pre>
+                                y&#770; = &sigma;(w<sup>T</sup> x + b)
+                                &sigma;(z) = 1 / (1 + e<sup>-z</sup>)
+                            </pre>
+                            <p><strong>Challenges:</strong></p>
+                            <ul>
+                                <li>Requires a sufficiently large set of labeled anomalies, which is often impractical.</li>
+                                <li>Can be biased towards majority classes due to data imbalance.</li>
+                            </ul>
+                            
+                            <h3>2. Unsupervised Anomaly Detection</h3>
+                            <p>Unsupervised methods assume no labeled anomalies and detect deviations based on learned distributions.</p>
+                            
+                            <h4>Statistical Methods</h4>
+                            <p>A common approach is to assume a probability distribution <code>p(x)</code> over normal instances and define an anomaly threshold:</p>
+                            <pre>
+                                x is anomalous if p(x) &lt; &epsilon;
+                            </pre>
+                            <p>For Gaussian distributions, anomalies can be detected using the Mahalanobis distance:</p>
+                            <pre>
+                                d<sub>M</sub>(x) = sqrt((x - &mu;)<sup>T</sup> &Sigma;<sup>-1</sup> (x - &mu;))
+                            </pre>
+                            <h4>Clustering-Based Methods</h4>
+                            <p>Clustering techniques such as K-Means and DBSCAN identify outliers as points that do not fit well into any cluster.</p>
+                            <pre>
+                                d(x, C<sub>k</sub>) = min<sub>c &isin; C</sub> ||x - c||<sub>2</sub>
+                            </pre>
+                            <h4>Density-Based Methods</h4>
+                            <p>Isolation Forest and Local Outlier Factor (LOF) estimate local density and classify instances in low-density regions as anomalies.</p>
+                            <pre>
+                                LOF(x) = 1 / |N<sub>k</sub>(x)| &sum;<sub>y &isin; N<sub>k</sub>(x)</sub> (lrd(y) / lrd(x))
                             </pre>
                             
-                            <h2>1. Supervised Anomaly Detection</h2>
-                            <p>Supervised methods treat anomaly detection as a classification problem, using machine learning models such as logistic regression, decision trees, and neural networks.</p>
+                            <h3>3. Semi-Supervised Anomaly Detection</h3>
+                            <p>These methods train a model on normal data only and flag deviations as anomalies.</p>
                             
-                            <h2>2. Unsupervised Anomaly Detection</h2>
-                            <h3>Statistical Methods</h3>
-                            <p>Assuming a probability distribution <code>p(x)</code> over normal data, anomalies can be detected when <code>p(x) &lt; ε</code>.</p>
+                            <h4>Autoencoders</h4>
+                            <p>A neural network is trained to reconstruct input data. If reconstruction error <code>||x - x&#770;||<sub>2</sub></code> is high, <code>x</code> is likely an anomaly.</p>
                             
-                            <h3>Clustering-Based Methods</h3>
-                            <p>Algorithms like K-Means and DBSCAN identify outliers as points that don’t fit well into any cluster.</p>
+                            <h4>One-Class SVM</h4>
+                            <p>A support vector machine (SVM) is trained to separate normal data from the origin in a high-dimensional space:</p>
+                            <pre>
+                                w<sup>T</sup> x - b &ge; 0
+                            </pre>
                             
-                            <h3>Density-Based Methods</h3>
-                            <p>Isolation Forest and Local Outlier Factor (LOF) estimate anomaly scores based on data density.</p>
-                            
-                            <h2>3. Semi-Supervised Anomaly Detection</h2>
-                            <h3>Autoencoders</h3>
-                            <p>Neural networks trained to reconstruct input data. High reconstruction error suggests an anomaly.</p>
-                            
-                            <h3>One-Class SVM</h3>
-                            <p>Separates normal data from outliers using a decision boundary.</p>
-                            
-                            <h2>Practical Steps for Implementing Anomaly Detection</h2>
-                            <ul>
-                                <li><strong>Data Preprocessing</strong> – Normalize features and handle missing values.</li>
-                                <li><strong>Choosing the Right Model</strong> – Based on dataset characteristics.</li>
-                                <li><strong>Training & Evaluation</strong> – Use precision-recall and ROC curves.</li>
-                                <li><strong>Deployment & Monitoring</strong> – Continuously update models.</li>
-                            </ul>
+                            <h2>Practical Implementation</h2>
+                            <ol>
+                                <li><strong>Data Preprocessing:</strong> Normalization, missing value handling, feature selection.</li>
+                                <li><strong>Model Selection:</strong> Choose an appropriate method based on data properties.</li>
+                                <li><strong>Training and Evaluation:</strong> Use metrics like Precision-Recall and ROC curves to assess performance.</li>
+                                <li><strong>Deployment and Monitoring:</strong> Continuously update models to adapt to data drift.</li>
+                            </ol>
                             
                             <h2>Challenges in Anomaly Detection</h2>
                             <ul>
-                                <li><strong>Imbalanced Data</strong> – Techniques like oversampling and cost-sensitive learning help.</li>
-                                <li><strong>Concept Drift</strong> – Models must adapt over time.</li>
-                                <li><strong>High False Positives</strong> – Fine-tuning thresholds improves accuracy.</li>
+                                <li><strong>Imbalanced Data:</strong> Techniques like oversampling, undersampling, and cost-sensitive learning are used to mitigate bias.</li>
+                                <li><strong>Concept Drift:</strong> Models must adapt to changing patterns over time.</li>
+                                <li><strong>High False Positives:</strong> Threshold tuning and ensemble methods help improve reliability.</li>
                             </ul>
                             
                             <h2>Conclusion</h2>
-                            <p>Anomaly detection is essential in many real-world applications. Various approaches—ranging from statistical methods to deep learning—can be used, and hybrid models are proving to be highly effective.</p>
+                            <p>Anomaly detection is a crucial component of machine learning applications, requiring a mix of statistical, clustering, and deep learning techniques. The choice of method depends on the nature of the dataset and the availability of labeled data. As research advances, hybrid approaches combining multiple methods are proving to be more effective in tackling real-world anomaly detection challenges.</p>
                         </div>
+                        
                         
                     </div>
                 </div>
