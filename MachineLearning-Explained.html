@@ -3,22 +3,113 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Bahaerdogan</title>
+    <title>What's Machine Learning, Really? | Comprehensive Guide & Explanation | Bahaerdogan</title>
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
     <meta name="theme-color" content="#0078ff">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta content="" name="keywords">
-    <meta content="" name="description">
+    <meta content="machine learning, AI, artificial intelligence, technology, data science, supervised learning, unsupervised learning, reinforcement learning" name="keywords">
+    <meta content="A comprehensive explanation of machine learning, its types, and how it actually works - beyond the hype and misconceptions. Learn about supervised, unsupervised, and reinforcement learning." name="description">
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZGTWHSMVV7"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
         
-          gtag('config', 'G-ZGTWHSMVV7');
+        // Enhanced ecommerce tracking with custom dimensions
+        gtag('config', 'G-ZGTWHSMVV7', {
+            'page_title': 'What\'s Machine Learning, Really?',
+            'page_location': window.location.href,
+            'page_path': window.location.pathname,
+            'send_page_view': true,
+            'custom_map': {
+                'dimension1': 'article_category',
+                'dimension2': 'reading_time',
+                'dimension3': 'scroll_depth'
+            }
+        });
+
+        // Track user interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Track search usage
+            const searchForm = document.getElementById('search-form');
+            if (searchForm) {
+                searchForm.addEventListener('submit', function() {
+                    const searchTerm = document.getElementById('search-input').value;
+                    gtag('event', 'search', {
+                        'event_category': 'Search',
+                        'event_label': searchTerm,
+                        'value': 1
+                    });
+                });
+            }
+
+            // Track reading time
+            let startTime = new Date();
+            let timeOnPage = 0;
+            setInterval(function() {
+                timeOnPage += 1;
+                if (timeOnPage % 30 === 0) { // Send every 30 seconds
+                    gtag('event', 'reading_time', {
+                        'event_category': 'Engagement',
+                        'event_label': 'Machine Learning Explained Post',
+                        'value': timeOnPage
+                    });
+                }
+            }, 1000);
+
+            // Track scroll depth
+            let maxScroll = 0;
+            window.addEventListener('scroll', function() {
+                const scrollPercent = Math.round((window.scrollY + window.innerHeight) / document.body.scrollHeight * 100);
+                if (scrollPercent > maxScroll && scrollPercent % 25 === 0) { // Track every 25%
+                    maxScroll = scrollPercent;
+                    gtag('event', 'scroll_depth', {
+                        'event_category': 'Engagement',
+                        'event_label': 'Machine Learning Explained Post',
+                        'value': scrollPercent
+                    });
+                }
+            });
+
+            // Track outbound links
+            document.querySelectorAll('a[href^="http"]').forEach(link => {
+                if (!link.href.includes(window.location.hostname)) {
+                    link.addEventListener('click', function(e) {
+                        gtag('event', 'outbound_click', {
+                            'event_category': 'Outbound Links',
+                            'event_label': link.href,
+                            'transport_type': 'beacon'
+                        });
+                    });
+                }
+            });
+
+            // Track social shares
+            document.querySelectorAll('.social-share').forEach(button => {
+                button.addEventListener('click', function() {
+                    gtag('event', 'social_share', {
+                        'event_category': 'Social',
+                        'event_label': button.dataset.platform,
+                        'value': 1
+                    });
+                });
+            });
+
+            // Track comment interactions
+            const commentForm = document.getElementById('comment-form');
+            if (commentForm) {
+                commentForm.addEventListener('submit', function() {
+                    gtag('event', 'form_submit', {
+                        'event_category': 'Comments',
+                        'event_label': 'Machine Learning Explained Post',
+                        'value': 1
+                    });
+                });
+            }
+        });
     </script>
 
     <!-- EmailJS Library -->
@@ -48,8 +139,42 @@
     License: https://bootstrapmade.com/license/
   ======================================================= -->
 
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "What's Machine Learning, Really?",
+        "description": "A comprehensive explanation of machine learning, its types, and how it actually works - beyond the hype and misconceptions.",
+        "image": "https://www.bahaerdogan.com/img/mlearning2.png",
+        "author": {
+            "@type": "Person",
+            "name": "Baha Erdoğan"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Bahaerdogan",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://www.bahaerdogan.com/img/favicon.png"
+            }
+        },
+        "datePublished": "2024-03-20",
+        "dateModified": "2024-03-20",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://www.bahaerdogan.com/MachineLearning-Explained.html"
+        }
+    }
+    </script>
+
+    <!-- Accessibility Improvements -->
+    <div class="skip-nav">
+        <a href="#main-content" class="sr-only sr-only-focusable">Skip to main content</a>
+    </div>
+
     <!-- LinkedIn ve diğer sosyal medya önizleme meta etiketleri -->
-    <meta property="og:title" content="What's machine learning, really?">
+    <meta property="og:title" content="What's Machine Learning, Really?">
     <meta property="og:description" content="A comprehensive explanation of machine learning, its types, and how it actually works - beyond the hype and misconceptions.">
     <meta property="og:image" content="https://www.bahaerdogan.com/img/mlearning2.png">
     <meta property="og:url" content="https://www.bahaerdogan.com/MachineLearning-Explained.html">
