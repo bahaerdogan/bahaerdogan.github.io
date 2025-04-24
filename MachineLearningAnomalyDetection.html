@@ -444,75 +444,28 @@
                 <div class="card shadow-sm">
                     <div class="card-body">
                         <h3 class="mb-4 title-left">Leave a Reply</h3>
-                        <form id="comment-form" class="comment-form" novalidate>
-                            <div id="comment-success" class="alert alert-success d-none" role="alert">
-                                <i class="fa fa-check-circle"></i> Your comment has been submitted. Thank you!
-                            </div>
-                            <div id="error-message" class="alert alert-danger d-none" role="alert">
-                                <i class="fa fa-exclamation-circle"></i> <span id="error-message">There was an error submitting your comment. Please try again.</span>
+                        <form id="comment-form" class="comment-form">
+                            <div id="comment-success" class="alert alert-success d-none">Your comment has been submitted. Thank you!</div>
+                            <div id="comment-error" class="alert alert-danger d-none">There was an error submitting your comment. Please try again.</div>
+                            <div class="form-group mb-3">
+                                <label for="comment-name">Name *</label>
+                                <input type="text" class="form-control input-mf" id="comment-name" name="from_name" required>
                             </div>
                             <div class="form-group mb-3">
-                                <label for="comment-name" class="required">Name *</label>
-                                <input type="text" class="form-control input-mf" id="comment-name" name="from_name" required 
-                                       pattern="[A-Za-z\s]{2,50}" 
-                                       title="Please enter a valid name (2-50 characters, letters only)"
-                                       aria-required="true">
-                                <div class="invalid-feedback">Please enter a valid name (2-50 characters, letters only)</div>
+                                <label for="comment-email">Email *</label>
+                                <input type="email" class="form-control input-mf" id="comment-email" name="from_email" required>
                             </div>
                             <div class="form-group mb-3">
-                                <label for="comment-email" class="required">Email *</label>
-                                <input type="email" class="form-control input-mf" id="comment-email" name="from_email" required
-                                       pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-                                       title="Please enter a valid email address"
-                                       aria-required="true">
-                                <div class="invalid-feedback">Please enter a valid email address</div>
+                                <label for="comment-text">Comment *</label>
+                                <textarea class="form-control input-mf" id="comment-text" name="message" rows="5" required></textarea>
                             </div>
-                            <div class="form-group mb-3">
-                                <label for="comment-text" class="required">Comment *</label>
-                                <textarea class="form-control input-mf" id="comment-text" name="message" rows="5" required
-                                          minlength="10" maxlength="1000"
-                                          title="Please enter a comment (10-1000 characters)"
-                                          aria-required="true"></textarea>
-                                <div class="invalid-feedback">Please enter a comment (10-1000 characters)</div>
-                                <small class="form-text text-muted">Maximum 1000 characters</small>
-                            </div>
-                            <div class="form-group mb-3">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="privacy-check" required>
-                                    <label class="custom-control-label" for="privacy-check">
-                                        I agree to the <a href="privacy-policy.html" target="_blank">privacy policy</a> *
-                                    </label>
-                                </div>
-                            </div>
-                            <button type="submit" class="button button-a button-big button-rouded" aria-label="Submit comment">
-                                <span class="submit-text">Submit Comment</span>
-                                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                            </button>
+                            <button type="submit" class="button button-a button-big button-rouded">Submit Comment</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <style>
-        .required::after {
-            content: " *";
-            color: #dc3545;
-        }
-        .invalid-feedback {
-            display: none;
-        }
-        .was-validated .form-control:invalid ~ .invalid-feedback {
-            display: block;
-        }
-        .was-validated .form-control:invalid {
-            border-color: #dc3545;
-        }
-        .was-validated .form-control:valid {
-            border-color: #28a745;
-        }
-    </style>
 
     <!-- Comments Display Section -->
     <div class="container mt-5 mb-5">
@@ -584,7 +537,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const commentForm = document.getElementById('comment-form');
             const successMessage = document.getElementById('comment-success');
-            const errorMessage = document.getElementById('error-message');
+            const errorMessage = document.getElementById('comment-error');
             const commentsContainer = document.getElementById('comments-container');
             
             // Load existing comments from localStorage
@@ -596,28 +549,19 @@
                     
                     // Hide messages
                     successMessage.classList.add('d-none');
-                    errorMessage.parentElement.classList.add('d-none');
-                    
-                    // Validate form
-                    if (!commentForm.checkValidity()) {
-                        event.stopPropagation();
-                        commentForm.classList.add('was-validated');
-                        return;
-                    }
+                    errorMessage.classList.add('d-none');
                     
                     // Get form data
-                    const name = document.getElementById('comment-name').value.trim();
-                    const email = document.getElementById('comment-email').value.trim();
-                    const comment = document.getElementById('comment-text').value.trim();
+                    const name = document.getElementById('comment-name').value;
+                    const email = document.getElementById('comment-email').value;
+                    const comment = document.getElementById('comment-text').value;
                     const date = new Date().toLocaleDateString();
                     const blogTitle = "Anomaly Detection in Machine Learning";
                     
                     // Show loading state
                     const submitButton = commentForm.querySelector('button[type="submit"]');
-                    const submitText = submitButton.querySelector('.submit-text');
-                    const spinner = submitButton.querySelector('.spinner-border');
-                    submitText.textContent = "Submitting...";
-                    spinner.classList.remove('d-none');
+                    const originalButtonText = submitButton.textContent;
+                    submitButton.textContent = "Submitting...";
                     submitButton.disabled = true;
                     
                     // Prepare email template parameters
@@ -642,35 +586,19 @@
                             
                             // Reset form
                             commentForm.reset();
-                            commentForm.classList.remove('was-validated');
                             
                             // Reset button
-                            submitText.textContent = "Submit Comment";
-                            spinner.classList.add('d-none');
+                            submitButton.textContent = originalButtonText;
                             submitButton.disabled = false;
-                            
-                            // Track successful submission
-                            gtag('event', 'comment_success', {
-                                'event_category': 'Comments',
-                                'event_label': 'Anomaly Detection Post'
-                            });
                         })
                         .catch(function(error) {
                             console.error('EmailJS Error:', error);
                             errorMessage.textContent = "There was an error submitting your comment: " + error.text;
-                            errorMessage.parentElement.classList.remove('d-none');
+                            errorMessage.classList.remove('d-none');
                             
                             // Reset button
-                            submitText.textContent = "Submit Comment";
-                            spinner.classList.add('d-none');
+                            submitButton.textContent = originalButtonText;
                             submitButton.disabled = false;
-                            
-                            // Track error
-                            gtag('event', 'comment_error', {
-                                'event_category': 'Comments',
-                                'event_label': 'Anomaly Detection Post',
-                                'value': error.status
-                            });
                         });
                 });
             }
@@ -689,7 +617,7 @@
                 const comments = JSON.parse(localStorage.getItem(`comments-${blogId}`) || '[]');
                 
                 if (comments.length === 0) {
-                    commentsContainer.innerHTML = '<p class="text-muted">No comments yet. Be the first to comment!</p>';
+                    commentsContainer.innerHTML = '<p>No comments yet. Be the first to comment!</p>';
                 } else {
                     commentsContainer.innerHTML = '';
                     comments.forEach(comment => {
@@ -703,11 +631,8 @@
                 const commentElement = document.createElement('div');
                 commentElement.className = 'comment mb-4 p-3 border-bottom';
                 commentElement.innerHTML = `
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="mb-1">${name}</h5>
-                        <small class="text-muted">${date}</small>
-                    </div>
-                    <p class="mb-0">${comment}</p>
+                    <h5>${name} <small class="text-muted">${date}</small></h5>
+                    <p>${comment}</p>
                 `;
                 commentsContainer.appendChild(commentElement);
             }
