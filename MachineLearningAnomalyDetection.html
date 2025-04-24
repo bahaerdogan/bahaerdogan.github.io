@@ -3,22 +3,55 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Bahaerdogan</title>
+    <title>Anomaly Detection in Machine Learning | Technical Guide & Examples | Bahaerdogan</title>
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
     <meta name="theme-color" content="#0078ff">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta content="" name="keywords">
-    <meta content="" name="description">
+    <meta content="machine learning, anomaly detection, data science, AI, technology, technical guide, examples, implementation" name="keywords">
+    <meta content="A comprehensive technical overview of anomaly detection in machine learning, including methodologies, mathematical foundations, and practical implementation examples." name="description">
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZGTWHSMVV7"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
         
-          gtag('config', 'G-ZGTWHSMVV7');
+        // Enhanced ecommerce tracking
+        gtag('config', 'G-ZGTWHSMVV7', {
+            'page_title': 'Anomaly Detection in Machine Learning',
+            'page_location': window.location.href,
+            'page_path': window.location.pathname,
+            'send_page_view': true
+        });
+
+        // Track user interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Track form submissions
+            const commentForm = document.getElementById('comment-form');
+            if (commentForm) {
+                commentForm.addEventListener('submit', function() {
+                    gtag('event', 'form_submit', {
+                        'event_category': 'Comments',
+                        'event_label': 'Anomaly Detection Post'
+                    });
+                });
+            }
+
+            // Track search usage
+            const searchForm = document.getElementById('search-form');
+            if (searchForm) {
+                searchForm.addEventListener('submit', function() {
+                    const searchTerm = document.getElementById('search-input').value;
+                    gtag('event', 'search', {
+                        'event_category': 'Search',
+                        'event_label': searchTerm,
+                        'value': 1
+                    });
+                });
+            }
+        });
     </script>
 
     <!-- EmailJS Library -->
@@ -49,10 +82,10 @@
   ======================================================= -->
 
     <!-- LinkedIn ve diğer sosyal medya önizleme meta etiketleri -->
-    <meta property="og:title" content="What's machine learning, really?">
-    <meta property="og:description" content="A comprehensive explanation of machine learning, its types, and how it actually works - beyond the hype and misconceptions.">
+    <meta property="og:title" content="Anomaly Detection in Machine Learning: A Technical Overview">
+    <meta property="og:description" content="A comprehensive technical overview of anomaly detection in machine learning, including methodologies and mathematical foundations.">
     <meta property="og:image" content="https://www.bahaerdogan.com/img/machinelearning.jpeg">
-    <meta property="og:url" content="https://www.bahaerdogan.com/MachineLearning-Explained.html">
+    <meta property="og:url" content="https://www.bahaerdogan.com/MachineLearningAnomalyDetection.html">
     <meta property="og:type" content="article">
 
     <!-- Third-party Scripts -->
@@ -61,6 +94,40 @@
 
     <!-- Application Scripts -->
     <script src="js/main.js"></script>
+
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Anomaly Detection in Machine Learning: A Technical Overview",
+        "description": "A comprehensive technical overview of anomaly detection in machine learning, including methodologies, mathematical foundations, and practical implementation examples.",
+        "image": "https://www.bahaerdogan.com/img/post-2.png",
+        "author": {
+            "@type": "Person",
+            "name": "Baha Erdoğan"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Bahaerdogan",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://www.bahaerdogan.com/img/favicon.png"
+            }
+        },
+        "datePublished": "2024-03-20",
+        "dateModified": "2024-03-20",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://www.bahaerdogan.com/MachineLearningAnomalyDetection.html"
+        }
+    }
+    </script>
+
+    <!-- Accessibility Improvements -->
+    <div class="skip-nav">
+        <a href="#main-content" class="sr-only sr-only-focusable">Skip to main content</a>
+    </div>
 </head>
 
 <body>
@@ -125,7 +192,7 @@
                         <li class="breadcrumb-item">
                             <a href="index.html#blog">Blog</a>
                         </li>
-                        <li class="breadcrumb-item active">What's machine learning, really?</li>
+                        <li class="breadcrumb-item active">Anomaly Detection in Machine Learning</li>
                     </ol>
                 </div>
             </div>
@@ -377,28 +444,75 @@
                 <div class="card shadow-sm">
                     <div class="card-body">
                         <h3 class="mb-4 title-left">Leave a Reply</h3>
-                        <form id="comment-form" class="comment-form">
-                            <div id="comment-success" class="alert alert-success d-none">Your comment has been submitted. Thank you!</div>
-                            <div id="comment-error" class="alert alert-danger d-none">There was an error submitting your comment. Please try again.</div>
-                            <div class="form-group mb-3">
-                                <label for="comment-name">Name *</label>
-                                <input type="text" class="form-control input-mf" id="comment-name" name="from_name" required>
+                        <form id="comment-form" class="comment-form" novalidate>
+                            <div id="comment-success" class="alert alert-success d-none" role="alert">
+                                <i class="fa fa-check-circle"></i> Your comment has been submitted. Thank you!
+                            </div>
+                            <div id="error-message" class="alert alert-danger d-none" role="alert">
+                                <i class="fa fa-exclamation-circle"></i> <span id="error-message">There was an error submitting your comment. Please try again.</span>
                             </div>
                             <div class="form-group mb-3">
-                                <label for="comment-email">Email *</label>
-                                <input type="email" class="form-control input-mf" id="comment-email" name="from_email" required>
+                                <label for="comment-name" class="required">Name *</label>
+                                <input type="text" class="form-control input-mf" id="comment-name" name="from_name" required 
+                                       pattern="[A-Za-z\s]{2,50}" 
+                                       title="Please enter a valid name (2-50 characters, letters only)"
+                                       aria-required="true">
+                                <div class="invalid-feedback">Please enter a valid name (2-50 characters, letters only)</div>
                             </div>
                             <div class="form-group mb-3">
-                                <label for="comment-text">Comment *</label>
-                                <textarea class="form-control input-mf" id="comment-text" name="message" rows="5" required></textarea>
+                                <label for="comment-email" class="required">Email *</label>
+                                <input type="email" class="form-control input-mf" id="comment-email" name="from_email" required
+                                       pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                                       title="Please enter a valid email address"
+                                       aria-required="true">
+                                <div class="invalid-feedback">Please enter a valid email address</div>
                             </div>
-                            <button type="submit" class="button button-a button-big button-rouded">Submit Comment</button>
+                            <div class="form-group mb-3">
+                                <label for="comment-text" class="required">Comment *</label>
+                                <textarea class="form-control input-mf" id="comment-text" name="message" rows="5" required
+                                          minlength="10" maxlength="1000"
+                                          title="Please enter a comment (10-1000 characters)"
+                                          aria-required="true"></textarea>
+                                <div class="invalid-feedback">Please enter a comment (10-1000 characters)</div>
+                                <small class="form-text text-muted">Maximum 1000 characters</small>
+                            </div>
+                            <div class="form-group mb-3">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="privacy-check" required>
+                                    <label class="custom-control-label" for="privacy-check">
+                                        I agree to the <a href="privacy-policy.html" target="_blank">privacy policy</a> *
+                                    </label>
+                                </div>
+                            </div>
+                            <button type="submit" class="button button-a button-big button-rouded" aria-label="Submit comment">
+                                <span class="submit-text">Submit Comment</span>
+                                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                            </button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <style>
+        .required::after {
+            content: " *";
+            color: #dc3545;
+        }
+        .invalid-feedback {
+            display: none;
+        }
+        .was-validated .form-control:invalid ~ .invalid-feedback {
+            display: block;
+        }
+        .was-validated .form-control:invalid {
+            border-color: #dc3545;
+        }
+        .was-validated .form-control:valid {
+            border-color: #28a745;
+        }
+    </style>
 
     <!-- Comments Display Section -->
     <div class="container mt-5 mb-5">
@@ -468,107 +582,135 @@
     <!-- JavaScript for handling comments -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-          const commentForm = document.getElementById('comment-form');
-          const successMessage = document.getElementById('comment-success');
-          const errorMessage = document.getElementById('comment-error');
-          const commentsContainer = document.getElementById('comments-container');
-          
-          // Load existing comments from localStorage
-          loadComments();
-          
-          if (commentForm) {
-            commentForm.addEventListener('submit', function(event) {
-              event.preventDefault();
-              
-              // Hide messages
-              successMessage.classList.add('d-none');
-              errorMessage.classList.add('d-none');
-              
-              // Get form data
-              const name = document.getElementById('comment-name').value;
-              const email = document.getElementById('comment-email').value;
-              const comment = document.getElementById('comment-text').value;
-              const date = new Date().toLocaleDateString();
-              const blogTitle = "What's machine learning, really?";
-              
-              // Show loading state
-              const submitButton = commentForm.querySelector('button[type="submit"]');
-              const originalButtonText = submitButton.textContent;
-              submitButton.textContent = "Submitting...";
-              submitButton.disabled = true;
-              
-              // Prepare email template parameters
-              const templateParams = {
-                from_name: name,
-                from_email: email,
-                message: comment,
-                blog_title: blogTitle
-              };
-              
-              // Send email using EmailJS
-              emailjs.send('service_lhjdfqw', 'template_bha2val', templateParams, 'sr9_9CUgd0L641ObN')
-                .then(function() {
-                  // Show success message
-                  successMessage.classList.remove('d-none');
-                  
-                  // Save comment to localStorage
-                  saveComment(name, comment, date);
-                  
-                  // Display the new comment
-                  displayComment(name, comment, date);
-                  
-                  // Reset form
-                  commentForm.reset();
-                  
-                  // Reset button
-                  submitButton.textContent = originalButtonText;
-                  submitButton.disabled = false;
-                })
-                .catch(function(error) {
-                  console.error('EmailJS Error:', error);
-                  errorMessage.textContent = "There was an error submitting your comment: " + error.text;
-                  errorMessage.classList.remove('d-none');
-                  
-                  // Reset button
-                  submitButton.textContent = originalButtonText;
-                  submitButton.disabled = false;
-                });
-            });
-          }
-          
-          // Function to save comment to localStorage
-          function saveComment(name, comment, date) {
-            const blogId = window.location.pathname.split('/').pop().replace('.html', '');
-            let comments = JSON.parse(localStorage.getItem(`comments-${blogId}`) || '[]');
-            comments.push({ name, comment, date });
-            localStorage.setItem(`comments-${blogId}`, JSON.stringify(comments));
-          }
-          
-          // Function to load comments from localStorage
-          function loadComments() {
-            const blogId = window.location.pathname.split('/').pop().replace('.html', '');
-            const comments = JSON.parse(localStorage.getItem(`comments-${blogId}`) || '[]');
+            const commentForm = document.getElementById('comment-form');
+            const successMessage = document.getElementById('comment-success');
+            const errorMessage = document.getElementById('error-message');
+            const commentsContainer = document.getElementById('comments-container');
             
-            if (comments.length === 0) {
-              commentsContainer.innerHTML = '<p>No comments yet. Be the first to comment!</p>';
-            } else {
-              commentsContainer.innerHTML = '';
-              comments.forEach(comment => {
-                displayComment(comment.name, comment.comment, comment.date);
-              });
+            // Load existing comments from localStorage
+            loadComments();
+            
+            if (commentForm) {
+                commentForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    
+                    // Hide messages
+                    successMessage.classList.add('d-none');
+                    errorMessage.parentElement.classList.add('d-none');
+                    
+                    // Validate form
+                    if (!commentForm.checkValidity()) {
+                        event.stopPropagation();
+                        commentForm.classList.add('was-validated');
+                        return;
+                    }
+                    
+                    // Get form data
+                    const name = document.getElementById('comment-name').value.trim();
+                    const email = document.getElementById('comment-email').value.trim();
+                    const comment = document.getElementById('comment-text').value.trim();
+                    const date = new Date().toLocaleDateString();
+                    const blogTitle = "Anomaly Detection in Machine Learning";
+                    
+                    // Show loading state
+                    const submitButton = commentForm.querySelector('button[type="submit"]');
+                    const submitText = submitButton.querySelector('.submit-text');
+                    const spinner = submitButton.querySelector('.spinner-border');
+                    submitText.textContent = "Submitting...";
+                    spinner.classList.remove('d-none');
+                    submitButton.disabled = true;
+                    
+                    // Prepare email template parameters
+                    const templateParams = {
+                        from_name: name,
+                        from_email: email,
+                        message: comment,
+                        blog_title: blogTitle
+                    };
+                    
+                    // Send email using EmailJS
+                    emailjs.send('service_lhjdfqw', 'template_bha2val', templateParams, 'sr9_9CUgd0L641ObN')
+                        .then(function() {
+                            // Show success message
+                            successMessage.classList.remove('d-none');
+                            
+                            // Save comment to localStorage
+                            saveComment(name, comment, date);
+                            
+                            // Display the new comment
+                            displayComment(name, comment, date);
+                            
+                            // Reset form
+                            commentForm.reset();
+                            commentForm.classList.remove('was-validated');
+                            
+                            // Reset button
+                            submitText.textContent = "Submit Comment";
+                            spinner.classList.add('d-none');
+                            submitButton.disabled = false;
+                            
+                            // Track successful submission
+                            gtag('event', 'comment_success', {
+                                'event_category': 'Comments',
+                                'event_label': 'Anomaly Detection Post'
+                            });
+                        })
+                        .catch(function(error) {
+                            console.error('EmailJS Error:', error);
+                            errorMessage.textContent = "There was an error submitting your comment: " + error.text;
+                            errorMessage.parentElement.classList.remove('d-none');
+                            
+                            // Reset button
+                            submitText.textContent = "Submit Comment";
+                            spinner.classList.add('d-none');
+                            submitButton.disabled = false;
+                            
+                            // Track error
+                            gtag('event', 'comment_error', {
+                                'event_category': 'Comments',
+                                'event_label': 'Anomaly Detection Post',
+                                'value': error.status
+                            });
+                        });
+                });
             }
-          }
-          
-          // Function to display a comment in the comments section
-          function displayComment(name, comment, date) {
-            const commentElement = document.createElement('div');
-            commentElement.className = 'comment mb-4 p-3 border-bottom';
-            commentElement.innerHTML = `
-              <h5>${name} <small class="text-muted">${date}</small></h5>
-              <p>${comment}</p>
-            `;
-            commentsContainer.appendChild(commentElement);
-          }
+            
+            // Function to save comment to localStorage
+            function saveComment(name, comment, date) {
+                const blogId = window.location.pathname.split('/').pop().replace('.html', '');
+                let comments = JSON.parse(localStorage.getItem(`comments-${blogId}`) || '[]');
+                comments.push({ name, comment, date });
+                localStorage.setItem(`comments-${blogId}`, JSON.stringify(comments));
+            }
+            
+            // Function to load comments from localStorage
+            function loadComments() {
+                const blogId = window.location.pathname.split('/').pop().replace('.html', '');
+                const comments = JSON.parse(localStorage.getItem(`comments-${blogId}`) || '[]');
+                
+                if (comments.length === 0) {
+                    commentsContainer.innerHTML = '<p class="text-muted">No comments yet. Be the first to comment!</p>';
+                } else {
+                    commentsContainer.innerHTML = '';
+                    comments.forEach(comment => {
+                        displayComment(comment.name, comment.comment, comment.date);
+                    });
+                }
+            }
+            
+            // Function to display a comment in the comments section
+            function displayComment(name, comment, date) {
+                const commentElement = document.createElement('div');
+                commentElement.className = 'comment mb-4 p-3 border-bottom';
+                commentElement.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-1">${name}</h5>
+                        <small class="text-muted">${date}</small>
+                    </div>
+                    <p class="mb-0">${comment}</p>
+                `;
+                commentsContainer.appendChild(commentElement);
+            }
         });
     </script>
 
