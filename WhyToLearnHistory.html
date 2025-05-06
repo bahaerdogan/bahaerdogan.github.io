@@ -17,12 +17,17 @@
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  // Enhanced ecommerce tracking
+  // Enhanced ecommerce tracking with custom dimensions
   gtag('config', 'G-ZGTWHSMVV7', {
     'page_title': 'Why is Knowing History Important?',
     'page_location': window.location.href,
     'page_path': window.location.pathname,
-    'send_page_view': true
+    'send_page_view': true,
+    'custom_map': {
+      'dimension1': 'article_category',
+      'dimension2': 'reading_time',
+      'dimension3': 'scroll_depth'
+    }
   });
 
   // Track user interactions
@@ -35,6 +40,70 @@
         gtag('event', 'search', {
           'event_category': 'Search',
           'event_label': searchTerm,
+          'value': 1
+        });
+      });
+    }
+
+    // Track reading time
+    let startTime = new Date();
+    let timeOnPage = 0;
+    setInterval(function() {
+      timeOnPage += 1;
+      if (timeOnPage % 30 === 0) { // Send every 30 seconds
+        gtag('event', 'reading_time', {
+          'event_category': 'Engagement',
+          'event_label': 'Why is Knowing History Important?',
+          'value': timeOnPage
+        });
+      }
+    }, 1000);
+
+    // Track scroll depth
+    let maxScroll = 0;
+    window.addEventListener('scroll', function() {
+      const scrollPercent = Math.round((window.scrollY + window.innerHeight) / document.body.scrollHeight * 100);
+      if (scrollPercent > maxScroll && scrollPercent % 25 === 0) { // Track every 25%
+        maxScroll = scrollPercent;
+        gtag('event', 'scroll_depth', {
+          'event_category': 'Engagement',
+          'event_label': 'Why is Knowing History Important?',
+          'value': scrollPercent
+        });
+      }
+    });
+
+    // Track outbound links
+    document.querySelectorAll('a[href^="http"]').forEach(link => {
+      if (!link.href.includes(window.location.hostname)) {
+        link.addEventListener('click', function(e) {
+          gtag('event', 'outbound_click', {
+            'event_category': 'Outbound Links',
+            'event_label': link.href,
+            'transport_type': 'beacon'
+          });
+        });
+      }
+    });
+
+    // Track social shares
+    document.querySelectorAll('.social-share').forEach(button => {
+      button.addEventListener('click', function() {
+        gtag('event', 'social_share', {
+          'event_category': 'Social',
+          'event_label': button.dataset.platform,
+          'value': 1
+        });
+      });
+    });
+
+    // Track comment interactions
+    const commentForm = document.getElementById('comment-form');
+    if (commentForm) {
+      commentForm.addEventListener('submit', function() {
+        gtag('event', 'form_submit', {
+          'event_category': 'Comments',
+          'event_label': 'Why is Knowing History Important?',
           'value': 1
         });
       });
