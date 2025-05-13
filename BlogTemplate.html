@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{{BLOG_TITLE}}</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+    <meta name="theme-color" content="#0078ff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta content="{{BLOG_KEYWORDS}}" name="keywords">
+    <meta content="{{BLOG_DESCRIPTION}}" name="description">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZGTWHSMVV7"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-ZGTWHSMVV7', {
+            'page_title': '{{BLOG_TITLE}}',
+            'page_location': window.location.href,
+            'page_path': window.location.pathname,
+            'send_page_view': true
+        });
+    </script>
+
+    <!-- EmailJS Library -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+    <!-- Favicons -->
+    <link href="img/favicon.png" rel="icon">
+    <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Bootstrap CSS File -->
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Libraries CSS Files -->
+    <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/ionicons/css/ionicons.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+    <!-- Main Stylesheet File -->
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- Social Media Preview Meta Tags (placeholders) -->
+    <meta property="og:title" content="{{BLOG_TITLE}}">
+    <meta property="og:description" content="{{BLOG_DESCRIPTION}}">
+    <meta property="og:image" content="{{BLOG_IMAGE}}">
+    <meta property="og:url" content="{{BLOG_URL}}">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{BLOG_TITLE}}">
+    <meta name="twitter:description" content="{{BLOG_DESCRIPTION}}">
+    <meta name="twitter:image" content="{{BLOG_IMAGE}}">
+
+    <!-- Application Scripts -->
+    <script src="js/main.js"></script>
+
+    <!-- Accessibility Improvements -->
+    <div class="skip-nav">
+        <a href="#main-content" class="sr-only sr-only-focusable">Skip to main content</a>
+    </div>
+</head>
+<body>
+    <!--/ Nav Star /-->
+    <nav class="navbar navbar-b navbar-trans navbar-expand-md fixed-top" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand js-scroll" href="#page-top">Baha Erdoğan</a>
+            <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarDefault" aria-controls="navbarDefault" aria-expanded="false" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="navbar-collapse collapse justify-content-end" id="navbarDefault">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll" href="index.html#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll" href="index.html#blog">Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll" href="index.html#voluntary">Voluntary</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll" href="index.html#projects">Projects</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll" href="index.html#contact">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="language-toggle" href="#">
+                            <i class="fa fa-language"></i> Türkçe
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!--/ Nav End /-->
+
+    <!--/ Intro Skew Star /-->
+    <div class="intro intro-single route bg-image" style="background-image: url('img/image (21).png')">
+        <div class="overlay-mf"></div>
+        <div class="intro-content display-table">
+            <div class="table-cell">
+                <div class="container">
+                    <h2 class="intro-title mb-4">{{BLOG_HEADER}}</h2>
+                    <ol class="breadcrumb d-flex justify-content-center">
+                        <li class="breadcrumb-item">
+                            <a href="index.html">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="index.html#blog">Blog</a>
+                        </li>
+                        <li class="breadcrumb-item active">{{BLOG_BREADCRUMB}}</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/ Intro Skew End /-->
+
+    <!--/ Section Blog-Single Star /-->
+    <section class="blog-wrapper sect-pt4" id="blog">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="post-box">
+                        <div class="post-thumb">
+                            <img src="{{BLOG_IMAGE}}" class="img-fluid" alt="">
+                        </div>
+                        <div class="post-meta">
+                            <h1 class="article-title">{{BLOG_TITLE}}</h1>
+                            <ul>
+                                <li>
+                                    <span class="ion-ios-person"></span>
+                                    <a href="#">{{BLOG_AUTHOR}}</a>
+                                </li>
+                                <li>
+                                    <span class="ion-pricetag"></span>
+                                    <a href="#">{{BLOG_CATEGORY}}</a>
+                                </li>
+                                <li>
+                                    <span class="ion-chatbox"></span>
+                                    <a href="#">0</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="article-content">
+                            <!-- Blog content goes here -->
+                            <p>{{BLOG_CONTENT}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="widget-sidebar sidebar-search">
+                        <h5 class="sidebar-title">Search</h5>
+                        <div class="sidebar-content">
+                            <form id="search-form" onsubmit="return handleSearch(event)">
+                                <div class="input-group">
+                                    <input type="text" id="search-input" class="form-control" placeholder="Search for..." aria-label="Search for...">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-secondary btn-search" type="submit">
+                                            <span class="ion-android-search"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="widget-sidebar">
+                        <h5 class="sidebar-title">Recent Post</h5>
+                        <div class="sidebar-content">
+                            <ul class="list-sidebar">
+                                <!-- Placeholder for recent posts -->
+                                <li><a href="#">Recent Post 1</a></li>
+                                <li><a href="#">Recent Post 2</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="widget-sidebar">
+                        <h5 class="sidebar-title">Archives</h5>
+                        <div class="sidebar-content">
+                            <ul class="list-sidebar">
+                                <!-- Placeholder for archives -->
+                                <li><a href="#">Archive 1</a></li>
+                                <li><a href="#">Archive 2</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="widget-sidebar widget-tags">
+                        <h5 class="sidebar-title">Tags</h5>
+                        <div class="sidebar-content">
+                            <ul>
+                                <!-- Placeholder for tags -->
+                                <li><a href="#">Tag1</a></li>
+                                <li><a href="#">Tag2</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--/ Section Blog-Single End /-->
+
+    <!-- Leave a Reply Section -->
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h3 class="mb-4 title-left">Leave a Reply</h3>
+                        <form id="comment-form" class="comment-form">
+                            <div id="comment-success" class="alert alert-success d-none">Your comment has been submitted. Thank you!</div>
+                            <div id="comment-error" class="alert alert-danger d-none">There was an error submitting your comment. Please try again.</div>
+                            <div class="form-group mb-3">
+                                <label for="comment-name">Name *</label>
+                                <input type="text" class="form-control input-mf" id="comment-name" name="from_name" required>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="comment-email">Email *</label>
+                                <input type="email" class="form-control input-mf" id="comment-email" name="from_email" required>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="comment-text">Comment *</label>
+                                <textarea class="form-control input-mf" id="comment-text" name="message" rows="5" required></textarea>
+                            </div>
+                            <button type="submit" class="button button-a button-big button-rouded">Submit Comment</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comments Display Section -->
+    <div class="container mt-5 mb-5">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h3 class="mb-4 title-left">Comments</h3>
+                        <div id="comments-container">
+                            <!-- Comments will be displayed here --> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--/ Section Contact-Footer Star /-->
+    <section class="paralax-mf footer-paralax bg-image sect-mt4 route" style="background-image: url('img/overlay-bg.jpg')">
+        <div class="overlay-mf"></div>
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="copyright-box">
+                            <p class="copyright">&copy; Copyright <strong>Bahaerdogan</strong>. All Rights Reserved</p>
+                            <div class="credits">
+                                <!-- Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </section>
+    <!--/ Section Contact-footer End /-->
+
+    <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+    <div id="preloader"></div>
+
+    <!-- JavaScript Libraries -->
+    <script src="lib/jquery/jquery.min.js"></script>
+    <script src="lib/jquery/jquery-migrate.min.js"></script>
+    <script src="lib/popper/popper.min.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/counterup/jquery.waypoints.min.js"></script>
+    <script src="lib/counterup/jquery.counterup.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="lib/lightbox/js/lightbox.min.js"></script>
+    <script src="lib/typed/typed.min.js"></script>
+    <!-- Contact Form JavaScript File -->
+    <script src="contactform/contactform.js"></script>
+    <!-- Application Scripts -->
+    <script src="js/main.js"></script>
+    <!-- Blog Page Javascript File -->
+    <script src="js/blog.js"></script>
+    <!-- JavaScript for handling comments (unchanged) -->
+    <script>
+        // ... existing code for comment handling ...
+    </script>
+    <script>
+        // ... existing code for search handling ...
+    </script>
+</body>
+</html>
