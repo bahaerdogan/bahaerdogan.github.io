@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>From Prediction to Impact: What AI Means for You | Opinion | Bahaerdogan</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+    <meta name="theme-color" content="#0078ff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta content="From Prediction to Impact: What AI Means for You, Opinion, AI, Machine Learning, Technology, Impact" name="keywords">
+    <meta content="An opinion on what AI means for you, how it impacts your life, and why you should care." name="description">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZGTWHSMVV7"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        
+        // Enhanced ecommerce tracking with custom dimensions
+        gtag('config', 'G-ZGTWHSMVV7', {
+            'page_title': 'From Prediction to Impact: What AI Means for You',
+            'page_location': window.location.href,
+            'page_path': window.location.pathname,
+            'send_page_view': true,
+            'custom_map': {
+                'dimension1': 'article_category',
+                'dimension2': 'reading_time',
+                'dimension3': 'scroll_depth'
+            }
+        });
+
+        // Track user interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Track form submissions
+            const commentForm = document.getElementById('comment-form');
+            if (commentForm) {
+                commentForm.addEventListener('submit', function() {
+                    gtag('event', 'form_submit', {
+                        'event_category': 'Comments',
+                        'event_label': 'From Prediction to Impact: What AI Means for You',
+                        'value': 1
+                    });
+                });
+            }
+
+            // Track search usage
+            const searchForm = document.getElementById('search-form');
+            if (searchForm) {
+                searchForm.addEventListener('submit', function() {
+                    const searchTerm = document.getElementById('search-input').value;
+                    gtag('event', 'search', {
+                        'event_category': 'Search',
+                        'event_label': searchTerm,
+                        'value': 1
+                    });
+                });
+            }
+
+            // Track reading time
+            let startTime = new Date();
+            let timeOnPage = 0;
+            setInterval(function() {
+                timeOnPage += 1;
+                if (timeOnPage % 30 === 0) { // Send every 30 seconds
+                    gtag('event', 'reading_time', {
+                        'event_category': 'Engagement',
+                        'event_label': 'From Prediction to Impact: What AI Means for You',
+                        'value': timeOnPage
+                    });
+                }
+            }, 1000);
+
+            // Track scroll depth
+            let maxScroll = 0;
+            window.addEventListener('scroll', function() {
+                const scrollPercent = Math.round((window.scrollY + window.innerHeight) / document.body.scrollHeight * 100);
+                if (scrollPercent > maxScroll && scrollPercent % 25 === 0) { // Track every 25%
+                    maxScroll = scrollPercent;
+                    gtag('event', 'scroll_depth', {
+                        'event_category': 'Engagement',
+                        'event_label': 'From Prediction to Impact: What AI Means for You',
+                        'value': scrollPercent
+                    });
+                }
+            });
+
+            // Track outbound links
+            document.querySelectorAll('a[href^="http"]').forEach(link => {
+                if (!link.href.includes(window.location.hostname)) {
+                    link.addEventListener('click', function(e) {
+                        gtag('event', 'outbound_click', {
+                            'event_category': 'Outbound Links',
+                            'event_label': link.href,
+                            'transport_type': 'beacon'
+                        });
+                    });
+                }
+            });
+
+            // Track social shares
+            document.querySelectorAll('.social-share').forEach(button => {
+                button.addEventListener('click', function() {
+                    gtag('event', 'social_share', {
+                        'event_category': 'Social',
+                        'event_label': button.dataset.platform,
+                        'value': 1
+                    });
+                });
+            });
+        });
+    </script>
+
+    <!-- EmailJS Library -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+    <!-- Favicons -->
+    <link href="img/favicon.png" rel="icon">
+    <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Bootstrap CSS File -->
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Libraries CSS Files -->
+    <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/ionicons/css/ionicons.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+
+    <!-- Main Stylesheet File -->
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- =======================================================
+    Theme Name: DevFolio
+    Theme URL: https://bootstrapmade.com/devfolio-bootstrap-portfolio-html-template/
+    Author: BootstrapMade.com
+    License: https://bootstrapmade.com/license/
+  ======================================================= -->
+
+    <!-- Social Media Preview Meta Tags for AI Impact Article -->
+    <meta property="og:title" content="From Prediction to Impact: What AI Means for You">
+    <meta property="og:description" content="An opinion on what AI means for you, how it impacts your life, and why you should care.">
+    <meta property="og:image" content="https://www.bahaerdogan.com/img/CubistExportPerKG.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="https://www.bahaerdogan.com/WhatAıMeansToYou.html">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="From Prediction to Impact: What AI Means for You">
+    <meta name="twitter:description" content="An opinion on what AI means for you, how it impacts your life, and why you should care.">
+    <meta name="twitter:image" content="https://www.bahaerdogan.com/img/CubistExportPerKG.png">
+
+    <!-- Third-party Scripts -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZGTWHSMVV7"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+    <!-- Application Scripts -->
+    <script src="js/main.js"></script>
+
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "From Prediction to Impact: What AI Means for You",
+        "description": "An opinion on what AI means for you, how it impacts your life, and why you should care.",
+        "image": "https://www.bahaerdogan.com/img/CubistExportPerKG.png",
+        "author": {
+            "@type": "Person",
+            "name": "Baha Erdoğan"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Bahaerdogan",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://www.bahaerdogan.com/img/favicon.png"
+            }
+        },
+        "datePublished": "2024-03-20",
+        "dateModified": "2024-03-20",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://www.bahaerdogan.com/WhatAıMeansToYou.html"
+        }
+    }
+    </script>
+
+    <!-- Accessibility Improvements -->
+    <div class="skip-nav">
+        <a href="#main-content" class="sr-only sr-only-focusable">Skip to main content</a>
+    </div>
+</head>
+
+<body>
+    <div class="skip-nav">
+        <a href="#main-content" class="sr-only sr-only-focusable">Skip to main content</a>
+    </div>
+    <!--/ Nav Star /-->
+    <nav class="navbar navbar-b navbar-trans navbar-expand-md fixed-top" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand js-scroll" href="#page-top">Baha Erdoğan</a>
+            <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarDefault" aria-controls="navbarDefault" aria-expanded="false" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="navbar-collapse collapse justify-content-end" id="navbarDefault">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll" href="index.html">Home</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll" href="index.html#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll" href="index.html#blog">Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll" href="index.html#voluntary">Voluntary</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll" href="index.html#projects">Projects</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll" href="index.html#contact">Contact</a>
+                    </li>
+
+
+
+                    <li class="nav-item">
+                        <a class="nav-link" id="language-toggle" href="#">
+                            <i class="fa fa-language"></i> Türkçe
+                        </a>
+                    </li>
+
+
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!--/ Nav End /-->
+
+    <!--/ Intro Skew Star /-->
+    <div class="intro intro-single route bg-image" style="background-image: url('img/image\ \(21\).png')">
+        <div class="overlay-mf"></div>
+        <div class="intro-content display-table">
+            <div class="table-cell">
+                <div class="container">
+                    <h2 class="intro-title mb-4">Blog Details</h2>
+                    <ol class="breadcrumb d-flex justify-content-center">
+                        <li class="breadcrumb-item">
+                            <a href="index.html">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="index.html#blog">Blog</a>
+                        </li>
+                        <li class="breadcrumb-item active">From Prediction to Impact: What AI Means for You</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/ Intro Skew End /-->
+
+    <!--/ Section Blog-Single Star /-->
+    <section class="blog-wrapper sect-pt4" id="blog">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="post-box">
+                        <div class="post-thumb">
+                            <img src="img/CubistExportPerKG.png" class="img-fluid" alt="">
+                        </div>
+                        <div class="post-meta">
+                            <h1 class="article-title">From Prediction to Impact: What AI Means for You</h1>
+                            <ul>
+                                <li>
+                                    <span class="ion-ios-person"></span>
+                                    <a href="#">Baha Erdoğan</a>
+                                </li>
+                                <li>
+                                    <span class="ion-pricetag"></span>
+                                    <a href="#">Technology</a>
+                                </li>
+                                <li>
+                                    <span class="ion-chatbox"></span>
+                                    <a href="#">0</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="article-content">
+                            <blockquote class="blockquote">“You don't need to understand AI to be shaped by it—unless you want to.”</blockquote>
+                            <p>Artificial Intelligence (AI) is no longer a concept reserved for science fiction or research labs. It's a quiet force that's already integrated into your everyday life. From the ads you see online to the recommendations on your streaming service, AI—powered by machine learning (ML)—is everywhere. But what does that mean for you, and why should you care?</p>
+                            <h3>The Invisible Engine: What Is Machine Learning?</h3>
+                            <p>Machine Learning is the engine behind modern AI. In the simplest terms, it's a way for computers to learn from data and make decisions without being explicitly programmed. Think of it like this: instead of telling a computer exactly what to do, we feed it data and let it figure out the patterns. As Andriy Burkov describes in his widely respected <em>The Hundred-Page Machine Learning Book</em>, ML is the science of turning data into predictions.</p>
+                            <h3>Analogy: ML Is the Electricity of the 21st Century</h3>
+                            <p>You don't need to know how your smartphone works to use it effectively. Similarly, you don't need to understand the math behind ML to feel its impact. Just like electricity, it runs quietly in the background, enabling powerful capabilities that seem effortless on the surface.</p>
+                            <h3>Practical AI in Your Life: Where You Already See It</h3>
+                            <ul>
+                                <li>🏥 <strong>Healthcare</strong>
+                                  <br>AI systems help doctors detect diseases earlier and more accurately, from identifying tumors in medical images to predicting patient risk in hospitals. What used to take hours of human analysis now happens in minutes.
+                                  <ul>
+                                    <li>💡 Real-world example: Google's DeepMind developed an AI that can diagnose over 50 eye conditions as accurately as world-leading experts.</li>
+                                  </ul>
+                                </li>
+                                <li>💸 <strong>Finance</strong>
+                                  <br>Banks use ML to detect fraud, approve loans faster, and tailor services to individual customers. Ever wondered how your bank knew to flag that suspicious purchase? That's ML in action.
+                                  <ul>
+                                    <li>💡 Bonus: Robo-advisors like Betterment or Wealthfront use AI to optimize your investments—even while you sleep.</li>
+                                  </ul>
+                                </li>
+                                <li>🎓 <strong>Education</strong>
+                                  <br>Online learning platforms recommend lessons tailored to your progress. ML is even used to automatically grade assignments or detect when a student might be struggling.
+                                  <ul>
+                                    <li>💡 Fun fact: AI tutors can now offer feedback on writing, helping students refine essays in real time.</li>
+                                  </ul>
+                                </li>
+                                <li>🛒 <strong>Retail & E-Commerce</strong>
+                                  <br>When you shop online, ML is working behind the scenes—recommending products, optimizing prices, and even predicting what you'll want next.
+                                  <ul>
+                                    <li>💡 Example: Amazon's "Customers who bought this also bought…" feature isn't just helpful—it's powered by powerful collaborative filtering algorithms.</li>
+                                  </ul>
+                                </li>
+                                <li>🛣️ <strong>Transportation</strong>
+                                  <br>AI powers ride-sharing apps like Uber and Bolt. From estimating arrival times to setting prices based on demand, ML keeps the wheels moving.
+                                  <ul>
+                                    <li>💡 Did you know? Self-driving cars rely on ML to recognize pedestrians, traffic signs, and other vehicles in real time.</li>
+                                  </ul>
+                                </li>
+                                <li>📱 <strong>Social Media</strong>
+                                  <br>Your feed is a custom blend brewed by algorithms learning what you like, watch, and click.
+                                  <ul>
+                                    <li>💡 Real-world angle: Instagram's Explore page, TikTok's "For You" algorithm—both rely on machine learning to keep you scrolling.</li>
+                                  </ul>
+                                </li>
+                                <li>🎮 <strong>Gaming</strong>
+                                  <br>Game developers use ML to create smarter, more adaptive AI opponents, personalize user experiences, and even create content on the fly.
+                                  <ul>
+                                    <li>💡 Cool example: The AI in Middle-earth: Shadow of Mordor remembers how you fought, adapts, and comes back stronger.</li>
+                                  </ul>
+                                </li>
+                                <li>🎤 <strong>Entertainment</strong>
+                                  <br>Streaming platforms like Netflix, Spotify, and YouTube use ML to predict what you'll love next.
+                                  <ul>
+                                    <li>💡 Behind the scenes: Spotify analyzes tempo, pitch, and lyrics to recommend music that matches your mood.</li>
+                                  </ul>
+                                </li>
+                                <li>🧠 <strong>Mental Health & Wellness</strong>
+                                  <br>AI chatbots like Woebot or Wysa provide basic cognitive behavioral therapy (CBT) and emotional check-ins.
+                                  <ul>
+                                    <li>💡 Insight: While not a replacement for human therapists, they can offer 24/7 support for people in need.</li>
+                                  </ul>
+                                </li>
+                                <li>🌾 <strong>Agriculture</strong>
+                                  <br>AI helps farmers monitor crop health, predict weather patterns, and even control pests.
+                                  <ul>
+                                    <li>💡 On the ground: Drones combined with ML can scan fields and spot diseases before they spread.</li>
+                                  </ul>
+                                </li>
+                              </ul>
+                            <p>And that's just scratching the surface.</p>
+                            <h3>What This Means for You</h3>
+                            <p>Whether you realize it or not, AI is already influencing your decisions. The music you hear, the products you discover, even the route your navigation app chooses—these are all shaped by algorithms learning from your behavior.</p>
+                            <p>But here's the good news: you don't need a PhD to understand how AI is shaping your world. And if you're curious, a basic awareness of its principles (like those Burkov lays out) can empower you—not just as a consumer, but as a citizen in a world increasingly guided by data.</p>
+                            <h3>How to Stay Ahead</h3>
+                            <ul>
+                                <li><strong>Be Curious</strong> – Learn the basics of ML. You don't have to dive into the math; just understanding the vocabulary helps.</li>
+                                <li><strong>Ask Questions</strong> – When an app recommends something, wonder why. Is it helping you—or nudging you?</li>
+                                <li><strong>Demand Transparency</strong> – As AI becomes more embedded in society, transparency and fairness matter. Don't be afraid to ask how decisions are made.</li>
+                            </ul>
+                            <blockquote class="blockquote">Final Thought: AI Won't Replace You—But Someone Who Understands It Might</blockquote>
+                            <p>As AI continues to evolve, the question is no longer if it will affect you—but how. The more you understand its mechanics, the more prepared you'll be to harness its power and avoid its pitfalls.</p>
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="widget-sidebar sidebar-search">
+                        <h5 class="sidebar-title">Search</h5>
+                        <div class="sidebar-content">
+                            <form id="search-form" onsubmit="return handleSearch(event)">
+                                <div class="input-group">
+                                    <input type="text" id="search-input" class="form-control" placeholder="Search for..." aria-label="Search for...">
+                                    <span class="input-group-btn">
+                    <button class="btn btn-secondary btn-search" type="submit">
+                      <span class="ion-android-search"></span>
+                                    </button>
+                                    </span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="widget-sidebar">
+                        <h5 class="sidebar-title">Recent Post</h5>
+                        <div class="sidebar-content">
+                            <ul class="list-sidebar">
+                                <li>
+                                    <a href="AlgorithmsExplained.html">From Netflix to TikTok: How AI Knows What You Like</a>
+                                </li>
+                                <li>
+                                    <a href="DistanceCalculatingMethods.html">How to Estimate Object Speed from Video</a>
+                                </li>
+                                <li>
+                                    <a href="MachineLearningAnomalyDetection.html">Machine Learning Anomaly Detection</a>
+                                </li>
+                                <li>
+                                    <a href="MachineLearning-Explained.html">What's machine learning, really?</a>
+                                </li>
+                                <li>
+                                    <a href="MacShortcuts.html">Mac shortcuts guide</a>
+                                </li>
+                                <li>
+                                    <a href="OguzKaganEpic.html">Oğuz Kağan Epic</a>
+                                </li>
+                                <li>
+                                    <a href="ErgenekonEpic.html">Ergenekon epic</a>
+                                </li>
+                                <li>
+                                    <a href="DeservingMoney.html">Are AI Models Making Us Earn Money We Don't Deserve?</a>
+                                </li>
+                                <li>
+                                    <a href="AI-Defense.html">The Role of Artificial Intelligence in Defense Technologies</a>
+                                </li>
+                                <li>
+                                    <a href="WhyToLearnHistory.html">Why is knowing history important?</a>
+                                </li>
+                                <li>
+                                    <a href="PreciousMetalData.html">One of the precious metals, Data</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="widget-sidebar">
+                        <h5 class="sidebar-title">Archives</h5>
+                        <div class="sidebar-content">
+                            <ul class="list-sidebar">
+                                <li>
+                                    <a href="AlgorithmsExplained.html">From Netflix to TikTok: How AI Knows What You Like</a>
+                                </li>
+                                <li>
+                                    <a href="DistanceCalculatingMethods.html">How to Estimate Object Speed from Video</a>
+                                </li>
+                                <li>
+                                    <a href="MachineLearningAnomalyDetection.html">Machine Learning Anomaly Detection</a>
+                                </li>
+                                <li>
+                                    <a href="MachineLearning-Explained.html">What's machine learning, really?</a>
+                                </li>
+                                <li>
+                                    <a href="MacShortcuts.html">Mac shortcuts guide</a>
+                                </li>
+                                <li>
+                                    <a href="OguzKaganEpic.html">Oğuz Kağan Epic</a>
+                                </li>
+                                <li>
+                                    <a href="ErgenekonEpic.html">Ergenekon epic</a>
+                                </li>
+                                <li>
+                                    <a href="DeservingMoney.html">Are AI Models Making Us Earn Money We Don't Deserve?</a>
+                                </li>
+                                <li>
+                                    <a href="AI-Defense.html">The Role of Artificial Intelligence in Defense Technologies</a>
+                                </li>
+                                <li>
+                                    <a href="WhyToLearnHistory.html">Why is knowing history important?</a>
+                                </li>
+                                <li>
+                                    <a href="PreciousMetalData.html">One of the precious metals, Data</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="widget-sidebar widget-tags">
+                        <h5 class="sidebar-title">Tags</h5>
+                        <div class="sidebar-content">
+                            <ul>
+                                <li><a href="#">AI</a></li>
+                                <li><a href="#">Machine Learning</a></li>
+                                <li><a href="#">Technology</a></li>
+                                <li><a href="#">Opinion</a></li>
+                                <li><a href="#">Impact</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--/ Section Blog-Single End /-->
+
+    <!-- Leave a Reply Section -->
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h3 class="mb-4 title-left">Leave a Reply</h3>
+                        <form id="comment-form" class="comment-form">
+                            <div id="comment-success" class="alert alert-success d-none">Your comment has been submitted. Thank you!</div>
+                            <div id="comment-error" class="alert alert-danger d-none">There was an error submitting your comment. Please try again.</div>
+                            <div class="form-group mb-3">
+                                <label for="comment-name">Name *</label>
+                                <input type="text" class="form-control input-mf" id="comment-name" name="from_name" required>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="comment-email">Email *</label>
+                                <input type="email" class="form-control input-mf" id="comment-email" name="from_email" required>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="comment-text">Comment *</label>
+                                <textarea class="form-control input-mf" id="comment-text" name="message" rows="5" required></textarea>
+                            </div>
+                            <button type="submit" class="button button-a button-big button-rouded">Submit Comment</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comments Display Section -->
+    <div class="container mt-5 mb-5">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h3 class="mb-4 title-left">Comments</h3>
+                        <div id="comments-container">
+                            <!-- Comments will be displayed here --> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--/ Section Contact-Footer Star /-->
+    <section class="paralax-mf footer-paralax bg-image sect-mt4 route" style="background-image: url('img/overlay-bg.jpg')">
+        <div class="overlay-mf"></div>
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="copyright-box">
+                            <p class="copyright">&copy; Copyright <strong>Bahaerdogan</strong>. All Rights Reserved</p>
+                            <div class="credits">
+                                <!--
+                  All the links in the footer should remain intact.
+                  You can delete the links only if you purchased the pro version.
+                  Licensing information: https://bootstrapmade.com/license/
+                  Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=DevFolio
+                -->
+                                <!-- Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </section>
+    <!--/ Section Contact-footer End /-->
+
+    <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+    <div id="preloader"></div>
+
+    <!-- JavaScript Libraries -->
+    <script src="lib/jquery/jquery.min.js"></script>
+    <script src="lib/jquery/jquery-migrate.min.js"></script>
+    <script src="lib/popper/popper.min.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/counterup/jquery.waypoints.min.js"></script>
+    <script src="lib/counterup/jquery.counterup.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="lib/lightbox/js/lightbox.min.js"></script>
+    <script src="lib/typed/typed.min.js"></script>
+    <!-- Contact Form JavaScript File -->
+    <script src="contactform/contactform.js"></script>
+
+    <!-- Application Scripts -->
+    <script src="js/main.js"></script>
+
+    <!-- Blog Page Javascript File -->
+    <script src="js/blog.js"></script>
+
+    <!-- JavaScript for handling comments -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const commentForm = document.getElementById('comment-form');
+            const successMessage = document.getElementById('comment-success');
+            const errorMessage = document.getElementById('comment-error');
+            const commentsContainer = document.getElementById('comments-container');
+            
+            // Load existing comments from localStorage
+            loadComments();
+            
+            if (commentForm) {
+                commentForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    
+                    // Hide messages
+                    successMessage.classList.add('d-none');
+                    errorMessage.classList.add('d-none');
+                    
+                    // Get form data
+                    const name = document.getElementById('comment-name').value;
+                    const email = document.getElementById('comment-email').value;
+                    const comment = document.getElementById('comment-text').value;
+                    const date = new Date().toLocaleDateString();
+                    const blogTitle = "From Prediction to Impact: What AI Means for You";
+                    
+                    // Show loading state
+                    const submitButton = commentForm.querySelector('button[type="submit"]');
+                    const originalButtonText = submitButton.textContent;
+                    submitButton.textContent = "Submitting...";
+                    submitButton.disabled = true;
+                    
+                    // Prepare email template parameters
+                    const templateParams = {
+                        from_name: name,
+                        from_email: email,
+                        message: comment,
+                        blog_title: blogTitle
+                    };
+                    
+                    // Send email using EmailJS
+                    emailjs.send('service_lhjdfqw', 'template_bha2val', templateParams, 'sr9_9CUgd0L641ObN')
+                        .then(function() {
+                            // Show success message
+                            successMessage.classList.remove('d-none');
+                            
+                            // Save comment to localStorage
+                            saveComment(name, comment, date);
+                            
+                            // Display the new comment
+                            displayComment(name, comment, date);
+                            
+                            // Reset form
+                            commentForm.reset();
+                            
+                            // Reset button
+                            submitButton.textContent = originalButtonText;
+                            submitButton.disabled = false;
+                        })
+                        .catch(function(error) {
+                            console.error('EmailJS Error:', error);
+                            errorMessage.textContent = "There was an error submitting your comment: " + error.text;
+                            errorMessage.classList.remove('d-none');
+                            
+                            // Reset button
+                            submitButton.textContent = originalButtonText;
+                            submitButton.disabled = false;
+                        });
+                });
+            }
+            
+            // Function to save comment to localStorage
+            function saveComment(name, comment, date) {
+                const blogId = window.location.pathname.split('/').pop().replace('.html', '');
+                let comments = JSON.parse(localStorage.getItem(`comments-${blogId}`) || '[]');
+                comments.push({ name, comment, date });
+                localStorage.setItem(`comments-${blogId}`, JSON.stringify(comments));
+            }
+            
+            // Function to load comments from localStorage
+            function loadComments() {
+                const blogId = window.location.pathname.split('/').pop().replace('.html', '');
+                const comments = JSON.parse(localStorage.getItem(`comments-${blogId}`) || '[]');
+                
+                if (comments.length === 0) {
+                    commentsContainer.innerHTML = '<p>No comments yet. Be the first to comment!</p>';
+                } else {
+                    commentsContainer.innerHTML = '';
+                    comments.forEach(comment => {
+                        displayComment(comment.name, comment.comment, comment.date);
+                    });
+                }
+            }
+            
+            // Function to display a comment in the comments section
+            function displayComment(name, comment, date) {
+                const commentElement = document.createElement('div');
+                commentElement.className = 'comment mb-4 p-3 border-bottom';
+                commentElement.innerHTML = `
+                    <h5>${name} <small class="text-muted">${date}</small></h5>
+                    <p>${comment}</p>
+                `;
+                commentsContainer.appendChild(commentElement);
+            }
+        });
+    </script>
+
+    <script>
+        const blogPosts = [
+          { title: "One of the precious metals, Data", url: "PreciousMetalData.html", keywords: ["data", "technology", "ai", "artificial intelligence", "precious"] },
+          { title: "Why is knowing history important?", url: "WhyToLearnHistory.html", keywords: ["history", "learning", "knowledge", "importance"] },
+          { title: "The Role of Artificial Intelligence in Defense Technologies", url: "AI-Defense.html", keywords: ["ai", "artificial intelligence", "defense", "technology", "security"] },
+          { title: "Are AI Models Making Us Earn Money We Don't Deserve?", url: "DeservingMoney.html", keywords: ["ai", "money", "work", "technology", "earnings"] },
+          { title: "Ergenekon epic", url: "ErgenekonEpic.html", keywords: ["ergenekon", "epic", "history", "story"] },
+          { title: "Oğuz Kağan Epic", url: "OguzKaganEpic.html", keywords: ["oğuz kağan", "epic", "history", "turkish", "legend"] },
+          { title: "Mac shortcuts guide", url: "MacShortcuts.html", keywords: ["mac", "shortcuts", "guide", "productivity"] }
+        ];
+    
+        function handleSearch(event) {
+          event.preventDefault();
+          const searchTerm = document.getElementById('search-input').value.toLowerCase();
+          
+          if (!searchTerm.trim()) {
+            return false;
+          }
+    
+          const results = blogPosts.filter(post => {
+            const titleMatch = post.title.toLowerCase().includes(searchTerm);
+            const keywordMatch = post.keywords.some(keyword => keyword.includes(searchTerm));
+            return titleMatch || keywordMatch;
+          });
+    
+          if (results.length > 0) {
+            // Redirect to the first matching result
+            window.location.href = results[0].url;
+          } else {
+            alert('No matching posts found.');
+          }
+    
+          return false;
+        }
+    </script>
+
+</body>
+
+</html>
