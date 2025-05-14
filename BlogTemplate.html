@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
-    <title>{{BLOG_TITLE}}</title>
+    <title>Why High Value-Per-Kilogram Exports Are the Key to National Prosperity | Opinion | Bahaerdogan</title>
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
     <meta name="theme-color" content="#0078ff">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta content="{{BLOG_KEYWORDS}}" name="keywords">
-    <meta content="{{BLOG_DESCRIPTION}}" name="description">
+    <meta content="Opinion, Economy, National Prosperity, Value-Per-Kilogram, Exports" name="keywords">
+    <meta content="An opinion on why high value-per-kilogram exports are the key to national prosperity." name="description">
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZGTWHSMVV7"></script>
@@ -16,11 +17,98 @@
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
+        
+        // Enhanced ecommerce tracking with custom dimensions
         gtag('config', 'G-ZGTWHSMVV7', {
-            'page_title': '{{BLOG_TITLE}}',
+            'page_title': 'Why High Value-Per-Kilogram Exports Are the Key to National Prosperity',
             'page_location': window.location.href,
             'page_path': window.location.pathname,
-            'send_page_view': true
+            'send_page_view': true,
+            'custom_map': {
+                'dimension1': 'article_category',
+                'dimension2': 'reading_time',
+                'dimension3': 'scroll_depth'
+            }
+        });
+
+        // Track user interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Track form submissions
+            const commentForm = document.getElementById('comment-form');
+            if (commentForm) {
+                commentForm.addEventListener('submit', function() {
+                    gtag('event', 'form_submit', {
+                        'event_category': 'Comments',
+                        'event_label': 'Anomaly Detection Post',
+                        'value': 1
+                    });
+                });
+            }
+
+            // Track search usage
+            const searchForm = document.getElementById('search-form');
+            if (searchForm) {
+                searchForm.addEventListener('submit', function() {
+                    const searchTerm = document.getElementById('search-input').value;
+                    gtag('event', 'search', {
+                        'event_category': 'Search',
+                        'event_label': searchTerm,
+                        'value': 1
+                    });
+                });
+            }
+
+            // Track reading time
+            let startTime = new Date();
+            let timeOnPage = 0;
+            setInterval(function() {
+                timeOnPage += 1;
+                if (timeOnPage % 30 === 0) { // Send every 30 seconds
+                    gtag('event', 'reading_time', {
+                        'event_category': 'Engagement',
+                        'event_label': 'Anomaly Detection Post',
+                        'value': timeOnPage
+                    });
+                }
+            }, 1000);
+
+            // Track scroll depth
+            let maxScroll = 0;
+            window.addEventListener('scroll', function() {
+                const scrollPercent = Math.round((window.scrollY + window.innerHeight) / document.body.scrollHeight * 100);
+                if (scrollPercent > maxScroll && scrollPercent % 25 === 0) { // Track every 25%
+                    maxScroll = scrollPercent;
+                    gtag('event', 'scroll_depth', {
+                        'event_category': 'Engagement',
+                        'event_label': 'Anomaly Detection Post',
+                        'value': scrollPercent
+                    });
+                }
+            });
+
+            // Track outbound links
+            document.querySelectorAll('a[href^="http"]').forEach(link => {
+                if (!link.href.includes(window.location.hostname)) {
+                    link.addEventListener('click', function(e) {
+                        gtag('event', 'outbound_click', {
+                            'event_category': 'Outbound Links',
+                            'event_label': link.href,
+                            'transport_type': 'beacon'
+                        });
+                    });
+                }
+            });
+
+            // Track social shares
+            document.querySelectorAll('.social-share').forEach(button => {
+                button.addEventListener('click', function() {
+                    gtag('event', 'social_share', {
+                        'event_category': 'Social',
+                        'event_label': button.dataset.platform,
+                        'value': 1
+                    });
+                });
+            });
         });
     </script>
 
@@ -33,34 +121,79 @@
 
     <!-- Bootstrap CSS File -->
     <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
     <!-- Libraries CSS Files -->
     <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <link href="lib/animate/animate.min.css" rel="stylesheet">
     <link href="lib/ionicons/css/ionicons.min.css" rel="stylesheet">
     <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
     <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+
     <!-- Main Stylesheet File -->
     <link href="css/style.css" rel="stylesheet">
 
-    <!-- Social Media Preview Meta Tags (placeholders) -->
-    <meta property="og:title" content="{{BLOG_TITLE}}">
-    <meta property="og:description" content="{{BLOG_DESCRIPTION}}">
-    <meta property="og:image" content="{{BLOG_IMAGE}}">
-    <meta property="og:url" content="{{BLOG_URL}}">
+    <!-- =======================================================
+    Theme Name: DevFolio
+    Theme URL: https://bootstrapmade.com/devfolio-bootstrap-portfolio-html-template/
+    Author: BootstrapMade.com
+    License: https://bootstrapmade.com/license/
+  ======================================================= -->
+
+    <!-- Social Media Preview Meta Tags for Value Per Kilogram For Prosperity -->
+    <meta property="og:title" content="Why High Value-Per-Kilogram Exports Are the Key to National Prosperity">
+    <meta property="og:description" content="An opinion on why high value-per-kilogram exports are the key to national prosperity.">
+    <meta property="og:image" content="https://www.bahaerdogan.com/img/CubistExportPerKG.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="https://www.bahaerdogan.com/ValuePerKilogramForProsperity.html">
     <meta property="og:type" content="article">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{{BLOG_TITLE}}">
-    <meta name="twitter:description" content="{{BLOG_DESCRIPTION}}">
-    <meta name="twitter:image" content="{{BLOG_IMAGE}}">
+    <meta name="twitter:title" content="Why High Value-Per-Kilogram Exports Are the Key to National Prosperity">
+    <meta name="twitter:description" content="An opinion on why high value-per-kilogram exports are the key to national prosperity.">
+    <meta name="twitter:image" content="https://www.bahaerdogan.com/img/CubistExportPerKG.png">
+
+    <!-- Third-party Scripts -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZGTWHSMVV7"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
     <!-- Application Scripts -->
     <script src="js/main.js"></script>
+
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Why High Value-Per-Kilogram Exports Are the Key to National Prosperity",
+        "description": "An opinion on why high value-per-kilogram exports are the key to national prosperity.",
+        "image": "https://www.bahaerdogan.com/img/CubistExportPerKG.png",
+        "author": {
+            "@type": "Person",
+            "name": "Baha Erdoğan"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Bahaerdogan",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://www.bahaerdogan.com/img/favicon.png"
+            }
+        },
+        "datePublished": "2024-03-20",
+        "dateModified": "2024-03-20",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://www.bahaerdogan.com/ValuePerKilogramForProsperity.html"
+        }
+    }
+    </script>
 
     <!-- Accessibility Improvements -->
     <div class="skip-nav">
         <a href="#main-content" class="sr-only sr-only-focusable">Skip to main content</a>
     </div>
 </head>
+
 <body>
     <!--/ Nav Star /-->
     <nav class="navbar navbar-b navbar-trans navbar-expand-md fixed-top" id="mainNav">
@@ -76,6 +209,7 @@
                     <li class="nav-item">
                         <a class="nav-link js-scroll" href="index.html">Home</a>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link js-scroll" href="index.html#about">About</a>
                     </li>
@@ -91,11 +225,17 @@
                     <li class="nav-item">
                         <a class="nav-link js-scroll" href="index.html#contact">Contact</a>
                     </li>
+
+
+
                     <li class="nav-item">
                         <a class="nav-link" id="language-toggle" href="#">
                             <i class="fa fa-language"></i> Türkçe
                         </a>
                     </li>
+
+
+
                 </ul>
             </div>
         </div>
@@ -103,12 +243,12 @@
     <!--/ Nav End /-->
 
     <!--/ Intro Skew Star /-->
-    <div class="intro intro-single route bg-image" style="background-image: url('img/image (21).png')">
+    <div class="intro intro-single route bg-image" style="background-image: url('img/image\ \(21\).png')">
         <div class="overlay-mf"></div>
         <div class="intro-content display-table">
             <div class="table-cell">
                 <div class="container">
-                    <h2 class="intro-title mb-4">{{BLOG_HEADER}}</h2>
+                    <h2 class="intro-title mb-4">Blog Details</h2>
                     <ol class="breadcrumb d-flex justify-content-center">
                         <li class="breadcrumb-item">
                             <a href="index.html">Home</a>
@@ -116,7 +256,7 @@
                         <li class="breadcrumb-item">
                             <a href="index.html#blog">Blog</a>
                         </li>
-                        <li class="breadcrumb-item active">{{BLOG_BREADCRUMB}}</li>
+                        <li class="breadcrumb-item active">Anomaly Detection in Machine Learning</li>
                     </ol>
                 </div>
             </div>
@@ -131,18 +271,18 @@
                 <div class="col-md-8">
                     <div class="post-box">
                         <div class="post-thumb">
-                            <img src="{{BLOG_IMAGE}}" class="img-fluid" alt="">
+                            <img src="img/CubistExportPerKG.png" class="img-fluid" alt="">
                         </div>
                         <div class="post-meta">
-                            <h1 class="article-title">{{BLOG_TITLE}}</h1>
+                            <h1 class="article-title">Title here</h1>
                             <ul>
                                 <li>
                                     <span class="ion-ios-person"></span>
-                                    <a href="#">{{BLOG_AUTHOR}}</a>
+                                    <a href="#">Baha Erdoğan</a>
                                 </li>
                                 <li>
                                     <span class="ion-pricetag"></span>
-                                    <a href="#">{{BLOG_CATEGORY}}</a>
+                                    <a href="#">Economy</a>
                                 </li>
                                 <li>
                                     <span class="ion-chatbox"></span>
@@ -151,9 +291,12 @@
                             </ul>
                         </div>
                         <div class="article-content">
-                            <!-- Blog content goes here -->
-                            <p>{{BLOG_CONTENT}}</p>
+    
+                          #article here
+                            
                         </div>
+                        
+                        
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -164,9 +307,9 @@
                                 <div class="input-group">
                                     <input type="text" id="search-input" class="form-control" placeholder="Search for..." aria-label="Search for...">
                                     <span class="input-group-btn">
-                                        <button class="btn btn-secondary btn-search" type="submit">
-                                            <span class="ion-android-search"></span>
-                                        </button>
+                    <button class="btn btn-secondary btn-search" type="submit">
+                      <span class="ion-android-search"></span>
+                                    </button>
                                     </span>
                                 </div>
                             </form>
@@ -176,9 +319,39 @@
                         <h5 class="sidebar-title">Recent Post</h5>
                         <div class="sidebar-content">
                             <ul class="list-sidebar">
-                                <!-- Placeholder for recent posts -->
-                                <li><a href="#">Recent Post 1</a></li>
-                                <li><a href="#">Recent Post 2</a></li>
+                                <li>
+                                    <a href="AlgorithmsExplained.html">From Netflix to TikTok: How AI Knows What You Like</a>
+                                </li>
+                                <li>
+                                    <a href="DistanceCalculatingMethods.html">How to Estimate Object Speed from Video</a>
+                                </li>
+                                <li>
+                                    <a href="MachineLearningAnomalyDetection.html">Machine Learning Anomaly Detection</a>
+                                </li>
+                                <li>
+                                    <a href="MachineLearning-Explained.html">What's machine learning, really?</a>
+                                </li>
+                                <li>
+                                    <a href="MacShortcuts.html">Mac shortcuts guide</a>
+                                </li>
+                                <li>
+                                    <a href="OguzKaganEpic.html">Oğuz Kağan Epic</a>
+                                </li>
+                                <li>
+                                    <a href="ErgenekonEpic.html">Ergenekon epic</a>
+                                </li>
+                                <li>
+                                    <a href="DeservingMoney.html">Are AI Models Making Us Earn Money We Don't Deserve?</a>
+                                </li>
+                                <li>
+                                    <a href="AI-Defense.html">The Role of Artificial Intelligence in Defense Technologies</a>
+                                </li>
+                                <li>
+                                    <a href="WhyToLearnHistory.html">Why is knowing history important?</a>
+                                </li>
+                                <li>
+                                    <a href="PreciousMetalData.html">One of the precious metals, Data</a>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -186,9 +359,39 @@
                         <h5 class="sidebar-title">Archives</h5>
                         <div class="sidebar-content">
                             <ul class="list-sidebar">
-                                <!-- Placeholder for archives -->
-                                <li><a href="#">Archive 1</a></li>
-                                <li><a href="#">Archive 2</a></li>
+                                <li>
+                                    <a href="AlgorithmsExplained.html">From Netflix to TikTok: How AI Knows What You Like</a>
+                                </li>
+                                <li>
+                                    <a href="DistanceCalculatingMethods.html">How to Estimate Object Speed from Video</a>
+                                </li>
+                                <li>
+                                    <a href="MachineLearningAnomalyDetection.html">Machine Learning Anomaly Detection</a>
+                                </li>
+                                <li>
+                                    <a href="MachineLearning-Explained.html">What's machine learning, really?</a>
+                                </li>
+                                <li>
+                                    <a href="MacShortcuts.html">Mac shortcuts guide</a>
+                                </li>
+                                <li>
+                                    <a href="OguzKaganEpic.html">Oğuz Kağan Epic</a>
+                                </li>
+                                <li>
+                                    <a href="ErgenekonEpic.html">Ergenekon epic</a>
+                                </li>
+                                <li>
+                                    <a href="DeservingMoney.html">Are AI Models Making Us Earn Money We Don't Deserve?</a>
+                                </li>
+                                <li>
+                                    <a href="AI-Defense.html">The Role of Artificial Intelligence in Defense Technologies</a>
+                                </li>
+                                <li>
+                                    <a href="WhyToLearnHistory.html">Why is knowing history important?</a>
+                                </li>
+                                <li>
+                                    <a href="PreciousMetalData.html">One of the precious metals, Data</a>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -196,9 +399,21 @@
                         <h5 class="sidebar-title">Tags</h5>
                         <div class="sidebar-content">
                             <ul>
-                                <!-- Placeholder for tags -->
-                                <li><a href="#">Tag1</a></li>
-                                <li><a href="#">Tag2</a></li>
+                                <li>
+                                    <a href="#">Economy</a>
+                                </li>
+                                <li>
+                                    <a href="#">Value-Per-Kilogram</a>
+                                </li>
+                                <li>
+                                    <a href="#">Technology</a>
+                                </li>
+                                <li>
+                                    <a href="#">Opinion</a>
+                                </li>
+                                <li>
+                                    <a href="#">Strategy</a>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -264,6 +479,12 @@
                         <div class="copyright-box">
                             <p class="copyright">&copy; Copyright <strong>Bahaerdogan</strong>. All Rights Reserved</p>
                             <div class="credits">
+                                <!--
+                  All the links in the footer should remain intact.
+                  You can delete the links only if you purchased the pro version.
+                  Licensing information: https://bootstrapmade.com/license/
+                  Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=DevFolio
+                -->
                                 <!-- Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> -->
                             </div>
                         </div>
@@ -290,16 +511,156 @@
     <script src="lib/typed/typed.min.js"></script>
     <!-- Contact Form JavaScript File -->
     <script src="contactform/contactform.js"></script>
+
     <!-- Application Scripts -->
     <script src="js/main.js"></script>
+
     <!-- Blog Page Javascript File -->
     <script src="js/blog.js"></script>
-    <!-- JavaScript for handling comments (unchanged) -->
+
+    <!-- JavaScript for handling comments -->
     <script>
-        // ... existing code for comment handling ...
+        document.addEventListener('DOMContentLoaded', function() {
+            const commentForm = document.getElementById('comment-form');
+            const successMessage = document.getElementById('comment-success');
+            const errorMessage = document.getElementById('comment-error');
+            const commentsContainer = document.getElementById('comments-container');
+            
+            // Load existing comments from localStorage
+            loadComments();
+            
+            if (commentForm) {
+                commentForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    
+                    // Hide messages
+                    successMessage.classList.add('d-none');
+                    errorMessage.classList.add('d-none');
+                    
+                    // Get form data
+                    const name = document.getElementById('comment-name').value;
+                    const email = document.getElementById('comment-email').value;
+                    const comment = document.getElementById('comment-text').value;
+                    const date = new Date().toLocaleDateString();
+                    const blogTitle = "Anomaly Detection in Machine Learning";
+                    
+                    // Show loading state
+                    const submitButton = commentForm.querySelector('button[type="submit"]');
+                    const originalButtonText = submitButton.textContent;
+                    submitButton.textContent = "Submitting...";
+                    submitButton.disabled = true;
+                    
+                    // Prepare email template parameters
+                    const templateParams = {
+                        from_name: name,
+                        from_email: email,
+                        message: comment,
+                        blog_title: blogTitle
+                    };
+                    
+                    // Send email using EmailJS
+                    emailjs.send('service_lhjdfqw', 'template_bha2val', templateParams, 'sr9_9CUgd0L641ObN')
+                        .then(function() {
+                            // Show success message
+                            successMessage.classList.remove('d-none');
+                            
+                            // Save comment to localStorage
+                            saveComment(name, comment, date);
+                            
+                            // Display the new comment
+                            displayComment(name, comment, date);
+                            
+                            // Reset form
+                            commentForm.reset();
+                            
+                            // Reset button
+                            submitButton.textContent = originalButtonText;
+                            submitButton.disabled = false;
+                        })
+                        .catch(function(error) {
+                            console.error('EmailJS Error:', error);
+                            errorMessage.textContent = "There was an error submitting your comment: " + error.text;
+                            errorMessage.classList.remove('d-none');
+                            
+                            // Reset button
+                            submitButton.textContent = originalButtonText;
+                            submitButton.disabled = false;
+                        });
+                });
+            }
+            
+            // Function to save comment to localStorage
+            function saveComment(name, comment, date) {
+                const blogId = window.location.pathname.split('/').pop().replace('.html', '');
+                let comments = JSON.parse(localStorage.getItem(`comments-${blogId}`) || '[]');
+                comments.push({ name, comment, date });
+                localStorage.setItem(`comments-${blogId}`, JSON.stringify(comments));
+            }
+            
+            // Function to load comments from localStorage
+            function loadComments() {
+                const blogId = window.location.pathname.split('/').pop().replace('.html', '');
+                const comments = JSON.parse(localStorage.getItem(`comments-${blogId}`) || '[]');
+                
+                if (comments.length === 0) {
+                    commentsContainer.innerHTML = '<p>No comments yet. Be the first to comment!</p>';
+                } else {
+                    commentsContainer.innerHTML = '';
+                    comments.forEach(comment => {
+                        displayComment(comment.name, comment.comment, comment.date);
+                    });
+                }
+            }
+            
+            // Function to display a comment in the comments section
+            function displayComment(name, comment, date) {
+                const commentElement = document.createElement('div');
+                commentElement.className = 'comment mb-4 p-3 border-bottom';
+                commentElement.innerHTML = `
+                    <h5>${name} <small class="text-muted">${date}</small></h5>
+                    <p>${comment}</p>
+                `;
+                commentsContainer.appendChild(commentElement);
+            }
+        });
     </script>
+
     <script>
-        // ... existing code for search handling ...
+        const blogPosts = [
+          { title: "One of the precious metals, Data", url: "PreciousMetalData.html", keywords: ["data", "technology", "ai", "artificial intelligence", "precious"] },
+          { title: "Why is knowing history important?", url: "WhyToLearnHistory.html", keywords: ["history", "learning", "knowledge", "importance"] },
+          { title: "The Role of Artificial Intelligence in Defense Technologies", url: "AI-Defense.html", keywords: ["ai", "artificial intelligence", "defense", "technology", "security"] },
+          { title: "Are AI Models Making Us Earn Money We Don't Deserve?", url: "DeservingMoney.html", keywords: ["ai", "money", "work", "technology", "earnings"] },
+          { title: "Ergenekon epic", url: "ErgenekonEpic.html", keywords: ["ergenekon", "epic", "history", "story"] },
+          { title: "Oğuz Kağan Epic", url: "OguzKaganEpic.html", keywords: ["oğuz kağan", "epic", "history", "turkish", "legend"] },
+          { title: "Mac shortcuts guide", url: "MacShortcuts.html", keywords: ["mac", "shortcuts", "guide", "productivity"] }
+        ];
+    
+        function handleSearch(event) {
+          event.preventDefault();
+          const searchTerm = document.getElementById('search-input').value.toLowerCase();
+          
+          if (!searchTerm.trim()) {
+            return false;
+          }
+    
+          const results = blogPosts.filter(post => {
+            const titleMatch = post.title.toLowerCase().includes(searchTerm);
+            const keywordMatch = post.keywords.some(keyword => keyword.includes(searchTerm));
+            return titleMatch || keywordMatch;
+          });
+    
+          if (results.length > 0) {
+            // Redirect to the first matching result
+            window.location.href = results[0].url;
+          } else {
+            alert('No matching posts found.');
+          }
+    
+          return false;
+        }
     </script>
+
 </body>
+
 </html>
