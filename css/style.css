@@ -1443,7 +1443,7 @@ footer .credits a {
 /* Mobile-specific background image for intro section */
 @media (max-width: 768px) {
   .intro.route.bg-image {
-    background-image: url('../img/mainphotomobile.png') !important;
+    background-image: url('/img/mainphotomobile.png') !important;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
