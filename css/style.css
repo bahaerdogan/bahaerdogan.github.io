@@ -1503,12 +1503,12 @@ footer .credits a {
   
   /* Center and make the swiping text bigger and lighter on mobile */
   .intro .intro-subtitle {
-    font-size: 2.25rem;
+    font-size: 1.8rem;
     font-weight: 300;
     text-align: center;
     margin: 0 auto;
-    max-width: 95%;
-    padding: 0 10px;
+    max-width: 100%;
+    padding: 0 5px;
     box-sizing: border-box;
   }
   
@@ -1518,19 +1518,20 @@ footer .credits a {
     display: inline-block;
     max-width: 100%;
     overflow: visible;
+    word-wrap: normal;
   }
   
   /* Responsive font sizing for mobile */
   @media (max-width: 480px) {
     .intro .intro-subtitle {
-      font-size: 1.65rem;
-      max-width: 98%;
+      font-size: 1.5rem;
+      max-width: 100%;
     }
   }
   
   @media (max-width: 360px) {
     .intro .intro-subtitle {
-      font-size: 1.35rem;
+      font-size: 1.2rem;
       max-width: 100%;
     }
   }
