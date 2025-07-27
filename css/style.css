@@ -1438,6 +1438,14 @@ footer .credits a {
   .breadcrumb {
     font-size: 0.9rem;
   }
+  
+  /* Additional mobile image optimization for very small screens */
+  .intro.route.bg-image {
+    background-image: url('../img/mainphotomobile.png') !important;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
 }
 
 /* Mobile-specific background image for intro section */
@@ -1447,6 +1455,13 @@ footer .credits a {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    background-attachment: scroll;
+    background-color: #000; /* Fallback color */
+  }
+  
+  /* Ensure the overlay doesn't interfere with mobile image */
+  .intro .overlay-itro {
+    background: rgba(0, 0, 0, 0.3) !important;
   }
   
   /* Hide the duplicate "Baha Erdoğan" title on mobile since it's already in navbar */
@@ -1469,10 +1484,33 @@ footer .credits a {
     align-items: center;
     justify-content: center;
     text-align: center;
+    min-height: 100vh;
   }
   
   .intro .table-cell {
     vertical-align: middle;
+  }
+  
+  /* Ensure proper mobile image display */
+  .intro {
+    min-height: 100vh;
+    position: relative;
+    will-change: transform;
+  }
+  
+  /* Force mobile image loading */
+  .intro.route.bg-image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('../img/mainphotomobile.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: -1;
   }
 }
 
