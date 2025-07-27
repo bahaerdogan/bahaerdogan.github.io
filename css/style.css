@@ -1476,6 +1476,19 @@ footer .credits a {
     text-align: center;
     margin: 0 auto;
     max-width: 90%;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  
+  /* Ensure text slider items display properly on mobile */
+  .intro .text-slider-items {
+    display: inline;
+    white-space: nowrap;
+  }
+  
+  .intro .text-slider {
+    display: inline;
+    white-space: nowrap;
   }
   
   /* Improve mobile layout centering */
