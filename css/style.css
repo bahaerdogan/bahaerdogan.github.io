@@ -1476,12 +1476,15 @@ footer .credits a {
     text-align: center;
     margin: 0 auto;
     max-width: 90%;
-    white-space: nowrap;
   }
   
-  /* Prevent unwanted line breaks in swiping text */
+  /* Prevent unwanted word breaks while keeping animation */
   .intro .text-slider-items {
-    white-space: nowrap;
+    display: inline;
+  }
+  
+  /* Ensure proper line breaks for animation */
+  .intro .text-slider {
     display: inline;
   }
   
