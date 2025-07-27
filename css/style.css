@@ -633,9 +633,10 @@ a:hover {
 /* Typing animation improvements */
 .intro .text-slider {
   white-space: nowrap;
-  overflow: hidden;
+  overflow: visible;
   display: inline-block;
   min-height: 1.5em;
+  max-width: 100%;
 }
 
 .typed-cursor {
@@ -1495,25 +1496,31 @@ footer .credits a {
     font-weight: 300;
     text-align: center;
     margin: 0 auto;
-    max-width: 90%;
+    max-width: 95%;
+    padding: 0 10px;
+    box-sizing: border-box;
   }
   
   /* Ensure typed text stays on one line */
   .intro .text-slider {
     white-space: nowrap;
     display: inline-block;
+    max-width: 100%;
+    overflow: visible;
   }
   
   /* Responsive font sizing for mobile */
   @media (max-width: 480px) {
     .intro .intro-subtitle {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
+      max-width: 98%;
     }
   }
   
   @media (max-width: 360px) {
     .intro .intro-subtitle {
-      font-size: 1rem;
+      font-size: 0.9rem;
+      max-width: 100%;
     }
   }
   
