@@ -643,12 +643,23 @@ a:hover {
   font-weight: 300;
   opacity: 1;
   animation: typedjsBlink 0.7s infinite;
+  position: relative;
+  display: inline-block;
 }
 
 @keyframes typedjsBlink {
   0% { opacity: 1; }
   50% { opacity: 0; }
   100% { opacity: 1; }
+}
+
+/* Ensure cursor moves with text on mobile */
+@media (max-width: 768px) {
+  .typed-cursor {
+    font-size: inherit;
+    line-height: inherit;
+    vertical-align: baseline;
+  }
 }
 
 .intro-single {
@@ -1490,9 +1501,9 @@ footer .credits a {
     display: none;
   }
   
-  /* Center and make the swiping text smaller and lighter on mobile */
+  /* Center and make the swiping text bigger and lighter on mobile */
   .intro .intro-subtitle {
-    font-size: 1.5rem;
+    font-size: 2.25rem;
     font-weight: 300;
     text-align: center;
     margin: 0 auto;
@@ -1512,14 +1523,14 @@ footer .credits a {
   /* Responsive font sizing for mobile */
   @media (max-width: 480px) {
     .intro .intro-subtitle {
-      font-size: 1.1rem;
+      font-size: 1.65rem;
       max-width: 98%;
     }
   }
   
   @media (max-width: 360px) {
     .intro .intro-subtitle {
-      font-size: 0.9rem;
+      font-size: 1.35rem;
       max-width: 100%;
     }
   }

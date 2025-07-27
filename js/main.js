@@ -143,6 +143,7 @@
 					showCursor: true,
 					cursorChar: '|',
 					fadeOut: false,
+					autoInsertCss: true,
 					onStringTyped: function(arrayPos, self) {
 						// Ensure text stays on one line
 						$('.text-slider').css('white-space', 'nowrap');
