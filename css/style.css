@@ -1448,6 +1448,32 @@ footer .credits a {
     background-position: center;
     background-repeat: no-repeat;
   }
+  
+  /* Hide the duplicate "Baha Erdoğan" title on mobile since it's already in navbar */
+  .intro .intro-title {
+    display: none;
+  }
+  
+  /* Center and make the swiping text bigger on mobile */
+  .intro .intro-subtitle {
+    font-size: 2rem;
+    font-weight: 400;
+    text-align: center;
+    margin: 0 auto;
+    max-width: 90%;
+  }
+  
+  /* Improve mobile layout centering */
+  .intro .intro-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .intro .table-cell {
+    vertical-align: middle;
+  }
 }
 
 /* Touch-friendly improvements */
