@@ -630,6 +630,26 @@ a:hover {
   display: none;
 }
 
+/* Typing animation improvements */
+.intro .text-slider {
+  white-space: nowrap;
+  overflow: hidden;
+  display: inline-block;
+  min-height: 1.5em;
+}
+
+.typed-cursor {
+  font-weight: 300;
+  opacity: 1;
+  animation: typedjsBlink 0.7s infinite;
+}
+
+@keyframes typedjsBlink {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
 .intro-single {
   height: 350px;
   position: relative;
@@ -1476,16 +1496,28 @@ footer .credits a {
     text-align: center;
     margin: 0 auto;
     max-width: 90%;
+    white-space: nowrap;
+    overflow: hidden;
   }
   
-  /* Prevent unwanted word breaks while keeping animation */
-  .intro .text-slider-items {
-    display: inline;
-  }
-  
-  /* Ensure proper line breaks for animation */
+  /* Ensure typed text stays on one line */
   .intro .text-slider {
-    display: inline;
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+  }
+  
+  /* Responsive font sizing for mobile */
+  @media (max-width: 480px) {
+    .intro .intro-subtitle {
+      font-size: 1.2rem;
+    }
+  }
+  
+  @media (max-width: 360px) {
+    .intro .intro-subtitle {
+      font-size: 1rem;
+    }
   }
   
   /* Improve mobile layout centering */

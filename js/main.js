@@ -123,20 +123,29 @@
 		}
 	});
 
-	// Enhanced text slider initialization
+	// Enhanced text slider initialization with mobile optimization
 	const initTextSlider = () => {
 		if ($('.text-slider').length === 1) {
 			try {
 				var typed_strings = $('.text-slider-items').text();
+				var strings = typed_strings.split(',').map(s => s.trim());
+				
 				var typed = new Typed('.text-slider', {
-					strings: typed_strings.split(','),
-					typeSpeed: 80,
+					strings: strings,
+					typeSpeed: 60,
 					loop: true,
-					backDelay: 1100,
-					backSpeed: 30,
+					backDelay: 1500,
+					backSpeed: 40,
 					smartBackspace: true,
 					showCursor: true,
-					cursorChar: '|'
+					cursorChar: '|',
+					fadeOut: false,
+					fadeOutClass: 'typed-fade-out',
+					fadeOutDelay: 500,
+					onStringTyped: function(arrayPos, self) {
+						// Ensure text stays on one line
+						$('.text-slider').css('white-space', 'nowrap');
+					}
 				});
 			} catch (e) {
 				console.warn('Typed.js initialization failed:', e);
