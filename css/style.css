@@ -1469,10 +1469,10 @@ footer .credits a {
     display: none;
   }
   
-  /* Center and make the swiping text bigger on mobile */
+  /* Center and make the swiping text smaller and lighter on mobile */
   .intro .intro-subtitle {
-    font-size: 2rem;
-    font-weight: 400;
+    font-size: 1.5rem;
+    font-weight: 300;
     text-align: center;
     margin: 0 auto;
     max-width: 90%;
