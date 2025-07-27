@@ -1496,14 +1496,11 @@ footer .credits a {
     text-align: center;
     margin: 0 auto;
     max-width: 90%;
-    white-space: nowrap;
-    overflow: hidden;
   }
   
   /* Ensure typed text stays on one line */
   .intro .text-slider {
     white-space: nowrap;
-    overflow: hidden;
     display: inline-block;
   }
   

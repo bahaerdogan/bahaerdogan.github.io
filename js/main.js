@@ -127,8 +127,11 @@
 	const initTextSlider = () => {
 		if ($('.text-slider').length === 1) {
 			try {
-				var typed_strings = $('.text-slider-items').text();
-				var strings = typed_strings.split(',').map(s => s.trim());
+				var strings = [
+					'Computer Engineer',
+					'AI Enthusiast', 
+					'Problem Solver'
+				];
 				
 				var typed = new Typed('.text-slider', {
 					strings: strings,
@@ -140,8 +143,6 @@
 					showCursor: true,
 					cursorChar: '|',
 					fadeOut: false,
-					fadeOutClass: 'typed-fade-out',
-					fadeOutDelay: 500,
 					onStringTyped: function(arrayPos, self) {
 						// Ensure text stays on one line
 						$('.text-slider').css('white-space', 'nowrap');
