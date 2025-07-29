@@ -69,7 +69,7 @@
                         'event_label': 'Types of Agentic AI and How to Build Your First Agent',
                         'value': timeOnPage
                     });
-                }
+    }
             }, 1000);
 
             // Track scroll depth
@@ -83,7 +83,7 @@
                         'event_label': 'Types of Agentic AI and How to Build Your First Agent',
                         'value': scrollPercent
                     });
-                }
+    }
             });
 
             // Track outbound links
@@ -295,166 +295,166 @@
                         </div>
                         <div class="article-content">
                             <blockquote class="blockquote">"Agentic systems are not one-of-a-kind—they are modular, goal-oriented, and built for impact. Recognizing their varieties and processes unlocks the roadmap from prototype to production."</blockquote>
-                            
+
                             <h3>Introduction: From Knowledge to Action</h3>
-                            <p>Agentic AI is a radical innovation in the operation of intelligent systems—not merely responding to questions, but actively reasoning, planning, and acting to advance goals.</p>
-                            <p>This report is more than definitions. It provides a concrete taxonomy of agent types and outlines a modular blueprint to guide you in developing your first agent—whether you're a researcher testing hypotheses, a startup deploying an MVP, or an enterprise orchestrating internal automation.</p>
+  <p>Agentic AI is a radical innovation in the operation of intelligent systems—not merely responding to questions, but actively reasoning, planning, and acting to advance goals.</p>
+  <p>This report is more than definitions. It provides a concrete taxonomy of agent types and outlines a modular blueprint to guide you in developing your first agent—whether you're a researcher testing hypotheses, a startup deploying an MVP, or an enterprise orchestrating internal automation.</p>
 
                             <h3>Agentic AI: A Functional Taxonomy</h3>
-                            <p>Agentic systems are divided based on their functional role, autonomy level, and coordination structure. Understanding these types helps define the right architecture for your use case.</p>
+  <p>Agentic systems are divided based on their functional role, autonomy level, and coordination structure. Understanding these types helps define the right architecture for your use case.</p>
 
                             <h4>1. Task Agents</h4>
-                            <ul>
-                                <li><strong>Examples:</strong> Document summarization, parsing emails, report generation</li>
-                                <li><strong>Characteristics:</strong> Stateless or semi-stateful, low autonomy</li>
-                                <li><strong>Tooling:</strong> Prompt templates, function calls, retrieval-augmented generation (RAG)</li>
-                                <li><strong>Best Use Case:</strong> Constrained, deterministic workflows such as compliance reporting</li>
-                            </ul>
+  <ul>
+    <li><strong>Examples:</strong> Document summarization, parsing emails, report generation</li>
+    <li><strong>Characteristics:</strong> Stateless or semi-stateful, low autonomy</li>
+    <li><strong>Tooling:</strong> Prompt templates, function calls, retrieval-augmented generation (RAG)</li>
+    <li><strong>Best Use Case:</strong> Constrained, deterministic workflows such as compliance reporting</li>
+  </ul>
 
                             <h4>2. Interface Agents</h4>
-                            <ul>
-                                <li><strong>Examples:</strong> Virtual assistants, chatbots, sales consultants</li>
-                                <li><strong>Features:</strong> Context-sensitive, multimodal, reactive or semi-autonomous</li>
-                                <li><strong>Stack:</strong> LLM + memory + UI (Streamlit, React)</li>
-                                <li><strong>Best Use Case:</strong> End-user applications with conversational UX</li>
-                            </ul>
+  <ul>
+    <li><strong>Examples:</strong> Virtual assistants, chatbots, sales consultants</li>
+    <li><strong>Features:</strong> Context-sensitive, multimodal, reactive or semi-autonomous</li>
+    <li><strong>Stack:</strong> LLM + memory + UI (Streamlit, React)</li>
+    <li><strong>Best Use Case:</strong> End-user applications with conversational UX</li>
+  </ul>
 
                             <h4>3. Reflection Agents</h4>
-                            <ul>
-                                <li><strong>Examples:</strong> Code critics, feedback evaluators, AI safety inspectors</li>
-                                <li><strong>Features:</strong> Feedback loops, reward models, critic roles</li>
-                                <li><strong>Structure:</strong> Self-referential LLM chains or two-agent systems</li>
-                                <li><strong>Ideal Use Case:</strong> Quality control, advanced error handling, self-improvement</li>
-                            </ul>
+  <ul>
+    <li><strong>Examples:</strong> Code critics, feedback evaluators, AI safety inspectors</li>
+    <li><strong>Features:</strong> Feedback loops, reward models, critic roles</li>
+    <li><strong>Structure:</strong> Self-referential LLM chains or two-agent systems</li>
+    <li><strong>Ideal Use Case:</strong> Quality control, advanced error handling, self-improvement</li>
+  </ul>
 
                             <h4>4. Planner Agents</h4>
-                            <ul>
-                                <li><strong>Examples:</strong> Project coordinators, workflow dispatchers, goal routers</li>
-                                <li><strong>Traits:</strong> High-order reasoning, dynamic execution paths</li>
-                                <li><strong>Stack:</strong> LangChain + AutoGen + Tool Use</li>
-                                <li><strong>Best Use Case:</strong> Complex multi-step workflows such as travel planning or legal task coordination</li>
-                            </ul>
+  <ul>
+    <li><strong>Examples:</strong> Project coordinators, workflow dispatchers, goal routers</li>
+    <li><strong>Traits:</strong> High-order reasoning, dynamic execution paths</li>
+    <li><strong>Stack:</strong> LangChain + AutoGen + Tool Use</li>
+    <li><strong>Best Use Case:</strong> Complex multi-step workflows such as travel planning or legal task coordination</li>
+  </ul>
 
                             <h4>5. Multi-Agent Systems</h4>
-                            <ul>
-                                <li><strong>Examples:</strong> Autonomous research labs, developer pods, robot teams</li>
-                                <li><strong>Traits:</strong> Emergent behavior, decentralized communication, negotiation protocols</li>
-                                <li><strong>Stack:</strong> CrewAI, AutoGen, custom inter-agent APIs</li>
-                                <li><strong>Best Use Case:</strong> Scalable coordination and real-time teamwork</li>
-                            </ul>
+  <ul>
+    <li><strong>Examples:</strong> Autonomous research labs, developer pods, robot teams</li>
+    <li><strong>Traits:</strong> Emergent behavior, decentralized communication, negotiation protocols</li>
+    <li><strong>Stack:</strong> CrewAI, AutoGen, custom inter-agent APIs</li>
+    <li><strong>Best Use Case:</strong> Scalable coordination and real-time teamwork</li>
+  </ul>
 
                             <h3>Core Components of a Minimal Agentic Stack</h3>
                             <div class="table-responsive">
                                 <table class="table table-bordered">
                                     <thead class="thead-dark">
-                                        <tr>
-                                            <th>Component</th>
-                                            <th>Description</th>
-                                            <th>Tools/Options</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
+      <tr>
+        <th>Component</th>
+        <th>Description</th>
+        <th>Tools/Options</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
                                             <td><strong>LLM Backbone</strong></td>
-                                            <td>Reasoning and language generation</td>
-                                            <td>OpenAI GPT-4o, Claude 3, Gemini, Mistral</td>
-                                        </tr>
-                                        <tr>
+        <td>Reasoning and language generation</td>
+        <td>OpenAI GPT-4o, Claude 3, Gemini, Mistral</td>
+      </tr>
+      <tr>
                                             <td><strong>Planner</strong></td>
-                                            <td>Translates goals into tasks</td>
-                                            <td>LangChain, ReAct, LangGraph</td>
-                                        </tr>
-                                        <tr>
+        <td>Translates goals into tasks</td>
+        <td>LangChain, ReAct, LangGraph</td>
+      </tr>
+      <tr>
                                             <td><strong>Tools Layer</strong></td>
-                                            <td>Interfaces for acting on the world</td>
-                                            <td>LangChain Tools, Custom APIs, Selenium</td>
-                                        </tr>
-                                        <tr>
+        <td>Interfaces for acting on the world</td>
+        <td>LangChain Tools, Custom APIs, Selenium</td>
+      </tr>
+      <tr>
                                             <td><strong>Memory System</strong></td>
-                                            <td>Contextual and persistent memory</td>
-                                            <td>Redis, Pinecone, Qdrant, Weaviate</td>
-                                        </tr>
-                                        <tr>
+        <td>Contextual and persistent memory</td>
+        <td>Redis, Pinecone, Qdrant, Weaviate</td>
+      </tr>
+      <tr>
                                             <td><strong>Execution</strong></td>
-                                            <td>Sandbox or runtime for actions</td>
-                                            <td>Azure Functions, Dapr, Serverless frameworks</td>
-                                        </tr>
-                                        <tr>
+        <td>Sandbox or runtime for actions</td>
+        <td>Azure Functions, Dapr, Serverless frameworks</td>
+      </tr>
+      <tr>
                                             <td><strong>UI/API Layer</strong></td>
-                                            <td>Human/system interface</td>
-                                            <td>Streamlit, FastAPI, React, Slack</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+        <td>Human/system interface</td>
+        <td>Streamlit, FastAPI, React, Slack</td>
+      </tr>
+    </tbody>
+  </table>
                             </div>
 
                             <h3>Quickstart Blueprint: Building a Travel Assistant Agent</h3>
-                            <p><strong>Objective:</strong> Plan a trip from Istanbul to Berlin within budget, taking visa and schedule into account.</p>
+  <p><strong>Objective:</strong> Plan a trip from Istanbul to Berlin within budget, taking visa and schedule into account.</p>
 
-                            <p><strong>Agent Capabilities:</strong></p>
-                            <ul>
-                                <li><strong>Planning:</strong> Use a planner agent to decompose goals</li>
-                                <li><strong>Tool Use:</strong> Integrate Skyscanner API, Google Calendar, and email tools</li>
-                                <li><strong>Memory:</strong> Store user preferences, budgets, frequent locations</li>
-                                <li><strong>Reflection:</strong> Evaluate feasibility and manage booking exceptions</li>
-                            </ul>
+  <p><strong>Agent Capabilities:</strong></p>
+  <ul>
+    <li><strong>Planning:</strong> Use a planner agent to decompose goals</li>
+    <li><strong>Tool Use:</strong> Integrate Skyscanner API, Google Calendar, and email tools</li>
+    <li><strong>Memory:</strong> Store user preferences, budgets, frequent locations</li>
+    <li><strong>Reflection:</strong> Evaluate feasibility and manage booking exceptions</li>
+  </ul>
 
-                            <p><strong>Architecture Flow:</strong></p>
+  <p><strong>Architecture Flow:</strong></p>
                             <pre><code>User Query → LLM Planning → Task Decomposition → API Calls → Final Output  
                              ↓
                         Memory Check  
                              ↓
                       Reflection Layer</code></pre>
 
-                            <p><strong>Outcome:</strong> A fully autonomous travel coordinator that interacts with live APIs, adapts to constraints, and handles exceptions—all without hardcoded logic.</p>
+  <p><strong>Outcome:</strong> A fully autonomous travel coordinator that interacts with live APIs, adapts to constraints, and handles exceptions—all without hardcoded logic.</p>
 
                             <h3>Best Practices for Building Robust Agents</h3>
-                            <ul>
-                                <li><strong>Interruptibility:</strong> Ensure agents can be paused or overridden at any time.</li>
-                                <li><strong>Memory Management:</strong> Separate short-term, long-term, and semantic memory. Prevent bloating or misinformation.</li>
-                                <li><strong>Modularity:</strong> Decompose into micro-agents—for planning, tool use, and validation—to simplify development.</li>
-                                <li><strong>Tool Governance:</strong> Use permissions and logging to restrict and monitor tool access.</li>
-                                <li><strong>Simulated Testing:</strong> Validate agents using simulations before deploying in live environments.</li>
-                            </ul>
+  <ul>
+    <li><strong>Interruptibility:</strong> Ensure agents can be paused or overridden at any time.</li>
+    <li><strong>Memory Management:</strong> Separate short-term, long-term, and semantic memory. Prevent bloating or misinformation.</li>
+    <li><strong>Modularity:</strong> Decompose into micro-agents—for planning, tool use, and validation—to simplify development.</li>
+    <li><strong>Tool Governance:</strong> Use permissions and logging to restrict and monitor tool access.</li>
+    <li><strong>Simulated Testing:</strong> Validate agents using simulations before deploying in live environments.</li>
+  </ul>
 
                             <h3>Tooling Recommendations by Use Case</h3>
                             <div class="table-responsive">
                                 <table class="table table-bordered">
                                     <thead class="thead-dark">
-                                        <tr>
-                                            <th>Use Case</th>
-                                            <th>Suggested Stack</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
+      <tr>
+        <th>Use Case</th>
+        <th>Suggested Stack</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
                                             <td><strong>Personal Agent</strong></td>
-                                            <td>LangChain + GPT-4o + Streamlit</td>
-                                        </tr>
-                                        <tr>
+        <td>LangChain + GPT-4o + Streamlit</td>
+      </tr>
+      <tr>
                                             <td><strong>Enterprise Workflow</strong></td>
-                                            <td>Azure OpenAI + AutoGen + Cosmos DB</td>
-                                        </tr>
-                                        <tr>
+        <td>Azure OpenAI + AutoGen + Cosmos DB</td>
+      </tr>
+      <tr>
                                             <td><strong>Multi-Agent Research</strong></td>
-                                            <td>CrewAI + VS Code + Redis + Docker</td>
-                                        </tr>
-                                        <tr>
+        <td>CrewAI + VS Code + Redis + Docker</td>
+      </tr>
+      <tr>
                                             <td><strong>Custom SaaS Agent</strong></td>
-                                            <td>FastAPI + Claude 3 + Pinecone + LangGraph</td>
-                                        </tr>
-                                        <tr>
+        <td>FastAPI + Claude 3 + Pinecone + LangGraph</td>
+      </tr>
+      <tr>
                                             <td><strong>RPA with Agentic Logic</strong></td>
-                                            <td>UiPath + LLM Bridge + LangChain Tools</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+        <td>UiPath + LLM Bridge + LangChain Tools</td>
+      </tr>
+    </tbody>
+  </table>
                             </div>
 
                             <h3>Conclusion: The Agentic Era Is Now</h3>
-                            <p>We are entering a time where language models are no longer passive engines—they are dynamic actors. Understanding the different types of AI agents, how to construct them, and where to deploy them gives you an edge in the next phase of intelligent system development.</p>
+  <p>We are entering a time where language models are no longer passive engines—they are dynamic actors. Understanding the different types of AI agents, how to construct them, and where to deploy them gives you an edge in the next phase of intelligent system development.</p>
 
-                            <p>Agentic systems are designed to evolve. When constructed properly, they unlock levels of autonomy, collaboration, and intelligence that scale well beyond human limits.</p>
+  <p>Agentic systems are designed to evolve. When constructed properly, they unlock levels of autonomy, collaboration, and intelligence that scale well beyond human limits.</p>
 
                             <blockquote class="blockquote">You do not program an agent. You teach it to think, to act—and then you give it purpose.</blockquote>
                         </div>

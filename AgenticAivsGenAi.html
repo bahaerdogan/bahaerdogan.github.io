@@ -297,110 +297,110 @@
                             <blockquote class="blockquote">"The transition from generative AI to agentic AI is not a technical feat but a fundamental transformation in the design of how intelligent systems operate."</blockquote>
                             
                             <h3>Introduction: Two Paradigms, One AI Evolution</h3>
-                            <p>The transition from generative AI to agentic AI is not a technical feat but a fundamental transformation in the design of how intelligent systems operate. While both utilize large language models (LLMs) at their core, their designs, goals, and real-world applications are fundamentally different. This article provides a deep technical analysis of the differences and their impact on deployable AI operations, especially in autonomous chatbot platforms.</p>
-                            
+      <p>The transition from generative AI to agentic AI is not a technical feat but a fundamental transformation in the design of how intelligent systems operate. While both utilize large language models (LLMs) at their core, their designs, goals, and real-world applications are fundamentally different. This article provides a deep technical analysis of the differences and their impact on deployable AI operations, especially in autonomous chatbot platforms.</p>
+
                             <h3>Generative AI: The Reactive Foundation</h3>
-                            <p>Generative AI systems are prompt-response systems. They leverage pretrained LLMs to create outputs like text, images, or code from context input. They are stateless, and every prompt is treated as a standalone. Some examples include:</p>
-                            <ul>
-                                <li>Customer support bots</li>
-                                <li>Email generation</li>
-                                <li>Language translation</li>
-                            </ul>
-                            <p>While excellent at content generation, generative AI is weak in the areas of long-term memory, decision-making, and task coordination. It cannot:</p>
-                            <ul>
-                                <li>Plan multi-step activities</li>
-                                <li>Remember previous choices</li>
-                                <li>Speak to APIs or tools dynamically</li>
-                            </ul>
-                            
+      <p>Generative AI systems are prompt-response systems. They leverage pretrained LLMs to create outputs like text, images, or code from context input. They are stateless, and every prompt is treated as a standalone. Some examples include:</p>
+      <ul>
+        <li>Customer support bots</li>
+        <li>Email generation</li>
+        <li>Language translation</li>
+      </ul>
+      <p>While excellent at content generation, generative AI is weak in the areas of long-term memory, decision-making, and task coordination. It cannot:</p>
+      <ul>
+        <li>Plan multi-step activities</li>
+        <li>Remember previous choices</li>
+        <li>Speak to APIs or tools dynamically</li>
+      </ul>
+
                             <h3>Agentic AI: The Autonomous Quantum Leap</h3>
                             <p>Agentic AI builds on generative capabilities by placing them within structured, goal based systems. It adds four main capabilities to traditional LLMs:</p>
-                            <ul>
-                                <li><strong>Planning:</strong> Agents set goals, evaluate plans, and revise plans based on feedback.</li>
+      <ul>
+        <li><strong>Planning:</strong> Agents set goals, evaluate plans, and revise plans based on feedback.</li>
                                 <li><strong>Memory:</strong> Agents maintain session history and long term knowledge to facilitate continuation.</li>
-                                <li><strong>Tool Use:</strong> Agents call upon APIs, databases, and write/execute code to accomplish tasks.</li>
+        <li><strong>Tool Use:</strong> Agents call upon APIs, databases, and write/execute code to accomplish tasks.</li>
                                 <li><strong>Reflection:</strong> Agents analyze outcomes, self tune, and adapt to changing environments.</li>
-                            </ul>
-                            <p>For example, an agentic travel assistant does not just suggest. It buys your ticket, checks visa requirements, interoperates with your calendar, and adapts when plans change—all automatically.</p>
-                            
+      </ul>
+      <p>For example, an agentic travel assistant does not just suggest. It buys your ticket, checks visa requirements, interoperates with your calendar, and adapts when plans change—all automatically.</p>
+
                             <h3>Architectural Distinctions: What Propels Agentic AI?</h3>
-                            <p>Agentic systems rely on a multilayered architecture, typically consisting of:</p>
-                            <ul>
-                                <li>Orchestration frameworks: <em>LangChain, AutoGen, CrewAI</em></li>
-                                <li>Tool routers: <em>Dynamic APIs for tool invocation</em> (e.g., LangChain tool calling)</li>
-                                <li>Persistent memory layers: <em>CosmosDB, Redis, or vector stores</em></li>
-                                <li>Sandboxed execution environments: <em>Azure Code Interpreter Sessions, Dapr-enabled microservices</em></li>
+      <p>Agentic systems rely on a multilayered architecture, typically consisting of:</p>
+      <ul>
+        <li>Orchestration frameworks: <em>LangChain, AutoGen, CrewAI</em></li>
+        <li>Tool routers: <em>Dynamic APIs for tool invocation</em> (e.g., LangChain tool calling)</li>
+        <li>Persistent memory layers: <em>CosmosDB, Redis, or vector stores</em></li>
+        <li>Sandboxed execution environments: <em>Azure Code Interpreter Sessions, Dapr-enabled microservices</em></li>
                                 <li>Multi agent coordination: <em>Horizontal/vertical/hybrid agent models</em></li>
-                            </ul>
-                            <p>This modularity enables agents to collaborate in concert or singularly without compromising safety, interoperability, and reliability.</p>
+      </ul>
+      <p>This modularity enables agents to collaborate in concert or singularly without compromising safety, interoperability, and reliability.</p>
                             
                             <h3>Agentic AI vs. Generative AI Comparison</h3>
                             <div class="table-responsive">
                                 <table class="table table-bordered table-striped">
                                     <thead class="thead-dark">
-                                        <tr>
-                                            <th>Feature</th>
-                                            <th>Generative AI</th>
-                                            <th>Agentic AI</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
+          <tr>
+            <th>Feature</th>
+            <th>Generative AI</th>
+            <th>Agentic AI</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
                                             <td><strong>State Management</strong></td>
-                                            <td>Stateless</td>
+            <td>Stateless</td>
                                             <td>Persistent memory (session and long term)</td>
-                                        </tr>
-                                        <tr>
+          </tr>
+          <tr>
                                             <td><strong>Tool Interaction</strong></td>
-                                            <td>None or static APIs</td>
-                                            <td>Dynamic tool calling, API integration</td>
-                                        </tr>
-                                        <tr>
+            <td>None or static APIs</td>
+            <td>Dynamic tool calling, API integration</td>
+          </tr>
+          <tr>
                                             <td><strong>Planning Capability</strong></td>
-                                            <td>None</td>
+            <td>None</td>
                                             <td>Multi step planning and goal setting</td>
-                                        </tr>
-                                        <tr>
+          </tr>
+          <tr>
                                             <td><strong>Decision Autonomy</strong></td>
                                             <td>Prompt based</td>
                                             <td>Goal directed, adaptive decision making</td>
-                                        </tr>
-                                        <tr>
+          </tr>
+          <tr>
                                             <td><strong>Task Execution</strong></td>
                                             <td>Single turn output</td>
-                                            <td>Multistep task orchestration</td>
-                                        </tr>
-                                        <tr>
+            <td>Multistep task orchestration</td>
+          </tr>
+          <tr>
                                             <td><strong>Multi Agent Support</strong></td>
-                                            <td>Not supported</td>
-                                            <td>Inherent orchestration for collaborative agents</td>
-                                        </tr>
-                                        <tr>
+            <td>Not supported</td>
+            <td>Inherent orchestration for collaborative agents</td>
+          </tr>
+          <tr>
                                             <td><strong>Use Case</strong></td>
-                                            <td>Text generation, chat</td>
-                                            <td>Assistants, agents, workflows, automation</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+            <td>Text generation, chat</td>
+            <td>Assistants, agents, workflows, automation</td>
+          </tr>
+        </tbody>
+      </table>
                             </div>
-                            
+
                             <h3>Technical Case Study: Creating a Conversational Agent with Azure</h3>
-                            <p>A modern use case of agentic AI might leverage:</p>
-                            <ul>
-                                <li><strong>Azure OpenAI:</strong> Foundation model for generative answers</li>
-                                <li><strong>LangChain or AutoGen:</strong> Orchestration framework</li>
-                                <li><strong>Azure API Management:</strong> Scalable secure access to model APIs</li>
-                                <li><strong>Azure AI Search + RAG:</strong> Enables knowledge retrieval</li>
-                                <li><strong>Azure Container Apps:</strong> Hosts horizontally scalable modular agents</li>
+      <p>A modern use case of agentic AI might leverage:</p>
+      <ul>
+        <li><strong>Azure OpenAI:</strong> Foundation model for generative answers</li>
+        <li><strong>LangChain or AutoGen:</strong> Orchestration framework</li>
+        <li><strong>Azure API Management:</strong> Scalable secure access to model APIs</li>
+        <li><strong>Azure AI Search + RAG:</strong> Enables knowledge retrieval</li>
+        <li><strong>Azure Container Apps:</strong> Hosts horizontally scalable modular agents</li>
                                 <li><strong>Azure Key Vault + Redis + Cosmos DB:</strong> For secrets, cache, and long term memory</li>
-                                <li><strong>Code Interpreter Sessions:</strong> Safe tool execution</li>
-                            </ul>
+        <li><strong>Code Interpreter Sessions:</strong> Safe tool execution</li>
+      </ul>
                             <p>This architecture enables developing resilient, scalable, and secure agentic systems that can be utilized in high stakes enterprise applications.</p>
                             
                             <h3>Simplified Summary for Beginners</h3>
                             <p><strong>Generative AI</strong> is a smart typewriter it types on what you instruct it to but does not retain what it has just typed.</p>
                             <p><strong>Agentic AI</strong> is similar to a virtual assistant it retains your earlier work, anticipates, opens apps on your behalf, and can modify as situations change.</p>
-                            <p>If generative AI is reactive, agentic AI is proactive.</p>
+      <p>If generative AI is reactive, agentic AI is proactive.</p>
                             
                             <h3>Conclusion: Agentic AI Is the Future of Autonomous Systems</h3>
                             <p>Transitioning from generative to agentic AI is not just evolutionary—it's revolutionary. More powerful, standalone, and generalizable AI systems are required by businesses as they grow. Generating is not enough. Systems must plan, act, reflect, and learn.</p>

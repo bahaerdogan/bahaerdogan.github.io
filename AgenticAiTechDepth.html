@@ -301,136 +301,136 @@
                             <p>This third episode of our series explores agentic AI from systems engineering and technical perspectives—unveiling its internal workings, theoretical underpinnings, and deployment methods that set it apart from reactive or generative-only systems.</p>
                             
                             <h3>Planning Is the Core Engine</h3>
-                            <p>Embedded deep within the heart of every agent is a planner—a subsystem that takes the abstract user goals and converts them into actionable, sequenced action.</p>
-                            
+      <p>Embedded deep within the heart of every agent is a planner—a subsystem that takes the abstract user goals and converts them into actionable, sequenced action.</p>
+
                             <p>Existing agentic systems also generally employ hierarchical task decomposition, a technique whereby the top-level goal is broken down into subgoals recursively such that the ultimate outcome is tangible and feasible. These actions are determined by:</p>
-                            
-                            <ul>
-                                <li><strong>Heuristics:</strong> Learned or stipulated encoded rules stored within the system with preference.</li>
+
+      <ul>
+        <li><strong>Heuristics:</strong> Learned or stipulated encoded rules stored within the system with preference.</li>
                                 <li><strong>Symbolic Planning:</strong> Logic-based planners like STRIPS or PDDL for deterministic planning.</li>
-                                <li><strong>Probabilistic Planning:</strong> Markov Decision Processes (MDPs) or POMDPs in which uncertainty is modeled.</li>
+        <li><strong>Probabilistic Planning:</strong> Markov Decision Processes (MDPs) or POMDPs in which uncertainty is modeled.</li>
                                 <li><strong>LLM-aided Reasoning:</strong> Utilizing transformer models (e.g., GPT-4, Claude) to generate subplans from instructions.</li>
-                            </ul>
-                            
+      </ul>
+
                             <p>Hybrid architectures increasingly combine symbolic reasoning with LLM plan-based planners—offering flexible interpretation together with ground logical execution.</p>
                             
                             <h3>Significant Agent Architectures in Practice</h3>
                             
                             <h4>1. BDI Model (Belief Desire Intention)</h4>
-                            <p>Inspired by human cognition, this classic model enables agents to:</p>
-                            <ul>
-                                <li><strong>Beliefs:</strong> Represent knowledge about the world and environment.</li>
-                                <li><strong>Desires:</strong> Possible outcomes or objectives.</li>
-                                <li><strong>Intentions:</strong> Chosen objectives and committed activities.</li>
-                            </ul>
-                            <p>The model allows for dynamic reconsideration, where agents can update intentions in response to changing beliefs (e.g., novel sensor data or user input).</p>
-                            
+          <p>Inspired by human cognition, this classic model enables agents to:</p>
+          <ul>
+            <li><strong>Beliefs:</strong> Represent knowledge about the world and environment.</li>
+            <li><strong>Desires:</strong> Possible outcomes or objectives.</li>
+            <li><strong>Intentions:</strong> Chosen objectives and committed activities.</li>
+          </ul>
+          <p>The model allows for dynamic reconsideration, where agents can update intentions in response to changing beliefs (e.g., novel sensor data or user input).</p>
+
                             <h4>2. ReAct (Reasoning + Acting)</h4>
-                            <p>Recommended by Google researchers, ReAct agents integrate reasoning steps into action plans. They carry out:</p>
-                            <ul>
-                                <li>Internal deliberation (reasoning)</li>
-                                <li>Tool manipulation (acting)</li>
-                                <li>Reflection on tool feedback</li>
-                            </ul>
+          <p>Recommended by Google researchers, ReAct agents integrate reasoning steps into action plans. They carry out:</p>
+          <ul>
+            <li>Internal deliberation (reasoning)</li>
+            <li>Tool manipulation (acting)</li>
+            <li>Reflection on tool feedback</li>
+          </ul>
                             <p>The result: open, interpretable behavior that's real-time adaptable.</p>
-                            
+
                             <h4>3. ReWOO (Read, Write, Observe, Operate)</h4>
-                            <p>Abstracted by Microsoft Research, ReWOO decouples LLM reasoning from the world. It prioritizes:</p>
-                            <ul>
-                                <li><strong>Read/Write:</strong> Modifying internal memory</li>
-                                <li><strong>Observe/Operate:</strong> Executing external APIs or tools</li>
-                            </ul>
+          <p>Abstracted by Microsoft Research, ReWOO decouples LLM reasoning from the world. It prioritizes:</p>
+          <ul>
+            <li><strong>Read/Write:</strong> Modifying internal memory</li>
+            <li><strong>Observe/Operate:</strong> Executing external APIs or tools</li>
+          </ul>
                             <p>This enables safe operation in multi-agent domains by isolating internal logic from outside effect.</p>
-                            
+
                             <h4>4. Multi-Agent Architectures</h4>
-                            <p>Architectures like CrewAI, AutoGen, or CAMEL introduce:</p>
-                            <ul>
-                                <li>Specialist agents (planner, executor, evaluator)</li>
-                                <li>Communication protocols (shared memory, message passing)</li>
+          <p>Architectures like CrewAI, AutoGen, or CAMEL introduce:</p>
+          <ul>
+            <li>Specialist agents (planner, executor, evaluator)</li>
+            <li>Communication protocols (shared memory, message passing)</li>
                                 <li>Role-based workflows (e.g., manager vs. coder agents)</li>
-                            </ul>
-                            <p>Such modularity grants robustness and scalability without central complexity.</p>
-                            
+          </ul>
+          <p>Such modularity grants robustness and scalability without central complexity.</p>
+
                             <h3>Tool Use and API Interfacing: Acting on the World</h3>
-                            <p>Agentic AI can interface with external tools and environments to:</p>
-                            <ul>
+      <p>Agentic AI can interface with external tools and environments to:</p>
+      <ul>
                                 <li>Fetch real-time data</li>
-                                <li>Send emails</li>
-                                <li>Schedule events</li>
-                                <li>Trigger CI/CD pipelines</li>
-                            </ul>
-                            
-                            <p>Enabled by:</p>
-                            <ul>
-                                <li>Function calling APIs (OpenAI tools, LangChain, Semantic Kernel)</li>
-                                <li>Code interpreters (Azure Code Interpreter, Python REPL environments)</li>
-                                <li>External action wrappers (Selenium, Postman APIs)</li>
-                            </ul>
-                            
+        <li>Send emails</li>
+        <li>Schedule events</li>
+        <li>Trigger CI/CD pipelines</li>
+      </ul>
+
+      <p>Enabled by:</p>
+      <ul>
+        <li>Function calling APIs (OpenAI tools, LangChain, Semantic Kernel)</li>
+        <li>Code interpreters (Azure Code Interpreter, Python REPL environments)</li>
+        <li>External action wrappers (Selenium, Postman APIs)</li>
+      </ul>
+
                             <p>Agents must also validate, sandbox, and permission-check before executing real-world actions.</p>
-                            
+
                             <h3>Memory Systems: From Stateless to Cognitive Agents</h3>
-                            <p>Agentic systems include memory types such as:</p>
-                            <ul>
+      <p>Agentic systems include memory types such as:</p>
+      <ul>
                                 <li><strong>Short-term memory:</strong> Session-level state retention</li>
                                 <li><strong>Long-term memory:</strong> User preferences, world models</li>
-                                <li><strong>Episodic memory:</strong> Logs of previous decisions and outcomes</li>
-                            </ul>
-                            
-                            <p>Technologies used:</p>
-                            <ul>
-                                <li>Vector databases (Pinecone, Weaviate, Qdrant)</li>
-                                <li>Graph stores (Neo4j)</li>
+        <li><strong>Episodic memory:</strong> Logs of previous decisions and outcomes</li>
+      </ul>
+
+      <p>Technologies used:</p>
+      <ul>
+        <li>Vector databases (Pinecone, Weaviate, Qdrant)</li>
+        <li>Graph stores (Neo4j)</li>
                                 <li>In-memory caches (Redis)</li>
-                            </ul>
-                            
+      </ul>
+
                             <p>Well-managed memory ensures consistent context in complex workflows.</p>
-                            
+
                             <h3>Agentic Orchestration Patterns</h3>
-                            <p>Developers orchestrate agents with patterns such as:</p>
-                            <ul>
-                                <li>Task Runners (e.g., Airflow, LangChain Agents)</li>
-                                <li>Dynamic Task Routing</li>
-                                <li>Feedback Loops for quality assessment</li>
-                                <li>Meta Agents to coordinate and monitor subagents</li>
-                            </ul>
-                            
-                            <p>Popular stacks include:</p>
-                            <ul>
+      <p>Developers orchestrate agents with patterns such as:</p>
+      <ul>
+        <li>Task Runners (e.g., Airflow, LangChain Agents)</li>
+        <li>Dynamic Task Routing</li>
+        <li>Feedback Loops for quality assessment</li>
+        <li>Meta Agents to coordinate and monitor subagents</li>
+      </ul>
+
+      <p>Popular stacks include:</p>
+      <ul>
                                 <li><strong>LangChain + Azure OpenAI + Cosmos DB:</strong> Enterprise-level orchestration</li>
-                                <li><strong>AutoGen + VS Code + Python Tooling:</strong> For custom developer tools</li>
-                                <li><strong>CrewAI + Pinecone + Zapier:</strong> Business automation across SaaS</li>
-                            </ul>
-                            
+        <li><strong>AutoGen + VS Code + Python Tooling:</strong> For custom developer tools</li>
+        <li><strong>CrewAI + Pinecone + Zapier:</strong> Business automation across SaaS</li>
+      </ul>
+
                             <h3>Technical Design Principles for Agentic Systems</h3>
-                            <p>To ensure reliability and transparency, agent developers focus on:</p>
-                            <ul>
+      <p>To ensure reliability and transparency, agent developers focus on:</p>
+      <ul>
                                 <li><strong>Interruptibility:</strong> Human-in-the-loop controls</li>
-                                <li><strong>Explainability:</strong> Transparent and traceable logic</li>
-                                <li><strong>Observability:</strong> Logging, dashboards, and telemetry</li>
-                                <li><strong>Scalability:</strong> Stateless services and shared memory</li>
-                            </ul>
-                            
+        <li><strong>Explainability:</strong> Transparent and traceable logic</li>
+        <li><strong>Observability:</strong> Logging, dashboards, and telemetry</li>
+        <li><strong>Scalability:</strong> Stateless services and shared memory</li>
+      </ul>
+
                             <h3>The Road Ahead: From Autonomous to General Purpose Agents</h3>
-                            <p>Looking forward, expect advances such as:</p>
-                            <ul>
-                                <li>Unified memory across symbolic and vector spaces</li>
-                                <li>Adaptive planners building reusable strategies</li>
-                                <li>Agent marketplaces for cooperation and capability exchange</li>
+      <p>Looking forward, expect advances such as:</p>
+      <ul>
+        <li>Unified memory across symbolic and vector spaces</li>
+        <li>Adaptive planners building reusable strategies</li>
+        <li>Agent marketplaces for cooperation and capability exchange</li>
                                 <li>Self-healing agents with runtime learning</li>
-                            </ul>
-                            
+      </ul>
+
                             <p>Tomorrow's developers will craft not just apps, but entire agent ecosystems.</p>
-                            
+
                             <h3>In Brief: Why This Technical Depth Matters</h3>
                             <p>Agentic AI is not magic—it's engineering. Through symbolic planning, memory management, orchestration, and modular architecture, we enable:</p>
-                            <ul>
-                                <li>Developers to build intelligent apps—not just chatbots</li>
-                                <li>Enterprises to automate processes with clarity and control</li>
-                                <li>Researchers to uncover emergent behavior and coordination patterns</li>
-                            </ul>
-                            
-                            <p>This is where generative intelligence becomes <strong>operative intelligence</strong>.</p>
+      <ul>
+        <li>Developers to build intelligent apps—not just chatbots</li>
+        <li>Enterprises to automate processes with clarity and control</li>
+        <li>Researchers to uncover emergent behavior and coordination patterns</li>
+      </ul>
+
+      <p>This is where generative intelligence becomes <strong>operative intelligence</strong>.</p>
                             
                             <blockquote class="blockquote">Next in the Series: Types of Agentic AI and How to Build Your First Agent<br>We'll explore hands-on frameworks, agent archetypes (task agents, reflection agents, interface agents), and practical workflows to bring your own agent to life.</blockquote>
                         </div>
@@ -600,7 +600,7 @@
     <!--/ Section Contact-Footer Star /-->
     <section class="paralax-mf footer-paralax bg-image sect-mt4 route" style="background-image: url('img/overlay-bg.jpg')">
         <div class="overlay-mf"></div>
-        <footer>
+    <footer>
             <div class="container">
                 <div class="row">
                     <div class="col-sm-12">
@@ -619,7 +619,7 @@
                     </div>
                 </div>
             </div>
-        </footer>
+    </footer>
     </section>
     <!--/ Section Contact-footer End /-->
 
