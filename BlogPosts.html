@@ -233,14 +233,38 @@
             }
         }
 
-        .blog-header {
-            height: 60px;
-            background: linear-gradient(135deg, #48abec, #667eea);
+        .blog-image-container {
             position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            height: 220px;
+            overflow: hidden;
             border-radius: 15px 15px 0 0;
+        }
+
+        .blog-image {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .blog-image.loaded {
+            background-image: var(--bg-image);
+        }
+
+        .image-placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ccc;
+            font-size: 2rem;
+            z-index: 1;
+        }
+
+        .blog-image.loaded .image-placeholder {
+            display: none;
         }
 
         .category-badge {
@@ -601,11 +625,13 @@
 
     <!-- Blog Posts JavaScript -->
     <script>
-        // Blog posts data
+        // Blog posts data with optimized images
         const blogPosts = [
             {
                 title: "What Are AI Agents or Agentic AI?",
                 excerpt: "Explore the foundation of autonomous artificial intelligence. Learn about AI agents, their architecture, and how they represent the next evolution in intelligent technology.",
+                image: "img/AgenticAi1.png",
+                imageWebp: "img/AgenticAi1.webp",
                 category: "ai",
                 file: "AgenticAiExplained.html",
                 readingTime: "8 min",
@@ -614,6 +640,8 @@
             {
                 title: "Agentic AI vs Generative AI: Understanding the Differences",
                 excerpt: "Dive deep into the distinctions between agentic AI and generative AI. Understand their capabilities, use cases, and how they complement each other in the AI ecosystem.",
+                image: "img/AgenticVsGenai.png",
+                imageWebp: "img/AgenticVsGenai.webp",
                 category: "ai",
                 file: "AgenticAivsGenAi.html",
                 readingTime: "10 min",
@@ -622,6 +650,8 @@
             {
                 title: "Types of Agentic AI: A Comprehensive Guide",
                 excerpt: "Explore the various types of agentic AI systems, from simple reactive agents to complex multi-agent systems. Understand their applications and capabilities.",
+                image: "img/AgenticAi2.png",
+                imageWebp: "img/AgenticAi2.webp",
                 category: "ai",
                 file: "BuildingAiAgent.html",
                 readingTime: "12 min",
@@ -630,6 +660,8 @@
             {
                 title: "Agentic AI Technical Deep Dive",
                 excerpt: "A technical exploration of agentic AI systems, covering architectures, decision-making processes, and implementation strategies for autonomous AI agents.",
+                image: "img/AgenticAi6.png",
+                imageWebp: "img/AgenticAi6.webp",
                 category: "ai",
                 file: "AgenticAiTechDepth.html",
                 readingTime: "15 min",
@@ -638,6 +670,8 @@
             {
                 title: "What AI Means to You: Personal Impact of Artificial Intelligence",
                 excerpt: "Discover how artificial intelligence is transforming your daily life, from personal assistants to healthcare, and what the future holds for AI integration.",
+                image: "img/predictiontoimpact.png",
+                imageWebp: "img/predictiontoimpact.webp",
                 category: "ai",
                 file: "WhatAiMeansToYou.html",
                 readingTime: "7 min",
@@ -646,6 +680,8 @@
             {
                 title: "The Role of AI in Defense Technologies",
                 excerpt: "I can confidently state that defense systems are among the most robustly protected systems in terms of software. To those of us who have had the opportunity to observe these systems from an external perspective, they appear to be incredibly solid and impenetrable.",
+                image: "img/defenseai.png",
+                imageWebp: "img/defenseai.webp",
                 category: "tech",
                 file: "AI-Defense.html",
                 readingTime: "6 min",
@@ -654,6 +690,8 @@
             {
                 title: "Introduction to Machine Learning",
                 excerpt: "A comprehensive guide to understanding machine learning fundamentals, including key concepts, common algorithms, and real-world applications. Perfect for beginners in AI and data science.",
+                image: "img/mlearning2.png",
+                imageWebp: "img/mlearning2.webp",
                 category: "ml",
                 file: "MachineLearning-Explained.html",
                 readingTime: "12 min",
@@ -662,6 +700,8 @@
             {
                 title: "Anomaly Detection in Machine Learning",
                 excerpt: "Unlike traditional supervised learning problems, anomaly detection typically deals with highly imbalanced datasets, requiring specialized methods to effectively model and detect outliers.",
+                image: "img/post-2.png",
+                imageWebp: "img/post-2.webp",
                 category: "ml",
                 file: "MachineLearningAnomalyDetection.html",
                 readingTime: "10 min",
@@ -670,6 +710,8 @@
             {
                 title: "Algorithms Explained: A Comprehensive Guide",
                 excerpt: "Explore the fundamental algorithms that power modern computing, from sorting and searching to machine learning algorithms and their real-world applications.",
+                image: "img/AlgorithmsExplained.png",
+                imageWebp: "img/AlgorithmsExplained.webp",
                 category: "tech",
                 file: "AlgorithmsExplained.html",
                 readingTime: "14 min",
@@ -678,6 +720,8 @@
             {
                 title: "How to Estimate Object Speed from Video without Prior Information",
                 excerpt: "In this article, I will explain how to estimate the speed of an object in a video without prior information, Using Structure from Motion (SfM) and 3D Reconstruction.",
+                image: "img/motion.png",
+                imageWebp: "img/motion.webp",
                 category: "tech",
                 file: "DistanceCalculatingMethods.html",
                 readingTime: "15 min",
@@ -686,6 +730,8 @@
             {
                 title: "Why High Value-Per-Kilogram Exports Are the Key to National Prosperity",
                 excerpt: "An opinion on why high value-per-kilogram exports are the key to national prosperity and economic development.",
+                image: "img/CubistExportPerKG.png",
+                imageWebp: "img/CubistExportPerKG.webp",
                 category: "finance",
                 file: "ValuePerKilogramForProsperity.html",
                 readingTime: "9 min",
@@ -694,6 +740,8 @@
             {
                 title: "Are AI Models Making Us Earn More Money Than We Deserve?",
                 excerpt: "There's a growing concern that the money once considered well-earned may no longer be justified. This sentiment might explain the resistance to AI adoption among certain professionals.",
+                image: "img/moneyearn.png",
+                imageWebp: "img/moneyearn.webp",
                 category: "finance",
                 file: "DeservingMoney.html",
                 readingTime: "7 min",
@@ -702,6 +750,8 @@
             {
                 title: "One of the Precious Metals: Data",
                 excerpt: "Data is an integral component in various aspects of our lives, from the television cables in our living rooms to the computers on our desks, and even the sophisticated artificial intelligence models that are shaping our future.",
+                image: "img/datamine.png",
+                imageWebp: "img/datamine.webp",
                 category: "tech",
                 file: "PreciousMetalData.html",
                 readingTime: "6 min",
@@ -710,6 +760,8 @@
             {
                 title: "Why is Knowing History Important?",
                 excerpt: "In today's fast-paced world, we have access to an abundance of information at our fingertips. However, this does not necessarily mean that we are making the most efficient use of it.",
+                image: "img/Artblogphoto.png",
+                imageWebp: "img/Artblogphoto.webp",
                 category: "history",
                 file: "WhyToLearnHistory.html",
                 readingTime: "5 min",
@@ -718,6 +770,8 @@
             {
                 title: "Oğuz Kağan Epic",
                 excerpt: "Explore the legendary Turkish epic of Oğuz Kağan, a tale of leadership, conquest, and the founding of the Turkish nation. Discover how this ancient narrative continues to influence Turkish culture today.",
+                image: "img/OguzKagan.jpeg",
+                imageWebp: "img/OguzKagan.webp",
                 category: "history",
                 file: "OguzKaganEpic.html",
                 readingTime: "8 min",
@@ -726,6 +780,8 @@
             {
                 title: "Ergenekon Epic",
                 excerpt: "Delve into the Ergenekon legend, a foundational myth of Turkish culture that tells the story of rebirth and resilience. Learn about its historical significance and modern interpretations.",
+                image: "img/ergenekon.jpeg",
+                imageWebp: "img/ergenekon.webp",
                 category: "history",
                 file: "ErgenekonEpic.html",
                 readingTime: "7 min",
@@ -734,6 +790,8 @@
             {
                 title: "Mac Shortcuts: Essential Keyboard Commands",
                 excerpt: "Master the essential Mac keyboard shortcuts to boost your productivity and streamline your workflow on macOS systems.",
+                image: "img/mainphotomobile.png",
+                imageWebp: "img/mainphotomobile.webp",
                 category: "tech",
                 file: "MacShortcuts.html",
                 readingTime: "5 min",
@@ -751,6 +809,51 @@
             updateStats();
         });
 
+        // Lazy loading functionality
+        function initLazyLoading() {
+            const lazyImages = document.querySelectorAll('.lazy-image');
+            
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        loadImage(img);
+                        observer.unobserve(img);
+                    }
+                });
+            }, {
+                rootMargin: '50px 0px',
+                threshold: 0.1
+            });
+
+            lazyImages.forEach(img => imageObserver.observe(img));
+        }
+
+        function loadImage(imgElement) {
+            const src = imgElement.dataset.src;
+            const srcWebp = imgElement.dataset.srcWebp;
+            
+            // Check if WebP is supported
+            const webpSupported = checkWebPSupport();
+            
+            const imageUrl = webpSupported && srcWebp ? srcWebp : src;
+            
+            // Create a temporary image to preload
+            const tempImg = new Image();
+            tempImg.onload = function() {
+                imgElement.style.setProperty('--bg-image', `url('${imageUrl}')`);
+                imgElement.classList.add('loaded');
+            };
+            tempImg.src = imageUrl;
+        }
+
+        function checkWebPSupport() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 1;
+            canvas.height = 1;
+            return canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+        }
+
         function initializeBlogPosts() {
             const blogGrid = document.getElementById('blogGrid');
             const loadingSpinner = document.getElementById('loadingSpinner');
@@ -759,9 +862,14 @@
             loadingSpinner.style.display = 'block';
             blogGrid.innerHTML = '';
             
-            // Immediate loading for better performance
+            // Display posts immediately
             displayBlogPosts(blogPosts);
             loadingSpinner.style.display = 'none';
+            
+            // Initialize lazy loading
+            setTimeout(() => {
+                initLazyLoading();
+            }, 100);
         }
 
         function displayBlogPosts(posts) {
@@ -779,8 +887,13 @@
             const postsHTML = posts.map((post, index) => `
                 <div class="col-lg-4 col-md-6 blog-card fade-in" style="animation-delay: ${index * 0.1}s">
                     <div class="card card-blog">
-                        <div class="blog-header">
-                            <div class="category-badge">${getCategoryName(post.category)}</div>
+                        <div class="blog-image-container">
+                            <div class="blog-image lazy-image" data-src="${post.image}" data-src-webp="${post.imageWebp || post.image}">
+                                <div class="category-badge">${getCategoryName(post.category)}</div>
+                                <div class="image-placeholder">
+                                    <i class="fa fa-image"></i>
+                                </div>
+                            </div>
                         </div>
                         <div class="blog-content">
                             <h3 class="blog-title">
