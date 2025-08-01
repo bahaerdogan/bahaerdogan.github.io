@@ -1791,14 +1791,130 @@ footer .credits a {
   transform: translateX(3px);
 }
 
-/* Responsive adjustments for blog preview */
+/* Enhanced Mobile Responsive Design */
 @media (max-width: 768px) {
+  /* General mobile improvements */
+  .container {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  
+  /* Navigation improvements */
+  .navbar-brand {
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+  
+  .navbar-toggler {
+    border: none;
+    padding: 0.5rem;
+  }
+  
+  .navbar-toggler:focus {
+    box-shadow: none;
+  }
+  
+  .navbar-collapse {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    margin-top: 10px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+  
+  .navbar-nav .nav-item {
+    margin: 10px 0;
+  }
+  
+  .navbar-nav .nav-link {
+    font-size: 1.1rem;
+    padding: 12px 20px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+  
+  .navbar-nav .nav-link:hover {
+    background: rgba(72, 171, 236, 0.1);
+    color: #48abec;
+  }
+  
+  /* Hero section improvements */
+  .intro {
+    min-height: 100vh;
+    padding: 0;
+  }
+  
+  .intro .intro-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  }
+  
+  .intro .intro-subtitle {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  }
+  
+  /* About section improvements */
+  .about-mf .box-shadow-full {
+    padding: 2rem 1.5rem;
+    margin: 0;
+    border-radius: 15px;
+  }
+  
+  .about-img {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .about-img img {
+    max-width: 200px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+  
+  .about-info {
+    margin-bottom: 2rem;
+  }
+  
+  .about-info p {
+    margin-bottom: 1rem;
+    font-size: 1rem;
+  }
+  
+  .about-info .title-s {
+    font-weight: 600;
+    color: #48abec;
+  }
+  
+  .about-me .lead {
+    font-size: 1rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Blog preview improvements */
   .blog-mf {
     padding: 60px 0;
   }
   
   .blog-preview-box {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+    border-radius: 15px;
+    overflow: hidden;
+  }
+  
+  .blog-preview-header {
+    height: 50px;
+  }
+  
+  .blog-category {
+    font-size: 11px;
+    padding: 6px 16px;
   }
   
   .blog-preview-content {
@@ -1806,10 +1922,166 @@ footer .credits a {
   }
   
   .blog-preview-title {
-    font-size: 16px;
+    font-size: 18px;
+    line-height: 1.4;
+    margin-bottom: 12px;
+  }
+  
+  .blog-preview-excerpt {
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    -webkit-line-clamp: 4;
+  }
+  
+  .blog-preview-meta {
+    font-size: 12px;
   }
   
   .view-all-posts {
-    padding: 20px;
+    padding: 25px 20px;
+    margin-top: 30px;
+  }
+  
+  .view-all-posts .btn {
+    padding: 15px 30px;
+    font-size: 1rem;
+  }
+  
+  /* Section titles */
+  .title-a {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .subtitle-a {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  /* Experience section */
+  .experience-mf .box-shadow-full {
+    padding: 2rem 1.5rem;
+  }
+  
+  .job-box {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    border-radius: 10px;
+    background: rgba(72, 171, 236, 0.05);
+    border-left: 4px solid #48abec;
+  }
+  
+  .job-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 0.5rem;
+  }
+  
+  .job-date {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 1rem;
+  }
+  
+  /* Projects section */
+  .work-box {
+    margin-bottom: 2rem;
+  }
+  
+  .work-content {
+    padding: 1.5rem;
+  }
+  
+  .w-title {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+  
+  /* Contact section */
+  .contact-mf .box-shadow-full {
+    padding: 2rem 1.5rem;
+  }
+  
+  .contact-info {
+    margin-bottom: 2rem;
+  }
+  
+  .contact-info .ico-circle {
+    width: 50px;
+    height: 50px;
+    margin-right: 15px;
+  }
+  
+  /* Footer */
+  footer {
+    padding: 2rem 0;
+    text-align: center;
+  }
+  
+  footer .copyright {
+    font-size: 0.9rem;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 576px) {
+  .intro .intro-title {
+    font-size: 2rem;
+  }
+  
+  .intro .intro-subtitle {
+    font-size: 1rem;
+  }
+  
+  .title-a {
+    font-size: 1.8rem;
+  }
+  
+  .blog-preview-title {
+    font-size: 16px;
+  }
+  
+  .container {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  
+  .about-mf .box-shadow-full {
+    padding: 1.5rem 1rem;
+  }
+  
+  .blog-preview-content {
+    padding: 15px;
+  }
+  
+  .view-all-posts {
+    padding: 20px 15px;
+  }
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+  .nav-link,
+  .btn,
+  .blog-preview-title a {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .navbar-toggler {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .blog-preview-box {
+    cursor: pointer;
+  }
+  
+  .blog-preview-box:active {
+    transform: scale(0.98);
   }
 }
