@@ -133,28 +133,60 @@
 					'Problem Solver'
 				];
 				
-				var typed = new Typed('.text-slider', {
+				// Destroy existing instance if it exists
+				if (window.typedInstance) {
+					window.typedInstance.destroy();
+				}
+				
+				// Mobile-specific settings
+				const isMobile = window.innerWidth <= 768;
+				const typeSpeed = isMobile ? 80 : 60;
+				const backSpeed = isMobile ? 60 : 40;
+				const backDelay = isMobile ? 2000 : 1500;
+				
+				window.typedInstance = new Typed('.text-slider', {
 					strings: strings,
-					typeSpeed: 60,
+					typeSpeed: typeSpeed,
 					loop: true,
-					backDelay: 1500,
-					backSpeed: 40,
+					backDelay: backDelay,
+					backSpeed: backSpeed,
 					smartBackspace: true,
 					showCursor: true,
 					cursorChar: '|',
 					fadeOut: false,
 					autoInsertCss: true,
 					onStringTyped: function(arrayPos, self) {
-						// Ensure text stays on one line
-						$('.text-slider').css('white-space', 'nowrap');
+						// Ensure text stays on one line and is properly positioned
+						$('.text-slider').css({
+							'white-space': 'nowrap',
+							'display': 'inline-block',
+							'vertical-align': 'top'
+						});
+					},
+					onBegin: function(self) {
+						// Ensure proper initialization
+						$('.text-slider-items').hide();
+						$('.text-slider').show();
+					},
+					onComplete: function(self) {
+						// Ensure cursor is visible
+						$('.typed-cursor').show();
 					}
 				});
 			} catch (e) {
 				console.warn('Typed.js initialization failed:', e);
+				// Fallback: show static text
+				$('.text-slider-items').show();
+				$('.text-slider').hide();
 			}
 		}
 	};
-	initTextSlider();
+	
+	// Initialize text slider after page load
+	$(document).ready(function() {
+		// Small delay to ensure DOM is ready
+		setTimeout(initTextSlider, 100);
+	});
 
 	// Improved testimonial carousel
 	if ($('#testimonial-mf').length) {
@@ -191,6 +223,11 @@
 		resizeTimer = setTimeout(function() {
 			navHeight = nav.outerHeight();
 			$('body').scrollspy('refresh');
+			
+			// Reinitialize text slider on resize for better mobile sync
+			if (window.innerWidth <= 768) {
+				setTimeout(initTextSlider, 100);
+			}
 		}, 250);
 	});
 

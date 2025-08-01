@@ -1857,6 +1857,32 @@ footer .credits a {
     line-height: 1.6;
     margin-bottom: 2rem;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  
+  /* Text slider improvements for mobile */
+  .text-slider {
+    display: inline-block !important;
+    vertical-align: top;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  
+  .typed-cursor {
+    display: inline-block !important;
+    vertical-align: top;
+    font-size: inherit;
+    color: inherit;
+    margin-left: 2px;
+    animation: typedjsBlink 1s infinite;
+  }
+  
+  .text-slider-items {
+    display: none;
   }
   
   /* About section improvements */
