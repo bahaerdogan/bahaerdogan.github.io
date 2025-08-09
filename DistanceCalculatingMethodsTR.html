@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8">
+    <title>How to Estimate Object Speed from Video | Computer Vision Guide | Bahaerdogan | Türkçe</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+    <meta name="theme-color" content="#0078ff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta content="computer vision, object speed, video analysis, AI, machine learning, structure from motion, monocular depth estimation" name="keywords">
+    <meta content="Learn how to estimate object speed from video using computer vision techniques without prior information or calibration. Comprehensive guide with practical examples." name="description">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZGTWHSMVV7"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        
+        // Enhanced ecommerce tracking with custom dimensions
+        gtag('config', 'G-ZGTWHSMVV7', {
+            'page_title': 'How to Estimate Object Speed from Video',
+            'page_location': window.location.href,
+            'page_path': window.location.pathname,
+            'send_page_view': true,
+            'custom_map': {
+                'dimension1': 'article_category',
+                'dimension2': 'reading_time',
+                'dimension3': 'scroll_depth'
+            }
+        });
+
+        // Track user interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Track search usage
+            const searchForm = document.getElementById('search-form');
+            if (searchForm) {
+                searchForm.addEventListener('submit', function() {
+                    const searchTerm = document.getElementById('search-input').value;
+                    gtag('event', 'search', {
+                        'event_category': 'Search',
+                        'event_label': searchTerm,
+                        'value': 1
+                    });
+                });
+            }
+
+            // Track reading time
+            let startTime = new Date();
+            let timeOnPage = 0;
+            setInterval(function() {
+                timeOnPage += 1;
+                if (timeOnPage % 30 === 0) { // Send every 30 seconds
+                    gtag('event', 'reading_time', {
+                        'event_category': 'Engagement',
+                        'event_label': 'How to Estimate Object Speed from Video',
+                        'value': timeOnPage
+                    });
+                }
+            }, 1000);
+
+            // Track scroll depth
+            let maxScroll = 0;
+            window.addEventListener('scroll', function() {
+                const scrollPercent = Math.round((window.scrollY + window.innerHeight) / document.body.scrollHeight * 100);
+                if (scrollPercent > maxScroll && scrollPercent % 25 === 0) { // Track every 25%
+                    maxScroll = scrollPercent;
+                    gtag('event', 'scroll_depth', {
+                        'event_category': 'Engagement',
+                        'event_label': 'How to Estimate Object Speed from Video',
+                        'value': scrollPercent
+                    });
+                }
+            });
+
+            // Track outbound links
+            document.querySelectorAll('a[href^="http"]').forEach(link => {
+                if (!link.href.includes(window.location.hostname)) {
+                    link.addEventListener('click', function(e) {
+                        gtag('event', 'outbound_click', {
+                            'event_category': 'Outbound Links',
+                            'event_label': link.href,
+                            'transport_type': 'beacon'
+                        });
+                    });
+                }
+            });
+
+            // Track social shares
+            document.querySelectorAll('.social-share').forEach(button => {
+                button.addEventListener('click', function() {
+                    gtag('event', 'social_share', {
+                        'event_category': 'Social',
+                        'event_label': button.dataset.platform,
+                        'value': 1
+                    });
+                });
+            });
+
+            // Track comment interactions
+            const commentForm = document.getElementById('comment-form');
+            if (commentForm) {
+                commentForm.addEventListener('submit', function() {
+                    gtag('event', 'form_submit', {
+                        'event_category': 'Comments',
+                        'event_label': 'How to Estimate Object Speed from Video',
+                        'value': 1
+                    });
+                });
+            }
+        });
+    </script>
+
+    <!-- EmailJS Library -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+    <!-- Favicons -->
+    <link href="img/favicon.png" rel="icon">
+    <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Bootstrap CSS File -->
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Libraries CSS Files -->
+    <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/ionicons/css/ionicons.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+
+    <!-- Main Stylesheet File -->
+    <link href="css/style.min.css" rel="stylesheet">
+
+    <!-- =======================================================
+    Theme Name: DevFolio
+    Theme URL: https://bootstrapmade.com/devfolio-bootstrap-portfolio-html-template/
+    Author: BootstrapMade.com
+    License: https://bootstrapmade.com/license/
+  ======================================================= -->
+
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "How to Estimate Object Speed from Video without Prior Information",
+        "description": "Learn how to estimate object speed from video using computer vision techniques without prior information or calibration. Comprehensive guide with practical examples.",
+        "image": "https://www.bahaerdogan.com/img/motion.png",
+        "author": {
+            "@type": "Person",
+            "name": "Baha Erdoğan"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Bahaerdogan",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://www.bahaerdogan.com/img/favicon.png"
+            }
+        },
+        "datePublished": "2024-03-20",
+        "dateModified": "2024-03-20",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://www.bahaerdogan.com/DistanceCalculatingMethods.html"
+        }
+    }
+    </script>
+
+    <!-- Accessibility Improvements -->
+    <div class="skip-nav">
+        <a href="#main-content" class="sr-only sr-only-focusable">Skip to main content</a>
+    </div>
+
+    <!-- LinkedIn ve diğer sosyal medya önizleme meta etiketleri -->
+    <meta property="og:title" content="How to Estimate Object Speed from Video without Prior Information">
+    <meta property="og:description" content="Learn how to estimate object speed from video using computer vision techniques without prior information or calibration. Comprehensive guide with practical examples.">
+    <meta property="og:image" content="https://www.bahaerdogan.com/img/motion.png">
+    <meta property="og:url" content="https://www.bahaerdogan.com/DistanceCalculatingMethods.html">
+    <meta property="og:type" content="article">
+
+    <!-- Third-party Scripts -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZGTWHSMVV7"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+    <!-- Application Scripts -->
+    <script src="js/main.min.js"></script>
+</head>
+
+<body>
+    <!--/ Nav Star /-->
+    <nav class="navbar navbar-b navbar-trans navbar-expand-md fixed-top" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand js-scroll" href="#page-top">Baha Erdoğan</a>
+            <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarDefault" aria-controls="navbarDefault" aria-expanded="false" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="navbar-collapse collapse justify-content-end" id="navbarDefault">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll" href="index.html">Home</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll" href="index.html#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll" href="BlogPosts.html">Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll" href="index.html#voluntary">Voluntary</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll" href="index.html#projects">Projects</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll" href="index.html#contact">Contact</a>
+                    </li>
+
+
+
+                    <li class="nav-item">
+                        <a class="nav-link" id="language-toggle" href="#">
+                            <i class="fa fa-language"></i> Türkçe
+                        </a>
+                    </li>
+
+
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!--/ Nav End /-->
+
+    <!--/ Intro Skew Star /-->
+    <div class="intro intro-single route bg-image" style="background-image: url('img/image\ \(21\).png')">
+        <div class="overlay-mf"></div>
+        <div class="intro-content display-table">
+            <div class="table-cell">
+                <div class="container">
+                    <h2 class="intro-title mb-4">Blog Details</h2>
+                    <ol class="breadcrumb d-flex justify-content-center">
+                        <li class="breadcrumb-item">
+                            <a href="index.html">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="BlogPosts.html">Blog</a>
+                        </li>
+                        <li class="breadcrumb-item active">How to Estimate Object Speed from Video</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/ Intro Skew End /-->
+
+  <!--/ Section Blog-Single Star /-->
+  <section class="blog-wrapper sect-pt4" id="blog">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="post-box">
+                    <div class="post-thumb">
+                        <img src="img/motion.webp" class="img-fluid" alt="" loading="lazy" decoding="async">
+                    </div>
+                    <div class="post-meta">
+                        <h1 class="article-title">How to Estimate Object Speed from Video without Prior Information</h1>
+                        <ul>
+                            <li>
+                                <span class="ion-ios-person"></span>
+                                <a href="#">Baha Erdoğan</a>
+                            </li>
+                            <li>
+                                <span class="ion-pricetag"></span>
+                                <a href="#">Computer Vision</a>
+                            </li>
+                            <li>
+                                <span class="ion-chatbox"></span>
+                                <a href="#">0</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="article-content">
+                        <p>Have you ever watched a video and wondered, "How fast is that object moving?" Maybe it's a car speeding down the highway, an athlete sprinting, or even a celestial body moving across the night sky. Figuring this out might seem like something straight out of a CSI episode—especially when you have <strong>no camera calibration, no known object sizes, and zero reference measurements</strong>.</p>
+
+                        <p>But here's the exciting part: with modern computer vision techniques and some AI magic, we can actually get surprisingly accurate speed estimates from ordinary videos.</p>
+
+                        <h2>The Challenge: Speed Without References</h2>
+
+                        <p>Let's start with the basics. Speed is simply distance divided by time. In videos, time is straightforward—it's just the frame rate. But distance? That's where things get tricky. How do you convert pixels to meters when you don't know how big anything in the frame actually is?</p>
+
+                        <p>If you've tried the standard approach of using known objects for scale (like cars or smartphones), but don't have any recognizable items in your scene—don't worry. We're about to dive into some advanced techniques that can help.</p>
+
+                        <h2>Structure from Motion: Building 3D from 2D</h2>
+
+                        <p>Have you ever been amazed by those 3D models created from drone footage? That's Structure from Motion (SfM) at work, and it's one of our secret weapons for speed estimation.</p>
+
+                        <p>SfM works like human vision. When you look at something from different angles, your brain combines those perspectives to understand depth. Similarly, SfM analyzes multiple video frames to reconstruct a 3D scene and track the camera's movement through it.</p>
+
+                        <p>Here's how we use it for speed calculation:</p>
+
+                        <ul>
+                            <li>The algorithm identifies distinctive visual features across frames</li>
+                            <li>It tracks how these features move from frame to frame</li>
+                            <li>Using geometry, it reconstructs both the 3D environment and camera positions</li>
+                            <li>Finally, it calculates how far objects moved in this reconstructed space</li>
+                        </ul>
+
+                        <p>What I love about SfM is that it gives you a complete spatial understanding of the scene. You're not just tracking pixels—you're reconstructing reality.</p>
+
+                        <h2>Monocular Depth Estimation: AI's Depth Perception</h2>
+
+                        <p>What if I told you AI can now look at a single image and predict how far away everything is? This might sound like science fiction, but it's exactly what monocular depth estimation does.</p>
+
+                        <p>These neural networks have been trained on millions of images with corresponding depth information, and they've learned to recognize subtle visual cues that indicate distance—things like texture gradients, object overlap, and perspective.</p>
+
+                        <p>For speed estimation, this approach is incredibly powerful:</p>
+
+                        <ul>
+                            <li>Run a depth model (like MiDaS or Monodepth2) on each frame</li>
+                            <li>Track your object of interest across frames</li>
+                            <li>Measure how its estimated depth changes over time</li>
+                            <li>Convert this to speed using the frame rate</li>
+                        </ul>
+
+                        <p>I recently used this technique to analyze wildlife movement patterns in a nature documentary, and the results were fascinating—we could determine hunting speeds of predators without disturbing their natural behavior.</p>
+
+                        <h2>Choosing the Right Approach for Your Scenario</h2>
+
+                        <p>Both methods have their sweet spots. In my experience:</p>
+
+                        <p><strong>Structure from Motion works best when:</strong></p>
+                        <ul>
+                            <li>Your scene has plenty of distinctive visual features</li>
+                            <li>The camera is moving (or multiple viewpoints are available)</li>
+                            <li>You need a complete 3D understanding of the environment</li>
+                        </ul>
+
+                        <p><strong>Monocular Depth is ideal when:</strong></p>
+                        <ul>
+                            <li>The video quality isn't perfect (perhaps blurry or low-resolution)</li>
+                            <li>You need frame-by-frame distance estimates</li>
+                            <li>The scene lacks texture or distinctive features</li>
+                        </ul>
+
+                        <p>And here's my favorite approach—why not use both? By combining SfM's structural understanding with the frame-by-frame insights from depth estimation, you can create a robust hybrid system that overcomes the limitations of each individual method.</p>
+
+                        <h2>Practical Implementation Tips</h2>
+
+                        <p>If you're excited to try this yourself, here are some practical starting points:</p>
+
+                        <ul>
+                            <li><strong>For SfM:</strong> COLMAP is an excellent open-source package. It has a bit of a learning curve, but the results are worth it.</li>
+                            <li><strong>For Depth Estimation:</strong> MiDaS is my go-to model, available through PyTorch. It's relatively fast and gives impressive results even on consumer hardware.</li>
+                            <li><strong>For Object Tracking:</strong> YOLOv8 combined with DeepSORT works wonders for keeping tabs on objects across frames.</li>
+                        </ul>
+
+                        <p>I always recommend starting with a test video where you actually know the speeds (perhaps film something while using a speedometer). This gives you a baseline to calibrate your approach.</p>
+
+                        <h2>Real-World Applications</h2>
+
+                        <p>The techniques I've shared aren't just academic exercises—they're being used in fascinating ways:</p>
+
+                        <ul>
+                            <li>Traffic monitoring systems that don't require expensive radar equipment</li>
+                            <li>Sports analytics to track athlete performance</li>
+                            <li>Wildlife research without intrusive tracking devices</li>
+                            <li>Autonomous vehicle development</li>
+                            <li>Forensic video analysis</li>
+                        </ul>
+
+                        <p>I'm particularly excited about the environmental applications—being able to study animal movement patterns without disturbing their natural behavior is a game-changer for conservation efforts.</p>
+
+                        <h2>Wrapping Up</h2>
+
+                        <p>Speed estimation from video without prior information is no longer science fiction—it's science fact. Whether you're using Structure from Motion to build complete 3D reconstructions or leveraging the power of neural networks for depth estimation, these techniques open up incredible possibilities.</p>
+
+                        <p>And the best part? Many of the tools are open-source and accessible to anyone with basic programming knowledge and a decent GPU.</p>
+
+                        <p>What would you use these techniques for? I'd love to hear your ideas and answer any questions in the comments below. And stay tuned—in my next post, I'll walk through a complete Python implementation using these methods!</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <!-- Sidebar content would be preserved from template -->
+                <div class="widget-sidebar sidebar-search">
+                    <h5 class="sidebar-title">Search</h5>
+                    <div class="sidebar-content">
+                        <form id="search-form" onsubmit="return handleSearch(event)">
+                            <div class="input-group">
+                                <input type="text" id="search-input" class="form-control" placeholder="Search for..." aria-label="Search for...">
+                                <span class="input-group-btn">
+                <button class="btn btn-secondary btn-search" type="submit">
+                  <span class="ion-android-search"></span>
+                                </button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="widget-sidebar">
+                    <h5 class="sidebar-title">Recent Post</h5>
+                    <div class="sidebar-content">
+                        <ul class="list-sidebar">
+                            <li>
+                                <a href="AlgorithmsExplained.html">From Netflix to TikTok: How AI Knows What You Like</a>
+                            </li>
+                            <li>
+                                <a href="AI-Defense.html">The Role of Artificial Intelligence in Defense Technologies</a>
+                            </li>
+                            <li>
+                                <a href="AgenticAiExplained.html">What Are AI Agents or Agentic AI?</a>
+                            </li>
+                            <li>
+                                <a href="AgenticAivsGenAi.html">Agentic AI vs Generative AI: Architectural Differences and Chatbot Impact</a>
+                            </li>
+                            <li>
+                                <a href="AgenticAiTechDepth.html">Agentic AI in Depth: Technical Structures, Planning Models, and Autonomous Orchestration</a>
+                            </li>
+                            <li>
+                                <a href="DeservingMoney.html">Are AI Models Making Us Earn Money We Don't Deserve?</a>
+                            </li>
+                            <li>
+                                <a href="DistanceCalculatingMethods.html">How to Estimate Object Speed from Video</a>
+                            </li>
+                            <li>
+                                <a href="ErgenekonEpic.html">Ergenekon epic</a>
+                            </li>
+                            <li>
+                                <a href="MacShortcuts.html">Mac shortcuts guide</a>
+                            </li>
+                            <li>
+                                <a href="MachineLearning-Explained.html">What's machine learning, really?</a>
+                            </li>
+                            <li>
+                                <a href="MachineLearningAnomalyDetection.html">Machine Learning Anomaly Detection</a>
+                            </li>
+                            <li>
+                                <a href="OguzKaganEpic.html">Oğuz Kağan Epic</a>
+                            </li>
+                            <li>
+                                <a href="PreciousMetalData.html">One of the precious metals, Data</a>
+                            </li>
+                            <li>
+                                <a href="TypesOfAgenticAi.html">Types of Agentic AI and How to Build Your First Agent</a>
+                            </li>
+                            <li>
+                                <a href="ValuePerKilogramForProsperity.html">Why High Value-Per-Kilogram Exports Are the Key to National Prosperity</a>
+                            </li>
+                            <li>
+                                <a href="WhatAiMeansToYou.html">From Prediction to Impact: What AI Means for You</a>
+                            </li>
+                            <li>
+                                <a href="WhyToLearnHistory.html">Why is knowing history important?</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="widget-sidebar">
+                    <h5 class="sidebar-title">Archives</h5>
+                    <div class="sidebar-content">
+                        <ul class="list-sidebar">
+                            <li><a href="AlgorithmsExplained.html">From Netflix to TikTok: How AI Knows What You Like</a></li>
+                            <li><a href="AI-Defense.html">The Role of Artificial Intelligence in Defense Technologies</a></li>
+                            <li><a href="AgenticAiExplained.html">What Are AI Agents or Agentic AI?</a></li>
+                            <li><a href="AgenticAivsGenAi.html">Agentic AI vs Generative AI: Architectural Differences and Chatbot Impact</a></li>
+                            <li><a href="AgenticAiTechDepth.html">Agentic AI in Depth: Technical Structures, Planning Models, and Autonomous Orchestration</a></li>
+                            <li><a href="DeservingMoney.html">Are AI Models Making Us Earn Money We Don't Deserve?</a></li>
+                            <li><a href="DistanceCalculatingMethods.html">How to Estimate Object Speed from Video</a></li>
+                            <li><a href="ErgenekonEpic.html">Ergenekon epic</a></li>
+                            <li><a href="MacShortcuts.html">Mac shortcuts guide</a></li>
+                            <li><a href="MachineLearning-Explained.html">What's machine learning, really?</a></li>
+                            <li><a href="MachineLearningAnomalyDetection.html">Machine Learning Anomaly Detection</a></li>
+                            <li><a href="OguzKaganEpic.html">Oğuz Kağan Epic</a></li>
+                            <li><a href="PreciousMetalData.html">One of the precious metals, Data</a></li>
+                            <li><a href="TypesOfAgenticAi.html">Types of Agentic AI and How to Build Your First Agent</a></li>
+                            <li><a href="ValuePerKilogramForProsperity.html">Why High Value-Per-Kilogram Exports Are the Key to National Prosperity</a></li>
+                            <li><a href="WhatAiMeansToYou.html">From Prediction to Impact: What AI Means for You</a></li>
+                            <li><a href="WhyToLearnHistory.html">Why is knowing history important?</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="widget-sidebar widget-tags">
+                    <h5 class="sidebar-title">Tags</h5>
+                    <div class="sidebar-content">
+                        <ul>
+                            <li>
+                                <a href="#">Computer Vision</a>
+                            </li>
+                            <li>
+                                <a href="#">Video Processing</a>
+                            </li>
+                            <li>
+                                <a href="#">Object Detection</a>
+                            </li>
+                            <li>
+                                <a href="#">Technology</a>
+                            </li>
+                            <li>
+                                <a href="#">AI</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--/ Section Blog-Single End /-->
+
+    <!-- Leave a Reply Section -->
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h3 class="mb-4 title-left">Leave a Reply</h3>
+                        <form id="comment-form" class="comment-form">
+                            <div id="comment-success" class="alert alert-success d-none">Your comment has been submitted. Thank you!</div>
+                            <div id="comment-error" class="alert alert-danger d-none">There was an error submitting your comment. Please try again.</div>
+                            <div class="form-group mb-3">
+                                <label for="comment-name">Name *</label>
+                                <input type="text" class="form-control input-mf" id="comment-name" name="from_name" required>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="comment-email">Email *</label>
+                                <input type="email" class="form-control input-mf" id="comment-email" name="from_email" required>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="comment-text">Comment *</label>
+                                <textarea class="form-control input-mf" id="comment-text" name="message" rows="5" required></textarea>
+                            </div>
+                            <button type="submit" class="button button-a button-big button-rouded">Submit Comment</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comments Display Section -->
+    <div class="container mt-5 mb-5">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h3 class="mb-4 title-left">Comments</h3>
+                        <div id="comments-container">
+                            <!-- Comments will be displayed here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--/ Section Contact-Footer Star /-->
+    <section class="paralax-mf footer-paralax bg-image sect-mt4 route" style="background-image: url('img/overlay-bg.jpg')">
+        <div class="overlay-mf"></div>
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="copyright-box">
+                            <p class="copyright">&copy; Copyright <strong>Bahaerdogan</strong>. All Rights Reserved</p>
+                            <div class="credits">
+                                <!--
+                  All the links in the footer should remain intact.
+                  You can delete the links only if you purchased the pro version.
+                  Licensing information: https://bootstrapmade.com/license/
+                  Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=DevFolio
+                -->
+                                <!-- Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </section>
+    <!--/ Section Contact-footer End /-->
+
+    <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+    <div id="preloader"></div>
+
+    <!-- JavaScript Libraries -->
+    <script src="lib/jquery/jquery.min.js"></script>
+    <script src="lib/jquery/jquery-migrate.min.js"></script>
+    <script src="lib/popper/popper.min.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/counterup/jquery.waypoints.min.js"></script>
+    <script src="lib/counterup/jquery.counterup.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="lib/lightbox/js/lightbox.min.js"></script>
+    <script src="lib/typed/typed.min.js"></script>
+    <!-- Contact Form JavaScript File -->
+
+    <!-- Application Scripts -->
+    <script src="js/main.min.js"></script>
+
+    <!-- Blog Page Javascript File -->
+    <script src="js/blog.min.js"></script>
+
+    <!-- JavaScript for handling comments -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          const commentForm = document.getElementById('comment-form');
+          const successMessage = document.getElementById('comment-success');
+          const errorMessage = document.getElementById('comment-error');
+          const commentsContainer = document.getElementById('comments-container');
+          
+          // Load existing comments from localStorage
+          loadComments();
+          
+          if (commentForm) {
+            commentForm.addEventListener('submit', function(event) {
+              event.preventDefault();
+              
+              // Hide messages
+              successMessage.classList.add('d-none');
+              errorMessage.classList.add('d-none');
+              
+              // Get form data
+              const name = document.getElementById('comment-name').value;
+              const email = document.getElementById('comment-email').value;
+              const comment = document.getElementById('comment-text').value;
+              const date = new Date().toLocaleDateString();
+              const blogTitle = "How to Estimate Object Speed from Video without Prior Information";
+              
+              // Show loading state
+              const submitButton = commentForm.querySelector('button[type="submit"]');
+              const originalButtonText = submitButton.textContent;
+              submitButton.textContent = "Submitting...";
+              submitButton.disabled = true;
+              
+              // Prepare email template parameters
+              const templateParams = {
+                from_name: name,
+                from_email: email,
+                message: comment,
+                blog_title: blogTitle
+              };
+              
+              // Send email using EmailJS
+              emailjs.send('service_lhjdfqw', 'template_bha2val', templateParams, 'sr9_9CUgd0L641ObN')
+                .then(function() {
+                  // Show success message
+                  successMessage.classList.remove('d-none');
+                  
+                  // Save comment to localStorage
+                  saveComment(name, comment, date);
+                  
+                  // Display the new comment
+                  displayComment(name, comment, date);
+                  
+                  // Reset form
+                  commentForm.reset();
+                  
+                  // Reset button
+                  submitButton.textContent = originalButtonText;
+                  submitButton.disabled = false;
+                })
+                .catch(function(error) {
+                  console.error('EmailJS Error:', error);
+                  errorMessage.textContent = "There was an error submitting your comment: " + error.text;
+                  errorMessage.classList.remove('d-none');
+                  
+                  // Reset button
+                  submitButton.textContent = originalButtonText;
+                  submitButton.disabled = false;
+                });
+            });
+          }
+          
+          // Function to save comment to localStorage
+          function saveComment(name, comment, date) {
+            const blogId = window.location.pathname.split('/').pop().replace('.html', '');
+            let comments = JSON.parse(localStorage.getItem(`comments-${blogId}`) || '[]');
+            comments.push({ name, comment, date });
+            localStorage.setItem(`comments-${blogId}`, JSON.stringify(comments));
+          }
+          
+          // Function to load comments from localStorage
+          function loadComments() {
+            const blogId = window.location.pathname.split('/').pop().replace('.html', '');
+            const comments = JSON.parse(localStorage.getItem(`comments-${blogId}`) || '[]');
+            
+            if (comments.length === 0) {
+              commentsContainer.innerHTML = '<p>No comments yet. Be the first to comment!</p>';
+            } else {
+              commentsContainer.innerHTML = '';
+              comments.forEach(comment => {
+                displayComment(comment.name, comment.comment, comment.date);
+              });
+            }
+          }
+          
+          // Function to display a comment in the comments section
+          function displayComment(name, comment, date) {
+            const commentElement = document.createElement('div');
+            commentElement.className = 'comment mb-4 p-3 border-bottom';
+            commentElement.innerHTML = `
+              <h5>${name} <small class="text-muted">${date}</small></h5>
+              <p>${comment}</p>
+            `;
+            commentsContainer.appendChild(commentElement);
+          }
+        });
+    </script>
+
+    <script>
+        const blogPosts = [
+          { title: "One of the precious metals, Data", url: "PreciousMetalData.html", keywords: ["data", "technology", "ai", "artificial intelligence", "precious"] },
+          { title: "Why is knowing history important?", url: "WhyToLearnHistory.html", keywords: ["history", "learning", "knowledge", "importance"] },
+          { title: "The Role of Artificial Intelligence in Defense Technologies", url: "AI-Defense.html", keywords: ["ai", "artificial intelligence", "defense", "technology", "security"] },
+          { title: "Are AI Models Making Us Earn Money We Don't Deserve?", url: "DeservingMoney.html", keywords: ["ai", "money", "work", "technology", "earnings"] },
+          { title: "Ergenekon epic", url: "ErgenekonEpic.html", keywords: ["ergenekon", "epic", "history", "story"] },
+          { title: "Oğuz Kağan Epic", url: "OguzKaganEpic.html", keywords: ["oğuz kağan", "epic", "history", "turkish", "legend"] },
+          { title: "Mac shortcuts guide", url: "MacShortcuts.html", keywords: ["mac", "shortcuts", "guide", "productivity"] }
+        ];
+    
+        function handleSearch(event) {
+          event.preventDefault();
+          const searchTerm = document.getElementById('search-input').value.toLowerCase();
+          
+          if (!searchTerm.trim()) {
+            return false;
+          }
+    
+          const results = blogPosts.filter(post => {
+            const titleMatch = post.title.toLowerCase().includes(searchTerm);
+            const keywordMatch = post.keywords.some(keyword => keyword.includes(searchTerm));
+            return titleMatch || keywordMatch;
+          });
+    
+          if (results.length > 0) {
+            // Redirect to the first matching result
+            window.location.href = results[0].url;
+          } else {
+            alert('No matching posts found.');
+          }
+    
+          return false;
+        }
+    </script>
+
+</body>
+
+</html>

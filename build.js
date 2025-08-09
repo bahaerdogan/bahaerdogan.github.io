@@ -57,14 +57,48 @@ async function convertToWebP() {
 async function generateSitemapAndRobots() {
     const baseUrl = 'https://bahaerdogan.com';
     const htmlFiles = glob.sync('*.html');
-    const urlEntries = [];
 
+    // Build language groups: { base: { en: file, tr: trFile } }
+    const groups = {};
     for (const file of htmlFiles) {
+        const isIndex = file.toLowerCase() === 'index.html';
+        if (isIndex) continue; // will handle index separately
+        const isTr = /TR\.html$/i.test(file);
+        const base = isTr ? file.replace(/TR\.html$/i, '') : file.replace(/\.html$/i, '');
+        groups[base] = groups[base] || {};
+        if (isTr) groups[base].tr = file; else groups[base].en = file;
+    }
+
+    const urlEntries = [];
+    // Add index
+    try {
+        const stats = await stat('index.html');
+        urlEntries.push({
+            enLoc: `${baseUrl}/`,
+            lastmod: new Date(stats.mtime).toISOString(),
+            alternates: [
+                { hreflang: 'en', href: `${baseUrl}/` },
+                { hreflang: 'x-default', href: `${baseUrl}/` }
+            ]
+        });
+    } catch (_) {}
+
+    for (const [base, langs] of Object.entries(groups)) {
+        const enFile = langs.en;
+        const trFile = langs.tr;
+        const lastStatFile = trFile || enFile; // pick one existing to time-stamp
         try {
-            const stats = await stat(file);
+            const stats = await stat(lastStatFile);
             const lastmod = new Date(stats.mtime).toISOString();
-            const loc = file.toLowerCase() === 'index.html' ? `${baseUrl}/` : `${baseUrl}/${file}`;
-            urlEntries.push({ loc, lastmod });
+            const enLoc = enFile ? `${baseUrl}/${enFile}` : undefined;
+            const trLoc = trFile ? `${baseUrl}/${trFile}` : undefined;
+            const alternates = [];
+            if (enLoc) alternates.push({ hreflang: 'en', href: enLoc });
+            if (trLoc) alternates.push({ hreflang: 'tr', href: trLoc });
+            const xDefault = enLoc || trLoc;
+            if (xDefault) alternates.push({ hreflang: 'x-default', href: xDefault });
+
+            urlEntries.push({ enLoc: enLoc || trLoc, trLoc, lastmod, alternates });
         } catch (_) {
             // ignore
         }
@@ -72,10 +106,12 @@ async function generateSitemapAndRobots() {
 
     const sitemap = [
         '<?xml version="1.0" encoding="UTF-8"?>',
-        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-        ...urlEntries.map(u => (
-            `  <url>\n    <loc>${u.loc}</loc>\n    <lastmod>${u.lastmod}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>${u.loc.endsWith('/') ? '1.0' : '0.7'}</priority>\n  </url>`
-        )),
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
+        ...urlEntries.map(u => {
+            const loc = u.enLoc || u.trLoc;
+            const alt = (u.alternates || []).map(a => `    <xhtml:link rel="alternate" hreflang="${a.hreflang}" href="${a.href}" />`).join('\n');
+            return `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${u.lastmod}</lastmod>\n${alt}\n    <changefreq>weekly</changefreq>\n    <priority>${loc.endsWith('/') ? '1.0' : '0.7'}</priority>\n  </url>`;
+        }),
         '</urlset>'
     ].join('\n');
 

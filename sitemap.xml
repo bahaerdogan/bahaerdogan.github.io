@@ -1,128 +1,180 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://bahaerdogan.com/</loc>
-    <lastmod>2025-08-09T11:45:29.588Z</lastmod>
+    <lastmod>2025-08-09T14:02:14.818Z</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bahaerdogan.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bahaerdogan.com/" />
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://bahaerdogan.com/WhyToLearnHistory.html</loc>
-    <lastmod>2025-08-09T11:46:26.272Z</lastmod>
+    <lastmod>2025-08-09T15:29:16.119Z</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bahaerdogan.com/WhyToLearnHistory.html" />
+    <xhtml:link rel="alternate" hreflang="tr" href="https://bahaerdogan.com/WhyToLearnHistoryTR.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bahaerdogan.com/WhyToLearnHistory.html" />
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://bahaerdogan.com/WhatAiMeansToYou.html</loc>
-    <lastmod>2025-08-09T11:46:32.866Z</lastmod>
+    <lastmod>2025-08-09T15:29:16.117Z</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bahaerdogan.com/WhatAiMeansToYou.html" />
+    <xhtml:link rel="alternate" hreflang="tr" href="https://bahaerdogan.com/WhatAiMeansToYouTR.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bahaerdogan.com/WhatAiMeansToYou.html" />
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://bahaerdogan.com/ValuePerKilogramForProsperity.html</loc>
-    <lastmod>2025-08-09T11:46:37.610Z</lastmod>
+    <lastmod>2025-08-09T15:29:16.114Z</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bahaerdogan.com/ValuePerKilogramForProsperity.html" />
+    <xhtml:link rel="alternate" hreflang="tr" href="https://bahaerdogan.com/ValuePerKilogramForProsperityTR.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bahaerdogan.com/ValuePerKilogramForProsperity.html" />
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://bahaerdogan.com/TypesOfAgenticAi.html</loc>
-    <lastmod>2025-08-09T11:46:54.562Z</lastmod>
+    <lastmod>2025-08-09T15:29:16.111Z</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bahaerdogan.com/TypesOfAgenticAi.html" />
+    <xhtml:link rel="alternate" hreflang="tr" href="https://bahaerdogan.com/TypesOfAgenticAiTR.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bahaerdogan.com/TypesOfAgenticAi.html" />
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://bahaerdogan.com/PreciousMetalData.html</loc>
-    <lastmod>2025-08-09T11:47:13.125Z</lastmod>
+    <lastmod>2025-08-09T15:29:16.108Z</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bahaerdogan.com/PreciousMetalData.html" />
+    <xhtml:link rel="alternate" hreflang="tr" href="https://bahaerdogan.com/PreciousMetalDataTR.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bahaerdogan.com/PreciousMetalData.html" />
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://bahaerdogan.com/OguzKaganEpic.html</loc>
-    <lastmod>2025-08-09T11:47:16.863Z</lastmod>
+    <lastmod>2025-08-09T15:29:16.106Z</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bahaerdogan.com/OguzKaganEpic.html" />
+    <xhtml:link rel="alternate" hreflang="tr" href="https://bahaerdogan.com/OguzKaganEpicTR.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bahaerdogan.com/OguzKaganEpic.html" />
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://bahaerdogan.com/MachineLearningAnomalyDetection.html</loc>
-    <lastmod>2025-08-09T11:47:28.606Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://bahaerdogan.com/MachineLearning-ExplainedTR.html</loc>
-    <lastmod>2025-08-09T11:48:02.357Z</lastmod>
+    <lastmod>2025-08-09T15:29:16.100Z</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bahaerdogan.com/MachineLearningAnomalyDetection.html" />
+    <xhtml:link rel="alternate" hreflang="tr" href="https://bahaerdogan.com/MachineLearningAnomalyDetectionTR.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bahaerdogan.com/MachineLearningAnomalyDetection.html" />
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://bahaerdogan.com/MachineLearning-Explained.html</loc>
-    <lastmod>2025-08-09T11:48:10.364Z</lastmod>
+    <lastmod>2025-08-09T15:29:16.097Z</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bahaerdogan.com/MachineLearning-Explained.html" />
+    <xhtml:link rel="alternate" hreflang="tr" href="https://bahaerdogan.com/MachineLearning-ExplainedTR.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bahaerdogan.com/MachineLearning-Explained.html" />
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://bahaerdogan.com/MacShortcuts.html</loc>
-    <lastmod>2025-08-09T11:47:23.048Z</lastmod>
+    <lastmod>2025-08-09T15:29:16.103Z</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bahaerdogan.com/MacShortcuts.html" />
+    <xhtml:link rel="alternate" hreflang="tr" href="https://bahaerdogan.com/MacShortcutsTR.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bahaerdogan.com/MacShortcuts.html" />
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://bahaerdogan.com/ErgenekonEpic.html</loc>
-    <lastmod>2025-08-09T11:48:21.577Z</lastmod>
+    <lastmod>2025-08-09T15:29:16.094Z</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bahaerdogan.com/ErgenekonEpic.html" />
+    <xhtml:link rel="alternate" hreflang="tr" href="https://bahaerdogan.com/ErgenekonEpicTR.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bahaerdogan.com/ErgenekonEpic.html" />
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://bahaerdogan.com/DistanceCalculatingMethods.html</loc>
-    <lastmod>2025-08-09T11:48:28.474Z</lastmod>
+    <lastmod>2025-08-09T15:29:16.092Z</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bahaerdogan.com/DistanceCalculatingMethods.html" />
+    <xhtml:link rel="alternate" hreflang="tr" href="https://bahaerdogan.com/DistanceCalculatingMethodsTR.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bahaerdogan.com/DistanceCalculatingMethods.html" />
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://bahaerdogan.com/DeservingMoney.html</loc>
-    <lastmod>2025-08-09T11:48:38.026Z</lastmod>
+    <lastmod>2025-08-09T15:29:16.089Z</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bahaerdogan.com/DeservingMoney.html" />
+    <xhtml:link rel="alternate" hreflang="tr" href="https://bahaerdogan.com/DeservingMoneyTR.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bahaerdogan.com/DeservingMoney.html" />
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://bahaerdogan.com/BlogTemplate.html</loc>
-    <lastmod>2025-08-09T11:48:45.350Z</lastmod>
+    <lastmod>2025-08-09T15:29:16.086Z</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bahaerdogan.com/BlogTemplate.html" />
+    <xhtml:link rel="alternate" hreflang="tr" href="https://bahaerdogan.com/BlogTemplateTR.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bahaerdogan.com/BlogTemplate.html" />
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://bahaerdogan.com/BlogPosts.html</loc>
-    <lastmod>2025-08-09T11:44:23.191Z</lastmod>
+    <lastmod>2025-08-09T14:02:29.986Z</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bahaerdogan.com/BlogPosts.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bahaerdogan.com/BlogPosts.html" />
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://bahaerdogan.com/AlgorithmsExplained.html</loc>
-    <lastmod>2025-08-09T11:48:56.318Z</lastmod>
+    <lastmod>2025-08-09T15:29:16.083Z</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bahaerdogan.com/AlgorithmsExplained.html" />
+    <xhtml:link rel="alternate" hreflang="tr" href="https://bahaerdogan.com/AlgorithmsExplainedTR.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bahaerdogan.com/AlgorithmsExplained.html" />
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://bahaerdogan.com/AgenticAivsGenAi.html</loc>
-    <lastmod>2025-08-09T11:49:19.728Z</lastmod>
+    <lastmod>2025-08-09T15:29:16.077Z</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bahaerdogan.com/AgenticAivsGenAi.html" />
+    <xhtml:link rel="alternate" hreflang="tr" href="https://bahaerdogan.com/AgenticAivsGenAiTR.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bahaerdogan.com/AgenticAivsGenAi.html" />
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://bahaerdogan.com/AgenticAiTechDepth.html</loc>
-    <lastmod>2025-08-09T11:49:37.412Z</lastmod>
+    <lastmod>2025-08-09T15:29:16.074Z</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bahaerdogan.com/AgenticAiTechDepth.html" />
+    <xhtml:link rel="alternate" hreflang="tr" href="https://bahaerdogan.com/AgenticAiTechDepthTR.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bahaerdogan.com/AgenticAiTechDepth.html" />
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://bahaerdogan.com/AgenticAiExplained.html</loc>
-    <lastmod>2025-08-09T11:45:41.472Z</lastmod>
+    <lastmod>2025-08-09T15:29:16.071Z</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bahaerdogan.com/AgenticAiExplained.html" />
+    <xhtml:link rel="alternate" hreflang="tr" href="https://bahaerdogan.com/AgenticAiExplainedTR.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bahaerdogan.com/AgenticAiExplained.html" />
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://bahaerdogan.com/AI-Defense.html</loc>
-    <lastmod>2025-08-09T11:49:13.891Z</lastmod>
+    <lastmod>2025-08-09T15:29:16.080Z</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bahaerdogan.com/AI-Defense.html" />
+    <xhtml:link rel="alternate" hreflang="tr" href="https://bahaerdogan.com/AI-DefenseTR.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bahaerdogan.com/AI-Defense.html" />
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>

@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Agentic AI vs Generative AI: Architectural Differences and Chatbot Impact | AI Technology Guide | Bahaerdogan | Türkçe</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+    <meta name="theme-color" content="#0078ff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta content="Agentic AI, Generative AI, AI Chatbot, AI Architecture, LangChain, Azure AI, Autonomous Agents, LLM, AI Comparison, Memory in AI, Multi-agent Systems, AI Orchestration" name="keywords">
+    <meta content="Explore the critical distinctions between agentic AI and generative AI, their architectural foundations, and their real-world impact on autonomous AI chatbot systems." name="description">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZGTWHSMVV7"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        
+        // Enhanced ecommerce tracking with custom dimensions
+        gtag('config', 'G-ZGTWHSMVV7', {
+            'page_title': 'Agentic AI vs Generative AI: Architectural Differences and Chatbot Impact',
+            'page_location': window.location.href,
+            'page_path': window.location.pathname,
+            'send_page_view': true,
+            'custom_map': {
+                'dimension1': 'article_category',
+                'dimension2': 'reading_time',
+                'dimension3': 'scroll_depth'
+            }
+        });
+
+        // Track user interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Track form submissions
+            const commentForm = document.getElementById('comment-form');
+            if (commentForm) {
+                commentForm.addEventListener('submit', function() {
+                    gtag('event', 'form_submit', {
+                        'event_category': 'Comments',
+                        'event_label': 'Agentic AI vs Generative AI: Architectural Differences and Chatbot Impact',
+                        'value': 1
+                    });
+                });
+            }
+
+            // Track search usage
+            const searchForm = document.getElementById('search-form');
+            if (searchForm) {
+                searchForm.addEventListener('submit', function() {
+                    const searchTerm = document.getElementById('search-input').value;
+                    gtag('event', 'search', {
+                        'event_category': 'Search',
+                        'event_label': searchTerm,
+                        'value': 1
+                    });
+                });
+            }
+
+            // Track reading time
+            let startTime = new Date();
+            let timeOnPage = 0;
+            setInterval(function() {
+                timeOnPage += 1;
+                if (timeOnPage % 30 === 0) { // Send every 30 seconds
+                    gtag('event', 'reading_time', {
+                        'event_category': 'Engagement',
+                        'event_label': 'Agentic AI vs Generative AI: Architectural Differences and Chatbot Impact',
+                        'value': timeOnPage
+                    });
+                }
+            }, 1000);
+
+            // Track scroll depth
+            let maxScroll = 0;
+            window.addEventListener('scroll', function() {
+                const scrollPercent = Math.round((window.scrollY + window.innerHeight) / document.body.scrollHeight * 100);
+                if (scrollPercent > maxScroll && scrollPercent % 25 === 0) { // Track every 25%
+                    maxScroll = scrollPercent;
+                    gtag('event', 'scroll_depth', {
+                        'event_category': 'Engagement',
+                        'event_label': 'Agentic AI vs Generative AI: Architectural Differences and Chatbot Impact',
+                        'value': scrollPercent
+                    });
+                }
+            });
+
+            // Track outbound links
+            document.querySelectorAll('a[href^="http"]').forEach(link => {
+                if (!link.href.includes(window.location.hostname)) {
+                    link.addEventListener('click', function(e) {
+                        gtag('event', 'outbound_click', {
+                            'event_category': 'Outbound Links',
+                            'event_label': link.href,
+                            'transport_type': 'beacon'
+                        });
+                    });
+                }
+            });
+
+            // Track social shares
+            document.querySelectorAll('.social-share').forEach(button => {
+                button.addEventListener('click', function() {
+                    gtag('event', 'social_share', {
+                        'event_category': 'Social',
+                        'event_label': button.dataset.platform,
+                        'value': 1
+                    });
+                });
+            });
+        });
+    </script>
+
+    <!-- EmailJS Library -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+    <!-- Favicons -->
+    <link href="img/favicon.png" rel="icon">
+    <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Bootstrap CSS File -->
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Libraries CSS Files -->
+    <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/ionicons/css/ionicons.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+
+    <!-- Main Stylesheet File -->
+    <link href="css/style.min.css" rel="stylesheet">
+
+    <!-- =======================================================
+    Theme Name: DevFolio
+    Theme URL: https://bootstrapmade.com/devfolio-bootstrap-portfolio-html-template/
+    Author: BootstrapMade.com
+    License: https://bootstrapmade.com/license/
+  ======================================================= -->
+
+    <!-- Social Media Preview Meta Tags for AI Comparison Article -->
+    <meta property="og:title" content="Agentic AI vs Generative AI: Architectural Differences and Chatbot Impact">
+    <meta property="og:description" content="Explore the critical distinctions between agentic AI and generative AI, their architectural foundations, and their real-world impact on autonomous AI chatbot systems.">
+    <meta property="og:image" content="https://www.bahaerdogan.com/img/AgenticAi1.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="https://www.bahaerdogan.com/AgenticAivsGenAi.html">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Agentic AI vs Generative AI: Architectural Differences and Chatbot Impact">
+    <meta name="twitter:description" content="Explore the critical distinctions between agentic AI and generative AI, their architectural foundations, and their real-world impact on autonomous AI chatbot systems.">
+    <meta name="twitter:image" content="https://www.bahaerdogan.com/img/AgenticAi1.png">
+
+    <!-- Third-party Scripts -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZGTWHSMVV7"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+    <!-- Application Scripts -->
+    <script src="js/main.min.js"></script>
+
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Agentic AI vs Generative AI: Architectural Differences and Chatbot Impact",
+        "description": "Explore the critical distinctions between agentic AI and generative AI, their architectural foundations, and their real-world impact on autonomous AI chatbot systems.",
+        "image": "https://www.bahaerdogan.com/img/AgenticAi1.png",
+        "author": {
+            "@type": "Person",
+            "name": "Baha Erdoğan"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Bahaerdogan",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://www.bahaerdogan.com/img/favicon.png"
+            }
+        },
+        "datePublished": "2024-03-20",
+        "dateModified": "2024-03-20",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://www.bahaerdogan.com/AgenticAivsGenAi.html"
+        }
+    }
+    </script>
+
+    <!-- Accessibility Improvements -->
+    <div class="skip-nav">
+        <a href="#main-content" class="sr-only sr-only-focusable">Skip to main content</a>
+    </div>
+</head>
+
+<body>
+    <div class="skip-nav">
+        <a href="#main-content" class="sr-only sr-only-focusable">Skip to main content</a>
+    </div>
+    <!--/ Nav Star /-->
+    <nav class="navbar navbar-b navbar-trans navbar-expand-md fixed-top" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand js-scroll" href="#page-top">Baha Erdoğan</a>
+            <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarDefault" aria-controls="navbarDefault" aria-expanded="false" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="navbar-collapse collapse justify-content-end" id="navbarDefault">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll" href="index.html">Home</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll" href="index.html#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll" href="BlogPosts.html">Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll" href="index.html#voluntary">Voluntary</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll" href="index.html#projects">Projects</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll" href="index.html#contact">Contact</a>
+                    </li>
+
+
+
+                    <li class="nav-item">
+                        <a class="nav-link" id="language-toggle" href="#">
+                            <i class="fa fa-language"></i> Türkçe
+                        </a>
+                    </li>
+
+
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!--/ Nav End /-->
+
+    <!--/ Intro Skew Star /-->
+    <div class="intro intro-single route bg-image" style="background-image: url('img/image\ \(21\).png')">
+        <div class="overlay-mf"></div>
+        <div class="intro-content display-table">
+            <div class="table-cell">
+                <div class="container">
+                    <h2 class="intro-title mb-4">Blog Details</h2>
+                    <ol class="breadcrumb d-flex justify-content-center">
+                        <li class="breadcrumb-item">
+                            <a href="index.html">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="BlogPosts.html">Blog</a>
+                        </li>
+                        <li class="breadcrumb-item active">Agentic AI vs Generative AI: Architectural Differences and Chatbot Impact</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/ Intro Skew End /-->
+
+    <!--/ Section Blog-Single Star /-->
+    <section class="blog-wrapper sect-pt4" id="blog">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="post-box">
+                        <div class="post-thumb">
+                           <img src="img/AgenticVsGenai.webp" class="img-fluid" alt="Agentic AI vs Generative AI Comparison" loading="lazy" decoding="async">
+                        </div>
+                        <div class="post-meta">
+                            <h1 class="article-title">Agentic AI vs Generative AI: Architectural Differences and Chatbot Impact</h1>
+                            <ul>
+                                <li>
+                                    <span class="ion-ios-person"></span>
+                                    <a href="#">Baha Erdoğan</a>
+                                </li>
+                                <li>
+                                    <span class="ion-pricetag"></span>
+                                    <a href="#">Technology</a>
+                                </li>
+                                <li>
+                                    <span class="ion-chatbox"></span>
+                                    <a href="#">0</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="article-content">
+                            <blockquote class="blockquote">"The transition from generative AI to agentic AI is not a technical feat but a fundamental transformation in the design of how intelligent systems operate."</blockquote>
+                            
+                            <h3>Introduction: Two Paradigms, One AI Evolution</h3>
+      <p>The transition from generative AI to agentic AI is not a technical feat but a fundamental transformation in the design of how intelligent systems operate. While both utilize large language models (LLMs) at their core, their designs, goals, and real-world applications are fundamentally different. This article provides a deep technical analysis of the differences and their impact on deployable AI operations, especially in autonomous chatbot platforms.</p>
+
+                            <h3>Generative AI: The Reactive Foundation</h3>
+      <p>Generative AI systems are prompt-response systems. They leverage pretrained LLMs to create outputs like text, images, or code from context input. They are stateless, and every prompt is treated as a standalone. Some examples include:</p>
+      <ul>
+        <li>Customer support bots</li>
+        <li>Email generation</li>
+        <li>Language translation</li>
+      </ul>
+      <p>While excellent at content generation, generative AI is weak in the areas of long-term memory, decision-making, and task coordination. It cannot:</p>
+      <ul>
+        <li>Plan multi-step activities</li>
+        <li>Remember previous choices</li>
+        <li>Speak to APIs or tools dynamically</li>
+      </ul>
+
+                            <h3>Agentic AI: The Autonomous Quantum Leap</h3>
+                            <p>Agentic AI builds on generative capabilities by placing them within structured, goal based systems. It adds four main capabilities to traditional LLMs:</p>
+      <ul>
+        <li><strong>Planning:</strong> Agents set goals, evaluate plans, and revise plans based on feedback.</li>
+                                <li><strong>Memory:</strong> Agents maintain session history and long term knowledge to facilitate continuation.</li>
+        <li><strong>Tool Use:</strong> Agents call upon APIs, databases, and write/execute code to accomplish tasks.</li>
+                                <li><strong>Reflection:</strong> Agents analyze outcomes, self tune, and adapt to changing environments.</li>
+      </ul>
+      <p>For example, an agentic travel assistant does not just suggest. It buys your ticket, checks visa requirements, interoperates with your calendar, and adapts when plans change—all automatically.</p>
+
+                            <h3>Architectural Distinctions: What Propels Agentic AI?</h3>
+      <p>Agentic systems rely on a multilayered architecture, typically consisting of:</p>
+      <ul>
+        <li>Orchestration frameworks: <em>LangChain, AutoGen, CrewAI</em></li>
+        <li>Tool routers: <em>Dynamic APIs for tool invocation</em> (e.g., LangChain tool calling)</li>
+        <li>Persistent memory layers: <em>CosmosDB, Redis, or vector stores</em></li>
+        <li>Sandboxed execution environments: <em>Azure Code Interpreter Sessions, Dapr-enabled microservices</em></li>
+                                <li>Multi agent coordination: <em>Horizontal/vertical/hybrid agent models</em></li>
+      </ul>
+      <p>This modularity enables agents to collaborate in concert or singularly without compromising safety, interoperability, and reliability.</p>
+                            
+                            <h3>Agentic AI vs. Generative AI Comparison</h3>
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped">
+                                    <thead class="thead-dark">
+          <tr>
+            <th>Feature</th>
+            <th>Generative AI</th>
+            <th>Agentic AI</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+                                            <td><strong>State Management</strong></td>
+            <td>Stateless</td>
+                                            <td>Persistent memory (session and long term)</td>
+          </tr>
+          <tr>
+                                            <td><strong>Tool Interaction</strong></td>
+            <td>None or static APIs</td>
+            <td>Dynamic tool calling, API integration</td>
+          </tr>
+          <tr>
+                                            <td><strong>Planning Capability</strong></td>
+            <td>None</td>
+                                            <td>Multi step planning and goal setting</td>
+          </tr>
+          <tr>
+                                            <td><strong>Decision Autonomy</strong></td>
+                                            <td>Prompt based</td>
+                                            <td>Goal directed, adaptive decision making</td>
+          </tr>
+          <tr>
+                                            <td><strong>Task Execution</strong></td>
+                                            <td>Single turn output</td>
+            <td>Multistep task orchestration</td>
+          </tr>
+          <tr>
+                                            <td><strong>Multi Agent Support</strong></td>
+            <td>Not supported</td>
+            <td>Inherent orchestration for collaborative agents</td>
+          </tr>
+          <tr>
+                                            <td><strong>Use Case</strong></td>
+            <td>Text generation, chat</td>
+            <td>Assistants, agents, workflows, automation</td>
+          </tr>
+        </tbody>
+      </table>
+                            </div>
+
+                            <h3>Technical Case Study: Creating a Conversational Agent with Azure</h3>
+      <p>A modern use case of agentic AI might leverage:</p>
+      <ul>
+        <li><strong>Azure OpenAI:</strong> Foundation model for generative answers</li>
+        <li><strong>LangChain or AutoGen:</strong> Orchestration framework</li>
+        <li><strong>Azure API Management:</strong> Scalable secure access to model APIs</li>
+        <li><strong>Azure AI Search + RAG:</strong> Enables knowledge retrieval</li>
+        <li><strong>Azure Container Apps:</strong> Hosts horizontally scalable modular agents</li>
+                                <li><strong>Azure Key Vault + Redis + Cosmos DB:</strong> For secrets, cache, and long term memory</li>
+        <li><strong>Code Interpreter Sessions:</strong> Safe tool execution</li>
+      </ul>
+                            <p>This architecture enables developing resilient, scalable, and secure agentic systems that can be utilized in high stakes enterprise applications.</p>
+                            
+                            <h3>Simplified Summary for Beginners</h3>
+                            <p><strong>Generative AI</strong> is a smart typewriter it types on what you instruct it to but does not retain what it has just typed.</p>
+                            <p><strong>Agentic AI</strong> is similar to a virtual assistant it retains your earlier work, anticipates, opens apps on your behalf, and can modify as situations change.</p>
+      <p>If generative AI is reactive, agentic AI is proactive.</p>
+                            
+                            <h3>Conclusion: Agentic AI Is the Future of Autonomous Systems</h3>
+                            <p>Transitioning from generative to agentic AI is not just evolutionary—it's revolutionary. More powerful, standalone, and generalizable AI systems are required by businesses as they grow. Generating is not enough. Systems must plan, act, reflect, and learn.</p>
+                            <p>Whether designing chatbots, enterprise automations, or autonomous agents, understanding the architectural depth of agentic AI is the foundation for building systems that scale, adapt, and create sustainable value.</p>
+                            
+                            <blockquote class="blockquote">Coming up in this series: Agentic AI in Deep and Technical Perspective Sneak peek at planning algorithms, agent structures (BDI, ReAct, ReWOO), and orchestration patterns.</blockquote>
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="widget-sidebar sidebar-search">
+                        <h5 class="sidebar-title">Search</h5>
+                        <div class="sidebar-content">
+                            <form id="search-form" onsubmit="return handleSearch(event)">
+                                <div class="input-group">
+                                    <input type="text" id="search-input" class="form-control" placeholder="Search for..." aria-label="Search for...">
+                                    <span class="input-group-btn">
+                    <button class="btn btn-secondary btn-search" type="submit">
+                      <span class="ion-android-search"></span>
+                                    </button>
+                                    </span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="widget-sidebar">
+                        <h5 class="sidebar-title">Recent Post</h5>
+                        <div class="sidebar-content">
+                            <ul class="list-sidebar">
+                                <li>
+                                    <a href="AlgorithmsExplained.html">From Netflix to TikTok: How AI Knows What You Like</a>
+                                </li>
+                                <li>
+                                    <a href="AI-Defense.html">The Role of Artificial Intelligence in Defense Technologies</a>
+                                </li>
+                                <li>
+                                    <a href="AgenticAiExplained.html">What Are AI Agents or Agentic AI?</a>
+                                </li>
+                                <li>
+                                    <a href="AgenticAivsGenAi.html">Agentic AI vs Generative AI: Architectural Differences and Chatbot Impact</a>
+                                </li>
+                                <li>
+                                    <a href="DeservingMoney.html">Are AI Models Making Us Earn Money We Don't Deserve?</a>
+                                </li>
+                                <li>
+                                    <a href="DistanceCalculatingMethods.html">How to Estimate Object Speed from Video</a>
+                                </li>
+                                <li>
+                                    <a href="ErgenekonEpic.html">Ergenekon epic</a>
+                                </li>
+                                <li>
+                                    <a href="MacShortcuts.html">Mac shortcuts guide</a>
+                                </li>
+                                <li>
+                                    <a href="MachineLearning-Explained.html">What's machine learning, really?</a>
+                                </li>
+                                <li>
+                                    <a href="MachineLearningAnomalyDetection.html">Machine Learning Anomaly Detection</a>
+                                </li>
+                                <li>
+                                    <a href="OguzKaganEpic.html">Oğuz Kağan Epic</a>
+                                </li>
+                                <li>
+                                    <a href="PreciousMetalData.html">One of the precious metals, Data</a>
+                                </li>
+                                <li>
+                                    <a href="ValuePerKilogramForProsperity.html">Why High Value-Per-Kilogram Exports Are the Key to National Prosperity</a>
+                                </li>
+                                <li>
+                                    <a href="WhatAiMeansToYou.html">From Prediction to Impact: What AI Means for You</a>
+                                </li>
+                                <li>
+                                    <a href="WhyToLearnHistory.html">Why is knowing history important?</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="widget-sidebar">
+                        <h5 class="sidebar-title">Follow the Series</h5>
+                        <div class="sidebar-content">
+                            <ul class="list-sidebar">
+                                <li><strong>Part 1:</strong> <a href="AgenticAiExplained.html">What Are AI Agents or Agentic AI?</a></li>
+                                <li><strong>Part 2:</strong> <a href="AgenticAivsGenAi.html">Agentic AI vs Generative AI: Architectural Differences and Chatbot Impact</a> <span class="badge badge-primary">Current</span></li>
+                                <li><strong>Part 3:</strong> <a href="AgenticAiTechDepth.html">Agentic AI in Depth: Technical Structures, Planning Models, and Autonomous Orchestration</a></li>
+                                <li><strong>Part 4:</strong> <a href="TypesOfAgenticAi.html">Types of Agentic AI and How to Build Your First Agent</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="widget-sidebar widget-tags">
+                        <h5 class="sidebar-title">Tags</h5>
+                        <div class="sidebar-content">
+                            <ul>
+                                <li><a href="#">AI</a></li>
+                                <li><a href="#">Agentic AI</a></li>
+                                <li><a href="#">Generative AI</a></li>
+                                <li><a href="#">Technology</a></li>
+                                <li><a href="#">Architecture</a></li>
+                                <li><a href="#">Chatbot</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--/ Section Blog-Single End /-->
+
+    <!-- Leave a Reply Section -->
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h3 class="mb-4 title-left">Leave a Reply</h3>
+                        <form id="comment-form" class="comment-form">
+                            <div id="comment-success" class="alert alert-success d-none">Your comment has been submitted. Thank you!</div>
+                            <div id="comment-error" class="alert alert-danger d-none">There was an error submitting your comment. Please try again.</div>
+                            <div class="form-group mb-3">
+                                <label for="comment-name">Name *</label>
+                                <input type="text" class="form-control input-mf" id="comment-name" name="from_name" required>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="comment-email">Email *</label>
+                                <input type="email" class="form-control input-mf" id="comment-email" name="from_email" required>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="comment-text">Comment *</label>
+                                <textarea class="form-control input-mf" id="comment-text" name="message" rows="5" required></textarea>
+                            </div>
+                            <button type="submit" class="button button-a button-big button-rouded">Submit Comment</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comments Display Section -->
+    <div class="container mt-5 mb-5">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h3 class="mb-4 title-left">Comments</h3>
+                        <div id="comments-container">
+                            <!-- Comments will be displayed here --> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--/ Section Contact-Footer Star /-->
+    <section class="paralax-mf footer-paralax bg-image sect-mt4 route" style="background-image: url('img/overlay-bg.jpg')">
+        <div class="overlay-mf"></div>
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="copyright-box">
+                            <p class="copyright">&copy; Copyright <strong>Bahaerdogan</strong>. All Rights Reserved</p>
+                            <div class="credits">
+                                <!--
+                  All the links in the footer should remain intact.
+                  You can delete the links only if you purchased the pro version.
+                  Licensing information: https://bootstrapmade.com/license/
+                  Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=DevFolio
+                -->
+                                <!-- Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </section>
+    <!--/ Section Contact-footer End /-->
+
+    <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+    <div id="preloader"></div>
+
+    <!-- JavaScript Libraries -->
+    <script src="lib/jquery/jquery.min.js"></script>
+    <script src="lib/jquery/jquery-migrate.min.js"></script>
+    <script src="lib/popper/popper.min.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/counterup/jquery.waypoints.min.js"></script>
+    <script src="lib/counterup/jquery.counterup.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="lib/lightbox/js/lightbox.min.js"></script>
+    <script src="lib/typed/typed.min.js"></script>
+    <!-- Contact Form JavaScript File -->
+
+    <!-- Application Scripts -->
+    <script src="js/main.min.js"></script>
+
+    <!-- Blog Page Javascript File -->
+    <script src="js/blog.min.js"></script>
+
+    <!-- JavaScript for handling comments -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const commentForm = document.getElementById('comment-form');
+            const successMessage = document.getElementById('comment-success');
+            const errorMessage = document.getElementById('comment-error');
+            const commentsContainer = document.getElementById('comments-container');
+            
+            // Load existing comments from localStorage
+            loadComments();
+            
+            if (commentForm) {
+                commentForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    
+                    // Hide messages
+                    successMessage.classList.add('d-none');
+                    errorMessage.classList.add('d-none');
+                    
+                    // Get form data
+                    const name = document.getElementById('comment-name').value;
+                    const email = document.getElementById('comment-email').value;
+                    const comment = document.getElementById('comment-text').value;
+                    const date = new Date().toLocaleDateString();
+                    const blogTitle = "Agentic AI vs Generative AI: Architectural Differences and Chatbot Impact";
+                    
+                    // Show loading state
+                    const submitButton = commentForm.querySelector('button[type="submit"]');
+                    const originalButtonText = submitButton.textContent;
+                    submitButton.textContent = "Submitting...";
+                    submitButton.disabled = true;
+                    
+                    // Prepare email template parameters
+                    const templateParams = {
+                        from_name: name,
+                        from_email: email,
+                        message: comment,
+                        blog_title: blogTitle
+                    };
+                    
+                    // Send email using EmailJS
+                    emailjs.send('service_lhjdfqw', 'template_bha2val', templateParams, 'sr9_9CUgd0L641ObN')
+                        .then(function() {
+                            // Show success message
+                            successMessage.classList.remove('d-none');
+                            
+                            // Save comment to localStorage
+                            saveComment(name, comment, date);
+                            
+                            // Display the new comment
+                            displayComment(name, comment, date);
+                            
+                            // Reset form
+                            commentForm.reset();
+                            
+                            // Reset button
+                            submitButton.textContent = originalButtonText;
+                            submitButton.disabled = false;
+                        })
+                        .catch(function(error) {
+                            console.error('EmailJS Error:', error);
+                            errorMessage.textContent = "There was an error submitting your comment: " + error.text;
+                            errorMessage.classList.remove('d-none');
+                            
+                            // Reset button
+                            submitButton.textContent = originalButtonText;
+                            submitButton.disabled = false;
+                        });
+                });
+            }
+            
+            // Function to save comment to localStorage
+            function saveComment(name, comment, date) {
+                const blogId = window.location.pathname.split('/').pop().replace('.html', '');
+                let comments = JSON.parse(localStorage.getItem(`comments-${blogId}`) || '[]');
+                comments.push({ name, comment, date });
+                localStorage.setItem(`comments-${blogId}`, JSON.stringify(comments));
+            }
+            
+            // Function to load comments from localStorage
+            function loadComments() {
+                const blogId = window.location.pathname.split('/').pop().replace('.html', '');
+                const comments = JSON.parse(localStorage.getItem(`comments-${blogId}`) || '[]');
+                
+                if (comments.length === 0) {
+                    commentsContainer.innerHTML = '<p>No comments yet. Be the first to comment!</p>';
+                } else {
+                    commentsContainer.innerHTML = '';
+                    comments.forEach(comment => {
+                        displayComment(comment.name, comment.comment, comment.date);
+                    });
+                }
+            }
+            
+            // Function to display a comment in the comments section
+            function displayComment(name, comment, date) {
+                const commentElement = document.createElement('div');
+                commentElement.className = 'comment mb-4 p-3 border-bottom';
+                commentElement.innerHTML = `
+                    <h5>${name} <small class="text-muted">${date}</small></h5>
+                    <p>${comment}</p>
+                `;
+                commentsContainer.appendChild(commentElement);
+            }
+        });
+    </script>
+
+    <script>
+        const blogPosts = [
+          { title: "One of the precious metals, Data", url: "PreciousMetalData.html", keywords: ["data", "technology", "ai", "artificial intelligence", "precious"] },
+          { title: "Why is knowing history important?", url: "WhyToLearnHistory.html", keywords: ["history", "learning", "knowledge", "importance"] },
+          { title: "The Role of Artificial Intelligence in Defense Technologies", url: "AI-Defense.html", keywords: ["ai", "artificial intelligence", "defense", "technology", "security"] },
+          { title: "Are AI Models Making Us Earn Money We Don't Deserve?", url: "DeservingMoney.html", keywords: ["ai", "money", "work", "technology", "earnings"] },
+          { title: "Ergenekon epic", url: "ErgenekonEpic.html", keywords: ["ergenekon", "epic", "history", "story"] },
+          { title: "Oğuz Kağan Epic", url: "OguzKaganEpic.html", keywords: ["oğuz kağan", "epic", "history", "turkish", "legend"] },
+          { title: "Mac shortcuts guide", url: "MacShortcuts.html", keywords: ["mac", "shortcuts", "guide", "productivity"] },
+          { title: "What Are AI Agents or Agentic AI?", url: "AgenticAiExplained.html", keywords: ["ai", "agents", "agentic", "autonomous", "technology"] },
+          { title: "Agentic AI vs Generative AI: Architectural Differences and Chatbot Impact", url: "AgenticAivsGenAi.html", keywords: ["ai", "agentic", "generative", "architecture", "chatbot", "comparison"] }
+        ];
+    
+        function handleSearch(event) {
+          event.preventDefault();
+          const searchTerm = document.getElementById('search-input').value.toLowerCase();
+          
+          if (!searchTerm.trim()) {
+            return false;
+          }
+    
+          const results = blogPosts.filter(post => {
+            const titleMatch = post.title.toLowerCase().includes(searchTerm);
+            const keywordMatch = post.keywords.some(keyword => keyword.includes(searchTerm));
+            return titleMatch || keywordMatch;
+          });
+    
+          if (results.length > 0) {
+            // Redirect to the first matching result
+            window.location.href = results[0].url;
+          } else {
+            alert('No matching posts found.');
+          }
+    
+          return false;
+        }
+    </script>
+
+</body>
+
+</html>

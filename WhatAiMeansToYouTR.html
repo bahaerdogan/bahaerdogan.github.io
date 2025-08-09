@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8">
+    <title>From Prediction to Impact: What Artificial Intelligence Actually Means for You | Bahaerdogan | Türkçe</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+    <meta name="theme-color" content="#0078ff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta content="What is machine learning, Real-world applications of artificial intelligence, AI in healthcare, finance, and education, Machine learning in daily life, How artificial intelligence affects everyday life, Artificial intelligence use cases, Impact of AI on consumers" name="keywords">
+    <meta content="Explore how artificial intelligence and machine learning impact your daily life and decisions, and why understanding AI is no longer optional." name="description">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZGTWHSMVV7"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        
+        // Enhanced ecommerce tracking with custom dimensions
+        gtag('config', 'G-ZGTWHSMVV7', {
+            'page_title': 'From Prediction to Impact: What Artificial Intelligence Actually Means for You',
+            'page_location': window.location.href,
+            'page_path': window.location.pathname,
+            'send_page_view': true,
+            'custom_map': {
+                'dimension1': 'article_category',
+                'dimension2': 'reading_time',
+                'dimension3': 'scroll_depth'
+            }
+        });
+
+        // Track user interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Track form submissions
+            const commentForm = document.getElementById('comment-form');
+            if (commentForm) {
+                commentForm.addEventListener('submit', function() {
+                    gtag('event', 'form_submit', {
+                        'event_category': 'Comments',
+                        'event_label': 'From Prediction to Impact: What Artificial Intelligence Actually Means for You',
+                        'value': 1
+                    });
+                });
+            }
+
+            // Track search usage
+            const searchForm = document.getElementById('search-form');
+            if (searchForm) {
+                searchForm.addEventListener('submit', function() {
+                    const searchTerm = document.getElementById('search-input').value;
+                    gtag('event', 'search', {
+                        'event_category': 'Search',
+                        'event_label': searchTerm,
+                        'value': 1
+                    });
+                });
+            }
+
+            // Track reading time
+            let startTime = new Date();
+            let timeOnPage = 0;
+            setInterval(function() {
+                timeOnPage += 1;
+                if (timeOnPage % 30 === 0) { // Send every 30 seconds
+                    gtag('event', 'reading_time', {
+                        'event_category': 'Engagement',
+                        'event_label': 'From Prediction to Impact: What Artificial Intelligence Actually Means for You',
+                        'value': timeOnPage
+                    });
+                }
+            }, 1000);
+
+            // Track scroll depth
+            let maxScroll = 0;
+            window.addEventListener('scroll', function() {
+                const scrollPercent = Math.round((window.scrollY + window.innerHeight) / document.body.scrollHeight * 100);
+                if (scrollPercent > maxScroll && scrollPercent % 25 === 0) { // Track every 25%
+                    maxScroll = scrollPercent;
+                    gtag('event', 'scroll_depth', {
+                        'event_category': 'Engagement',
+                        'event_label': 'From Prediction to Impact: What Artificial Intelligence Actually Means for You',
+                        'value': scrollPercent
+                    });
+                }
+            });
+
+            // Track outbound links
+            document.querySelectorAll('a[href^="http"]').forEach(link => {
+                if (!link.href.includes(window.location.hostname)) {
+                    link.addEventListener('click', function(e) {
+                        gtag('event', 'outbound_click', {
+                            'event_category': 'Outbound Links',
+                            'event_label': link.href,
+                            'transport_type': 'beacon'
+                        });
+                    });
+                }
+            });
+
+            // Track social shares
+            document.querySelectorAll('.social-share').forEach(button => {
+                button.addEventListener('click', function() {
+                    gtag('event', 'social_share', {
+                        'event_category': 'Social',
+                        'event_label': button.dataset.platform,
+                        'value': 1
+                    });
+                });
+            });
+        });
+    </script>
+
+    <!-- EmailJS Library -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+    <!-- Favicons -->
+    <link href="img/favicon.png" rel="icon">
+    <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Bootstrap CSS File -->
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Libraries CSS Files -->
+    <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/ionicons/css/ionicons.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+
+    <!-- Main Stylesheet File -->
+    <link href="css/style.min.css" rel="stylesheet">
+
+    <!-- =======================================================
+    Theme Name: DevFolio
+    Theme URL: https://bootstrapmade.com/devfolio-bootstrap-portfolio-html-template/
+    Author: BootstrapMade.com
+    License: https://bootstrapmade.com/license/
+  ======================================================= -->
+
+    <!-- Social Media Preview Meta Tags for AI Impact Article -->
+    <meta property="og:title" content="From Prediction to Impact: What Artificial Intelligence Actually Means for You">
+    <meta property="og:description" content="Explore how artificial intelligence and machine learning impact your daily life and decisions, and why understanding AI is no longer optional.">
+    <meta property="og:image" content="https://www.bahaerdogan.com/img/predictiontoimpact.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="https://www.bahaerdogan.com/WhatAiMeansToYou.html">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="From Prediction to Impact: What Artificial Intelligence Actually Means for You">
+    <meta name="twitter:description" content="Explore how artificial intelligence and machine learning impact your daily life and decisions, and why understanding AI is no longer optional.">
+    <meta name="twitter:image" content="https://www.bahaerdogan.com/img/predictiontoimpact.png">
+
+    <!-- Third-party Scripts -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZGTWHSMVV7"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+    <!-- Application Scripts -->
+    <script src="js/main.min.js"></script>
+
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "From Prediction to Impact: What Artificial Intelligence Actually Means for You",
+        "description": "Explore how artificial intelligence and machine learning impact your daily life and decisions, and why understanding AI is no longer optional.",
+        "image": "https://www.bahaerdogan.com/img/predictiontoimpact.png",
+        "author": {
+            "@type": "Person",
+            "name": "Baha Erdoğan"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Bahaerdogan",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://www.bahaerdogan.com/img/favicon.png"
+            }
+        },
+        "datePublished": "2024-03-20",
+        "dateModified": "2024-03-20",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://www.bahaerdogan.com/WhatAiMeansToYou.html"
+        }
+    }
+    </script>
+
+    <!-- Accessibility Improvements -->
+    <div class="skip-nav">
+        <a href="#main-content" class="sr-only sr-only-focusable">Skip to main content</a>
+    </div>
+</head>
+
+<body>
+    <div class="skip-nav">
+        <a href="#main-content" class="sr-only sr-only-focusable">Skip to main content</a>
+    </div>
+
+    <!--/ Nav Star /-->
+    <nav class="navbar navbar-b navbar-trans navbar-expand-md fixed-top" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand js-scroll" href="#page-top">Baha Erdoğan</a>
+            <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarDefault" aria-controls="navbarDefault" aria-expanded="false" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="navbar-collapse collapse justify-content-end" id="navbarDefault">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll" href="index.html">Home</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll" href="index.html#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll" href="BlogPosts.html">Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll" href="index.html#voluntary">Voluntary</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll" href="index.html#projects">Projects</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll" href="index.html#contact">Contact</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" id="language-toggle" href="#">
+                            <i class="fa fa-language"></i> Türkçe
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!--/ Nav End /-->
+
+    <!--/ Intro Skew Star /-->
+    <div class="intro intro-single route bg-image" style="background-image: url('img/image\ \(21\).png')">
+        <div class="overlay-mf"></div>
+        <div class="intro-content display-table">
+            <div class="table-cell">
+                <div class="container">
+                    <h2 class="intro-title mb-4">Blog Details</h2>
+                    <ol class="breadcrumb d-flex justify-content-center">
+                        <li class="breadcrumb-item">
+                            <a href="index.html">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="BlogPosts.html">Blog</a>
+                        </li>
+                        <li class="breadcrumb-item active">From Prediction to Impact: What Artificial Intelligence Actually Means for You</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/ Intro Skew End /-->
+
+    <!--/ Section Blog-Single Star /-->
+    <section class="blog-wrapper sect-pt4" id="blog">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="post-box">
+                        <div class="post-thumb">
+                           <img src="img/predictiontoimpact.webp" class="img-fluid" alt="" loading="lazy" decoding="async">
+                        </div>
+                        <div class="post-meta">
+                            <h1 class="article-title">From Prediction to Impact: What Artificial Intelligence Actually Means for You</h1>
+                            <ul>
+                                <li>
+                                    <span class="ion-ios-person"></span>
+                                    <a href="#">Baha Erdoğan</a>
+                                </li>
+                                <li>
+                                    <span class="ion-pricetag"></span>
+                                    <a href="#">Technology</a>
+                                </li>
+                                <li>
+                                    <span class="ion-chatbox"></span>
+                                    <a href="#">0</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="article-content">
+                            <blockquote class="blockquote">"You don't have to understand AI to be formed by it—unless you need to."</blockquote>
+                            
+                            <p>Artificial Intelligence (AI) has quietly transitioned from a futuristic concept to a cornerstone of modern life. It is not just confined to research centers or technology companies anymore but now operates in the background—personalizing your online experience, optimizing logistics, and revolutionizing industries.</p>
+
+                            <p>Whether you realize it or not, AI powered by machine learning (ML) is already influencing your daily decisions. But what does that mean for you, and why does it matter?</p>
+
+                            <h2>What Is Machine Learning and Why Should You Care?</h2>
+                            <p>At the heart of AI is Machine Learning: a method by which computers learn patterns in data and make predictions or decisions without being explicitly programmed.</p>
+
+                            <p>In practice:</p>
+                            <ul>
+                                <li>Data is collected.</li>
+                                <li>Patterns are found.</li>
+                                <li>The system makes predictions based on those patterns—at scale, in real time.</li>
+                            </ul>
+
+                            <p>As Andriy Burkov describes in <em>The Hundred-Page Machine Learning Book</em>, machine learning is "the science of turning data into predictions." And these predictions are increasingly the unseen framework of your digital existence.</p>
+
+                            <h2>Machine Learning Is the New Electricity</h2>
+                            <p>Just as electricity was the enabling infrastructure of the 20th century, machine learning is that of the 21st. It hums in the background—powering apps, personalizing interfaces, detecting fraud, and even making medical diagnoses. You don't need to know the algorithms beneath the hood to feel its influence. Not knowing, however, is no longer an option.</p>
+
+                            <h2>11 Real-World Applications of AI You Already Use</h2>
+
+                            <ol>
+                                <li>
+                                    <h3>Healthcare: Faster Diagnoses, Smarter Outcomes</h3>
+                                    <p>AI improves diagnostic accuracy, identifies health risks earlier, and personalizes treatments.</p>
+                                    <p><strong>Example:</strong> DeepMind AI detects over 50 eye diseases with the accuracy of leading ophthalmologists.</p>
+                                </li>
+                                <li>
+                                    <h3>Finance: Intelligent Banking and Risk Identification</h3>
+                                    <p>Machine learning reinforces fraud detection, accelerates loan approvals, and personalizes financial advice.</p>
+                                    <p><strong>Example:</strong> Robo-advisors such as Wealthfront optimize investment portfolios using algorithmic models.</p>
+                                </li>
+                                <li>
+                                    <h3>Education: Personalized, Adaptive Learning</h3>
+                                    <p>AI tailors learning materials to meet individual needs, detects knowledge gaps, and provides real-time feedback.</p>
+                                    <p><strong>Example:</strong> AI writing assistants offer on-demand feedback and guidance to allow students to refine essays.</p>
+                                </li>
+                                <li>
+                                    <h3>Retail and E-Commerce: Predictive Personalization</h3>
+                                    <p>AI predicts consumer behavior, personalizes recommendations, and dynamically prices.</p>
+                                    <p><strong>Example:</strong> Amazon's recommendation engine uses collaborative filtering to predict customer's tastes.</p>
+                                </li>
+                                <li>
+                                    <h3>Transportation: Real-Time Efficiency</h3>
+                                    <p>AI powers everything from ride-sharing algorithms to autonomous vehicle systems.</p>
+                                    <p><strong>Example:</strong> Autonomous cars rely on machine learning to interpret road conditions, recognize signs, and avoid obstacles.</p>
+                                </li>
+                                <li>
+                                    <h3>Social Media: Algorithmic Curation</h3>
+                                    <p>Your feed is continuously shaped by AI models learning what retains your attention.</p>
+                                    <p><strong>Example:</strong> Instagram's Explore tab and TikTok's For You page are curated using behavioral prediction engines.</p>
+                                </li>
+                                <li>
+                                    <h3>Gaming: Adaptive, Personalized Gameplay</h3>
+                                    <p>AI enhances realism, modifies difficulty levels, and tailors experiences in real time.</p>
+                                    <p><strong>Example:</strong> In Shadow of Mordor, AI enemies learn and respond to your gameplay strategy.</p>
+                                </li>
+                                <li>
+                                    <h3>Entertainment: Accuracy in Recommendations</h3>
+                                    <p>Streaming services monitor user information to make extremely tailored suggestions.</p>
+                                    <p><strong>Example:</strong> Spotify's algorithms monitor rhythm, tone, and listening habits to match music to your mood.</p>
+                                </li>
+                                <li>
+                                    <h3>Mental Health and Wellness: Scalable Support</h3>
+                                    <p>AI-powered tools deliver immediate, low-barrier mental health support.</p>
+                                    <p><strong>Example:</strong> Virtual therapists like Woebot and Wysa offer 24/7 emotional check-ins using cognitive behavioral principles.</p>
+                                </li>
+                                <li>
+                                    <h3>Agriculture: Data-Driven Farming</h3>
+                                    <p>AI supports precision farming by monitoring crop data, yield prediction, and disease detection.</p>
+                                    <p><strong>Example:</strong> Drone imaging combined with ML detects crop issues prior to their expansion.</p>
+                                </li>
+                                <li>
+                                    <h3>Logistics and Supply Chain Optimization</h3>
+                                    <p>AI enhances delivery accuracy, predicts demand, and streamlines warehouse operations.</p>
+                                    <p><strong>Example:</strong> Companies like FedEx and DHL use predictive analytics to streamline global supply chains.</p>
+                                </li>
+                            </ol>
+
+                            <h2>What This Means for You</h2>
+                            <p>Artificial Intelligence is neither optional, theoretical, nor distant. It already inhabits your decision spaces—from what information you consume to transactions you engage in.</p>
+
+                            <p>Knowing AI's function is not technical. However, developing a sense of how these systems work enables you to make smarter decisions as a consumer, worker, and citizen.</p>
+
+                            <h2>How to Get Ahead in an AI-Driven World</h2>
+                            <ul>
+                                <li><strong>Be Curious:</strong> Learn the basics of AI principles. You do not have to code—but learn the terms.</li>
+                                <li><strong>Ask Why:</strong> If you're being recommended something, consider the logic behind it. Is it helping you or dictating to you?</li>
+                                <li><strong>Demand Transparency:</strong> As AI is being more embedded in public systems, accountability and ethical design are essential.</li>
+                            </ul>
+
+                            <h2>Final Thought: AI Won't Replace You But Somebody Who Knows How to Use It Will</h2>
+                            <p>Artificial Intelligence isn't taking the place of humans—it's enhancing them. The competitive advantage now lies with those who know how to use AI effectively.</p>
+
+                            <p>Whether you're an entrepreneur, student, policymaker, or creative, understanding how AI works—and how it impacts your field—is no longer optional. It's the new digital fluency.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="widget-sidebar">
+                        <h5 class="sidebar-title">Recent Post</h5>
+                        <div class="sidebar-content">
+                            <ul class="list-sidebar">
+                                <li>
+                                    <a href="AgenticAiExplained.html">What Are AI Agents or Agentic AI?</a>
+                                </li>
+                                <li>
+                                    <a href="AgenticAivsGenAi.html">Agentic AI vs Generative AI: Understanding the Differences</a>
+                                </li>
+                                <li>
+                                    <a href="TypesOfAgenticAi.html">Types of Agentic AI: A Comprehensive Guide</a>
+                                </li>
+                                <li>
+                                    <a href="AgenticAiTechDepth.html">Agentic AI Technical Deep Dive</a>
+                                </li>
+                                <li>
+                                    <a href="AI-Defense.html">The Role of AI in Defense Technologies</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="widget-sidebar">
+                        <h5 class="sidebar-title">Archives</h5>
+                        <div class="sidebar-content">
+                            <ul class="list-sidebar">
+                                <li>
+                                    <a href="BlogPosts.html">All Posts</a>
+                                </li>
+                                <li>
+                                    <a href="MachineLearning-Explained.html">Machine Learning Articles</a>
+                                </li>
+                                <li>
+                                    <a href="AlgorithmsExplained.html">Technology Articles</a>
+                                </li>
+                                <li>
+                                    <a href="OguzKaganEpic.html">History Articles</a>
+                                </li>
+                                <li>
+                                    <a href="ValuePerKilogramForProsperity.html">Finance Articles</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="widget-sidebar widget-tags">
+                        <h5 class="sidebar-title">Tags</h5>
+                        <div class="sidebar-content">
+                            <ul>
+                                <li><a href="#">AI</a></li>
+                                <li><a href="#">Machine Learning</a></li>
+                                <li><a href="#">Technology</a></li>
+                                <li><a href="#">Digital Transformation</a></li>
+                                <li><a href="#">Future of Work</a></li>
+                                <li><a href="#">Innovation</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--/ Section Blog-Single End /-->
+
+    <!-- Leave a Reply Section -->
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h3 class="mb-4 title-left">Leave a Reply</h3>
+                        <form id="comment-form" class="comment-form">
+                            <div id="comment-success" class="alert alert-success d-none">Your comment has been submitted. Thank you!</div>
+                            <div id="comment-error" class="alert alert-danger d-none">There was an error submitting your comment. Please try again.</div>
+                            <div class="form-group mb-3">
+                                <label for="comment-name">Name *</label>
+                                <input type="text" class="form-control input-mf" id="comment-name" name="from_name" required>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="comment-email">Email *</label>
+                                <input type="email" class="form-control input-mf" id="comment-email" name="from_email" required>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="comment-text">Comment *</label>
+                                <textarea class="form-control input-mf" id="comment-text" name="message" rows="5" required></textarea>
+                            </div>
+                            <button type="submit" class="button button-a button-big button-rouded">Submit Comment</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comments Display Section -->
+    <div class="container mt-5 mb-5">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h3 class="mb-4 title-left">Comments</h3>
+                        <div id="comments-container">
+                            <!-- Comments will be displayed here --> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--/ Section Contact-Footer Star /-->
+    <section class="paralax-mf footer-paralax bg-image sect-mt5 route" style="background-image: url(img/overlay-bg.jpg)">
+        <div class="overlay-mf"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="contact-mf">
+                        <div id="contact" class="box-shadow-full">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="title-box-2">
+                                        <h5 class="title-left">
+                                            Send Message Us
+                                        </h5>
+                                    </div>
+                                    <div>
+                                        <form action="" method="post" role="form" class="contactForm">
+                                            <div id="sendmessage">Your message has been sent. Thank you!</div>
+                                            <div id="errormessage"></div>
+                                            <div class="row">
+                                                <div class="col-md-12 mb-3">
+                                                    <div class="form-group">
+                                                        <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" data-rule="minlen:4" data-msg="Please enter at least 4 chars" />
+                                                        <div class="validation"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 mb-3">
+                                                    <div class="form-group">
+                                                        <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" data-rule="email" data-msg="Please enter a valid email" />
+                                                        <div class="validation"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 mb-3">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" data-rule="minlen:4" data-msg="Please enter at least 8 chars of subject" />
+                                                        <div class="validation"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <textarea class="form-control" name="message" rows="5" data-rule="required" data-msg="Please write something for us" placeholder="Message"></textarea>
+                                                        <div class="validation"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <button type="submit" class="button button-a button-big button-rouded">Send Message</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="title-box-2 pt-4 pt-md-0">
+                                        <h5 class="title-left">
+                                            Get in Touch
+                                        </h5>
+                                    </div>
+                                    <div class="more-info">
+                                        <p class="lead">
+                                            Whether you have a question or just want to say hi, I'll try my best to get back to you!
+                                        </p>
+                                        <ul class="list-ico">
+                                            <li><span class="ion-ios-location"></span> Istanbul, Turkey</li>
+                                            <li><span class="ion-ios-telephone"></span> +90 532 123 45 67</li>
+                                            <li><span class="ion-ios-email"></span> baha@bahaerdogan.com</li>
+                                        </ul>
+                                    </div>
+                                    <div class="socials">
+                                        <ul>
+                                            <li><a href=""><span class="ico-circle"><i class="ion-social-facebook"></i></span></a></li>
+                                            <li><a href=""><span class="ico-circle"><i class="ion-social-instagram"></i></span></a></li>
+                                            <li><a href=""><span class="ico-circle"><i class="ion-social-twitter"></i></span></a></li>
+                                            <li><a href=""><span class="ico-circle"><i class="ion-social-pinterest"></i></span></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="copyright-box">
+                            <p class="copyright">&copy; Copyright <strong>Bahaerdogan</strong>. All Rights Reserved</p>
+                            <div class="credits">
+                                Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </section>
+    <!--/ Section Contact-footer End /-->
+
+    <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+    <div id="preloader"></div>
+
+    <!-- JavaScript Libraries -->
+    <script src="lib/jquery/jquery.min.js"></script>
+    <script src="lib/jquery/jquery-migrate.min.js"></script>
+    <script src="lib/popper/popper.min.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/counterup/jquery.waypoints.min.js"></script>
+    <script src="lib/counterup/jquery.counterup.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="lib/lightbox/js/lightbox.min.js"></script>
+    <script src="lib/typed/typed.min.js"></script>
+    <!-- Contact Form JavaScript File -->
+
+    <!-- Template Main Javascript File -->
+    <script src="js/main.min.js"></script>
+
+</body>
+</html>
