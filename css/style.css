@@ -1473,7 +1473,7 @@ footer .credits a {
   
   /* Additional mobile image optimization for very small screens */
   .intro.route.bg-image {
-    background-image: url('../img/mainphotomobile.png') !important;
+    background-image: url('../img/mainphotomobile.webp') !important;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -1483,7 +1483,7 @@ footer .credits a {
 /* Mobile-specific background image for intro section */
 @media (max-width: 768px) {
   .intro.route.bg-image {
-    background-image: url('../img/mainphotomobile.png') !important;
+    background-image: url('../img/mainphotomobile.webp') !important;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -1568,7 +1568,7 @@ footer .credits a {
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: url('../img/mainphotomobile.png');
+    background-image: url('../img/mainphotomobile.webp');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -1589,52 +1589,25 @@ footer .credits a {
   }
 }
 
-/* Blog Components */
-.blog-content {
-  /* Move blog-specific styles here */
-  .post-box {
-    background-color: #fff;
-    padding: 2rem;
-    border-radius: 4px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  }
-
-  .article-content {
-    line-height: 1.8;
-    color: #4e4e4e;
-  }
-  /* ... other blog styles ... */
+/* Blog Components (flattened) */
+.blog-content .post-box {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-/* Comment System */
-.comment-system {
-  /* Move comment-specific styles here */
-  .comment-form {
-    margin-top: 2rem;
-  }
-
-  .input-mf {
-    border: 1px solid #ced4da;
-    border-radius: 4px;
-    padding: 0.75rem;
-    width: 100%;
-    margin-bottom: 1rem;
-  }
-  /* ... other comment styles ... */
+.blog-content .article-content {
+  line-height: 1.8;
+  color: #4e4e4e;
 }
 
-/* Sidebar Components */
-.blog-sidebar {
-  /* Move sidebar-specific styles here */
-  .widget-sidebar {
-    margin-bottom: 3rem;
-    padding: 1.5rem;
-    background-color: #fff;
-    border-radius: 4px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  }
-  /* ... other sidebar styles ... */
-}
+/* Comment System (flattened) */
+.comment-system .comment-form { margin-top: 2rem; }
+.comment-system .input-mf { border: 1px solid #ced4da; border-radius: 4px; padding: 0.75rem; width: 100%; margin-bottom: 1rem; }
+
+/* Sidebar Components (flattened) */
+.blog-sidebar .widget-sidebar { margin-bottom: 3rem; padding: 1.5rem; background-color: #fff; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
 
 /* Blog Preview Section Styles */
 .blog-mf {
