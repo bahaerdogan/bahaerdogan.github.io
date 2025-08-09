@@ -593,7 +593,7 @@
                     const email = document.getElementById('comment-email').value;
                     const comment = document.getElementById('comment-text').value;
                     const date = new Date().toLocaleDateString();
-                    const blogTitle = "Anomaly Detection in Machine Learning";
+                    const blogTitle = "İhracatta Kilogram Başına Değer";
                     
                     // Show loading state
                     const submitButton = commentForm.querySelector('button[type="submit"]');
@@ -702,10 +702,9 @@
           });
     
           if (results.length > 0) {
-            // Redirect to the first matching result
             window.location.href = results[0].url;
           } else {
-            alert('No matching posts found.');
+            alert('Eşleşen yazı bulunamadı.');
           }
     
           return false;
