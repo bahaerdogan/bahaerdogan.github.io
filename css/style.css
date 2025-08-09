@@ -1503,14 +1503,15 @@ footer .credits a {
   
   /* Center and make the swiping text bigger and lighter on mobile */
   .intro .intro-subtitle {
-    font-size: 2rem;
-    font-weight: 300;
+    font-size: 2.2rem;
+    font-weight: 700;
     text-align: center;
     margin: 0 auto;
     max-width: 100%;
     padding: 0 15px;
     box-sizing: border-box;
     min-height: 3rem;
+    letter-spacing: 0.3px;
   }
   
   /* Ensure typed text stays on one line */
@@ -1840,18 +1841,21 @@ footer .credits a {
   /* Text slider improvements for mobile */
   .text-slider {
     display: inline-block !important;
-    vertical-align: top;
+    vertical-align: baseline;
     white-space: nowrap;
     overflow: hidden;
+    line-height: 1;
   }
   
   .typed-cursor {
     display: inline-block !important;
-    vertical-align: top;
+    vertical-align: baseline;
     font-size: inherit;
-    color: inherit;
-    margin-left: 2px;
+    font-weight: 700;
+    color: #fff;
+    margin-left: 3px;
     animation: typedjsBlink 1s infinite;
+    text-shadow: 0 0 2px rgba(0,0,0,0.5);
   }
   
   .text-slider-items {

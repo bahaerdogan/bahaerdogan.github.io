@@ -139,10 +139,10 @@
 				}
 				
 				// Mobile-specific settings
-				const isMobile = window.innerWidth <= 768;
-				const typeSpeed = isMobile ? 80 : 60;
-				const backSpeed = isMobile ? 60 : 40;
-				const backDelay = isMobile ? 2000 : 1500;
+                const isMobile = window.innerWidth <= 768;
+                const typeSpeed = isMobile ? 60 : 60;
+                const backSpeed = isMobile ? 45 : 40;
+                const backDelay = isMobile ? 2200 : 1500;
 				
 				window.typedInstance = new Typed('.text-slider', {
 					strings: strings,
@@ -155,14 +155,14 @@
 					cursorChar: '|',
 					fadeOut: false,
 					autoInsertCss: true,
-					onStringTyped: function(arrayPos, self) {
-						// Ensure text stays on one line and is properly positioned
-						$('.text-slider').css({
-							'white-space': 'nowrap',
-							'display': 'inline-block',
-							'vertical-align': 'top'
-						});
-					},
+                    onStringTyped: function() {
+                        $('.text-slider').css({
+                            'white-space': 'nowrap',
+                            'display': 'inline-block',
+                            'vertical-align': 'baseline',
+                            'line-height': '1'
+                        });
+                    },
 					onBegin: function(self) {
 						// Ensure proper initialization
 						$('.text-slider-items').hide();
