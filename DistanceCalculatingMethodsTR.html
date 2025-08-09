@@ -8,13 +8,13 @@
 <link rel="alternate" hreflang="x-default" href="https://bahaerdogan.com/DistanceCalculatingMethods.html">
 
     <meta charset="utf-8">
-    <title>How to Estimate Object Speed from Video | Computer Vision Guide | Bahaerdogan | Türkçe</title>
+    <title>Videodan Nesne Hızını Nasıl Tahmin Ederiz? | Bilgisayarlı Görü Rehberi | Bahaerdogan | Türkçe</title>
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
     <meta name="theme-color" content="#0078ff">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta content="computer vision, object speed, video analysis, AI, machine learning, structure from motion, monocular depth estimation" name="keywords">
-    <meta content="Learn how to estimate object speed from video using computer vision techniques without prior information or calibration. Comprehensive guide with practical examples." name="description">
+    <meta content="bilgisayarlı görme, nesne hızı, video analizi, yapay zekâ, makine öğrenimi, structure from motion, tek gözlü derinlik" name="keywords">
+    <meta content="Kamera kalibrasyonu veya ön bilgi olmadan videodan nesne hızını tahmin etme yöntemleri. Pratik örneklerle kapsamlı özet." name="description">
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZGTWHSMVV7"></script>
@@ -149,8 +149,8 @@
     {
         "@context": "https://schema.org",
         "@type": "BlogPosting",
-        "headline": "How to Estimate Object Speed from Video without Prior Information",
-        "description": "Learn how to estimate object speed from video using computer vision techniques without prior information or calibration. Comprehensive guide with practical examples.",
+        "headline": "Ön Bilgi Olmadan Videodan Nesne Hızı Nasıl Tahmin Edilir?",
+        "description": "Kamera kalibrasyonu ya da bilinen ölçek olmadan videodan hız tahmini için bilgisayarlı görme tekniklerinin özeti.",
         "image": "https://www.bahaerdogan.com/img/motion.png",
         "author": {
             "@type": "Person",
@@ -168,7 +168,7 @@
         "dateModified": "2024-03-20",
         "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "https://www.bahaerdogan.com/DistanceCalculatingMethods.html"
+            "@id": "https://www.bahaerdogan.com/DistanceCalculatingMethodsTR.html"
         }
     }
     </script>
@@ -179,10 +179,10 @@
     </div>
 
     <!-- LinkedIn ve diğer sosyal medya önizleme meta etiketleri -->
-    <meta property="og:title" content="How to Estimate Object Speed from Video without Prior Information">
-    <meta property="og:description" content="Learn how to estimate object speed from video using computer vision techniques without prior information or calibration. Comprehensive guide with practical examples.">
+    <meta property="og:title" content="Ön Bilgi Olmadan Videodan Nesne Hızı Nasıl Tahmin Edilir?">
+    <meta property="og:description" content="Kalibrasyon olmadan videodan hız tahmini için bilgisayarlı görme teknikleri.">
     <meta property="og:image" content="https://www.bahaerdogan.com/img/motion.png">
-    <meta property="og:url" content="https://www.bahaerdogan.com/DistanceCalculatingMethods.html">
+    <meta property="og:url" content="https://www.bahaerdogan.com/DistanceCalculatingMethodsTR.html">
     <meta property="og:type" content="article">
 
     <!-- Third-party Scripts -->
@@ -247,7 +247,7 @@
         <div class="intro-content display-table">
             <div class="table-cell">
                 <div class="container">
-                    <h2 class="intro-title mb-4">Blog Details</h2>
+                    <h2 class="intro-title mb-4">Blog Detayları</h2>
                     <ol class="breadcrumb d-flex justify-content-center">
                         <li class="breadcrumb-item">
                             <a href="index.html">Home</a>
@@ -255,7 +255,7 @@
                         <li class="breadcrumb-item">
                             <a href="BlogPosts.html">Blog</a>
                         </li>
-                        <li class="breadcrumb-item active">How to Estimate Object Speed from Video</li>
+                        <li class="breadcrumb-item active">Videodan Nesne Hızını Nasıl Tahmin Ederiz?</li>
                     </ol>
                 </div>
             </div>
@@ -273,7 +273,7 @@
                         <img src="img/motion.webp" class="img-fluid" alt="" loading="lazy" decoding="async">
                     </div>
                     <div class="post-meta">
-                        <h1 class="article-title">How to Estimate Object Speed from Video without Prior Information</h1>
+                        <h1 class="article-title">Ön Bilgi Olmadan Videodan Nesne Hızı Nasıl Tahmin Edilir?</h1>
                         <ul>
                             <li>
                                 <span class="ion-ios-person"></span>
@@ -290,103 +290,103 @@
                         </ul>
                     </div>
                     <div class="article-content">
-                        <p>Have you ever watched a video and wondered, "How fast is that object moving?" Maybe it's a car speeding down the highway, an athlete sprinting, or even a celestial body moving across the night sky. Figuring this out might seem like something straight out of a CSI episode—especially when you have <strong>no camera calibration, no known object sizes, and zero reference measurements</strong>.</p>
+                        <p>Bir videoya bakıp “Bu nesne ne kadar hızlı?” diye düşündüğünüz oldu mu? Otoyolda hızlanan bir araba, sprint atan bir sporcu ya da gece göğünde kayan bir cisim olabilir. <strong>Kamera kalibrasyonu yok, bilinen nesne boyutu yok, referans ölçüm yok</strong>ken bunu çıkarmak CSI sahnesi gibi gelebilir.</p>
 
-                        <p>But here's the exciting part: with modern computer vision techniques and some AI magic, we can actually get surprisingly accurate speed estimates from ordinary videos.</p>
+                        <p>İyi haber: Modern bilgisayarlı görme teknikleri ve biraz YZ ile sıradan videolardan şaşırtıcı derecede isabetli hız tahminleri elde edebiliriz.</p>
 
-                        <h2>The Challenge: Speed Without References</h2>
+                        <h2>Zorluk: Referans Olmadan Hız</h2>
 
-                        <p>Let's start with the basics. Speed is simply distance divided by time. In videos, time is straightforward—it's just the frame rate. But distance? That's where things get tricky. How do you convert pixels to meters when you don't know how big anything in the frame actually is?</p>
+                        <p>Temelden gidelim: Hız = mesafe / zaman. Videoda zaman kolaydır—kare hızı. Mesafe ise zor kısım. Karedeki nesnelerin gerçek boyutunu bilmezken pikseli metreye nasıl çeviririz?</p>
 
-                        <p>If you've tried the standard approach of using known objects for scale (like cars or smartphones), but don't have any recognizable items in your scene—don't worry. We're about to dive into some advanced techniques that can help.</p>
+                        <p>Ölçek için bilinen nesnelerden yararlanmak (araba, telefon vb.) klasik yöntemdir; ama sahnede tanınan bir nesne yoksa sorun değil. Yardımcı olacak ileri tekniklere geçelim.</p>
 
-                        <h2>Structure from Motion: Building 3D from 2D</h2>
+                        <h2>Structure from Motion: 2B'den 3B'ye</h2>
 
-                        <p>Have you ever been amazed by those 3D models created from drone footage? That's Structure from Motion (SfM) at work, and it's one of our secret weapons for speed estimation.</p>
+                        <p>Drone görüntülerinden 3B modeller çıktığını gördünüz mü? Bu, Structure from Motion (SfM) tekniğidir ve hız tahmininde güçlü bir araçtır.</p>
 
-                        <p>SfM works like human vision. When you look at something from different angles, your brain combines those perspectives to understand depth. Similarly, SfM analyzes multiple video frames to reconstruct a 3D scene and track the camera's movement through it.</p>
+                        <p>SfM insan görmesine benzer: Farklı açılardan bakınca derinlik hissini oluşturursunuz. SfM de çoklu kareleri analiz ederek 3B sahneyi ve kamera hareketini çıkarır.</p>
 
-                        <p>Here's how we use it for speed calculation:</p>
-
-                        <ul>
-                            <li>The algorithm identifies distinctive visual features across frames</li>
-                            <li>It tracks how these features move from frame to frame</li>
-                            <li>Using geometry, it reconstructs both the 3D environment and camera positions</li>
-                            <li>Finally, it calculates how far objects moved in this reconstructed space</li>
-                        </ul>
-
-                        <p>What I love about SfM is that it gives you a complete spatial understanding of the scene. You're not just tracking pixels—you're reconstructing reality.</p>
-
-                        <h2>Monocular Depth Estimation: AI's Depth Perception</h2>
-
-                        <p>What if I told you AI can now look at a single image and predict how far away everything is? This might sound like science fiction, but it's exactly what monocular depth estimation does.</p>
-
-                        <p>These neural networks have been trained on millions of images with corresponding depth information, and they've learned to recognize subtle visual cues that indicate distance—things like texture gradients, object overlap, and perspective.</p>
-
-                        <p>For speed estimation, this approach is incredibly powerful:</p>
+                        <p>Hız hesabında şu şekilde kullanırız:</p>
 
                         <ul>
-                            <li>Run a depth model (like MiDaS or Monodepth2) on each frame</li>
-                            <li>Track your object of interest across frames</li>
-                            <li>Measure how its estimated depth changes over time</li>
-                            <li>Convert this to speed using the frame rate</li>
+                            <li>Çerçeveler boyunca ayırt edici görsel özellikler bulunur</li>
+                            <li>Bu özelliklerin kareler arasındaki hareketi izlenir</li>
+                            <li>Geometri ile 3B çevre ve kamera pozisyonları kurulur</li>
+                            <li>Yeniden kurulan uzayda nesnelerin katettiği mesafe hesaplanır</li>
                         </ul>
 
-                        <p>I recently used this technique to analyze wildlife movement patterns in a nature documentary, and the results were fascinating—we could determine hunting speeds of predators without disturbing their natural behavior.</p>
+                        <p>SfM'in güzel yanı, sahne hakkında bütüncül uzamsal anlayış vermesidir. Sadece pikselleri değil, gerçeği yeniden kurarsınız.</p>
 
-                        <h2>Choosing the Right Approach for Your Scenario</h2>
+                        <h2>Tek Gözlü Derinlik: YZ'nin Derinlik Algısı</h2>
 
-                        <p>Both methods have their sweet spots. In my experience:</p>
+                        <p>YZ’nin tek bir kareye bakarak derinlik tahmini yapabildiğini söylesem? Bilim kurgu gibi gelse de tek gözlü derinlik tahmini tam olarak budur.</p>
 
-                        <p><strong>Structure from Motion works best when:</strong></p>
+                        <p>Bu ağlar, derinlik etiketli milyonlarca görüntüyle eğitilmiştir ve mesafe ipuçlarını (doku gradyanı, örtüşme, perspektif) yakalamayı öğrenir.</p>
+
+                        <p>Hız tahmini için oldukça etkilidir:</p>
+
+                        <ul>
+                            <li>Her karede bir derinlik modeli (MiDaS, Monodepth2) çalıştırın</li>
+                            <li>İlgili nesneyi kareler arasında izleyin</li>
+                            <li>Tahmini derinliğinin zamana göre değişimini ölçün</li>
+                            <li>Kare hızını kullanarak hıza dönüştürün</li>
+                        </ul>
+
+                        <p>Bu teknikle belgesel görüntülerinde vahşi yaşam hareketlerini analiz ettiğimde, doğal davranışa müdahale etmeden av hızlarını ölçebildik.</p>
+
+                        <h2>Hangi Yaklaşım Ne Zaman?</h2>
+
+                        <p>Her iki yöntemin de güçlü olduğu senaryolar var. Deneyimim:</p>
+
+                        <p><strong>SfM en iyi şu durumlarda:</strong></p>
                         <ul>
                             <li>Your scene has plenty of distinctive visual features</li>
                             <li>The camera is moving (or multiple viewpoints are available)</li>
                             <li>You need a complete 3D understanding of the environment</li>
                         </ul>
 
-                        <p><strong>Monocular Depth is ideal when:</strong></p>
+                        <p><strong>Tek Gözlü Derinlik ideal olduğunda:</strong></p>
                         <ul>
                             <li>The video quality isn't perfect (perhaps blurry or low-resolution)</li>
                             <li>You need frame-by-frame distance estimates</li>
                             <li>The scene lacks texture or distinctive features</li>
                         </ul>
 
-                        <p>And here's my favorite approach—why not use both? By combining SfM's structural understanding with the frame-by-frame insights from depth estimation, you can create a robust hybrid system that overcomes the limitations of each individual method.</p>
+                        <p>Favorim: İkisini birleştirmek. SfM'in yapısal anlayışı ile derinlik modelinin kare bazlı içgörülerini harmanlayarak sınırlamaları aşan bir hibrit sistem kurabilirsiniz.</p>
 
-                        <h2>Practical Implementation Tips</h2>
+                        <h2>Pratik Uygulama İpuçları</h2>
 
-                        <p>If you're excited to try this yourself, here are some practical starting points:</p>
-
-                        <ul>
-                            <li><strong>For SfM:</strong> COLMAP is an excellent open-source package. It has a bit of a learning curve, but the results are worth it.</li>
-                            <li><strong>For Depth Estimation:</strong> MiDaS is my go-to model, available through PyTorch. It's relatively fast and gives impressive results even on consumer hardware.</li>
-                            <li><strong>For Object Tracking:</strong> YOLOv8 combined with DeepSORT works wonders for keeping tabs on objects across frames.</li>
-                        </ul>
-
-                        <p>I always recommend starting with a test video where you actually know the speeds (perhaps film something while using a speedometer). This gives you a baseline to calibrate your approach.</p>
-
-                        <h2>Real-World Applications</h2>
-
-                        <p>The techniques I've shared aren't just academic exercises—they're being used in fascinating ways:</p>
+                        <p>Kendiniz denemek isterseniz başlangıç noktaları:</p>
 
                         <ul>
-                            <li>Traffic monitoring systems that don't require expensive radar equipment</li>
-                            <li>Sports analytics to track athlete performance</li>
-                            <li>Wildlife research without intrusive tracking devices</li>
-                            <li>Autonomous vehicle development</li>
-                            <li>Forensic video analysis</li>
+                            <li><strong>SfM için:</strong> COLMAP güçlü bir açık kaynak pakettir.</li>
+                            <li><strong>Derinlik için:</strong> MiDaS, PyTorch ile kolay erişilebilir ve hızlıdır.</li>
+                            <li><strong>Nesne izleme için:</strong> YOLOv8 + DeepSORT ikilisi oldukça başarılıdır.</li>
                         </ul>
 
-                        <p>I'm particularly excited about the environmental applications—being able to study animal movement patterns without disturbing their natural behavior is a game-changer for conservation efforts.</p>
+                        <p>Mutlaka hızını bildiğiniz bir test video ile başlayın (örneğin hız göstergesiyle çekim). Yönteminizi kalibre etmenizi sağlar.</p>
 
-                        <h2>Wrapping Up</h2>
+                        <h2>Gerçek Dünya Kullanımları</h2>
 
-                        <p>Speed estimation from video without prior information is no longer science fiction—it's science fact. Whether you're using Structure from Motion to build complete 3D reconstructions or leveraging the power of neural networks for depth estimation, these techniques open up incredible possibilities.</p>
+                        <p>Bu teknikler yalnızca akademik değil, pratikte de yoğun kullanılıyor:</p>
 
-                        <p>And the best part? Many of the tools are open-source and accessible to anyone with basic programming knowledge and a decent GPU.</p>
+                        <ul>
+                            <li>Pahalı radar gerektirmeyen trafik izleme</li>
+                            <li>Spor analizleri ve performans takibi</li>
+                            <li>Müdahalesiz vahşi yaşam araştırmaları</li>
+                            <li>Otonom araç geliştirme</li>
+                            <li>Adli video analizi</li>
+                        </ul>
 
-                        <p>What would you use these techniques for? I'd love to hear your ideas and answer any questions in the comments below. And stay tuned—in my next post, I'll walk through a complete Python implementation using these methods!</p>
+                        <p>Özellikle çevresel uygulamalar heyecan verici: Doğal davranışı bozmadan hareket kalıplarını incelemek koruma çalışmalarında devrimdir.</p>
+
+                        <h2>Kapanış</h2>
+
+                        <p>Ön bilgi olmadan videodan hız tahmini artık bilim kurgu değil, bilimsel gerçektir. İster SfM ile 3B yeniden kurulum, ister derinlik ağları ile kare bazlı yaklaşım; hepsi güçlü araçlar.</p>
+
+                        <p>En güzel yanı: Araçların çoğu açık kaynak ve temel programlama bilgisi ile ulaşılabilir.</p>
+
+                        <p>Bu teknikleri hangi senaryoda kullanırdınız? Fikirlerinizi ve sorularınızı yorumlarda duymak isterim. Bir sonraki yazıda Python ile örnek bir uygulamayı adım adım paylaşacağım.</p>
                     </div>
                 </div>
             </div>
