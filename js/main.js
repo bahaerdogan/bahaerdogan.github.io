@@ -256,26 +256,27 @@
 	// Language toggle functionality
 	const languageToggle = $('#language-toggle');
 	
-	if (languageToggle.length) {
-		languageToggle.on('click', function(e) {
-			e.preventDefault();
-			
-			// Get current page URL
-			const currentPath = window.location.pathname;
-			const filename = currentPath.split('/').pop();
-			
-			// Check if this is already the Turkish version
-			if (filename.includes('TR.html')) {
-				// If Turkish, switch to English
-				const englishVersion = filename.replace('TR.html', '.html');
-				window.location.href = englishVersion;
-			} else {
-				// If English, switch to Turkish
-				const turkishVersion = filename.replace('.html', 'TR.html');
-				window.location.href = turkishVersion;
-			}
-		});
-	}
+    if (languageToggle.length) {
+        languageToggle.on('click', function(e) {
+            const href = $(this).attr('href');
+            // If href is provided and not a placeholder, follow it
+            if (href && href !== '#' && href.trim() !== '') {
+                // allow default navigation
+                return;
+            }
+            // Otherwise compute fallback based on current file
+            e.preventDefault();
+            const currentPath = window.location.pathname;
+            const filename = currentPath.split('/').pop();
+            if (filename.includes('TR.html')) {
+                const englishVersion = filename.replace('TR.html', '.html');
+                window.location.href = englishVersion;
+            } else {
+                const turkishVersion = filename.replace('.html', 'TR.html');
+                window.location.href = turkishVersion;
+            }
+        });
+    }
 
 	// Google Analytics initialization
 	const initGoogleAnalytics = () => {
