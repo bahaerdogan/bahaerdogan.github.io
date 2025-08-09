@@ -8,6 +8,11 @@
     <meta content="Baha Erdoğan, Computer Engineer, AI Enthusiast, Software Developer, Technology Professional" name="keywords">
     <meta content="Personal portfolio of Baha Erdoğan - Computer Engineer specializing in AI, software development, and technology innovation." name="description">
 
+    <!-- Performance: Preconnect to critical origins -->
+    <link rel="preconnect" href="https://www.googletagmanager.com">
+    <link rel="preconnect" href="https://www.google-analytics.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
     <!-- Add EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
@@ -52,7 +57,7 @@
   <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
 
   <!-- Main Stylesheet File -->
-  <link href="css/style.css" rel="stylesheet">
+  <link href="css/style.min.css" rel="stylesheet">
 
 
 </head>
@@ -99,7 +104,7 @@
   <!--/ Nav End /-->
 
   <!--/ Intro Skew Star /-->
-  <div id="home" class="intro route bg-image" style="background-image: url(img/image\ \(14\).png)">
+  <div id="home" class="intro route bg-image" style="background-image: url('img/image (14).png')">
     <div class="overlay-itro"></div>
     <div class="intro-content display-table">
       <div class="table-cell">
@@ -119,7 +124,7 @@
   <section id="about" class="about-mf sect-pt4 route">
     <div class="container">
       <div class="row">
-        <div class="col-sm-12
+        <div class="col-sm-12">
         <div class="box-shadow-full">
           <div class="row">
             <div class="col-md-6">
@@ -173,7 +178,7 @@
 <!--/ End About Section /-->
 
 <!--/ Section Blog Star /-->
-<section id="blog" class="blog-mf sect-pt4 route">
+  <section id="blog" class="blog-mf sect-pt4 route">
   <div class="container">
     <div class="row">
       <div class="col-sm-12">
@@ -192,7 +197,7 @@
       <div class="col-md-4">
         <div class="card card-blog">
           <div class="card-img">
-            <a href="PreciousMetalData.html"><img src="img/datamine.png" alt="" class="img-fluid"></a>
+            <a href="PreciousMetalData.html"><img src="img/datamine.png" alt="" class="img-fluid" loading="lazy"></a>
           </div>
           <div class="card-body">
             <div class="card-category-box">
@@ -224,7 +229,7 @@
       <div class="col-md-4">
         <div class="card card-blog">
           <div class="card-img">
-            <a href="AgenticAiExplained.html"><img src="img/AgenticAi1.png" alt="" class="img-fluid"></a>
+            <a href="AgenticAiExplained.html"><img src="img/AgenticAi1.png" alt="" class="img-fluid" loading="lazy"></a>
           </div>
           <div class="card-body">
             <div class="card-category-box">
@@ -253,7 +258,7 @@
       <div class="col-md-4">
         <div class="card card-blog">
           <div class="card-img">
-            <a href="PreciousMetalData.html"><img src="img/defenseai.png" alt="" class="img-fluid"></a>
+            <a href="PreciousMetalData.html"><img src="img/defenseai.png" alt="" class="img-fluid" loading="lazy"></a>
           </div>
           <div class="card-body">
             <div class="card-category-box">
@@ -291,7 +296,7 @@
 
 
 <!--/ Section Blog Preview Star /-->
-<section id="blog" class="blog-mf sect-pt4 route">
+<section id="blog-preview" class="blog-mf sect-pt4 route">
   <div class="container">
     <div class="row">
       <div class="col-sm-12">
@@ -692,7 +697,7 @@
                     <li><span class="ion-ios-location"></span> Istanbul / Antalya </li>
                     <li><span class="ion-email"></span> Baha-erdogan@hotmail.com</li>
                     <li><span class="ion-social-youtube-outline"></span> https://www.youtube.com/c/bahaerdoğan</li>
-                    <li><span class="ion-social-linkedin-outlinee"></span> https://www.linkedin.com/in/bahaerdogan/</li>                   
+                    <li><span class="ion-social-linkedin-outline"></span> https://www.linkedin.com/in/bahaerdogan/</li>                   
                     <li><span class="ion-logo-github"></span> https://github.com/bahaerdogan</li>                    
                   </ul>
                 </div>
@@ -740,10 +745,10 @@
 <script src="lib/lightbox/js/lightbox.min.js"></script>
 <script src="lib/typed/typed.min.js"></script>
 <!-- Contact Form JavaScript File -->
-<script src="js/contact.js"></script>
+<script src="js/contact.min.js"></script>
 
 <!-- Template Main Javascript File -->
-<script src="js/main.js"></script>
+<script src="js/main.min.js"></script>
 
 </body>
 </html>

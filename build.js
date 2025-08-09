@@ -6,7 +6,7 @@ const glob = require('glob');
 
 // Minify CSS files
 async function minifyCSS() {
-    const cssFiles = glob.sync('css/*.css');
+    const cssFiles = glob.sync('css/*.css', { ignore: ['css/*.min.css'] });
     const cssMinifier = new CleanCSS({
         level: 2,
         format: 'keep-breaks'
@@ -23,7 +23,7 @@ async function minifyCSS() {
 
 // Minify JavaScript files
 async function minifyJS() {
-    const jsFiles = glob.sync('js/*.js');
+    const jsFiles = glob.sync('js/*.js', { ignore: ['js/*.min.js'] });
     
     for (const file of jsFiles) {
         const js = fs.readFileSync(file, 'utf8');
