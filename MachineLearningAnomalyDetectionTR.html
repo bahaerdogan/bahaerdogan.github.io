@@ -292,89 +292,89 @@
                         <div class="article-content">
                             <h1>Makine Öğreniminde Anomali Tespiti: Teknik Bir Genel Bakış</h1>
     
-                            <h2>Introduction</h2>
-                            <p>Anomaly detection is a fundamental problem in machine learning, involving the identification of rare instances that deviate significantly from the majority of data. It is widely applied in fraud detection, cybersecurity, industrial defect detection, and predictive maintenance. Unlike traditional supervised learning problems, anomaly detection typically deals with highly imbalanced datasets, requiring specialized methods to effectively model and detect outliers.</p>
-                            <p>This article presents a technical overview of anomaly detection, its methodologies, and its mathematical foundations, drawing from <em>The Hundred-Page Machine Learning Book</em> by Andriy Burkov.</p>
+                            <h2>Giriş</h2>
+                            <p>Anomali tespiti, makine öğreniminde verinin büyük çoğunluğundan önemli ölçüde sapan nadir örneklerin belirlenmesi problemidir. Sahtekarlık tespiti, siber güvenlik, endüstriyel arıza tespiti ve kestirimci bakım gibi birçok alanda yaygın olarak kullanılır. Geleneksel denetimli öğrenme problemlerinden farklı olarak, anomali tespiti genellikle çok dengesiz veri kümeleriyle çalışır ve aykırı değerleri etkili biçimde modellemek ve tespit etmek için özel yöntemler gerektirir.</p>
+                            <p>Bu yazı, Andriy Burkov'un <em>The Hundred-Page Machine Learning Book</em> kitabından da yararlanarak anomali tespitinin yöntemlerine ve matematiksel temellerine teknik bir bakış sunar.</p>
                             
-                            <h2>Understanding Anomalies</h2>
-                            <p>Formally, let <code>X &sube; &reals;<sup>d</sup></code> be a dataset consisting of <code>N</code> independent observations <code>x<sub>1</sub>, x<sub>2</sub>, ..., x<sub>N</sub></code>. Anomalies are defined as instances <code>x<sub>i</sub> &in; X</code> that significantly deviate from the learned distribution of normal instances.</p>
+                            <h2>Anomalileri Anlamak</h2>
+                            <p>Resmi olarak, <code>X &sube; &reals;<sup>d</sup></code> bir veri kümesi ve <code>N</code> bağımsız gözlem <code>x<sub>1</sub>, x<sub>2</sub>, ..., x<sub>N</sub></code> olsun. Anomaliler, öğrenilen normal örnek dağılımından anlamlı biçimde sapan <code>x<sub>i</sub> &in; X</code> örnekleri olarak tanımlanır.</p>
                             
-                            <h3>Types of anomalies:</h3>
+                            <h3>Anomali türleri:</h3>
                             <ul>
-                                <li><strong>Point Anomalies:</strong> Individual points that deviate from the majority of the dataset. These are often modeled using probability distributions or distance metrics.</li>
-                                <li><strong>Contextual Anomalies:</strong> Instances that are considered anomalous within a specific context, often requiring temporal or spatial analysis.</li>
-                                <li><strong>Collective Anomalies:</strong> A group of observations that, when considered together, exhibit an abnormal pattern.</li>
+                                <li><strong>Nokta Anomalileri:</strong> Veri kümesinin çoğunluğundan sapan tekil noktalar. Çoğunlukla olasılık dağılımları veya uzaklık ölçümleriyle modellenir.</li>
+                                <li><strong>Bağlamsal Anomaliler:</strong> Belirli bir bağlamda anormal kabul edilen örnekler; genellikle zamansal veya mekansal analiz gerektirir.</li>
+                                <li><strong>Kolektif Anomaliler:</strong> Birlikte ele alındığında anormal bir desen sergileyen gözlem grupları.</li>
                             </ul>
                             
-                            <h2>Mathematical Formulation of Anomaly Detection</h2>
-                            <p>Given a dataset <code>X</code>, anomaly detection aims to learn a function:</p>
+                            <h2>Anomali Tespitinin Matematiksel Formülasyonu</h2>
+                            <p>Bir <code>X</code> veri kümesi verildiğinde, amaç aşağıdaki fonksiyonu öğrenmektir:</p>
                             <pre>
                                 f: X &rarr; {0,1}
-                                f(x) = 1, if x is an anomaly
-                                       0, otherwise
+                                f(x) = 1, eğer x anomali ise
+                                       0, aksi halde
                             </pre>
-                            <p>Depending on the availability of labeled data, methods can be categorized as supervised, unsupervised, or semi-supervised.</p>
+                            <p>Etiketli verinin mevcudiyetine bağlı olarak yöntemler denetimli, denetimsiz ve yarı-denetimli olarak sınıflandırılabilir.</p>
                             
-                            <h3>1. Supervised Anomaly Detection</h3>
-                            <p>Supervised learning relies on labeled training data <code>{(x<sub>i</sub>, y<sub>i</sub>)}<sub>i=1</sub><sup>N</sup></code>, where <code>y<sub>i</sub> &in; {0,1}</code> indicates whether an instance is anomalous. Traditional classification models such as logistic regression, decision trees, and neural networks can be used:</p>
+                            <h3>1. Denetimli Anomali Tespiti</h3>
+                            <p>Denetimli öğrenme, <code>y<sub>i</sub> &in; {0,1}</code> olacak şekilde etiketli eğitim verisine <code>{(x<sub>i</sub>, y<sub>i</sub>)}<sub>i=1</sub><sup>N</sup></code> dayanır. Lojistik regresyon, karar ağaçları ve sinir ağları gibi sınıflandırma modelleri kullanılabilir:</p>
                             <pre>
                                 y&#770; = &sigma;(w<sup>T</sup> x + b)
                                 &sigma;(z) = 1 / (1 + e<sup>-z</sup>)
                             </pre>
-                            <p><strong>Challenges:</strong></p>
+                            <p><strong>Zorluklar:</strong></p>
                             <ul>
-                                <li>Requires a sufficiently large set of labeled anomalies, which is often impractical.</li>
-                                <li>Can be biased towards majority classes due to data imbalance.</li>
+                                <li>Yeterli sayıda etiketli anomali gerektirir; pratikte sıklıkla mümkün değildir.</li>
+                                <li>Veri dengesizliğinden dolayı çoğunluk sınıfına yanlı olabilir.</li>
                             </ul>
                             
-                            <h3>2. Unsupervised Anomaly Detection</h3>
-                            <p>Unsupervised methods assume no labeled anomalies and detect deviations based on learned distributions.</p>
+                            <h3>2. Denetimsiz Anomali Tespiti</h3>
+                            <p>Denetimsiz yöntemler, etiketli anomali olmadığı varsayımıyla öğrenilen dağılımlara göre sapmaları tespit eder.</p>
                             
-                            <h4>Statistical Methods</h4>
-                            <p>A common approach is to assume a probability distribution <code>p(x)</code> over normal instances and define an anomaly threshold:</p>
+                            <h4>İstatistiksel Yöntemler</h4>
+                            <p>Yaygın bir yaklaşım, normal örnekler üzerinde bir olasılık dağılımı <code>p(x)</code> varsaymak ve bir anomali eşiği tanımlamaktır:</p>
                             <pre>
-                                x is anomalous if p(x) &lt; &epsilon;
+                                x anomalidir, eğer p(x) &lt; &epsilon;
                             </pre>
-                            <p>For Gaussian distributions, anomalies can be detected using the Mahalanobis distance:</p>
+                            <p>Gaussian dağılımlar için anomaliler Mahalanobis uzaklığı ile tespit edilebilir:</p>
                             <pre>
                                 d<sub>M</sub>(x) = sqrt((x - &mu;)<sup>T</sup> &Sigma;<sup>-1</sup> (x - &mu;))
                             </pre>
-                            <h4>Clustering-Based Methods</h4>
-                            <p>Clustering techniques such as K-Means and DBSCAN identify outliers as points that do not fit well into any cluster.</p>
+                            <h4>Kümeleme Tabanlı Yöntemler</h4>
+                            <p>K-ortalamalar ve DBSCAN gibi kümeleme teknikleri, herhangi bir kümeye iyi uymayan noktaları aykırı olarak tanımlar.</p>
                             <pre>
                                 d(x, C<sub>k</sub>) = min<sub>c &isin; C</sub> ||x - c||<sub>2</sub>
                             </pre>
-                            <h4>Density-Based Methods</h4>
-                            <p>Isolation Forest and Local Outlier Factor (LOF) estimate local density and classify instances in low-density regions as anomalies.</p>
+                            <h4>Yoğunluk Tabanlı Yöntemler</h4>
+                            <p>Isolation Forest ve Yerel Aykırılık Faktörü (LOF) yerel yoğunluğu tahmin eder ve düşük yoğunluk bölgelerindeki örnekleri anomali olarak sınıflandırır.</p>
                             <pre>
                                 LOF(x) = 1 / |N<sub>k</sub>(x)| &sum;<sub>y &isin; N<sub>k</sub>(x)</sub> (lrd(y) / lrd(x))
                             </pre>
                             
-                            <h3>3. Semi-Supervised Anomaly Detection</h3>
-                            <p>These methods train a model on normal data only and flag deviations as anomalies.</p>
+                            <h3>3. Yarı-Denetimli Anomali Tespiti</h3>
+                            <p>Bu yöntemler yalnızca normal veriler üzerinde bir model eğitir ve sapmaları anomali olarak işaretler.</p>
                             
-                            <h4>Autoencoders</h4>
-                            <p>A neural network is trained to reconstruct input data. If reconstruction error <code>||x - x&#770;||<sub>2</sub></code> is high, <code>x</code> is likely an anomaly.</p>
+                            <h4>Otoenkoderler</h4>
+                            <p>Bir sinir ağı, girdiyi yeniden üretmek üzere eğitilir. Yeniden üretim hatası <code>||x - x&#770;||<sub>2</sub></code> büyükse, <code>x</code> muhtemelen anomalidir.</p>
                             
-                            <h4>One-Class SVM</h4>
-                            <p>A support vector machine (SVM) is trained to separate normal data from the origin in a high-dimensional space:</p>
+                            <h4>Tek-Sınıf SVM</h4>
+                            <p>Destek vektör makineleri (SVM), yüksek boyutlu bir uzayda normal veriyi orijinden ayıracak biçimde eğitilir:</p>
                             <pre>
                                 w<sup>T</sup> x - b &ge; 0
                             </pre>
                             
-                            <h2>Practical Implementation</h2>
+                            <h2>Pratik Uygulama</h2>
                             <ol>
-                                <li><strong>Data Preprocessing:</strong> Normalization, missing value handling, feature selection.</li>
-                                <li><strong>Model Selection:</strong> Choose an appropriate method based on data properties.</li>
-                                <li><strong>Training and Evaluation:</strong> Use metrics like Precision-Recall and ROC curves to assess performance.</li>
-                                <li><strong>Deployment and Monitoring:</strong> Continuously update models to adapt to data drift.</li>
+                                <li><strong>Veri Ön İşleme:</strong> Normalizasyon, eksik değerlerin ele alınması, özellik seçimi.</li>
+                                <li><strong>Model Seçimi:</strong> Veri özelliklerine göre uygun yöntemin seçilmesi.</li>
+                                <li><strong>Eğitim ve Değerlendirme:</strong> Başarıyı değerlendirmek için Precision-Recall ve ROC eğrileri gibi metrikler kullanılır.</li>
+                                <li><strong>Canlıya Alma ve İzleme:</strong> Veri kayması (concept drift) için modeller düzenli olarak güncellenmelidir.</li>
                             </ol>
                             
-                            <h2>Challenges in Anomaly Detection</h2>
+                            <h2>Anomali Tespitinde Zorluklar</h2>
                             <ul>
-                                <li><strong>Imbalanced Data:</strong> Techniques like oversampling, undersampling, and cost-sensitive learning are used to mitigate bias.</li>
-                                <li><strong>Concept Drift:</strong> Models must adapt to changing patterns over time.</li>
-                                <li><strong>High False Positives:</strong> Threshold tuning and ensemble methods help improve reliability.</li>
+                                <li><strong>Dengesiz Veri:</strong> Aşırı örnekleme/az örnekleme ve maliyete duyarlı öğrenme gibi teknikler yanlılığı azaltmaya yardımcı olur.</li>
+                                <li><strong>Kavram Kayması:</strong> Zamanla değişen kalıplara uyum sağlanmalıdır.</li>
+                                <li><strong>Yüksek Yanlış Pozitif:</strong> Eşik ayarı ve ansambıl yöntemleri güvenilirliği artırır.</li>
                             </ul>
                             
                         </div>
@@ -384,11 +384,11 @@
                 </div>
                 <div class="col-md-4">
                     <div class="widget-sidebar sidebar-search">
-                        <h5 class="sidebar-title">Search</h5>
+                        <h5 class="sidebar-title">Arama</h5>
                         <div class="sidebar-content">
                             <form id="search-form" onsubmit="return handleSearch(event)">
                                 <div class="input-group">
-                                    <input type="text" id="search-input" class="form-control" placeholder="Search for..." aria-label="Search for...">
+                                    <input type="text" id="search-input" class="form-control" placeholder="Ara..." aria-label="Ara...">
                                     <span class="input-group-btn">
                     <button class="btn btn-secondary btn-search" type="submit">
                       <span class="ion-android-search"></span>
@@ -399,7 +399,7 @@
                         </div>
                     </div>
                     <div class="widget-sidebar">
-                        <h5 class="sidebar-title">Recent Post</h5>
+                        <h5 class="sidebar-title">Son Yazılar</h5>
                         <div class="sidebar-content">
                             <ul class="list-sidebar">
                                 <li>
@@ -457,7 +457,7 @@
                         </div>
                     </div>
                     <div class="widget-sidebar">
-                        <h5 class="sidebar-title">Archives</h5>
+                        <h5 class="sidebar-title">Arşiv</h5>
                         <div class="sidebar-content">
                             <ul class="list-sidebar">
                                 <li><a href="AlgorithmsExplained.html">From Netflix to TikTok: How AI Knows What You Like</a></li>
@@ -481,23 +481,23 @@
                         </div>
                     </div>
                     <div class="widget-sidebar widget-tags">
-                        <h5 class="sidebar-title">Tags</h5>
+                        <h5 class="sidebar-title">Etiketler</h5>
                         <div class="sidebar-content">
                             <ul>
                                 <li>
-                                    <a href="#">Machine Learning</a>
+                                    <a href="#">Makine Öğrenimi</a>
                                 </li>
                                 <li>
-                                    <a href="#">Anomaly Detection</a>
+                                    <a href="#">Anomali Tespiti</a>
                                 </li>
                                 <li>
-                                    <a href="#">Data Science</a>
+                                    <a href="#">Veri Bilimi</a>
                                 </li>
                                 <li>
-                                    <a href="#">AI</a>
+                                    <a href="#">Yapay Zeka</a>
                                 </li>
                                 <li>
-                                    <a href="#">Technology</a>
+                                    <a href="#">Teknoloji</a>
                                 </li>
                             </ul>
                         </div>
