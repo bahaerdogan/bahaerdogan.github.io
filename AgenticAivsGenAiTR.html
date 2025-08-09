@@ -256,7 +256,7 @@
         <div class="intro-content display-table">
             <div class="table-cell">
                 <div class="container">
-                    <h2 class="intro-title mb-4">Blog Details</h2>
+                    <h2 class="intro-title mb-4">Blog Detayları</h2>
                     <ol class="breadcrumb d-flex justify-content-center">
                         <li class="breadcrumb-item">
                             <a href="index.html">Home</a>
@@ -282,7 +282,7 @@
                            <img src="img/AgenticVsGenai.webp" class="img-fluid" alt="Agentic AI vs Generative AI Comparison" loading="lazy" decoding="async">
                         </div>
                         <div class="post-meta">
-                            <h1 class="article-title">Agentic AI vs Generative AI: Architectural Differences and Chatbot Impact</h1>
+                            <h1 class="article-title">Agentic AI ve Üretken AI: Mimari Farklar ve Sohbetbotlara Etkisi</h1>
                             <ul>
                                 <li>
                                     <span class="ion-ios-person"></span>
@@ -299,98 +299,98 @@
                             </ul>
                         </div>
                         <div class="article-content">
-                            <blockquote class="blockquote">"The transition from generative AI to agentic AI is not a technical feat but a fundamental transformation in the design of how intelligent systems operate."</blockquote>
-                            
-                            <h3>Introduction: Two Paradigms, One AI Evolution</h3>
-      <p>The transition from generative AI to agentic AI is not a technical feat but a fundamental transformation in the design of how intelligent systems operate. While both utilize large language models (LLMs) at their core, their designs, goals, and real-world applications are fundamentally different. This article provides a deep technical analysis of the differences and their impact on deployable AI operations, especially in autonomous chatbot platforms.</p>
+                            <blockquote class="blockquote">"Üretken YZ'den Agentic AI'ye geçiş, teknik bir başarıdan ziyade akıllı sistemlerin tasarımında köklü bir dönüşümdür."</blockquote>
 
-                            <h3>Generative AI: The Reactive Foundation</h3>
-      <p>Generative AI systems are prompt-response systems. They leverage pretrained LLMs to create outputs like text, images, or code from context input. They are stateless, and every prompt is treated as a standalone. Some examples include:</p>
+                            <h3>Giriş: İki Paradigma, Tek Evrim</h3>
+      <p>Üretken YZ'den Agentic AI'ye geçiş, mimarinin, hedeflerin ve gerçek kullanımın tamamen değişmesidir. İkisi de çekirdekte LLM kullanır; ancak tasarım ve uygulama farklıdır. Bu yazı; farkları ve özellikle otonom sohbetbot platformlarına etkisini teknik açıdan ele alır.</p>
+
+                            <h3>Üretken YZ: Reaktif Temel</h3>
+      <p>Üretken sistemler; girdiye yanıt üretir, durum tutmaz ve her istemi bağımsız ele alır. Örnekler:</p>
       <ul>
-        <li>Customer support bots</li>
-        <li>Email generation</li>
-        <li>Language translation</li>
+        <li>Müşteri destek botları</li>
+        <li>E-posta üretimi</li>
+        <li>Dil çevirisi</li>
       </ul>
-      <p>While excellent at content generation, generative AI is weak in the areas of long-term memory, decision-making, and task coordination. It cannot:</p>
+      <p>İçerik üretiminde başarılı olsalar da uzun süreli bellek, karar verme ve görev koordinasyonunda sınırlıdır. Şunları pek yapamazlar:</p>
       <ul>
-        <li>Plan multi-step activities</li>
-        <li>Remember previous choices</li>
-        <li>Speak to APIs or tools dynamically</li>
+        <li>Çok adımlı planlama</li>
+        <li>Önceki seçimleri hatırlama</li>
+        <li>API/ araçlarla dinamik iletişim</li>
       </ul>
 
-                            <h3>Agentic AI: The Autonomous Quantum Leap</h3>
-                            <p>Agentic AI builds on generative capabilities by placing them within structured, goal based systems. It adds four main capabilities to traditional LLMs:</p>
+                            <h3>Agentic AI: Otonom Sıçrama</h3>
+                            <p>Agentic AI, üretken yetenekleri <strong>hedef odaklı yapı</strong> içine yerleştirir ve dört temel kabiliyet ekler:</p>
       <ul>
-        <li><strong>Planning:</strong> Agents set goals, evaluate plans, and revise plans based on feedback.</li>
-                                <li><strong>Memory:</strong> Agents maintain session history and long term knowledge to facilitate continuation.</li>
-        <li><strong>Tool Use:</strong> Agents call upon APIs, databases, and write/execute code to accomplish tasks.</li>
-                                <li><strong>Reflection:</strong> Agents analyze outcomes, self tune, and adapt to changing environments.</li>
+        <li><strong>Planlama:</strong> Hedef belirleme, plan değerlendirme ve geri bildirime göre revizyon</li>
+        <li><strong>Bellek:</strong> Oturum geçmişi ve uzun süreli bilgi ile süreklilik</li>
+        <li><strong>Araç Kullanımı:</strong> API/ veri tabanı çağrıları, kod yazma/ çalıştırma</li>
+        <li><strong>Yansıtma:</strong> Sonuç analizi, öz ayarlama ve uyum</li>
       </ul>
       <p>For example, an agentic travel assistant does not just suggest. It buys your ticket, checks visa requirements, interoperates with your calendar, and adapts when plans change—all automatically.</p>
 
-                            <h3>Architectural Distinctions: What Propels Agentic AI?</h3>
-      <p>Agentic systems rely on a multilayered architecture, typically consisting of:</p>
+                            <h3>Mimari Farklar</h3>
+      <p>Agentic sistemler çok katmanlı mimariye dayanır:</p>
       <ul>
-        <li>Orchestration frameworks: <em>LangChain, AutoGen, CrewAI</em></li>
-        <li>Tool routers: <em>Dynamic APIs for tool invocation</em> (e.g., LangChain tool calling)</li>
-        <li>Persistent memory layers: <em>CosmosDB, Redis, or vector stores</em></li>
-        <li>Sandboxed execution environments: <em>Azure Code Interpreter Sessions, Dapr-enabled microservices</em></li>
-                                <li>Multi agent coordination: <em>Horizontal/vertical/hybrid agent models</em></li>
+        <li>Orkestrasyon çerçeveleri: <em>LangChain, AutoGen, CrewAI</em></li>
+        <li>Araç yönlendiriciler: <em>Dinamik API çağrıları</em></li>
+        <li>Kalıcı bellek katmanları: <em>CosmosDB, Redis, vektör veri tabanları</em></li>
+        <li>İzole çalışma ortamları: <em>Code Interpreter, mikro servisler</em></li>
+        <li>Çoklu ajan koordinasyonu: <em>Yatay/ dikey/ hibrit modeller</em></li>
       </ul>
       <p>This modularity enables agents to collaborate in concert or singularly without compromising safety, interoperability, and reliability.</p>
                             
-                            <h3>Agentic AI vs. Generative AI Comparison</h3>
+                            <h3>Agentic AI vs Üretken AI Karşılaştırması</h3>
                             <div class="table-responsive">
                                 <table class="table table-bordered table-striped">
                                     <thead class="thead-dark">
           <tr>
-            <th>Feature</th>
-            <th>Generative AI</th>
+            <th>Özellik</th>
+            <th>Üretken AI</th>
             <th>Agentic AI</th>
           </tr>
         </thead>
         <tbody>
           <tr>
                                             <td><strong>State Management</strong></td>
-            <td>Stateless</td>
-                                            <td>Persistent memory (session and long term)</td>
+            <td>Durumsuz</td>
+            <td>Sürekli bellek (oturum + uzun süreli)</td>
           </tr>
           <tr>
                                             <td><strong>Tool Interaction</strong></td>
-            <td>None or static APIs</td>
-            <td>Dynamic tool calling, API integration</td>
+            <td>Yok / statik API</td>
+            <td>Dinamik araç çağrısı, API entegrasyonu</td>
           </tr>
           <tr>
                                             <td><strong>Planning Capability</strong></td>
-            <td>None</td>
-                                            <td>Multi step planning and goal setting</td>
+            <td>Yok</td>
+            <td>Çok adımlı planlama ve hedef koyma</td>
           </tr>
           <tr>
                                             <td><strong>Decision Autonomy</strong></td>
-                                            <td>Prompt based</td>
-                                            <td>Goal directed, adaptive decision making</td>
+            <td>İstem tabanlı</td>
+            <td>Hedef odaklı, uyarlanabilir karar verme</td>
           </tr>
           <tr>
                                             <td><strong>Task Execution</strong></td>
-                                            <td>Single turn output</td>
-            <td>Multistep task orchestration</td>
+            <td>Tek adımlı çıktı</td>
+            <td>Çok adımlı görev orkestrasyonu</td>
           </tr>
           <tr>
                                             <td><strong>Multi Agent Support</strong></td>
-            <td>Not supported</td>
-            <td>Inherent orchestration for collaborative agents</td>
+            <td>Desteklenmez</td>
+            <td>İşbirlikçi ajanlar için yerleşik orkestrasyon</td>
           </tr>
           <tr>
                                             <td><strong>Use Case</strong></td>
-            <td>Text generation, chat</td>
-            <td>Assistants, agents, workflows, automation</td>
+            <td>Metin üretimi, sohbet</td>
+            <td>Asistanlar, ajanlar, iş akışları, otomasyon</td>
           </tr>
         </tbody>
       </table>
                             </div>
 
-                            <h3>Technical Case Study: Creating a Conversational Agent with Azure</h3>
-      <p>A modern use case of agentic AI might leverage:</p>
+                            <h3>Teknik Örnek: Azure ile Konuşan Ajan</h3>
+      <p>Modern bir Agentic AI örneği şu bileşenleri kullanabilir:</p>
       <ul>
         <li><strong>Azure OpenAI:</strong> Foundation model for generative answers</li>
         <li><strong>LangChain or AutoGen:</strong> Orchestration framework</li>
@@ -402,16 +402,16 @@
       </ul>
                             <p>This architecture enables developing resilient, scalable, and secure agentic systems that can be utilized in high stakes enterprise applications.</p>
                             
-                            <h3>Simplified Summary for Beginners</h3>
-                            <p><strong>Generative AI</strong> is a smart typewriter it types on what you instruct it to but does not retain what it has just typed.</p>
-                            <p><strong>Agentic AI</strong> is similar to a virtual assistant it retains your earlier work, anticipates, opens apps on your behalf, and can modify as situations change.</p>
-      <p>If generative AI is reactive, agentic AI is proactive.</p>
+                             <h3>Özet</h3>
+                            <p><strong>Üretken AI</strong> akıllı bir daktilo gibidir; yazdırırsınız, yazar ve unutur.</p>
+                            <p><strong>Agentic AI</strong> ise sanal bir asistan gibidir; geçmişi hatırlar, işler açar, değişime uyum sağlar.</p>
+      <p>Üretken reaktiftir; Agentic proaktiftir.</p>
                             
-                            <h3>Conclusion: Agentic AI Is the Future of Autonomous Systems</h3>
-                            <p>Transitioning from generative to agentic AI is not just evolutionary—it's revolutionary. More powerful, standalone, and generalizable AI systems are required by businesses as they grow. Generating is not enough. Systems must plan, act, reflect, and learn.</p>
-                            <p>Whether designing chatbots, enterprise automations, or autonomous agents, understanding the architectural depth of agentic AI is the foundation for building systems that scale, adapt, and create sustainable value.</p>
+                            <h3>Sonuç</h3>
+                            <p>Üretkenden Agentic’e geçiş devrimsel bir adımdır. Büyüyen işletmeler için planlayan, eyleyen, yansıtan ve öğrenen sistemler gerekir.</p>
+                            <p>Sohbetbot, kurumsal otomasyon ya da otonom ajan geliştirirken, bu mimari derinliği anlamak ölçeklenebilir ve sürdürülebilir değer yaratan sistemlerin temelidir.</p>
                             
-                            <blockquote class="blockquote">Coming up in this series: Agentic AI in Deep and Technical Perspective Sneak peek at planning algorithms, agent structures (BDI, ReAct, ReWOO), and orchestration patterns.</blockquote>
+                            <blockquote class="blockquote">Seride Yakında: Agentic AI’ye Derin ve Teknik Bakış — planlama algoritmaları, ajan yapıları (BDI, ReAct, ReWOO) ve orkestrasyon kalıpları.</blockquote>
                         </div>
                         
                         
