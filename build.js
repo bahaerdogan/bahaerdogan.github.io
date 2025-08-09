@@ -5,6 +5,8 @@ const Terser = require('terser');
 const glob = require('glob');
 const { promisify } = require('util');
 const stat = promisify(fs.stat);
+const readFileAsync = promisify(fs.readFile);
+const writeFileAsync = promisify(fs.writeFile);
 
 // Minify CSS files
 async function minifyCSS() {
@@ -171,6 +173,118 @@ async function generateRSS() {
     console.log('Generated feed.xml');
 }
 
+// Inject hreflang, canonical, OG meta, and language toggle links
+async function updateI18nHeadsAndToggle() {
+    const baseUrl = 'https://bahaerdogan.com';
+    const htmlFiles = glob.sync('*.html');
+
+    // Group EN/TR pairs
+    const groups = {};
+    for (const file of htmlFiles) {
+        const isTr = /TR\.html$/i.test(file);
+        const base = isTr ? file.replace(/TR\.html$/i, '') : file.replace(/\.html$/i, '');
+        groups[base] = groups[base] || {};
+        if (isTr) groups[base].tr = file; else groups[base].en = file;
+    }
+
+    for (const [base, langs] of Object.entries(groups)) {
+        const enFile = langs.en;
+        const trFile = langs.tr;
+        if (!enFile && !trFile) continue;
+
+        // Helper to safely inject into <head>
+        const injectHead = (html, inserts) => {
+            if (!html.includes('<head')) return html;
+            const already = inserts.every(snip => html.includes(snip.trim().slice(0, Math.min(30, snip.length))));
+            if (already) return html; // basic idempotency
+            return html.replace(/<head>([\s\S]*?)<\/head>/i, (m) => {
+                // place after opening <head>
+                return m.replace('<head>', '<head>\n' + inserts.join('\n') + '\n');
+            });
+        };
+
+        // Helper to add language toggle in navbar if missing
+        const injectToggle = (html, targetHref, label) => {
+            if (html.includes('id="language-toggle"')) return html;
+            return html.replace(/<ul class="navbar-nav">([\s\S]*?)<\/ul>/i, (match) => {
+                const li = `  <li class="nav-item">\n    <a class="nav-link" id="language-toggle" href="${targetHref}">\n      <i class="fa fa-language"></i> ${label}\n    </a>\n  </li>`;
+                return match.replace('</ul>', li + '\n</ul>');
+            });
+        };
+
+        // Read EN/TR files
+        let enHtml = enFile ? await readFileAsync(enFile, 'utf8') : null;
+        let trHtml = trFile ? await readFileAsync(trFile, 'utf8') : null;
+
+        // Derive titles
+        const extractTitle = (html) => {
+            const m = html && html.match(/<title>([\s\S]*?)<\/title>/i);
+            return m ? m[1].trim() : '';
+        };
+        const enTitle = enHtml ? extractTitle(enHtml) : '';
+        const trTitle = trHtml ? extractTitle(trHtml) : '';
+
+        // Build meta blocks
+        const enUrl = enFile ? (enFile.toLowerCase() === 'index.html' ? `${baseUrl}/` : `${baseUrl}/${enFile}`) : null;
+        const trUrl = trFile ? `${baseUrl}/${trFile}` : null;
+        const alternates = [];
+        if (enUrl) alternates.push(`<link rel="alternate" hreflang="en" href="${enUrl}">`);
+        if (trUrl) alternates.push(`<link rel="alternate" hreflang="tr" href="${trUrl}">`);
+        const xDefault = enUrl || trUrl;
+        if (xDefault) alternates.push(`<link rel="alternate" hreflang="x-default" href="${xDefault}">`);
+
+        // Canonicals
+        const enCanonical = enUrl ? `<link rel="canonical" href="${enUrl}">` : '';
+        const trCanonical = trUrl ? `<link rel="canonical" href="${trUrl}">` : '';
+
+        // OG meta for TR (simple CTR-friendly description)
+        const buildTrDescription = (title) => {
+            const clean = title.replace(/\s*\|\s*Türkçe/i, '').trim();
+            return clean ? `Bu yazıda “${clean}” konusunu sade ve anlaşılır bir dille ele alıyorum. Örneklerle, pratik ipuçlarıyla ve net açıklamalarla hızlıca fikir sahibi olun.`
+                         : 'Bu yazıda konuyu sade ve anlaşılır bir dille ele alıyorum. Örnekler ve pratik ipuçlarıyla hızlıca fikir sahibi olun.';
+        };
+
+        // Update EN
+        if (enHtml && (trUrl || enUrl)) {
+            const enInserts = [enCanonical, ...alternates].filter(Boolean);
+            enHtml = injectHead(enHtml, enInserts);
+            const trPath = trFile || (base + 'TR.html');
+            if (trPath) enHtml = injectToggle(enHtml, trPath, 'Türkçe');
+            await writeFileAsync(enFile, enHtml, 'utf8');
+        }
+
+        // Update TR
+        if (trHtml) {
+            const trInserts = [trCanonical, ...alternates].filter(Boolean);
+            // Add/update meta description if missing or empty
+            if (!/name=["']description["']/i.test(trHtml)) {
+                trInserts.push(`<meta name="description" content="${buildTrDescription(trTitle || enTitle)}">`);
+            }
+            // Add OG tags if missing basic OG
+            if (!/property=["']og:title["']/i.test(trHtml)) {
+                const ogTitle = (trTitle || enTitle || '').replace(/\s*\|\s*Türkçe/i, '') || 'Baha Erdoğan';
+                const ogDesc = buildTrDescription(trTitle || enTitle);
+                const ogUrl = trUrl || enUrl;
+                if (ogUrl) {
+                    trInserts.push(
+                        `<meta property="og:title" content="${ogTitle}">`,
+                        `<meta property="og:description" content="${ogDesc}">`,
+                        `<meta property="og:url" content="${ogUrl}">`,
+                        `<meta property="og:type" content="article">`
+                    );
+                }
+            }
+            // Inject into head and add toggle
+            trHtml = injectHead(trHtml, trInserts);
+            const enPath = enFile || (base + '.html');
+            if (enPath) trHtml = injectToggle(trHtml, enPath, 'English');
+            await writeFileAsync(trFile, trHtml, 'utf8');
+        }
+    }
+
+    console.log('Updated head tags and language toggles for EN↔TR pages');
+}
+
 // Main build process
 async function build() {
     try {
@@ -190,6 +304,9 @@ async function build() {
 
         console.log('Generating RSS feed...');
         await generateRSS();
+
+        console.log('Injecting i18n meta and toggles...');
+        await updateI18nHeadsAndToggle();
         
         console.log('Build completed successfully!');
     } catch (error) {
