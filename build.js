@@ -212,6 +212,13 @@ async function updateI18nHeadsAndToggle() {
             });
         };
 
+        // Helper to normalize existing toggle href
+        const normalizeToggleHref = (html, targetHref) => {
+            if (!html.includes('id="language-toggle"')) return html;
+            // Replace href value on the toggle anchor
+            return html.replace(/(<a[^>]*id=["']language-toggle["'][^>]*href=["'])[^"]*(["'])/i, `$1${targetHref}$2`);
+        };
+
         // Read EN/TR files
         let enHtml = enFile ? await readFileAsync(enFile, 'utf8') : null;
         let trHtml = trFile ? await readFileAsync(trFile, 'utf8') : null;
@@ -249,7 +256,10 @@ async function updateI18nHeadsAndToggle() {
             const enInserts = [enCanonical, ...alternates].filter(Boolean);
             enHtml = injectHead(enHtml, enInserts);
             const trPath = trFile || (base + 'TR.html');
-            if (trPath) enHtml = injectToggle(enHtml, trPath, 'Türkçe');
+            if (trPath) {
+                enHtml = injectToggle(enHtml, trPath, 'Türkçe');
+                enHtml = normalizeToggleHref(enHtml, trPath);
+            }
             await writeFileAsync(enFile, enHtml, 'utf8');
         }
 
@@ -277,7 +287,10 @@ async function updateI18nHeadsAndToggle() {
             // Inject into head and add toggle
             trHtml = injectHead(trHtml, trInserts);
             const enPath = enFile || (base + '.html');
-            if (enPath) trHtml = injectToggle(trHtml, enPath, 'English');
+            if (enPath) {
+                trHtml = injectToggle(trHtml, enPath, 'English');
+                trHtml = normalizeToggleHref(trHtml, enPath);
+            }
             await writeFileAsync(trFile, trHtml, 'utf8');
         }
     }
