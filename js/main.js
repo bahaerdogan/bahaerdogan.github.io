@@ -279,17 +279,23 @@
     }
 
 	// Google Analytics initialization
-	const initGoogleAnalytics = () => {
-		window.dataLayer = window.dataLayer || [];
-		function gtag(){dataLayer.push(arguments);}
-		gtag('js', new Date());
-		gtag('config', 'G-ZGTWHSMVV7');
-	};
+    const initGoogleAnalytics = () => {
+        try {
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);} 
+            gtag('js', new Date());
+            gtag('config', 'G-ZGTWHSMVV7');
+        } catch (err) {
+            console.warn('GA init skipped:', err);
+        }
+    };
 
 	// EmailJS initialization
-	const initEmailJS = () => {
-		emailjs.init("sr9_9CUgd0L641ObN");
-	};
+    const initEmailJS = () => {
+        if (typeof emailjs !== 'undefined' && emailjs && typeof emailjs.init === 'function') {
+            try { emailjs.init("sr9_9CUgd0L641ObN"); } catch (e) { console.warn('EmailJS init failed:', e); }
+        }
+    };
 
 	// Blog search functionality
 	const initBlogSearch = () => {
@@ -330,11 +336,12 @@
 		const errorMessage = document.getElementById('comment-error');
 		const commentsContainer = document.getElementById('comments-container');
 		
-		if (commentForm) {
-			commentForm.addEventListener('submit', handleCommentSubmission);
-		}
-		
-		loadComments();
+        if (commentForm && typeof handleCommentSubmission === 'function') {
+            commentForm.addEventListener('submit', handleCommentSubmission);
+        }
+        if (typeof loadComments === 'function') {
+            loadComments();
+        }
 	};
 
 	const handleCommentSubmission = async (event) => {

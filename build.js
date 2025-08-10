@@ -8,6 +8,17 @@ const stat = promisify(fs.stat);
 const readFileAsync = promisify(fs.readFile);
 const writeFileAsync = promisify(fs.writeFile);
 
+// Basic XML escape for text and attribute values
+function xmlEscape(value) {
+    if (value == null) return '';
+    return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&apos;');
+}
+
 // Minify CSS files
 async function minifyCSS() {
     const cssFiles = glob.sync('css/*.css', { ignore: ['css/*.min.css'] });
@@ -60,15 +71,20 @@ async function generateSitemapAndRobots() {
     const baseUrl = 'https://bahaerdogan.com';
     const htmlFiles = glob.sync('*.html');
 
-    // Build language groups: { base: { en: file, tr: trFile } }
+    // Build language groups: { base: { en: file, tr: trFile, de: deFile } }
     const groups = {};
     for (const file of htmlFiles) {
         const isIndex = file.toLowerCase() === 'index.html';
         if (isIndex) continue; // will handle index separately
         const isTr = /TR\.html$/i.test(file);
-        const base = isTr ? file.replace(/TR\.html$/i, '') : file.replace(/\.html$/i, '');
+        const isDe = /DE\.html$/i.test(file);
+        const base = isTr
+            ? file.replace(/TR\.html$/i, '')
+            : isDe
+                ? file.replace(/DE\.html$/i, '')
+                : file.replace(/\.html$/i, '');
         groups[base] = groups[base] || {};
-        if (isTr) groups[base].tr = file; else groups[base].en = file;
+        if (isTr) groups[base].tr = file; else if (isDe) groups[base].de = file; else groups[base].en = file;
     }
 
     const urlEntries = [];
@@ -88,19 +104,22 @@ async function generateSitemapAndRobots() {
     for (const [base, langs] of Object.entries(groups)) {
         const enFile = langs.en;
         const trFile = langs.tr;
+        const deFile = langs.de;
         const lastStatFile = trFile || enFile; // pick one existing to time-stamp
         try {
             const stats = await stat(lastStatFile);
             const lastmod = new Date(stats.mtime).toISOString();
             const enLoc = enFile ? `${baseUrl}/${enFile}` : undefined;
             const trLoc = trFile ? `${baseUrl}/${trFile}` : undefined;
+            const deLoc = deFile ? `${baseUrl}/${deFile}` : undefined;
             const alternates = [];
             if (enLoc) alternates.push({ hreflang: 'en', href: enLoc });
             if (trLoc) alternates.push({ hreflang: 'tr', href: trLoc });
-            const xDefault = enLoc || trLoc;
+            if (deLoc) alternates.push({ hreflang: 'de', href: deLoc });
+            const xDefault = enLoc || trLoc || deLoc;
             if (xDefault) alternates.push({ hreflang: 'x-default', href: xDefault });
 
-            urlEntries.push({ enLoc: enLoc || trLoc, trLoc, lastmod, alternates });
+            urlEntries.push({ enLoc: enLoc || trLoc || deLoc, trLoc, lastmod, alternates });
         } catch (_) {
             // ignore
         }
@@ -111,8 +130,8 @@ async function generateSitemapAndRobots() {
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
         ...urlEntries.map(u => {
             const loc = u.enLoc || u.trLoc;
-            const alt = (u.alternates || []).map(a => `    <xhtml:link rel="alternate" hreflang="${a.hreflang}" href="${a.href}" />`).join('\n');
-            return `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${u.lastmod}</lastmod>\n${alt}\n    <changefreq>weekly</changefreq>\n    <priority>${loc.endsWith('/') ? '1.0' : '0.7'}</priority>\n  </url>`;
+            const alt = (u.alternates || []).map(a => `    <xhtml:link rel="alternate" hreflang="${xmlEscape(a.hreflang)}" href="${xmlEscape(a.href)}" />`).join('\n');
+            return `  <url>\n    <loc>${xmlEscape(loc)}</loc>\n    <lastmod>${xmlEscape(u.lastmod)}</lastmod>\n${alt}\n    <changefreq>weekly</changefreq>\n    <priority>${(loc || '').endsWith('/') ? '1.0' : '0.7'}</priority>\n  </url>`;
         }),
         '</urlset>'
     ].join('\n');
@@ -163,7 +182,7 @@ async function generateRSS() {
         `    <link>${baseUrl}</link>`,
         '    <description>Articles on AI, technology, history and more</description>',
         ...items.map(i => (
-            `    <item>\n      <title><![CDATA[${i.title}]]></title>\n      <link>${i.link}</link>\n      <guid>${i.link}</guid>\n      <pubDate>${i.pubDate}</pubDate>\n      <description><![CDATA[${i.description}]]></description>\n    </item>`
+            `    <item>\n      <title><![CDATA[${i.title}]]></title>\n      <link>${xmlEscape(i.link)}</link>\n      <guid>${xmlEscape(i.link)}</guid>\n      <pubDate>${xmlEscape(i.pubDate)}</pubDate>\n      <description><![CDATA[${i.description}]]></description>\n    </item>`
         )),
         '  </channel>',
         '</rss>'
@@ -178,19 +197,25 @@ async function updateI18nHeadsAndToggle() {
     const baseUrl = 'https://bahaerdogan.com';
     const htmlFiles = glob.sync('*.html');
 
-    // Group EN/TR pairs
+    // Group EN/TR/DE triplets
     const groups = {};
     for (const file of htmlFiles) {
         const isTr = /TR\.html$/i.test(file);
-        const base = isTr ? file.replace(/TR\.html$/i, '') : file.replace(/\.html$/i, '');
+        const isDe = /DE\.html$/i.test(file);
+        const base = isTr
+            ? file.replace(/TR\.html$/i, '')
+            : isDe
+                ? file.replace(/DE\.html$/i, '')
+                : file.replace(/\.html$/i, '');
         groups[base] = groups[base] || {};
-        if (isTr) groups[base].tr = file; else groups[base].en = file;
+        if (isTr) groups[base].tr = file; else if (isDe) groups[base].de = file; else groups[base].en = file;
     }
 
     for (const [base, langs] of Object.entries(groups)) {
         const enFile = langs.en;
         const trFile = langs.tr;
-        if (!enFile && !trFile) continue;
+        const deFile = langs.de;
+        if (!enFile && !trFile && !deFile) continue;
 
         // Helper to safely inject into <head>
         const injectHead = (html, inserts) => {
@@ -203,25 +228,28 @@ async function updateI18nHeadsAndToggle() {
             });
         };
 
-        // Helper to add language toggle in navbar if missing
-        const injectToggle = (html, targetHref, label) => {
-            if (html.includes('id="language-toggle"')) return html;
-            return html.replace(/<ul class="navbar-nav">([\s\S]*?)<\/ul>/i, (match) => {
-                const li = `  <li class="nav-item">\n    <a class="nav-link" id="language-toggle" href="${targetHref}">\n      <i class="fa fa-language"></i> ${label}\n    </a>\n  </li>`;
-                return match.replace('</ul>', li + '\n</ul>');
-            });
+        // Helper to inject language dropdown in navbar; idempotent
+        const injectLanguageLinks = (html, links) => {
+            if (!Array.isArray(links) || links.length === 0) return html;
+            // Remove any existing single toggle or previous language blocks
+            let updated = html
+                .replace(/\n?\s*<li class=\"nav-item\">\s*<a[^>]*id=["']language-toggle["'][\s\S]*?<\/li>\s*/gi, '')
+                .replace(/\n?\s*<li class=\"nav-item language-link\">[\s\S]*?<\/li>\s*/gi, '')
+                .replace(/\n?\s*<li class=\"nav-item dropdown language-switcher\">[\s\S]*?<\/li>\s*/gi, '');
+
+            // Sort links in desired order: Deutsch, English, Türkçe
+            const order = { 'Deutsch': 1, 'English': 2, 'Türkçe': 3 };
+            const sorted = links.slice().sort((a, b) => (order[a.label] || 99) - (order[b.label] || 99));
+            const items = sorted.map(l => `<a class=\"dropdown-item\" href=\"${l.href}\">${l.label}</a>`).join('\n      ');
+            const dropdown = `  <li class=\"nav-item dropdown language-switcher\">\n    <a class=\"nav-link dropdown-toggle\" href=\"#\" id=\"langDropdown\" role=\"button\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n      <i class=\"fa fa-language\"></i> Language\n    </a>\n    <div class=\"dropdown-menu dropdown-menu-right\" aria-labelledby=\"langDropdown\">\n      ${items}\n    </div>\n  </li>`;
+
+            return updated.replace(/<ul class=\"navbar-nav\">([\s\S]*?)<\/ul>/i, (match) => match.replace('</ul>', dropdown + '\n</ul>'));
         };
 
-        // Helper to normalize existing toggle href
-        const normalizeToggleHref = (html, targetHref) => {
-            if (!html.includes('id="language-toggle"')) return html;
-            // Replace href value on the toggle anchor
-            return html.replace(/(<a[^>]*id=["']language-toggle["'][^>]*href=["'])[^"]*(["'])/i, `$1${targetHref}$2`);
-        };
-
-        // Read EN/TR files
+        // Read EN/TR/DE files
         let enHtml = enFile ? await readFileAsync(enFile, 'utf8') : null;
         let trHtml = trFile ? await readFileAsync(trFile, 'utf8') : null;
+        let deHtml = deFile ? await readFileAsync(deFile, 'utf8') : null;
 
         // Derive titles
         const extractTitle = (html) => {
@@ -230,14 +258,17 @@ async function updateI18nHeadsAndToggle() {
         };
         const enTitle = enHtml ? extractTitle(enHtml) : '';
         const trTitle = trHtml ? extractTitle(trHtml) : '';
+        const deTitle = deHtml ? extractTitle(deHtml) : '';
 
         // Build meta blocks
         const enUrl = enFile ? (enFile.toLowerCase() === 'index.html' ? `${baseUrl}/` : `${baseUrl}/${enFile}`) : null;
         const trUrl = trFile ? `${baseUrl}/${trFile}` : null;
+        const deUrl = deFile ? `${baseUrl}/${deFile}` : null;
         const alternates = [];
         if (enUrl) alternates.push(`<link rel="alternate" hreflang="en" href="${enUrl}">`);
         if (trUrl) alternates.push(`<link rel="alternate" hreflang="tr" href="${trUrl}">`);
-        const xDefault = enUrl || trUrl;
+        if (deUrl) alternates.push(`<link rel=\"alternate\" hreflang=\"de\" href=\"${deUrl}\">`);
+        const xDefault = enUrl || trUrl || deUrl;
         if (xDefault) alternates.push(`<link rel="alternate" hreflang="x-default" href="${xDefault}">`);
 
         // Canonicals
@@ -252,14 +283,13 @@ async function updateI18nHeadsAndToggle() {
         };
 
         // Update EN
-        if (enHtml && (trUrl || enUrl)) {
+        if (enHtml && (trUrl || deUrl || enUrl)) {
             const enInserts = [enCanonical, ...alternates].filter(Boolean);
             enHtml = injectHead(enHtml, enInserts);
-            const trPath = trFile || (base + 'TR.html');
-            if (trPath) {
-                enHtml = injectToggle(enHtml, trPath, 'Türkçe');
-                enHtml = normalizeToggleHref(enHtml, trPath);
-            }
+            enHtml = injectLanguageLinks(enHtml, [
+                ...(trFile ? [{ href: trFile, label: 'Türkçe' }] : []),
+                ...(deFile ? [{ href: deFile, label: 'Deutsch' }] : [])
+            ]);
             await writeFileAsync(enFile, enHtml, 'utf8');
         }
 
@@ -274,7 +304,7 @@ async function updateI18nHeadsAndToggle() {
             if (!/property=["']og:title["']/i.test(trHtml)) {
                 const ogTitle = (trTitle || enTitle || '').replace(/\s*\|\s*Türkçe/i, '') || 'Baha Erdoğan';
                 const ogDesc = buildTrDescription(trTitle || enTitle);
-                const ogUrl = trUrl || enUrl;
+                const ogUrl = trUrl || enUrl || deUrl;
                 if (ogUrl) {
                     trInserts.push(
                         `<meta property="og:title" content="${ogTitle}">`,
@@ -284,18 +314,50 @@ async function updateI18nHeadsAndToggle() {
                     );
                 }
             }
-            // Inject into head and add toggle
+            // Inject into head and add language links
             trHtml = injectHead(trHtml, trInserts);
-            const enPath = enFile || (base + '.html');
-            if (enPath) {
-                trHtml = injectToggle(trHtml, enPath, 'English');
-                trHtml = normalizeToggleHref(trHtml, enPath);
-            }
+            trHtml = injectLanguageLinks(trHtml, [
+                ...(enFile ? [{ href: enFile, label: 'English' }] : []),
+                ...(deFile ? [{ href: deFile, label: 'Deutsch' }] : [])
+            ]);
             await writeFileAsync(trFile, trHtml, 'utf8');
+        }
+
+        // Update DE
+        if (deHtml) {
+            const deCanonical = deUrl ? `<link rel="canonical" href="${deUrl}">` : '';
+            const deInserts = [deCanonical, ...alternates].filter(Boolean);
+            const buildDeDescription = (title) => {
+                const clean = (title || '').replace(/\s*\|\s*Deutsch/i, '').trim();
+                return clean ? `In diesem Beitrag behandle ich „${clean}“ prägnant und verständlich. Mit Beispielen, praktischen Tipps und klaren Erklärungen.`
+                             : 'In diesem Beitrag wird das Thema prägnant und verständlich erklärt – mit Beispielen und praktischen Tipps.';
+            };
+            if (!/name=["']description["']/i.test(deHtml)) {
+                deInserts.push(`<meta name="description" content="${buildDeDescription(deTitle || enTitle || trTitle)}">`);
+            }
+            if (!/property=["']og:title["']/i.test(deHtml)) {
+                const ogTitleDe = (deTitle || enTitle || trTitle || '').replace(/\s*\|\s*Deutsch/i, '') || 'Baha Erdoğan';
+                const ogDescDe = buildDeDescription(deTitle || enTitle || trTitle);
+                const ogUrlDe = deUrl || enUrl || trUrl;
+                if (ogUrlDe) {
+                    deInserts.push(
+                        `<meta property="og:title" content="${ogTitleDe}">`,
+                        `<meta property="og:description" content="${ogDescDe}">`,
+                        `<meta property="og:url" content="${ogUrlDe}">`,
+                        `<meta property="og:type" content="article">`
+                    );
+                }
+            }
+            deHtml = injectHead(deHtml, deInserts);
+            deHtml = injectLanguageLinks(deHtml, [
+                ...(enFile ? [{ href: enFile, label: 'English' }] : []),
+                ...(trFile ? [{ href: trFile, label: 'Türkçe' }] : [])
+            ]);
+            await writeFileAsync(deFile, deHtml, 'utf8');
         }
     }
 
-    console.log('Updated head tags and language toggles for EN↔TR pages');
+    console.log('Updated head tags and language links for EN↔TR↔DE pages');
 }
 
 // Main build process
