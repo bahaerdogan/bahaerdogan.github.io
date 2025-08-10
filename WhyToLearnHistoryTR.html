@@ -8,7 +8,7 @@
 
   <meta charset="utf-8">
   <title>Tarih Bilmek Neden Önemli? | Bahaerdogan | Türkçe</title>
-  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
   <meta name="theme-color" content="#0078ff">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -243,12 +243,12 @@
           <h2 class="intro-title mb-4">Blog Detayları</h2>
           <ol class="breadcrumb d-flex justify-content-center">
             <li class="breadcrumb-item">
-              <a href="#">Home</a>
+              <a href="index.html">Ana Sayfa</a>
             </li>
             <li class="breadcrumb-item">
-              <a href="#">Library</a>
+              <a href="BlogPosts.html">Blog</a>
             </li>
-            <li class="breadcrumb-item active">Data</li>
+            <li class="breadcrumb-item active">Tarih Bilmek Neden Önemli?</li>
           </ol>
         </div>
       </div>
@@ -274,7 +274,7 @@
                 </li>
                 <li>
                   <span class="ion-pricetag"></span>
-                  <a href="#">History</a>
+                  <a href="#">Tarih</a>
                 </li>
                 <li>
                   <span class="ion-chatbox"></span>
@@ -306,11 +306,11 @@
         </div>
         <div class="col-md-4">
           <div class="widget-sidebar sidebar-search">
-            <h5 class="sidebar-title">Search</h5>
+            <h5 class="sidebar-title">Arama</h5>
             <div class="sidebar-content">
               <form id="search-form" onsubmit="return handleSearch(event)">
                 <div class="input-group">
-                  <input type="text" id="search-input" class="form-control" placeholder="Search for..." aria-label="Search for...">
+                  <input type="text" id="search-input" class="form-control" placeholder="Ara..." aria-label="Ara...">
                   <span class="input-group-btn">
                     <button class="btn btn-secondary btn-search" type="submit">
                       <span class="ion-android-search"></span>
@@ -321,7 +321,7 @@
             </div>
           </div>
           <div class="widget-sidebar">
-            <h5 class="sidebar-title">Recent Post</h5>
+            <h5 class="sidebar-title">Son Yazılar</h5>
             <div class="sidebar-content">
               <ul class="list-sidebar">
                 <li>
@@ -379,7 +379,7 @@
             </div>
           </div>
           <div class="widget-sidebar">
-            <h5 class="sidebar-title">Archives</h5>
+            <h5 class="sidebar-title">Arşiv</h5>
             <div class="sidebar-content">
               <ul class="list-sidebar">
                 <li><a href="AlgorithmsExplained.html">From Netflix to TikTok: How AI Knows What You Like</a></li>
@@ -403,23 +403,23 @@
             </div>
           </div>
           <div class="widget-sidebar widget-tags">
-            <h5 class="sidebar-title">Tags</h5>
+            <h5 class="sidebar-title">Etiketler</h5>
             <div class="sidebar-content">
               <ul>
                 <li>
-                  <a href="#">History</a>
+                  <a href="#">Tarih</a>
                 </li>
                 <li>
-                  <a href="#">Education</a>
+                  <a href="#">Eğitim</a>
                 </li>
                 <li>
-                  <a href="#">Learning</a>
+                  <a href="#">Öğrenme</a>
                 </li>
                 <li>
-                  <a href="#">Knowledge</a>
+                  <a href="#">Bilgi</a>
                 </li>
                 <li>
-                  <a href="#">Culture</a>
+                  <a href="#">Kültür</a>
                 </li>
               </ul>
             </div>
@@ -436,23 +436,23 @@
       <div class="col-md-8 offset-md-2">
         <div class="card shadow-sm">
           <div class="card-body">
-            <h3 class="mb-4 title-left">Leave a Reply</h3>
+            <h3 class="mb-4 title-left">Yorum Bırakın</h3>
             <form id="comment-form" class="comment-form">
-              <div id="comment-success" class="alert alert-success d-none">Your comment has been submitted. Thank you!</div>
-              <div id="comment-error" class="alert alert-danger d-none">There was an error submitting your comment. Please try again.</div>
+              <div id="comment-success" class="alert alert-success d-none">Yorumunuz gönderildi. Teşekkürler!</div>
+              <div id="comment-error" class="alert alert-danger d-none">Yorum gönderilirken bir hata oluştu. Lütfen tekrar deneyin.</div>
               <div class="form-group mb-3">
-                <label for="comment-name">Name *</label>
+                <label for="comment-name">İsim *</label>
                 <input type="text" class="form-control input-mf" id="comment-name" name="from_name" required>
               </div>
               <div class="form-group mb-3">
-                <label for="comment-email">Email *</label>
+                <label for="comment-email">E-posta *</label>
                 <input type="email" class="form-control input-mf" id="comment-email" name="from_email" required>
               </div>
               <div class="form-group mb-3">
-                <label for="comment-text">Comment *</label>
+                <label for="comment-text">Yorum *</label>
                 <textarea class="form-control input-mf" id="comment-text" name="message" rows="5" required></textarea>
               </div>
-              <button type="submit" class="button button-a button-big button-rouded">Submit Comment</button>
+              <button type="submit" class="button button-a button-big button-rouded">Yorumu Gönder</button>
             </form>
           </div>
         </div>
@@ -466,7 +466,7 @@
       <div class="col-md-8 offset-md-2">
         <div class="card shadow-sm">
           <div class="card-body">
-            <h3 class="mb-4 title-left">Comments</h3>
+            <h3 class="mb-4 title-left">Yorumlar</h3>
             <div id="comments-container">
               <!-- Comments will be displayed here -->
             </div>
@@ -548,7 +548,7 @@
           const email = document.getElementById('comment-email').value;
           const comment = document.getElementById('comment-text').value;
           const date = new Date().toLocaleDateString();
-          const blogTitle = "Why is knowing history important?"; // Update for each blog post
+          const blogTitle = "Tarih Bilmek Neden Önemli?"; // Her blog yazısı için güncelleyin
           
           // Show loading state
           const submitButton = commentForm.querySelector('button[type="submit"]');
@@ -584,8 +584,8 @@
               submitButton.disabled = false;
             })
             .catch(function(error) {
-              console.error('EmailJS Error:', error);
-              errorMessage.textContent = "There was an error submitting your comment: " + error.text;
+              console.error('EmailJS Hatası:', error);
+              errorMessage.textContent = "Yorum gönderilirken bir hata oluştu: " + error.text;
               errorMessage.classList.remove('d-none');
               
               // Reset button
@@ -609,7 +609,7 @@
         const comments = JSON.parse(localStorage.getItem(`comments-${blogId}`) || '[]');
         
         if (comments.length === 0) {
-          commentsContainer.innerHTML = '<p>No comments yet. Be the first to comment!</p>';
+          commentsContainer.innerHTML = '<p>Henüz yorum yok. İlk yorumu siz yazın!</p>';
         } else {
           commentsContainer.innerHTML = '';
           comments.forEach(comment => {
