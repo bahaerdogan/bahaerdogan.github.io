@@ -1,101 +1,411 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="de">
+
 <head>
 <link rel="canonical" href="https://bahaerdogan.com/AlgorithmsExplainedDE.html">
 <link rel="alternate" hreflang="en" href="https://bahaerdogan.com/AlgorithmsExplained.html">
 <link rel="alternate" hreflang="tr" href="https://bahaerdogan.com/AlgorithmsExplainedTR.html">
 <link rel="alternate" hreflang="de" href="https://bahaerdogan.com/AlgorithmsExplainedDE.html">
 <link rel="alternate" hreflang="x-default" href="https://bahaerdogan.com/AlgorithmsExplained.html">
-<meta name="description" content="In diesem Beitrag behandle ich „Von Netflix bis TikTok: Wie KI weiß, was du magst“ prägnant und verständlich. Mit Beispielen, praktischen Tipps und klaren Erklärungen.">
-<meta property="og:title" content="Von Netflix bis TikTok: Wie KI weiß, was du magst">
-<meta property="og:description" content="In diesem Beitrag behandle ich „Von Netflix bis TikTok: Wie KI weiß, was du magst“ prägnant und verständlich. Mit Beispielen, praktischen Tipps und klaren Erklärungen.">
-<meta property="og:url" content="https://bahaerdogan.com/AlgorithmsExplainedDE.html">
-<meta property="og:type" content="article">
 
   <meta charset="utf-8">
-  <title>Von Netflix bis TikTok: Wie KI weiß, was du magst</title>
+  <title>Von Netflix bis TikTok: Wie KI weiß, was du magst | Bahaerdogan</title>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+  <meta name="theme-color" content="#0078ff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="description" content="Wie Empfehlungssysteme in Netflix, TikTok und Co. funktionieren – einfach erklärt.">
+  <meta name="keywords" content="Empfehlungssysteme, KI, maschinelles Lernen, Netflix, TikTok, Personalisierung">
+
+  <!-- Favicons -->
+  <link href="img/favicon.png" rel="icon">
+  <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Bootstrap CSS File -->
+  <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Libraries CSS Files -->
+  <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="lib/animate/animate.min.css" rel="stylesheet">
+  <link href="lib/ionicons/css/ionicons.min.css" rel="stylesheet">
+  <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+  <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+
+  <!-- Main Stylesheet File -->
+  <link href="css/style.min.css" rel="stylesheet">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Von Netflix bis TikTok: Wie KI weiß, was du magst">
+  <meta property="og:description" content="Wie Empfehlungssysteme in Netflix, TikTok und Co. funktionieren – einfach erklärt.">
+  <meta property="og:image" content="https://bahaerdogan.com/img/AlgorithmsExplained.png">
+  <meta property="og:url" content="https://bahaerdogan.com/AlgorithmsExplainedDE.html">
+  <meta property="og:type" content="article">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Von Netflix bis TikTok: Wie KI weiß, was du magst",
+    "description": "Wie Empfehlungssysteme in Netflix, TikTok und Co. funktionieren – einfach erklärt.",
+    "image": "https://bahaerdogan.com/img/AlgorithmsExplained.png",
+    "author": {"@type": "Person", "name": "Baha Erdoğan"},
+    "publisher": {"@type": "Organization", "name": "Bahaerdogan", "logo": {"@type": "ImageObject", "url": "https://bahaerdogan.com/img/favicon.png"}},
+    "datePublished": "2024-03-20",
+    "dateModified": "2024-03-20",
+    "mainEntityOfPage": {"@type": "WebPage", "@id": "https://bahaerdogan.com/AlgorithmsExplainedDE.html"}
+  }
+  </script>
 </head>
+
 <body>
-  <h1>Von Netflix bis TikTok: Wie KI weiß, was du magst</h1>
-  <div>
-    <strong>Baha Erdoğan</strong> &nbsp; <em>Wirtschaft</em> &nbsp; <span>0</span>
+  <!--/ Nav Star /-->
+  <nav class="navbar navbar-b navbar-trans navbar-expand-md fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand js-scroll" href="#page-top">Baha Erdoğan</a>
+      <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarDefault" aria-controls="navbarDefault" aria-expanded="false" aria-label="Navigation umschalten">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="navbar-collapse collapse justify-content-end" id="navbarDefault">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link js-scroll" href="index.html">Startseite</a></li>
+          <li class="nav-item"><a class="nav-link js-scroll" href="index.html#about">Über mich</a></li>
+          <li class="nav-item"><a class="nav-link js-scroll" href="BlogPosts.html">Blog</a></li>
+          <li class="nav-item"><a class="nav-link js-scroll" href="index.html#projects">Projekte</a></li>
+          <li class="nav-item"><a class="nav-link js-scroll" href="index.html#contact">Kontakt</a></li>  <li class="nav-item dropdown language-switcher">
+    <a class="nav-link dropdown-toggle" href="#" id="langDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <i class="fa fa-language"></i> Language
+    </a>
+    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="langDropdown">
+      <a class="dropdown-item" href="AlgorithmsExplained.html">English</a>
+      <a class="dropdown-item" href="AlgorithmsExplainedTR.html">Türkçe</a>
+    </div>
+  </li>
+</ul>
+      </div>
+    </div>
+  </nav>
+  <!--/ Nav End /-->
+
+  <!--/ Intro Skew Star /-->
+  <div class="intro intro-single route bg-image" style="background-image: url('img/image (21).webp')">
+    <div class="overlay-mf"></div>
+    <div class="intro-content display-table">
+      <div class="table-cell">
+        <div class="container">
+          <h2 class="intro-title mb-4">Blog-Details</h2>
+          <ol class="breadcrumb d-flex justify-content-center">
+            <li class="breadcrumb-item"><a href="index.html">Startseite</a></li>
+            <li class="breadcrumb-item"><a href="BlogPosts.html">Blog</a></li>
+            <li class="breadcrumb-item active">Von Netflix bis TikTok: Wie KI weiß, was du magst</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--/ Intro Skew End /-->
+
+  <!--/ Section Blog-Single Star /-->
+  <section class="blog-wrapper sect-pt4" id="blog">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="post-box">
+            <div class="post-thumb">
+              <img src="img/AlgorithmsExplained.webp" class="img-fluid" alt="Empfehlungssysteme erklärt" loading="lazy" decoding="async">
+            </div>
+            <div class="post-meta">
+              <h1 class="article-title">Von Netflix bis TikTok: Wie KI weiß, was du magst</h1>
+              <ul>
+                <li><span class="ion-ios-person"></span> <a href="#">Baha Erdoğan</a></li>
+                <li><span class="ion-pricetag"></span> <a href="#">Technologie</a></li>
+                <li><span class="ion-chatbox"></span> <a href="#">0</a></li>
+              </ul>
+            </div>
+            <div class="article-content">
+              <h3>Einleitung: Warum KI sich wie Magie anfühlt (aber keine ist)</h3>
+              <p>Hast du schon einmal Netflix geöffnet und gedacht: „Wow, genau das wollte ich sehen“? Oder durch TikTok gescrollt und überraschend passendes Material bekommen, das genau deinem Humor, deinen Interessen oder deiner Stimmung entspricht?</p>
+              <p>Das ist keine Magie. Das ist maschinelles Lernen.</p>
+              <p>Empfehlungssysteme, angetrieben von künstlicher Intelligenz (KI), stecken hinter vielen deiner täglichen digitalen Interaktionen. Ob YouTube, Spotify, Amazon oder deine Lieblingsnachrichten-App: Diese Systeme arbeiten still im Hintergrund, um Inhalte genau für dich zuzuschneiden.</p>
+              <p>In diesem Artikel erklären wir auf einfache Weise, wie Empfehlungsalgorithmen funktionieren. Kein Technikstudium nötig.</p>
+
+              <h3>Was sind Empfehlungssysteme?</h3>
+              <p>Ein Empfehlungssystem ist eine Art KI, die vorhersagt, was dir gefallen könnte, basierend auf vergangenem Verhalten. So entscheiden Streamingplattformen, E‑Commerce‑Seiten und soziale Netzwerke, was dir als Nächstes gezeigt wird.</p>
+              <p>Diese Systeme verlassen sich im Allgemeinen auf zwei Kernmethoden:</p>
+              <ul>
+                <li><strong>Collaborative Filtering</strong></li>
+                <li><strong>Content‑basiertes Filtering</strong></li>
+              </ul>
+              <p>Lass uns beide erklären, ganz ohne Mathe, versprochen.</p>
+
+              <h4>Collaborative Filtering: Lernen von digitalen Zwillingen</h4>
+              <p>Stell dir Collaborative Filtering als digitale Mundpropaganda vor.</p>
+              <p>Ein Beispiel: Du liebst Sci‑Fi‑Filme, und dein Freund Alex liebt Sci‑Fi und hat außerdem eine Fantasyserie gesehen, die du noch nicht kennst. Wenn Alex sie mochte, ist die Wahrscheinlichkeit hoch, dass sie dir auch gefällt.</p>
+              <p>Die KI macht etwas Ähnliches, aber mit Millionen von „Alexen“. Sie vergleicht dein Verhalten (was du schaust, likest, kaufst oder überspringst) mit dem Verhalten anderer, die ähnliche Gewohnheiten haben. Wenn Leute wie du einen bestimmten Titel mochten, bekommst du möglicherweise eine Empfehlung, selbst wenn du ihn vorher nicht kanntest.</p>
+              <p>So entstehen die erstaunlich genauen Vorschläge von Netflix und Spotify. Es ist, als hättest du Tausende digitale Zwillinge, die dir persönliche Tipps geben.</p>
+
+              <h4>Content‑basiertes Filtering: Ein Buch nach seinen Merkmalen beurteilen</h4>
+              <p>Angenommen, du siehst viele Krimiserien mit starken weiblichen Hauptrollen. Ein content‑basiertes System analysiert die Merkmale dessen, was du magst – Genre, Schauspielerinnen, Themen – und findet andere Inhalte mit ähnlichen Eigenschaften.</p>
+              <p>Es ist wie zu sagen: „Dir hat dieses Buch gefallen, weil es ein Thriller mit einer überraschenden Wendung ist – hier sind 10 weitere davon.“</p>
+              <p>TikTok verwendet oft eine Mischung aus beiden Methoden und verbindet Verhaltensmuster der Nutzer mit Metadaten des Videos (Beschriftungen, Hashtags, Audio usw.), um deinen Feed fein abzustimmen.</p>
+
+              <h3>Die geheime Zutat: Similaritätsmetriken</h3>
+              <p>Wie weiß die KI, was „ähnlich“ ist? Dafür gibt es Similaritätsmetriken – mathematische Formeln, die messen, wie ähnlich zwei Dinge sind. Zum Beispiel:</p>
+              <ul>
+                <li>Wie viele Nutzer haben sowohl <em>Stranger Things</em> als auch <em>The Umbrella Academy</em> gesehen?</li>
+                <li>Haben zwei Videos überlappende Hashtags, Stilmerkmale oder Soundtracks?</li>
+              </ul>
+              <p>Diese Metriken erzeugen ein großes Netzwerk von Assoziationen – sie verbinden Nutzer, Inhalte und Muster, um Vorschläge zu liefern, die menschlich wirken.</p>
+
+              <h3>Warum es so gut funktioniert (und manchmal zu gut)</h3>
+              <p>Empfehlungssysteme werden mit der Zeit besser, je mehr Daten sie bekommen. Je öfter du interagierst – schaust, scrollst, likest, teilst – desto smarter wird das System.</p>
+              <p>Aber es gibt einen Haken: Du kannst in einer „Filterblase“ landen und nur noch Inhalte sehen, die deine bestehenden Vorlieben bestätigen. Deshalb kann sich dein TikTok‑Feed hypermaßgeschneidert, aber auch repetitiv anfühlen. Plattformen mischen daher zunehmend „Exploration‑Inhalte“ bei, um Entdeckungen außerhalb der Komfortzone zu ermöglichen.</p>
+
+              <h3>Wie du die KI trainierst – ohne es zu wissen</h3>
+              <p>Jede Aktion, die du ausführst – einen Film ansehen, ein Video überspringen, einen Beitrag liken – füttert die KI. Du bringst ihr ständig deine Vorlieben bei. Das wirft Fragen auf zu Datenschutz, algorithmischer Verzerrung und digitaler Autonomie.</p>
+
+              <h3>Fazit: KI ist der beste Freund deines digitalen Zwillings (und dein persönlicher DJ)</h3>
+              <p>Empfehlungssysteme sind überall und werden immer klüger. Ob sie dir eine Serienbinge vorschlagen oder deinen nächsten Lieblingssong vorstellen – diese Algorithmen lernen von dir und von Leuten wie dir. Jetzt, da du weißt, wie es funktioniert, kannst du es besser nutzen, hinterfragen – oder gelegentlich austricksen.</p>
+
+              <h4>Bonus: 3 Wege, den Algorithmus auszutricksen</h4>
+              <ol>
+                <li>Leere regelmäßig deinen Wiedergabe‑ oder Suchverlauf für einen Neustart.</li>
+                <li>Interagiere mit vielfältigen Inhalten, um die KI breiter zu trainieren.</li>
+                <li>Verwende mehrere Profile für unterschiedliche Stimmungen oder Nutzer.</li>
+              </ol>
+
+              <h4>FAQs zu KI‑Empfehlungen</h4>
+              <p><strong>F:</strong> Spioniert mich KI aus?<br><strong>A:</strong> Nicht direkt. KI nutzt Muster aus deinem Verhalten – nicht deine privaten Nachrichten – um Inhalte zu empfehlen.</p>
+              <p><strong>F:</strong> Kann ich das ausschalten?<br><strong>A:</strong> Die meisten Plattformen erlauben es, das Tracking einzuschränken, aber das kann die Personalisierung reduzieren.</p>
+              <p><strong>F:</strong> Warum ändern sich meine Empfehlungen so schnell?<br><strong>A:</strong> Die Algorithmen sind dynamisch – sie reagieren schnell auf neue Interaktionen.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="widget-sidebar sidebar-search">
+            <h5 class="sidebar-title">Suche</h5>
+            <div class="sidebar-content">
+              <form id="search-form" onsubmit="return handleSearch(event)">
+                <div class="input-group">
+                  <input type="text" id="search-input" class="form-control" placeholder="Suche..." aria-label="Suche...">
+                  <span class="input-group-btn">
+                    <button class="btn btn-secondary btn-search" type="submit">
+                      <span class="ion-android-search"></span>
+                    </button>
+                  </span>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="widget-sidebar">
+            <h5 class="sidebar-title">Neueste Beiträge</h5>
+            <div class="sidebar-content">
+              <ul class="list-sidebar">
+                <li><a href="AlgorithmsExplainedDE.html">Von Netflix bis TikTok: Wie KI weiß, was du magst</a></li>
+                <li><a href="AI-DefenseDE.html">Die Rolle der KI in Verteidigungstechnologien</a></li>
+                <li><a href="AgenticAiExplainedDE.html">Was sind KI‑Agenten oder Agentic AI?</a></li>
+                <li><a href="AgenticAivsGenAiDE.html">Agentic AI vs Generative AI: Die Unterschiede</a></li>
+                <li><a href="AgenticAiTechDepthDE.html">Agentic AI im Detail: Technischer Deep‑Dive</a></li>
+                <li><a href="TypesOfAgenticAiDE.html">Arten von Agentic AI: Ein umfassender Leitfaden</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="widget-sidebar">
+            <h5 class="sidebar-title">Archiv</h5>
+            <div class="sidebar-content">
+              <ul class="list-sidebar">
+                <li><a href="MachineLearning-ExplainedDE.html">Einführung in Machine Learning</a></li>
+                <li><a href="MachineLearningAnomalyDetectionDE.html">Anomalieerkennung im Machine Learning</a></li>
+                <li><a href="DistanceCalculatingMethodsDE.html">Geschwindigkeit aus Videos schätzen</a></li>
+                <li><a href="ValuePerKilogramForProsperityDE.html">Warum der Wert pro Kilogramm wichtig ist</a></li>
+                <li><a href="AgenticAiExplainedDE.html">Was sind KI‑Agenten (Agentic AI)?</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="widget-sidebar widget-tags">
+            <h5 class="sidebar-title">Schlagwörter</h5>
+            <div class="sidebar-content">
+              <ul>
+                <li><a href="#">Technologie</a></li>
+                <li><a href="#">KI</a></li>
+                <li><a href="#">Personalisierung</a></li>
+                <li><a href="#">Algorithmen</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+  <!--/ Section Blog-Single End /-->
+
+  <!-- Leave a Reply Section -->
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h3 class="mb-4 title-left">Kommentar hinterlassen</h3>
+            <form id="comment-form" class="comment-form">
+              <div id="comment-success" class="alert alert-success d-none">Dein Kommentar wurde gesendet. Danke!</div>
+              <div id="comment-error" class="alert alert-danger d-none">Beim Senden deines Kommentars ist ein Fehler aufgetreten. Bitte versuche es erneut.</div>
+              <div class="form-group mb-3">
+                <label for="comment-name">Name *</label>
+                <input type="text" class="form-control input-mf" id="comment-name" name="from_name" required>
+              </div>
+              <div class="form-group mb-3">
+                <label for="comment-email">E‑Mail *</label>
+                <input type="email" class="form-control input-mf" id="comment-email" name="from_email" required>
+              </div>
+              <div class="form-group mb-3">
+                <label for="comment-text">Kommentar *</label>
+                <textarea class="form-control input-mf" id="comment-text" name="message" rows="5" required></textarea>
+              </div>
+              <button type="submit" class="button button-a button-big button-rouded">Kommentar senden</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <h2>Einleitung: Warum KI sich wie Magie anfühlt (aber keine ist)</h2>
-  <p>Hast du schon einmal Netflix geöffnet und gedacht: „Wow, genau das wollte ich sehen“? Oder durch TikTok gescrollt und überraschend passendes Material bekommen, das genau deinem Humor, deinen Interessen oder deiner Stimmung entspricht?</p>
-  <p>Das ist keine Magie. Das ist maschinelles Lernen.</p>
-  <p>Empfehlungssysteme, angetrieben von künstlicher Intelligenz (KI), stecken hinter vielen deiner täglichen digitalen Interaktionen. Ob YouTube, Spotify, Amazon oder deine Lieblingsnachrichten-App: Diese Systeme arbeiten still im Hintergrund, um Inhalte genau für dich zuzuschneiden.</p>
-  <p>In diesem Artikel erklären wir auf einfache Weise, wie Empfehlungsalgorithmen funktionieren. Kein Technikstudium nötig.</p>
+  <!-- Comments Display Section -->
+  <div class="container mt-5 mb-5">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h3 class="mb-4 title-left">Kommentare</h3>
+            <div id="comments-container"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <h2>Was sind Empfehlungssysteme?</h2>
-  <p>Ein Empfehlungssystem ist eine Art KI, die vorhersagt, was dir gefallen könnte, basierend auf vergangenem Verhalten. So entscheiden Streamingplattformen, E-Commerce-Seiten und soziale Netzwerke, was dir als Nächstes gezeigt wird.</p>
-  <p>Diese Systeme verlassen sich im Allgemeinen auf zwei Kernmethoden:</p>
-  <ul>
-    <li>Collaborative Filtering</li>
-    <li>Content-basiertes Filtering</li>
-  </ul>
-  <p>Lass uns beide erklären, ganz ohne Mathe, versprochen.</p>
+  <!--/ Section Contact-Footer Star /-->
+  <section class="paralax-mf footer-paralax bg-image sect-mt4 route" style="background-image: url('img/overlay-bg.jpg')">
+    <div class="overlay-mf"></div>
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="copyright-box">
+              <p class="copyright">&copy; Copyright <strong>Bahaerdogan</strong>. All Rights Reserved</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </section>
 
-  <h3>Collaborative Filtering: Lernen von digitalen Zwillingen</h3>
-  <p>Stell dir Collaborative Filtering als digitale Mundpropaganda vor.</p>
-  <p>Ein einfaches Bild: Du liebst Sci-Fi-Filme, und dein Freund Alex liebt Sci-Fi und hat außerdem eine Fantasyserie gesehen, die du noch nicht kennst. Wenn Alex sie mochte, ist die Wahrscheinlichkeit hoch, dass sie dir auch gefällt.</p>
-  <p>Die KI macht etwas Ähnliches, aber mit Millionen von „Alexen“. Sie vergleicht dein Verhalten (was du schaust, likest, kaufst oder überspringst) mit dem Verhalten anderer, die ähnliche Gewohnheiten haben. Wenn Leute wie du einen bestimmten Titel mochten, bekommst du möglicherweise eine Empfehlung, selbst wenn du ihn vorher nicht kanntest.</p>
-  <p>So entstehen die erstaunlich genauen Vorschläge von Netflix und Spotify. Es ist, als hättest du tausende digitale Zwillinge, die dir persönliche Tipps geben.</p>
+  <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+  <div id="preloader"></div>
 
-  <h3>Content-basiertes Filtering: Ein Buch nach seinen Merkmalen beurteilen</h3>
-  <p>Angenommen, du siehst viele Krimiserien mit starken weiblichen Hauptrollen. Ein content-basiertes System analysiert die Merkmale dessen, was du magst, Genre, Schauspielerinnen, Themen, und findet andere Inhalte mit ähnlichen Eigenschaften.</p>
-  <p>Es ist wie zu sagen: „Dir hat dieses Buch gefallen, weil es ein Thriller mit einer überraschenden Wendung ist, hier sind 10 weitere davon.“</p>
-  <p>Content-basiertes Filtering konzentriert sich also auf die Eigenschaften des Inhalts und passt sie an deine Vorlieben an.</p>
-  <p>TikTok verwendet oft eine Mischung aus beiden Methoden, es verbindet Verhaltensmuster der Nutzer mit Metadaten des Videos (Beschriftungen, Hashtags, Audio usw.), um deinen Feed fein abzustimmen.</p>
+  <!-- JavaScript Libraries -->
+  <script src="lib/jquery/jquery.min.js"></script>
+  <script src="lib/jquery/jquery-migrate.min.js"></script>
+  <script src="lib/popper/popper.min.js"></script>
+  <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+  <script src="lib/easing/easing.min.js"></script>
+  <script src="lib/counterup/jquery.waypoints.min.js"></script>
+  <script src="lib/counterup/jquery.counterup.js"></script>
+  <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+  <script src="lib/lightbox/js/lightbox.min.js"></script>
+  <script src="lib/typed/typed.min.js"></script>
+  
+  <!-- Application Scripts -->
+  <script src="js/main.min.js"></script>
+  <script src="js/blog.min.js"></script>
 
-  <h2>Die geheime Zutat: Similaritätsmetriken</h2>
-  <p>Wie weiß die KI, was „ähnlich“ ist? Dafür gibt es Similaritätsmetriken.</p>
-  <p>Das sind mathematische Formeln, die messen, wie ähnlich zwei Dinge sind. Zum Beispiel:</p>
-  <ul>
-    <li>Wie viele Nutzer haben sowohl <em>Stranger Things</em> als auch <em>The Umbrella Academy</em> gesehen?</li>
-    <li>Haben zwei Videos überlappende Hashtags, Stilmerkmale oder Soundtracks?</li>
-  </ul>
-  <p>Diese Metriken erzeugen ein riesiges Netzwerk von Assoziationen, sie verbinden Nutzer, Inhalte und Muster, um Vorschläge zu liefern, die menschlich wirken.</p>
+  <!-- Comments logic (same across locales) -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const commentForm = document.getElementById('comment-form');
+      const successMessage = document.getElementById('comment-success');
+      const errorMessage = document.getElementById('comment-error');
+      const commentsContainer = document.getElementById('comments-container');
+      loadComments();
+      if (commentForm) {
+        commentForm.addEventListener('submit', function(event) {
+          event.preventDefault();
+          successMessage.classList.add('d-none');
+          errorMessage.classList.add('d-none');
+          const name = document.getElementById('comment-name').value;
+          const email = document.getElementById('comment-email').value;
+          const comment = document.getElementById('comment-text').value;
+          const date = new Date().toLocaleDateString();
+          const blogTitle = 'Von Netflix bis TikTok: Wie KI weiß, was du magst';
+          const submitButton = commentForm.querySelector('button[type="submit"]');
+          const originalButtonText = submitButton.textContent;
+          submitButton.textContent = 'Sende...';
+          submitButton.disabled = true;
+          const templateParams = { from_name: name, from_email: email, message: comment, blog_title: blogTitle };
+          emailjs.send('service_lhjdfqw', 'template_bha2val', templateParams, 'sr9_9CUgd0L641ObN')
+            .then(function() {
+              successMessage.classList.remove('d-none');
+              saveComment(name, comment, date);
+              displayComment(name, comment, date);
+              commentForm.reset();
+              submitButton.textContent = originalButtonText;
+              submitButton.disabled = false;
+            })
+            .catch(function(error) {
+              console.error('EmailJS Error:', error);
+              errorMessage.textContent = 'Beim Senden deines Kommentars ist ein Fehler aufgetreten: ' + error.text;
+              errorMessage.classList.remove('d-none');
+              submitButton.textContent = originalButtonText;
+              submitButton.disabled = false;
+            });
+        });
+      }
+      function saveComment(name, comment, date) {
+        const blogId = window.location.pathname.split('/').pop().replace('.html', '');
+        let comments = JSON.parse(localStorage.getItem(`comments-${blogId}`) || '[]');
+        comments.push({ name, comment, date });
+        localStorage.setItem(`comments-${blogId}`, JSON.stringify(comments));
+      }
+      function loadComments() {
+        const blogId = window.location.pathname.split('/').pop().replace('.html', '');
+        const comments = JSON.parse(localStorage.getItem(`comments-${blogId}`) || '[]');
+        if (comments.length === 0) {
+          commentsContainer.innerHTML = '<p>Noch keine Kommentare. Sei der Erste!</p>';
+        } else {
+          commentsContainer.innerHTML = '';
+          comments.forEach(comment => displayComment(comment.name, comment.comment, comment.date));
+        }
+      }
+      function displayComment(name, comment, date) {
+        const commentElement = document.createElement('div');
+        commentElement.className = 'comment mb-4 p-3 border-bottom';
+        commentElement.innerHTML = `<h5>${name} <small class="text-muted">${date}</small></h5><p>${comment}</p>`;
+        commentsContainer.appendChild(commentElement);
+      }
+    });
+  </script>
 
-  <h2>Warum es so gut funktioniert (und manchmal zu gut)</h2>
-  <p>Empfehlungssysteme werden mit der Zeit besser, je mehr Daten sie bekommen. Je öfter du interagierst, schaust, scrollst, likest, teilst, desto smarter wird das System.</p>
-  <p>Aber es gibt einen Haken.</p>
-  <p>Du kannst in einer „Filterblase“ landen, du siehst nur noch Inhalte, die das bestätigen, was du bereits magst.</p>
-  <p>Deshalb kann sich dein TikTok-Feed hypermaßgeschneidert, aber auch repetitiv anfühlen. Und genau deshalb zeigt dir Netflix oft ähnliche Serien, selbst wenn du gerade etwas Neues ausprobieren möchtest.</p>
-  <p>Intelligente Plattformen mischen mittlerweile „Exploration-Inhalte“ bei, um dir zu helfen, außerhalb deiner Komfortzone zu entdecken.</p>
-
-  <h2>Wie du die KI trainierst, ohne es zu wissen</h2>
-  <p>Jede Aktion, die du ausführst, einen Film ansehen, ein Video überspringen, einen Beitrag liken, füttert die KI. Du bringst ihr ständig deine Vorlieben bei.</p>
-  <p>Das wirft Fragen auf zu:</p>
-  <ul>
-    <li>Datenschutz</li>
-    <li>algorithmischer Verzerrung</li>
-    <li>digitaler Autonomie</li>
-  </ul>
-  <p>Das ist eine Debatte, an der wir alle teilhaben sollten. Wenn du die Grundlagen von KI verstehst, wirst du ein informierterer digitaler Bürger.</p>
-
-  <h2>Fazit: KI ist der beste Freund deines digitalen Zwillings (und dein persönlicher DJ)</h2>
-  <p>Empfehlungssysteme sind überall und sie werden immer klüger. Ob sie dir eine Serienbinge vorschlagen oder deinen nächsten Lieblingssong vorstellen, diese Algorithmen lernen von dir und von Leuten wie dir.</p>
-  <p>Es ist, als hättest du einen persönlichen DJ, Filmkritiker und Einkäufer in der Tasche.</p>
-  <p>Und jetzt, wo du weißt, wie es funktioniert, bist du besser gerüstet, es zu nutzen, zu hinterfragen oder ihm manchmal einen Schritt voraus zu sein.</p>
-
-  <h3>Bonus: 3 Wege, den Algorithmus auszutricksen (wenn du willst)</h3>
-  <ol>
-    <li>Leere regelmäßig deinen Wiedergabe- oder Suchverlauf für einen Neustart.</li>
-    <li>Interagiere mit vielfältigen Inhalten, um die KI breiter zu trainieren.</li>
-    <li>Verwende mehrere Profile, um Empfehlungen für verschiedene Stimmungen oder Nutzer zu trennen.</li>
-  </ol>
-
-  <h3>FAQs zu KI-Empfehlungen</h3>
-  <p><strong>F:</strong> Spioniert mich KI aus?<br>
-  <strong>A:</strong> Nicht direkt. KI nutzt Muster aus deinem Verhalten, nicht deine privaten Nachrichten, um Inhalte zu empfehlen.</p>
-
-  <p><strong>F:</strong> Kann ich das ausschalten?<br>
-  <strong>A:</strong> Die meisten Plattformen erlauben es, das Tracking einzuschränken, aber das kann die Personalisierung reduzieren.</p>
-
-  <p><strong>F:</strong> Warum ändern sich meine Empfehlungen so schnell?<br>
-  <strong>A:</strong> Die Algorithmen sind dynamisch, sie reagieren schnell auf neue Interaktionen.</p>
-
-  <p>Abschließende Worte: Du musst kein Datenwissenschaftler sein, um zu verstehen, wie KI-Empfehlungen funktionieren. Neugier genügt und vielleicht eine gesunde Portion Skepsis.</p>
+  <script>
+    const blogPosts = [
+      { title: 'Was sind KI‑Agenten (Agentic AI)?', url: 'AgenticAiExplainedDE.html', keywords: ['ki','agenten','agentic','autonom','technologie'] },
+      { title: 'Einführung in Machine Learning', url: 'MachineLearning-ExplainedDE.html', keywords: ['machine learning','grundlagen','algorithmen'] },
+      { title: 'Anomalieerkennung im Machine Learning', url: 'MachineLearningAnomalyDetectionDE.html', keywords: ['anomalie','detektion','ml'] },
+      { title: 'Die Rolle der KI in Verteidigungstechnologien', url: 'AI-DefenseDE.html', keywords: ['ki','verteidigung','sicherheit'] }
+    ];
+    function handleSearch(event) {
+      event.preventDefault();
+      const searchTerm = document.getElementById('search-input').value.toLowerCase();
+      if (!searchTerm.trim()) return false;
+      const results = blogPosts.filter(post => post.title.toLowerCase().includes(searchTerm) || post.keywords.some(k => k.includes(searchTerm)));
+      if (results.length > 0) window.location.href = results[0].url; else alert('Keine passenden Beiträge gefunden.');
+      return false;
+    }
+  </script>
 </body>
 </html>
