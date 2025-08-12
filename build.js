@@ -3,6 +3,7 @@ const path = require('path');
 const CleanCSS = require('clean-css');
 const Terser = require('terser');
 const glob = require('glob');
+const { minify: minifyHTML } = require('html-minifier-terser');
 const { promisify } = require('util');
 const stat = promisify(fs.stat);
 const readFileAsync = promisify(fs.readFile);
@@ -63,6 +64,81 @@ async function convertToWebP() {
             .webp({ quality: 80 })
             .toFile(outputPath);
         console.log(`Converted ${file} to ${outputPath}`);
+    }
+}
+
+// Tweak icon font CSS to avoid FOIT
+async function tweakIconFontCSS() {
+    const targets = [
+        'lib/font-awesome/css/font-awesome.min.css',
+        'lib/ionicons/css/ionicons.min.css'
+    ];
+    for (const file of targets) {
+        try {
+            const css = await readFileAsync(file, 'utf8');
+            let updated = css;
+            if (file.includes('font-awesome') && !/font-display\s*:\s*swap/.test(css)) {
+                updated = updated.replace(/(@font-face\{[^}]*font-family:\s*'FontAwesome';)([^}]*\})/,
+                    (m, p1, p2) => `${p1}font-display:swap;${p2}`);
+            }
+            if (file.includes('ionicons') && !/font-display\s*:\s*swap/.test(updated)) {
+                updated = updated.replace(/(@font-face\{[^}]*font-family:\s*"Ionicons";)([^}]*\})/,
+                    (m, p1, p2) => `${p1}font-display:swap;${p2}`);
+            }
+            if (updated !== css) {
+                await writeFileAsync(file, updated, 'utf8');
+                console.log(`Updated font-display: swap in ${file}`);
+            }
+        } catch (_) {
+            // ignore
+        }
+    }
+}
+
+// Optimize and minify HTML files
+async function optimizeHTML() {
+    const htmlFiles = glob.sync('*.html');
+    for (const file of htmlFiles) {
+        try {
+            let html = await readFileAsync(file, 'utf8');
+
+            // Add defer to non-async scripts (preserve order)
+            html = html.replace(/<script(\s+[^>]*?)src=("|')(.*?)(\2)([^>]*)><\/script>/gi, (match, preAttrs = '', q, src, _q2, postAttrs = '') => {
+                const tag = `<script${preAttrs || ''}src=${q}${src}${q}${postAttrs || ''}></script>`;
+                const isGA = /googletagmanager\.com\/gtag\//i.test(src);
+                const isAsync = /\basync\b/i.test(preAttrs + postAttrs);
+                const hasDefer = /\bdefer\b/i.test(preAttrs + postAttrs);
+                if (isGA || isAsync || hasDefer) return tag; // leave as-is
+                return `<script defer${preAttrs || ''} src=${q}${src}${q}${postAttrs || ''}></script>`;
+            });
+
+            // Add lazy-loading to images lacking it
+            html = html.replace(/<img(?![^>]*\bloading=)([^>]*?)>/gi, (m, attrs) => {
+                // Skip if explicitly marked eager
+                if (/\bdata-no-lazy\b/i.test(attrs)) return `<img${attrs}>`;
+                // Add decoding async as well
+                let updated = attrs;
+                updated += ' loading="lazy" decoding="async"';
+                return `<img${updated}>`;
+            });
+
+            // Minify HTML
+            const minified = await minifyHTML(html, {
+                collapseWhitespace: true,
+                removeComments: true,
+                removeRedundantAttributes: true,
+                removeScriptTypeAttributes: true,
+                removeStyleLinkTypeAttributes: true,
+                minifyCSS: true,
+                minifyJS: true,
+                sortAttributes: true,
+                sortClassName: true,
+            });
+            await writeFileAsync(file, minified, 'utf8');
+            console.log(`Optimized ${file}`);
+        } catch (err) {
+            console.warn(`HTML optimize skipped for ${file}:`, err.message);
+        }
     }
 }
 
@@ -382,6 +458,12 @@ async function build() {
 
         console.log('Injecting i18n meta and toggles...');
         await updateI18nHeadsAndToggle();
+
+        console.log('Tweaking icon font CSS (font-display: swap)...');
+        await tweakIconFontCSS();
+
+        console.log('Optimizing and minifying HTML...');
+        await optimizeHTML();
         
         console.log('Build completed successfully!');
     } catch (error) {
