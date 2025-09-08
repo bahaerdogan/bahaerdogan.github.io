@@ -102,6 +102,37 @@ async function optimizeHTML() {
         try {
             let html = await readFileAsync(file, 'utf8');
 
+            // Site-wide: prefer WebP footer background
+            html = html.replace(/background-image:\s*url\(['"]img\/overlay-bg\.jpg['"]\)/gi, "background-image: url('img/overlay-bg.webp')");
+
+            // Remove unused heavy libs when not referenced by markup
+            const usesCarousel = /class=["'][^"']*blog-carousel[^"']*["']/.test(html);
+            if (!usesCarousel) {
+                html = html.replace(/\n?\s*<script[^>]*src=["']lib\/owlcarousel\/owl\.carousel\.min\.js["'][^>]*><\/script>/gi, '');
+            }
+            const usesLightbox = /data-lightbox=|class=["'][^"']*lightbox[^"']*["']/.test(html);
+            if (!usesLightbox) {
+                html = html.replace(/\n?\s*<script[^>]*src=["']lib\/lightbox\/js\/lightbox\.min\.js["'][^>]*><\/script>/gi, '');
+            }
+            const usesTyped = /class=["'][^"']*text-slider[^"']*["']/.test(html);
+            if (!usesTyped) {
+                html = html.replace(/\n?\s*<script[^>]*src=["']lib\/typed\/typed\.min\.js["'][^>]*><\/script>/gi, '');
+            }
+            // Blog listing script only needed on BlogPosts.html
+            if (!/BlogPosts\.html$/i.test(file)) {
+                html = html.replace(/\n?\s*<script[^>]*src=["']js\/blog\.min\.js["'][^>]*><\/script>/gi, '');
+            }
+
+            // Deduplicate EmailJS includes; keep the first one only
+            const emailJsMatches = [...html.matchAll(/<script[^>]*src=["']https:\/\/cdn\.jsdelivr\.net\/npm\/@emailjs\/browser@3\/dist\/email\.min\.js["'][^>]*><\/script>/gi)];
+            if (emailJsMatches.length > 1) {
+                let kept = false;
+                html = html.replace(/<script[^>]*src=["']https:\/\/cdn\.jsdelivr\.net\/npm\/@emailjs\/browser@3\/dist\/email\.min\.js["'][^>]*><\/script>/gi, (m) => {
+                    if (!kept) { kept = true; return m; }
+                    return '';
+                });
+            }
+
             // Add defer to non-async scripts (preserve order)
             html = html.replace(/<script(\s+[^>]*?)src=("|')(.*?)(\2)([^>]*)><\/script>/gi, (match, preAttrs = '', q, src, _q2, postAttrs = '') => {
                 const tag = `<script${preAttrs || ''}src=${q}${src}${q}${postAttrs || ''}></script>`;

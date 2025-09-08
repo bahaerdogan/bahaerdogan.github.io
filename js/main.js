@@ -231,27 +231,29 @@
 		}, 250);
 	});
 
-	// Initialize the blog carousel
-	$(".blog-carousel").owlCarousel({
-		loop: true,
-		margin: 20,
-		nav: true,
-		dots: true,
-		autoplay: true,
-		autoplayTimeout: 5000,
-		autoplayHoverPause: true,
-		responsive: {
-			0: {
-				items: 1
-			},
-			768: {
-				items: 2
-			},
-			992: {
-				items: 3
+	// Initialize the blog carousel (only if plugin and element exist)
+	if ($.fn && $.fn.owlCarousel && $(".blog-carousel").length) {
+		$(".blog-carousel").owlCarousel({
+			loop: true,
+			margin: 20,
+			nav: true,
+			dots: true,
+			autoplay: true,
+			autoplayTimeout: 5000,
+			autoplayHoverPause: true,
+			responsive: {
+				0: {
+					items: 1
+				},
+				768: {
+					items: 2
+				},
+				992: {
+					items: 3
+				}
 			}
-		}
-	});
+		});
+	}
 
 	// Language toggle functionality
 	const languageToggle = $('#language-toggle');
@@ -278,17 +280,341 @@
         });
     }
 
-	// Google Analytics initialization
-    const initGoogleAnalytics = () => {
-        try {
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);} 
-            gtag('js', new Date());
-            gtag('config', 'G-ZGTWHSMVV7');
-        } catch (err) {
-            console.warn('GA init skipped:', err);
-        }
-    };
+	// Cookie Consent System
+	const CookieConsent = {
+		STORAGE_KEY: 'cookie-consent',
+		
+		init() {
+			this.setupGoogleConsentMode();
+			this.checkExistingConsent();
+			this.createConsentBanner();
+		},
+		
+		setupGoogleConsentMode() {
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			window.gtag = gtag;
+			
+			// Default consent state (denied for regions requiring consent)
+			gtag('consent', 'default', {
+				ad_storage: 'denied',
+				analytics_storage: 'denied',
+				personalization_storage: 'denied',
+				functionality_storage: 'granted',
+				security_storage: 'granted'
+			});
+		},
+		
+		checkExistingConsent() {
+			const consent = localStorage.getItem(this.STORAGE_KEY);
+			if (consent) {
+				const consentData = JSON.parse(consent);
+				this.updateConsent(consentData.analytics);
+				return;
+			}
+			// Show banner if no consent found
+			setTimeout(() => this.showBanner(), 1000);
+		},
+		
+		createConsentBanner() {
+			const languages = {
+				en: {
+					message: 'This website uses cookies to improve your experience and analyze traffic.',
+					accept: 'Accept All',
+					reject: 'Reject All', 
+					settings: 'Settings',
+					necessary: 'Necessary',
+					analytics: 'Analytics',
+					save: 'Save Preferences',
+					close: 'Close'
+				},
+				tr: {
+					message: 'Bu web sitesi deneyiminizi iyileştirmek ve trafiği analiz etmek için çerezler kullanır.',
+					accept: 'Tümünü Kabul Et',
+					reject: 'Tümünü Reddet',
+					settings: 'Ayarlar', 
+					necessary: 'Gerekli',
+					analytics: 'Analitik',
+					save: 'Tercihleri Kaydet',
+					close: 'Kapat'
+				},
+				de: {
+					message: 'Diese Website verwendet Cookies, um Ihre Erfahrung zu verbessern und den Verkehr zu analysieren.',
+					accept: 'Alle akzeptieren',
+					reject: 'Alle ablehnen',
+					settings: 'Einstellungen',
+					necessary: 'Notwendig', 
+					analytics: 'Analytik',
+					save: 'Einstellungen speichern',
+					close: 'Schließen'
+				}
+			};
+			
+			const currentLang = this.detectLanguage();
+			const lang = languages[currentLang] || languages.en;
+			
+			const bannerHTML = `
+				<div id="cookie-banner" class="cookie-banner" style="display: none;">
+					<div class="cookie-content">
+						<p>${lang.message}</p>
+						<div class="cookie-buttons">
+							<button class="cookie-btn accept" onclick="CookieConsent.acceptAll()">${lang.accept}</button>
+							<button class="cookie-btn reject" onclick="CookieConsent.rejectAll()">${lang.reject}</button>
+							<button class="cookie-btn settings" onclick="CookieConsent.showSettings()">${lang.settings}</button>
+						</div>
+					</div>
+				</div>
+				
+				<div id="cookie-settings" class="cookie-modal" style="display: none;">
+					<div class="cookie-modal-content">
+						<div class="cookie-modal-header">
+							<h3>Cookie Settings</h3>
+							<button class="cookie-close" onclick="CookieConsent.hideSettings()">&times;</button>
+						</div>
+						<div class="cookie-modal-body">
+							<div class="cookie-category">
+								<label><input type="checkbox" checked disabled> ${lang.necessary}</label>
+								<small>Required for basic site functionality</small>
+							</div>
+							<div class="cookie-category">
+								<label><input type="checkbox" id="analytics-consent"> ${lang.analytics}</label>
+								<small>Help us understand how visitors interact with our website</small>
+							</div>
+						</div>
+						<div class="cookie-modal-footer">
+							<button class="cookie-btn" onclick="CookieConsent.savePreferences()">${lang.save}</button>
+						</div>
+					</div>
+				</div>
+			`;
+			
+			document.body.insertAdjacentHTML('beforeend', bannerHTML);
+			this.addStyles();
+		},
+		
+		addStyles() {
+			const styles = `
+				.cookie-banner {
+					position: fixed;
+					bottom: 0;
+					left: 0;
+					right: 0;
+					background: #2c3e50;
+					color: white;
+					padding: 20px;
+					z-index: 10000;
+					box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+				}
+				.cookie-content {
+					max-width: 1200px;
+					margin: 0 auto;
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					flex-wrap: wrap;
+					gap: 15px;
+				}
+				.cookie-content p {
+					margin: 0;
+					flex: 1;
+					min-width: 300px;
+				}
+				.cookie-buttons {
+					display: flex;
+					gap: 10px;
+					flex-wrap: wrap;
+				}
+				.cookie-btn {
+					padding: 10px 20px;
+					border: none;
+					border-radius: 4px;
+					cursor: pointer;
+					font-size: 14px;
+					transition: all 0.3s;
+				}
+				.cookie-btn.accept {
+					background: #27ae60;
+					color: white;
+				}
+				.cookie-btn.accept:hover {
+					background: #229954;
+				}
+				.cookie-btn.reject {
+					background: #e74c3c;
+					color: white;
+				}
+				.cookie-btn.reject:hover {
+					background: #c0392b;
+				}
+				.cookie-btn.settings {
+					background: #34495e;
+					color: white;
+				}
+				.cookie-btn.settings:hover {
+					background: #2c3e50;
+				}
+				.cookie-modal {
+					position: fixed;
+					top: 0;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					background: rgba(0,0,0,0.7);
+					z-index: 10001;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+				}
+				.cookie-modal-content {
+					background: white;
+					border-radius: 8px;
+					max-width: 500px;
+					width: 90%;
+					max-height: 80vh;
+					overflow-y: auto;
+				}
+				.cookie-modal-header {
+					padding: 20px;
+					border-bottom: 1px solid #eee;
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+				}
+				.cookie-modal-header h3 {
+					margin: 0;
+				}
+				.cookie-close {
+					background: none;
+					border: none;
+					font-size: 24px;
+					cursor: pointer;
+				}
+				.cookie-modal-body {
+					padding: 20px;
+				}
+				.cookie-category {
+					margin-bottom: 20px;
+				}
+				.cookie-category label {
+					display: flex;
+					align-items: center;
+					gap: 10px;
+					font-weight: bold;
+					margin-bottom: 5px;
+				}
+				.cookie-category small {
+					color: #666;
+					display: block;
+					margin-left: 30px;
+				}
+				.cookie-modal-footer {
+					padding: 20px;
+					border-top: 1px solid #eee;
+					text-align: right;
+				}
+				@media (max-width: 768px) {
+					.cookie-content {
+						flex-direction: column;
+						text-align: center;
+					}
+					.cookie-content p {
+						min-width: auto;
+					}
+					.cookie-buttons {
+						justify-content: center;
+					}
+				}
+			`;
+			
+			const styleSheet = document.createElement('style');
+			styleSheet.textContent = styles;
+			document.head.appendChild(styleSheet);
+		},
+		
+		detectLanguage() {
+			const path = window.location.pathname;
+			if (path.includes('TR.html')) return 'tr';
+			if (path.includes('DE.html')) return 'de';
+			return 'en';
+		},
+		
+		showBanner() {
+			const banner = document.getElementById('cookie-banner');
+			if (banner) banner.style.display = 'block';
+		},
+		
+		hideBanner() {
+			const banner = document.getElementById('cookie-banner');
+			if (banner) banner.style.display = 'none';
+		},
+		
+		showSettings() {
+			const modal = document.getElementById('cookie-settings');
+			if (modal) modal.style.display = 'flex';
+		},
+		
+		hideSettings() {
+			const modal = document.getElementById('cookie-settings');
+			if (modal) modal.style.display = 'none';
+		},
+		
+		acceptAll() {
+			this.saveConsent(true);
+			this.updateConsent(true);
+			this.hideBanner();
+		},
+		
+		rejectAll() {
+			this.saveConsent(false);
+			this.updateConsent(false);
+			this.hideBanner();
+		},
+		
+		savePreferences() {
+			const analyticsConsent = document.getElementById('analytics-consent').checked;
+			this.saveConsent(analyticsConsent);
+			this.updateConsent(analyticsConsent);
+			this.hideSettings();
+			this.hideBanner();
+		},
+		
+		saveConsent(analytics) {
+			const consent = {
+				analytics: analytics,
+				timestamp: new Date().toISOString()
+			};
+			localStorage.setItem(this.STORAGE_KEY, JSON.stringify(consent));
+		},
+		
+		updateConsent(analytics) {
+			if (typeof gtag === 'function') {
+				gtag('consent', 'update', {
+					analytics_storage: analytics ? 'granted' : 'denied'
+				});
+				
+				if (analytics) {
+					this.initGoogleAnalytics();
+				}
+			}
+		},
+		
+		initGoogleAnalytics() {
+			try {
+				gtag('js', new Date());
+				gtag('config', 'G-ZGTWHSMVV7', {
+					page_title: document.title,
+					page_location: window.location.href,
+					page_path: window.location.pathname,
+					send_page_view: true
+				});
+			} catch (err) {
+				console.warn('GA init failed:', err);
+			}
+		}
+	};
+	
+	// Make CookieConsent globally available
+	window.CookieConsent = CookieConsent;
 
 	// EmailJS initialization
     const initEmailJS = () => {
@@ -393,7 +719,7 @@
 
 	// Initialize all components
 	document.addEventListener('DOMContentLoaded', () => {
-		initGoogleAnalytics();
+		CookieConsent.init();
 		initEmailJS();
 		initBlogSearch();
 		initCommentSystem();
