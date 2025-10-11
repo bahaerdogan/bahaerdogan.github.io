@@ -1,0 +1,36 @@
+# Cloudflare Workers Configuration
+# Documentation: https://developers.cloudflare.com/workers/
+
+name = "comment-handler"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+# KV Namespace bindings
+[[kv_namespaces]]
+binding = "KV_COMMENTS"
+id = "YOUR_KV_NAMESPACE_ID" # ⚠️ IMPORTANT: Replace with your actual KV namespace ID from Cloudflare Dashboard
+
+# Routes - Deploy to your custom domain
+# Uncomment and configure after setting up your domain in Cloudflare
+# routes = [
+#   { pattern = "bahaerdogan.com/api/comments*", zone_name = "bahaerdogan.com" }
+# ]
+
+# Workers subdomain route (for testing before custom domain)
+# Access at: https://bahaerdogan-comments.YOUR_SUBDOMAIN.workers.dev
+
+# Environment variables (optional)
+# [env.production]
+# vars = { ENVIRONMENT = "production" }
+
+# [env.staging]
+# vars = { ENVIRONMENT = "staging" }
+
+# Observability (optional - requires paid plan)
+# [observability]
+# enabled = true
+
+# Limits
+[limits]
+cpu_ms = 50
+
