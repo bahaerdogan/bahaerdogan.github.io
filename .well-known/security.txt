@@ -1,4 +1,4 @@
-Contact: mailto:baha-erdogan@hotmail.com
+Contact: mailto:baha@bahaerdogan.com
 Preferred-Languages: en, tr, de
 Canonical: https://bahaerdogan.com/.well-known/security.txt
 Expires: 2026-10-11T23:59:59.000Z
