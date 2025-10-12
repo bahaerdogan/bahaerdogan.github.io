@@ -123,15 +123,7 @@ async function optimizeHTML() {
                 html = html.replace(/\n?\s*<script[^>]*src=["']js\/blog\.min\.js["'][^>]*><\/script>/gi, '');
             }
 
-            // Deduplicate EmailJS includes; keep the first one only
-            const emailJsMatches = [...html.matchAll(/<script[^>]*src=["']https:\/\/cdn\.jsdelivr\.net\/npm\/@emailjs\/browser@3\/dist\/email\.min\.js["'][^>]*><\/script>/gi)];
-            if (emailJsMatches.length > 1) {
-                let kept = false;
-                html = html.replace(/<script[^>]*src=["']https:\/\/cdn\.jsdelivr\.net\/npm\/@emailjs\/browser@3\/dist\/email\.min\.js["'][^>]*><\/script>/gi, (m) => {
-                    if (!kept) { kept = true; return m; }
-                    return '';
-                });
-            }
+            // EmailJS has been removed - now using Cloudflare Workers
 
             // Add defer to non-async scripts (preserve order)
             html = html.replace(/<script(\s+[^>]*?)src=("|')(.*?)(\2)([^>]*)><\/script>/gi, (match, preAttrs = '', q, src, _q2, postAttrs = '') => {

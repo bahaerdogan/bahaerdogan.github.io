@@ -8,7 +8,7 @@ compatibility_date = "2024-01-01"
 # KV Namespace bindings
 [[kv_namespaces]]
 binding = "KV_COMMENTS"
-id = "YOUR_KV_NAMESPACE_ID" # ⚠️ IMPORTANT: Replace with your actual KV namespace ID from Cloudflare Dashboard
+id = "d912fbb92ac3468ca187733c28055a28" # blog-comments KV namespace
 
 # Routes - Deploy to your custom domain
 # Uncomment and configure after setting up your domain in Cloudflare
@@ -30,7 +30,6 @@ id = "YOUR_KV_NAMESPACE_ID" # ⚠️ IMPORTANT: Replace with your actual KV name
 # [observability]
 # enabled = true
 
-# Limits
-[limits]
-cpu_ms = 50
-
+# Limits (requires paid plan - commented out for free tier)
+# [limits]
+# cpu_ms = 50

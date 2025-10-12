@@ -705,12 +705,7 @@
 	// Make CookieConsent globally available
 	window.CookieConsent = CookieConsent;
 
-	// EmailJS initialization
-    const initEmailJS = () => {
-        if (typeof emailjs !== 'undefined' && emailjs && typeof emailjs.init === 'function') {
-            try { emailjs.init("sr9_9CUgd0L641ObN"); } catch (e) { console.warn('EmailJS init failed:', e); }
-        }
-    };
+	// EmailJS removed - now using Cloudflare Workers for comments and contact form
 
 	// Blog search functionality
 	const initBlogSearch = () => {
@@ -759,38 +754,10 @@
         }
 	};
 
+	// Comment submission is now handled by comments-system.js using Cloudflare Workers
 	const handleCommentSubmission = async (event) => {
 		event.preventDefault();
-		
-		const submitButton = event.target.querySelector('button[type="submit"]');
-		const originalButtonText = submitButton.textContent;
-		
-		try {
-			submitButton.textContent = "Submitting...";
-			submitButton.disabled = true;
-			
-			const formData = {
-				from_name: document.getElementById('comment-name').value,
-				from_email: document.getElementById('comment-email').value,
-				message: document.getElementById('comment-text').value,
-				blog_title: "What's machine learning, really?"
-			};
-			
-			await emailjs.send('service_lhjdfqw', 'template_bha2val', formData);
-			
-			saveComment(formData.from_name, formData.message, new Date().toLocaleDateString());
-			displayComment(formData.from_name, formData.message, new Date().toLocaleDateString());
-			
-			event.target.reset();
-			document.getElementById('comment-success').classList.remove('d-none');
-			
-		} catch (error) {
-			console.error('EmailJS Error:', error);
-			document.getElementById('comment-error').classList.remove('d-none');
-		} finally {
-			submitButton.textContent = originalButtonText;
-			submitButton.disabled = false;
-		}
+		console.log('Comment submission handled by comments-system.js');
 	};
 
 	// Handle scroll to section when page loads with hash
@@ -809,7 +776,6 @@
 	// Initialize all components
 	document.addEventListener('DOMContentLoaded', () => {
 		CookieConsent.init();
-		initEmailJS();
 		initBlogSearch();
 		initCommentSystem();
 		// ... other existing initializations ...

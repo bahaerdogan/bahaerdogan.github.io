@@ -12,7 +12,21 @@ node_modules/
 # OS files
 Thumbs.db
 
-# Documentation files (if recreated)
-*.md
-!README.md
+# Documentation files (temporary/deployment guides)
+CLOUDFLARE_DEPLOYMENT.md
+DEPLOYMENT_STATUS.md
+
+# Environment and secrets
+.env
+.env.*
+*.key
+*.pem
+
+# Logs
+*.log
+wrangler-*.log
+
+# Build artifacts
+dist/
+.wrangler/
 
