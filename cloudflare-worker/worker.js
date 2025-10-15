@@ -3,14 +3,14 @@ export default {
       const url = new URL(request.url);
       const method = request.method;
   
-      if (method === "OPTIONS") return handleOptions();
+      if (method === "OPTIONS") return handleOptions(request);
   
       if (method === "POST" && url.pathname === "/comments") {
         return await handlePostComment(request, env);
       }
   
       if (method === "GET" && url.pathname.startsWith("/comments")) {
-        return await handleGetComments(url, env);
+        return await handleGetComments(url, env, request);
       }
   
       if (method === "POST" && url.pathname === "/contact") {
@@ -40,7 +40,7 @@ export default {
       if (now - rateLimitData.timestamp < RATE_LIMIT_WINDOW) {
         if (rateLimitData.count >= MAX_COMMENTS) {
           const minutesLeft = Math.ceil((RATE_LIMIT_WINDOW - (now - rateLimitData.timestamp)) / 60000);
-          return json({ error: `Rate limit aşıldı. Lütfen ${minutesLeft} dakika sonra tekrar deneyin.` }, 429);
+          return json({ error: `Rate limit aşıldı. Lütfen ${minutesLeft} dakika sonra tekrar deneyin.` }, 429, request);
         }
       } else {
         rateLimitData.count = 0;
@@ -52,16 +52,16 @@ export default {
   
       // Validation
       if (!name || name.trim().length < 2 || name.trim().length > 100)
-        return json({ error: "İsim 2-100 karakter arasında olmalı" }, 400);
+        return json({ error: "İsim 2-100 karakter arasında olmalı" }, 400, request);
         
       if (!email || !isValidEmail(email))
-        return json({ error: "Geçerli bir email adresi girin" }, 400);
+        return json({ error: "Geçerli bir email adresi girin" }, 400, request);
         
       if (!message || message.trim().length < 10 || message.trim().length > 5000)
-        return json({ error: "Mesaj 10-5000 karakter arasında olmalı" }, 400);
+        return json({ error: "Mesaj 10-5000 karakter arasında olmalı" }, 400, request);
         
       if (!slug)
-        return json({ error: "Slug gerekli" }, 400);
+        return json({ error: "Slug gerekli" }, 400, request);
   
       const sanitized = {
         id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -100,15 +100,16 @@ export default {
         timestamp: sanitized.timestamp
       };
   
-      return json({ success: true, comment: publicComment, message: 'Yorumunuz başarıyla gönderildi!' });
+      return json({ success: true, comment: publicComment, message: 'Yorumunuz başarıyla gönderildi!' }, 200, request);
     } catch (err) {
-      return json({ error: err.message }, 500);
+      console.error('Comment submission error:', err);
+      return json({ error: 'Bir hata oluştu. Lütfen daha sonra tekrar deneyin.' }, 500, request);
     }
   }
   
-  async function handleGetComments(url, env) {
+  async function handleGetComments(url, env, request) {
     const slug = url.pathname.split('/comments/')[1];
-    if (!slug) return json({ error: "Slug gerekli" }, 400);
+    if (!slug) return json({ error: "Slug gerekli" }, 400, request);
   
     const comments = (await env.KV_COMMENTS.get(`comments:${slug}`, "json")) || [];
     
@@ -123,7 +124,7 @@ export default {
       }))
       .sort((a, b) => b.timestamp - a.timestamp);
     
-    return json({ comments: publicComments });
+    return json({ comments: publicComments }, 200, request);
   }
   
   // --- Email with MailChannels ---
@@ -176,6 +177,28 @@ export default {
   }
   
   // --- Helpers ---
+  function getCorsHeaders(request) {
+    const allowedOrigins = [
+      'https://bahaerdogan.com',
+      'https://www.bahaerdogan.com'
+    ];
+    
+    const origin = request.headers.get('Origin');
+    
+    // If origin is in allowed list, use it; otherwise use default
+    const allowOrigin = allowedOrigins.includes(origin) 
+      ? origin 
+      : allowedOrigins[0];
+    
+    return {
+      "Access-Control-Allow-Origin": allowOrigin,
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
+      "Access-Control-Max-Age": "86400", // Cache preflight for 24 hours
+      "Vary": "Origin" // Tell CDN to cache per origin
+    };
+  }
+
   function sanitize(str) {
     const map = {
       '&': '&amp;',
@@ -203,14 +226,18 @@ export default {
     });
   }
   
-  function json(obj, status = 200) {
+  function json(obj, status = 200, request = null) {
+    const corsHeaders = request ? getCorsHeaders(request) : {
+      "Access-Control-Allow-Origin": "https://bahaerdogan.com",
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
+    };
+    
     return new Response(JSON.stringify(obj), {
       status,
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "https://bahaerdogan.com",
-        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type",
+        ...corsHeaders,
       },
     });
   }
@@ -230,7 +257,7 @@ export default {
       if (now - rateLimitData.timestamp < RATE_LIMIT_WINDOW) {
         if (rateLimitData.count >= MAX_CONTACTS) {
           const minutesLeft = Math.ceil((RATE_LIMIT_WINDOW - (now - rateLimitData.timestamp)) / 60000);
-          return json({ error: `Rate limit exceeded. Please try again in ${minutesLeft} minute(s).` }, 429);
+          return json({ error: `Rate limit exceeded. Please try again in ${minutesLeft} minute(s).` }, 429, request);
         }
       } else {
         rateLimitData.count = 0;
@@ -242,16 +269,16 @@ export default {
   
       // Validation
       if (!name || name.trim().length < 2 || name.trim().length > 100)
-        return json({ error: "Name must be between 2-100 characters" }, 400);
+        return json({ error: "Name must be between 2-100 characters" }, 400, request);
         
       if (!email || !isValidEmail(email))
-        return json({ error: "Please enter a valid email address" }, 400);
+        return json({ error: "Please enter a valid email address" }, 400, request);
         
       if (!subject || subject.trim().length < 2 || subject.trim().length > 200)
-        return json({ error: "Subject must be between 2-200 characters" }, 400);
+        return json({ error: "Subject must be between 2-200 characters" }, 400, request);
         
       if (!message || message.trim().length < 10 || message.trim().length > 5000)
-        return json({ error: "Message must be between 10-5000 characters" }, 400);
+        return json({ error: "Message must be between 10-5000 characters" }, 400, request);
   
       const sanitizedData = {
         id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -276,10 +303,10 @@ export default {
       return json({ 
         success: true, 
         message: 'Your message has been sent successfully! Thank you for contacting us.'
-      });
+      }, 200, request);
     } catch (err) {
       console.error('Contact form error:', err);
-      return json({ error: 'Failed to send message. Please try again later.' }, 500);
+      return json({ error: 'Failed to send message. Please try again later.' }, 500, request);
     }
   }
   
@@ -337,13 +364,9 @@ export default {
     console.log('Contact form email sent successfully');
   }
   
-  function handleOptions() {
+  function handleOptions(request) {
     return new Response(null, {
-      headers: {
-        "Access-Control-Allow-Origin": "https://bahaerdogan.com",
-        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type",
-      },
+      headers: getCorsHeaders(request),
     });
   }
   

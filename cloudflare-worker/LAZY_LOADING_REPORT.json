@@ -1,0 +1,130 @@
+{
+  "timestamp": "2025-10-14T18:03:31.538Z",
+  "summary": {
+    "totalFiles": 51,
+    "totalImages": 51,
+    "withLazyLoading": 51,
+    "withoutLazyLoading": 0,
+    "criticalImages": 7,
+    "filesWithIssues": 1,
+    "totalIssues": 7,
+    "lazyLoadingScore": "115.9"
+  },
+  "results": [
+    {
+      "file": "/Users/baha/MyWork/bahaerdogan.github.io/index.html",
+      "images": [
+        {
+          "fullTag": "<img alt=\"\" class=\"img-fluid b-shadow-a rounded\" decoding=\"async\" loading=\"lazy\" src=\"img/testimonial-2.jpg\">",
+          "attributes": "alt=\"\" class=\"img-fluid b-shadow-a rounded\" decoding=\"async\" loading=\"lazy\" src=\"img/testimonial-2.jpg\"",
+          "hasLazyLoading": true,
+          "hasEagerLoading": false,
+          "src": "img/testimonial-2.jpg",
+          "alt": null,
+          "isCritical": true
+        },
+        {
+          "fullTag": "<img alt=\"\" class=\"img-fluid\" decoding=\"async\" loading=\"lazy\" src=\"img/datamine.webp\">",
+          "attributes": "alt=\"\" class=\"img-fluid\" decoding=\"async\" loading=\"lazy\" src=\"img/datamine.webp\"",
+          "hasLazyLoading": true,
+          "hasEagerLoading": false,
+          "src": "img/datamine.webp",
+          "alt": null,
+          "isCritical": true
+        },
+        {
+          "fullTag": "<img alt=\"\" class=\"avatar rounded-circle\" decoding=\"async\" loading=\"lazy\" src=\"img/testimonial-2.jpg\">",
+          "attributes": "alt=\"\" class=\"avatar rounded-circle\" decoding=\"async\" loading=\"lazy\" src=\"img/testimonial-2.jpg\"",
+          "hasLazyLoading": true,
+          "hasEagerLoading": false,
+          "src": "img/testimonial-2.jpg",
+          "alt": null,
+          "isCritical": true
+        },
+        {
+          "fullTag": "<img alt=\"\" class=\"img-fluid\" decoding=\"async\" loading=\"lazy\" src=\"img/AgenticAi1.webp\">",
+          "attributes": "alt=\"\" class=\"img-fluid\" decoding=\"async\" loading=\"lazy\" src=\"img/AgenticAi1.webp\"",
+          "hasLazyLoading": true,
+          "hasEagerLoading": false,
+          "src": "img/AgenticAi1.webp",
+          "alt": null,
+          "isCritical": true
+        },
+        {
+          "fullTag": "<img alt=\"\" class=\"avatar rounded-circle\" decoding=\"async\" loading=\"lazy\" src=\"img/testimonial-2.jpg\">",
+          "attributes": "alt=\"\" class=\"avatar rounded-circle\" decoding=\"async\" loading=\"lazy\" src=\"img/testimonial-2.jpg\"",
+          "hasLazyLoading": true,
+          "hasEagerLoading": false,
+          "src": "img/testimonial-2.jpg",
+          "alt": null,
+          "isCritical": true
+        },
+        {
+          "fullTag": "<img alt=\"\" class=\"img-fluid\" decoding=\"async\" loading=\"lazy\" src=\"img/defenseai.webp\">",
+          "attributes": "alt=\"\" class=\"img-fluid\" decoding=\"async\" loading=\"lazy\" src=\"img/defenseai.webp\"",
+          "hasLazyLoading": true,
+          "hasEagerLoading": false,
+          "src": "img/defenseai.webp",
+          "alt": null,
+          "isCritical": true
+        },
+        {
+          "fullTag": "<img alt=\"\" class=\"avatar rounded-circle\" decoding=\"async\" loading=\"lazy\" src=\"img/testimonial-2.jpg\">",
+          "attributes": "alt=\"\" class=\"avatar rounded-circle\" decoding=\"async\" loading=\"lazy\" src=\"img/testimonial-2.jpg\"",
+          "hasLazyLoading": true,
+          "hasEagerLoading": false,
+          "src": "img/testimonial-2.jpg",
+          "alt": null,
+          "isCritical": true
+        }
+      ],
+      "issues": [
+        {
+          "type": "critical-image-lazy",
+          "src": "img/testimonial-2.jpg",
+          "message": "Critical image should not use lazy loading (use loading=\"eager\" or omit)"
+        },
+        {
+          "type": "critical-image-lazy",
+          "src": "img/datamine.webp",
+          "message": "Critical image should not use lazy loading (use loading=\"eager\" or omit)"
+        },
+        {
+          "type": "critical-image-lazy",
+          "src": "img/testimonial-2.jpg",
+          "message": "Critical image should not use lazy loading (use loading=\"eager\" or omit)"
+        },
+        {
+          "type": "critical-image-lazy",
+          "src": "img/AgenticAi1.webp",
+          "message": "Critical image should not use lazy loading (use loading=\"eager\" or omit)"
+        },
+        {
+          "type": "critical-image-lazy",
+          "src": "img/testimonial-2.jpg",
+          "message": "Critical image should not use lazy loading (use loading=\"eager\" or omit)"
+        },
+        {
+          "type": "critical-image-lazy",
+          "src": "img/defenseai.webp",
+          "message": "Critical image should not use lazy loading (use loading=\"eager\" or omit)"
+        },
+        {
+          "type": "critical-image-lazy",
+          "src": "img/testimonial-2.jpg",
+          "message": "Critical image should not use lazy loading (use loading=\"eager\" or omit)"
+        }
+      ],
+      "summary": {
+        "total": 7,
+        "withLazyLoading": 7,
+        "withoutLazyLoading": 0,
+        "criticalImages": 7
+      }
+    }
+  ],
+  "issueTypes": {
+    "missingLazyLoading": 0,
+    "criticalImageLazy": 7
+  }
+}

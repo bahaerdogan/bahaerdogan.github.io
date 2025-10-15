@@ -28,12 +28,29 @@ async function minifyCSS() {
         format: 'keep-breaks'
     });
 
-    for (const file of cssFiles) {
-        const css = fs.readFileSync(file, 'utf8');
-        const minified = cssMinifier.minify(css);
-        const outputPath = file.replace('.css', '.min.css');
-        fs.writeFileSync(outputPath, minified.styles);
-        console.log(`Minified ${file} to ${outputPath}`);
+    const results = await Promise.all(cssFiles.map(async (file) => {
+        try {
+            const css = await readFileAsync(file, 'utf8');
+            const minified = cssMinifier.minify(css);
+            
+            if (minified.errors && minified.errors.length > 0) {
+                console.error(`CSS minification errors in ${file}:`, minified.errors);
+                return { file, success: false };
+            }
+            
+            const outputPath = file.replace('.css', '.min.css');
+            await writeFileAsync(outputPath, minified.styles, 'utf8');
+            console.log(`Minified ${file} to ${outputPath}`);
+            return { file, success: true };
+        } catch (error) {
+            console.error(`Failed to minify ${file}:`, error.message);
+            return { file, success: false, error };
+        }
+    }));
+    
+    const failed = results.filter(r => !r.success);
+    if (failed.length > 0) {
+        console.warn(`CSS minification completed with ${failed.length} failures`);
     }
 }
 
@@ -41,15 +58,32 @@ async function minifyCSS() {
 async function minifyJS() {
     const jsFiles = glob.sync('js/*.js', { ignore: ['js/*.min.js'] });
     
-    for (const file of jsFiles) {
-        const js = fs.readFileSync(file, 'utf8');
-        const minified = await Terser.minify(js, {
-            compress: true,
-            mangle: true
-        });
-        const outputPath = file.replace('.js', '.min.js');
-        fs.writeFileSync(outputPath, minified.code);
-        console.log(`Minified ${file} to ${outputPath}`);
+    const results = await Promise.all(jsFiles.map(async (file) => {
+        try {
+            const js = await readFileAsync(file, 'utf8');
+            const minified = await Terser.minify(js, {
+                compress: true,
+                mangle: true
+            });
+            
+            if (minified.error) {
+                console.error(`JS minification error in ${file}:`, minified.error);
+                return { file, success: false };
+            }
+            
+            const outputPath = file.replace('.js', '.min.js');
+            await writeFileAsync(outputPath, minified.code, 'utf8');
+            console.log(`Minified ${file} to ${outputPath}`);
+            return { file, success: true };
+        } catch (error) {
+            console.error(`Failed to minify ${file}:`, error.message);
+            return { file, success: false, error };
+        }
+    }));
+    
+    const failed = results.filter(r => !r.success);
+    if (failed.length > 0) {
+        console.warn(`JS minification completed with ${failed.length} failures`);
     }
 }
 
@@ -58,12 +92,43 @@ async function convertToWebP() {
     const sharp = require('sharp');
     const imageFiles = glob.sync('img/*.{png,jpg,jpeg}');
     
-    for (const file of imageFiles) {
-        const outputPath = file.replace(/\.(png|jpg|jpeg)$/, '.webp');
-        await sharp(file)
-            .webp({ quality: 80 })
-            .toFile(outputPath);
-        console.log(`Converted ${file} to ${outputPath}`);
+    const results = await Promise.all(imageFiles.map(async (file) => {
+        try {
+            const outputPath = file.replace(/\.(png|jpg|jpeg)$/, '.webp');
+            
+            // Check if WebP already exists and is newer than source
+            try {
+                const [sourceStat, webpStat] = await Promise.all([
+                    stat(file),
+                    stat(outputPath)
+                ]);
+                
+                if (webpStat.mtime >= sourceStat.mtime) {
+                    // WebP is up to date, skip conversion
+                    return { file, success: true, skipped: true };
+                }
+            } catch (err) {
+                // WebP doesn't exist or stat failed, proceed with conversion
+            }
+            
+            await sharp(file)
+                .webp({ quality: 80 })
+                .toFile(outputPath);
+            console.log(`Converted ${file} to ${outputPath}`);
+            return { file, success: true, skipped: false };
+        } catch (error) {
+            console.error(`Failed to convert ${file}:`, error.message);
+            return { file, success: false, error };
+        }
+    }));
+    
+    const failed = results.filter(r => !r.success);
+    const skipped = results.filter(r => r.skipped);
+    if (skipped.length > 0) {
+        console.log(`Skipped ${skipped.length} up-to-date WebP images`);
+    }
+    if (failed.length > 0) {
+        console.warn(`WebP conversion completed with ${failed.length} failures`);
     }
 }
 
@@ -73,10 +138,12 @@ async function tweakIconFontCSS() {
         'lib/font-awesome/css/font-awesome.min.css',
         'lib/ionicons/css/ionicons.min.css'
     ];
-    for (const file of targets) {
+    
+    const results = await Promise.all(targets.map(async (file) => {
         try {
             const css = await readFileAsync(file, 'utf8');
             let updated = css;
+            
             if (file.includes('font-awesome') && !/font-display\s*:\s*swap/.test(css)) {
                 updated = updated.replace(/(@font-face\{[^}]*font-family:\s*'FontAwesome';)([^}]*\})/,
                     (m, p1, p2) => `${p1}font-display:swap;${p2}`);
@@ -85,20 +152,30 @@ async function tweakIconFontCSS() {
                 updated = updated.replace(/(@font-face\{[^}]*font-family:\s*"Ionicons";)([^}]*\})/,
                     (m, p1, p2) => `${p1}font-display:swap;${p2}`);
             }
+            
             if (updated !== css) {
                 await writeFileAsync(file, updated, 'utf8');
                 console.log(`Updated font-display: swap in ${file}`);
+                return { file, success: true, modified: true };
             }
-        } catch (_) {
-            // ignore
+            return { file, success: true, modified: false };
+        } catch (error) {
+            console.error(`Failed to update font-display in ${file}:`, error.message);
+            return { file, success: false, error };
         }
+    }));
+    
+    const failed = results.filter(r => !r.success);
+    if (failed.length > 0) {
+        console.warn(`Font CSS updates completed with ${failed.length} failures`);
     }
 }
 
 // Optimize and minify HTML files
 async function optimizeHTML() {
     const htmlFiles = glob.sync('*.html');
-    for (const file of htmlFiles) {
+    
+    const results = await Promise.all(htmlFiles.map(async (file) => {
         try {
             let html = await readFileAsync(file, 'utf8');
 
@@ -159,9 +236,17 @@ async function optimizeHTML() {
             });
             await writeFileAsync(file, minified, 'utf8');
             console.log(`Optimized ${file}`);
+            return { file, success: true };
         } catch (err) {
-            console.warn(`HTML optimize skipped for ${file}:`, err.message);
+            console.error(`HTML optimize failed for ${file}:`, err.message);
+            return { file, success: false, error: err };
         }
+    }));
+    
+    const failed = results.filter(r => !r.success);
+    if (failed.length > 0) {
+        console.warn(`HTML optimization completed with ${failed.length} failures`);
+        throw new Error(`Failed to optimize ${failed.length} HTML files`);
     }
 }
 
@@ -316,25 +401,36 @@ async function updateI18nHeadsAndToggle() {
         const deFile = langs.de;
         if (!enFile && !trFile && !deFile) continue;
 
-        // Helper to safely inject into <head>
+        // Helper to safely inject into <head> with proper duplicate detection
         const injectHead = (html, inserts) => {
             if (!html.includes('<head')) return html;
-            const already = inserts.every(snip => html.includes(snip.trim().slice(0, Math.min(30, snip.length))));
-            if (already) return html; // basic idempotency
-            return html.replace(/<head>([\s\S]*?)<\/head>/i, (m) => {
-                // place after opening <head>
+            
+            // Clean before inject: remove existing canonical and hreflang tags
+            let cleaned = html.replace(/<link\s+[^>]*rel=["']canonical["'][^>]*>/gi, '');
+            cleaned = cleaned.replace(/<link\s+[^>]*rel=["']alternate["'][^>]*hreflang=["'][^"']+["'][^>]*>/gi, '');
+            
+            // Also remove any OG meta tags that we'll be re-injecting
+            cleaned = cleaned.replace(/<meta\s+[^>]*property=["']og:(title|description|url|type)["'][^>]*>/gi, '');
+            
+            // Now inject the new tags
+            return cleaned.replace(/<head>([\s\S]*?)<\/head>/i, (m) => {
+                // Place after opening <head>
                 return m.replace('<head>', '<head>\n' + inserts.join('\n') + '\n');
             });
         };
 
-        // Helper to inject language dropdown in navbar; idempotent
+        // Helper to inject language dropdown in navbar; idempotent with improved cleaning
         const injectLanguageLinks = (html, links) => {
             if (!Array.isArray(links) || links.length === 0) return html;
-            // Remove any existing single toggle or previous language blocks
+            
+            // Remove any existing language switcher elements more thoroughly
             let updated = html
-                .replace(/\n?\s*<li class=\"nav-item\">\s*<a[^>]*id=["']language-toggle["'][\s\S]*?<\/li>\s*/gi, '')
-                .replace(/\n?\s*<li class=\"nav-item language-link\">[\s\S]*?<\/li>\s*/gi, '')
-                .replace(/\n?\s*<li class=\"nav-item dropdown language-switcher\">[\s\S]*?<\/li>\s*/gi, '');
+                // Remove old single toggle links
+                .replace(/\n?\s*<li\s+class=["']nav-item["']>\s*<a[^>]*id=["']language-toggle["'][^>]*>[\s\S]*?<\/a>\s*<\/li>\s*/gi, '')
+                // Remove old language-link items
+                .replace(/\n?\s*<li\s+class=["']nav-item\s+language-link["'][^>]*>[\s\S]*?<\/li>\s*/gi, '')
+                // Remove existing language-switcher dropdowns (more flexible pattern)
+                .replace(/\n?\s*<li\s+class=["'][^"']*language-switcher[^"']*["'][^>]*>[\s\S]*?<\/li>\s*(?=\s*<\/ul>|\s*<li)/gi, '');
 
             // Sort links in desired order: Deutsch, English, Türkçe
             const order = { 'Deutsch': 1, 'English': 2, 'Türkçe': 3 };
@@ -342,7 +438,12 @@ async function updateI18nHeadsAndToggle() {
             const items = sorted.map(l => `<a class=\"dropdown-item\" href=\"${l.href}\">${l.label}</a>`).join('\n      ');
             const dropdown = `  <li class=\"nav-item dropdown language-switcher\">\n    <a class=\"nav-link dropdown-toggle\" href=\"#\" id=\"langDropdown\" role=\"button\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n      <i class=\"fa fa-language\"></i> Language\n    </a>\n    <div class=\"dropdown-menu dropdown-menu-right\" aria-labelledby=\"langDropdown\">\n      ${items}\n    </div>\n  </li>`;
 
-            return updated.replace(/<ul class=\"navbar-nav\">([\s\S]*?)<\/ul>/i, (match) => match.replace('</ul>', dropdown + '\n</ul>'));
+            // Insert before closing </ul> in navbar-nav
+            return updated.replace(/(<ul\s+class=["']navbar-nav["'][^>]*>[\s\S]*?)(<\/ul>)/i, (match, before, closing) => {
+                // Check if dropdown already exists (shouldn't after cleaning, but safety check)
+                if (before.includes('language-switcher')) return match;
+                return before + '\n' + dropdown + '\n' + closing;
+            });
         };
 
         // Read EN/TR/DE files

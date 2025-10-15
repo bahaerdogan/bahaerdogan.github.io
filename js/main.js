@@ -757,7 +757,7 @@
 	// Comment submission is now handled by comments-system.js using Cloudflare Workers
 	const handleCommentSubmission = async (event) => {
 		event.preventDefault();
-		console.log('Comment submission handled by comments-system.js');
+		// Comment submission handled by comments-system.js
 	};
 
 	// Handle scroll to section when page loads with hash

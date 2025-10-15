@@ -1,0 +1,119 @@
+{
+  "timestamp": "2025-10-13T15:51:18.804Z",
+  "summary": {
+    "total": 21,
+    "passed": 1,
+    "failed": 20,
+    "successRate": "4.76%"
+  },
+  "tests": [
+    {
+      "name": "Invalid endpoint returns 404",
+      "passed": false,
+      "details": "Status: 0, Message: {\"error\":\"fetch failed\"}"
+    },
+    {
+      "name": "Missing name field returns 400 with error message",
+      "passed": false,
+      "details": "Status: 0, Error: fetch failed"
+    },
+    {
+      "name": "Missing email field returns 400 with error message",
+      "passed": false,
+      "details": "Status: 0, Error: fetch failed"
+    },
+    {
+      "name": "Missing message field returns 400 with error message",
+      "passed": false,
+      "details": "Status: 0, Error: fetch failed"
+    },
+    {
+      "name": "Missing slug field returns 400 with error message",
+      "passed": false,
+      "details": "Status: 0, Error: fetch failed"
+    },
+    {
+      "name": "Name too short returns 400 with meaningful error",
+      "passed": false,
+      "details": "Status: 0, Error: fetch failed"
+    },
+    {
+      "name": "Invalid email format returns 400 with meaningful error",
+      "passed": false,
+      "details": "Status: 0, Error: fetch failed"
+    },
+    {
+      "name": "Message too short returns 400 with meaningful error",
+      "passed": false,
+      "details": "Status: 0, Error: fetch failed"
+    },
+    {
+      "name": "Malformed JSON returns 500 with error message",
+      "passed": false,
+      "details": "Status: 0, Error: fetch failed"
+    },
+    {
+      "name": "Missing subject returns 400 with error message",
+      "passed": false,
+      "details": "Status: 0, Error: fetch failed"
+    },
+    {
+      "name": "Subject too short returns 400 with meaningful error",
+      "passed": false,
+      "details": "Status: 0, Error: fetch failed"
+    },
+    {
+      "name": "GET comments without slug returns 400 with error message",
+      "passed": false,
+      "details": "Status: 0, Error: fetch failed"
+    },
+    {
+      "name": "Error responses include CORS headers",
+      "passed": false,
+      "details": "CORS header: undefined"
+    },
+    {
+      "name": "Error responses have JSON content-type",
+      "details": "Content-Type: undefined"
+    },
+    {
+      "name": "Health check endpoint returns 200",
+      "passed": false,
+      "details": "Status: 0, Response: {\"error\":\"fetch failed\"}"
+    },
+    {
+      "name": "OPTIONS request returns proper CORS headers",
+      "passed": false,
+      "details": "Status: 0, Methods: undefined, Headers: undefined"
+    },
+    {
+      "name": "XSS attempts are handled (sanitized or rejected)",
+      "passed": false,
+      "details": "Status: 0, Name in response: N/A"
+    },
+    {
+      "name": "Injection attempts are handled gracefully",
+      "passed": false,
+      "details": "Status: 0"
+    },
+    {
+      "name": "Very long name is rejected with error message",
+      "passed": false,
+      "details": "Status: 0, Error: fetch failed"
+    },
+    {
+      "name": "Empty request body returns error",
+      "passed": false,
+      "details": "Status: 0, Error: fetch failed"
+    },
+    {
+      "name": "Network errors are caught and handled",
+      "passed": true,
+      "details": "Error caught: fetch failed"
+    }
+  ],
+  "conclusions": [
+    "⚠️ Some error handling tests failed",
+    "⚠️ Review failed tests for improvements"
+  ]
+}
