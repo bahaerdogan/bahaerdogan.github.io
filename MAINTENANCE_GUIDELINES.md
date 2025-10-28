@@ -907,13 +907,8 @@ git reset --hard <commit-hash>
 **Core Documentation**:
 - README.md - Project overview
 - MAINTENANCE_GUIDELINES.md - This document
-- PROJECT_STRUCTURE_DOCUMENTATION.md - Project structure
-- FINAL_AUDIT_REPORT.md - Audit results
-
-**Security Documentation**:
-- SECURITY_AUDIT_REPORT.md - Security audit
-- CSP_UPDATE_SUMMARY.md - CSP updates
-- INLINE_SCRIPTS_ANALYSIS.md - Inline scripts
+- package.json - Project dependencies and scripts
+- build.js - Build process configuration
 
 **Build Documentation**:
 - BUILD_OPTIMIZATION_SUMMARY.md - Build improvements
