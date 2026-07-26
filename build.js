@@ -560,6 +560,137 @@ async function updateI18nHeadsAndToggle() {
     console.log('Updated head tags and language links for EN↔TR↔DE pages');
 }
 
+// Enrich Blog SEO, BreadcrumbList & Article Schema, and normalize heading hierarchy across all articles
+async function enrichBlogSEOAndSchema() {
+    const htmlFiles = glob.sync('*.html');
+    const baseUrl = 'https://bahaerdogan.com';
+
+    for (const file of htmlFiles) {
+        if (file === 'index.html' || file === 'BlogPosts.html') continue;
+        try {
+            let html = await readFileAsync(file, 'utf8');
+
+            const titleMatch = html.match(/<title>(.*?)<\/title>/i);
+            const descMatch = html.match(/<meta[^>]*name=["']description["'][^>]*content=["'](.*?)["']/i);
+            const imageMatch = html.match(/<meta[^>]*property=["']og:image["'][^>]*content=["'](.*?)["']/i);
+            
+            const rawTitle = titleMatch ? titleMatch[1].trim() : '';
+            const title = rawTitle.replace(/\s*\|\s*(Bahaerdogan|Baha Erdoğan|Deutsch|Türkçe|Opinion|AI Technology Guide|Computer Vision Guide|Data Science Guide|AI Development Guide|Historical Perspective Guide)/gi, '').trim() || 'Article';
+            const description = descMatch ? descMatch[1].trim() : '';
+            const imageUrl = imageMatch ? imageMatch[1].trim() : `${baseUrl}/img/AgenticAi1.webp`;
+            const articleUrl = `${baseUrl}/${file}`;
+
+            const lang = file.endsWith('TR.html') || file.endsWith('-tr.html') ? 'tr' : (file.endsWith('DE.html') ? 'de' : 'en');
+
+            const schemaGraph = {
+                "@context": "https://schema.org",
+                "@graph": [
+                    {
+                        "@type": "BlogPosting",
+                        "@id": `${articleUrl}#article`,
+                        "isPartOf": {
+                            "@type": "WebPage",
+                            "@id": articleUrl
+                        },
+                        "headline": title,
+                        "description": description,
+                        "image": imageUrl,
+                        "inLanguage": lang,
+                        "mainEntityOfPage": articleUrl,
+                        "datePublished": "2024-03-20",
+                        "dateModified": "2026-07-26",
+                        "author": {
+                            "@type": "Person",
+                            "@id": "https://bahaerdogan.com/#person",
+                            "name": "Baha Erdoğan",
+                            "url": "https://bahaerdogan.com",
+                            "jobTitle": "Computer Engineer & AI R&D Specialist"
+                        },
+                        "publisher": {
+                            "@type": "Person",
+                            "@id": "https://bahaerdogan.com/#person",
+                            "name": "Baha Erdoğan"
+                        }
+                    },
+                    {
+                        "@type": "BreadcrumbList",
+                        "@id": `${articleUrl}#breadcrumb`,
+                        "itemListElement": [
+                            {
+                                "@type": "ListItem",
+                                "position": 1,
+                                "name": "Home",
+                                "item": `${baseUrl}/`
+                            },
+                            {
+                                "@type": "ListItem",
+                                "position": 2,
+                                "name": "Blog",
+                                "item": `${baseUrl}/BlogPosts.html`
+                            },
+                            {
+                                "@type": "ListItem",
+                                "position": 3,
+                                "name": title,
+                                "item": articleUrl
+                            }
+                        ]
+                    }
+                ]
+            };
+
+            const jsonLdTag = `<script type="application/ld+json">${JSON.stringify(schemaGraph)}</script>`;
+
+            html = html.replace(/<script[^>]*type=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/gi, '');
+            html = html.replace('</head>', `${jsonLdTag}</head>`);
+
+            html = html.replace(/<h2[^>]*class=["'][^"']*intro-title[^"']*["'][^>]*>([\s\S]*?)<\/h2>/gi, '<div class="mb-4 intro-title h2 display-4 font-weight-bold text-white">$1</div>');
+            html = html.replace(/<h5([^>]*class=["'][^"']*sidebar-title[^"']*["'][^>]*)>([\s\S]*?)<\/h5>/gi, '<h3$1>$2</h3>');
+
+            await writeFileAsync(file, html, 'utf8');
+        } catch (e) {
+            console.error(`Error enriching schema for ${file}:`, e.message);
+        }
+    }
+    console.log('Enriched JSON-LD Article & BreadcrumbList schema and corrected heading hierarchy for all blog pages');
+}
+
+// Generate llms.txt and llms-full.txt for AI Search engines (GEO)
+async function generateLlmsTxt() {
+    const htmlFiles = glob.sync('*.html');
+    const articles = [];
+
+    for (const file of htmlFiles) {
+        if (file === 'index.html' || file === 'BlogPosts.html' || file.startsWith('BlogTemplate')) continue;
+        try {
+            const html = await readFileAsync(file, 'utf8');
+            const titleMatch = html.match(/<title>(.*?)<\/title>/i);
+            const descMatch = html.match(/<meta[^>]*name=["']description["'][^>]*content=["'](.*?)["']/i);
+            const title = titleMatch ? titleMatch[1].replace(/\s*\|\s*(Bahaerdogan|Baha Erdoğan|Deutsch|Türkçe)/gi, '').trim() : file;
+            const description = descMatch ? descMatch[1].trim() : '';
+            articles.push({ file, title, description });
+        } catch (e) {}
+    }
+
+    const llmsTxtContent = `# Baha Erdoğan
+> Computer Engineer & AI R&D Specialist at Huawei R&D
+
+- Website: https://bahaerdogan.com
+- Author: Baha Erdoğan
+- Focus Areas: Artificial Intelligence, Computer Vision, Machine Learning, C++, Python, Deep Learning, Software Architecture
+- GitHub: https://github.com/bahaerdogan
+- LinkedIn: https://www.linkedin.com/in/bahaerdogan/
+
+## Publications & Engineering Notes
+
+${articles.map(a => `- [${a.title}](https://bahaerdogan.com/${a.file}): ${a.description}`).join('\n')}
+`;
+
+    await writeFileAsync('llms.txt', llmsTxtContent, 'utf8');
+    await writeFileAsync('llms-full.txt', llmsTxtContent, 'utf8');
+    console.log('Generated llms.txt and llms-full.txt for AI Search Engines');
+}
+
 // Main build process
 async function build() {
     try {
@@ -579,6 +710,12 @@ async function build() {
 
         console.log('Generating RSS feed...');
         await generateRSS();
+
+        console.log('Enriching Blog SEO, Schema & Headings...');
+        await enrichBlogSEOAndSchema();
+
+        console.log('Generating llms.txt for AI search engines...');
+        await generateLlmsTxt();
 
         console.log('Injecting i18n meta and toggles...');
         await updateI18nHeadsAndToggle();

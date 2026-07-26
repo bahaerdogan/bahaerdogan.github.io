@@ -1,0 +1,57 @@
+# Baha Erdoğan
+> Computer Engineer & AI R&D Specialist at Huawei R&D
+
+- Website: https://bahaerdogan.com
+- Author: Baha Erdoğan
+- Focus Areas: Artificial Intelligence, Computer Vision, Machine Learning, C++, Python, Deep Learning, Software Architecture
+- GitHub: https://github.com/bahaerdogan
+- LinkedIn: https://www.linkedin.com/in/bahaerdogan/
+
+## Publications & Engineering Notes
+
+- [Will Artificial Intelligence Replace My Job? | AI & Future of Work](https://bahaerdogan.com/ai-and-human-job-competition.html): 
+- [Yapay Zekâ İşimi Elimden Alacak mı? | İşin Geleceği](https://bahaerdogan.com/ai-and-human-job-competition-tr.html): 
+- [Tarih Bilmek Neden Önemli?](https://bahaerdogan.com/WhyToLearnHistoryTR.html): 
+- [Why is Knowing History Important? | Historical Perspective Guide](https://bahaerdogan.com/WhyToLearnHistory.html): 
+- [Tahminden Etkiye: Yapay Zekâ Sizin İçin Ne İfade Ediyor?](https://bahaerdogan.com/WhatAiMeansToYouTR.html): 
+- [From Prediction to Impact: What Artificial Intelligence Actually Means for You](https://bahaerdogan.com/WhatAiMeansToYou.html): 
+- [İhracatta Kilogram Başına Değer Neden Refahın Anahtarıdır? | Görüş](https://bahaerdogan.com/ValuePerKilogramForProsperityTR.html): 
+- [Warum der Wert pro Kilogramm der Schlüssel zum Wohlstand ist](https://bahaerdogan.com/ValuePerKilogramForProsperityDE.html): 
+- [Why High Value-Per-Kilogram Exports Are the Key to National Prosperity | Opinion](https://bahaerdogan.com/ValuePerKilogramForProsperity.html): 
+- [Agentic AI Türleri ve İlk Ajanınızı Nasıl Kurarsınız](https://bahaerdogan.com/TypesOfAgenticAiTR.html): 
+- [Arten von Agentic AI: Ein umfassender Leitfaden](https://bahaerdogan.com/TypesOfAgenticAiDE.html): 
+- [Types of Agentic AI and How to Build Your First Agent | AI Development Guide](https://bahaerdogan.com/TypesOfAgenticAi.html): 
+- [Kıymetli Madenlerden Biri: Veri](https://bahaerdogan.com/PreciousMetalDataTR.html): 
+- [One of the Precious Metals: Data | Data Science Guide](https://bahaerdogan.com/PreciousMetalData.html): 
+- [Oğuz Kağan Destanı | Eski Türk Efsanesi](https://bahaerdogan.com/OguzKaganEpicTR.html): 
+- [The Oğuz Kağan Epic | Ancient Turkish Legend](https://bahaerdogan.com/OguzKaganEpic.html): 
+- [Makine Öğreniminde Anomali Tespiti | Teknik Rehber ve Örnekler](https://bahaerdogan.com/MachineLearningAnomalyDetectionTR.html): 
+- [Anomalieerkennung im Machine Learning](https://bahaerdogan.com/MachineLearningAnomalyDetectionDE.html): 
+- [Anomaly Detection in Machine Learning | Technical Guide & Examples](https://bahaerdogan.com/MachineLearningAnomalyDetection.html): 
+- [Bahaerdogan](https://bahaerdogan.com/MachineLearning-ExplainedTR.html): 
+- [Einführung in Machine Learning](https://bahaerdogan.com/MachineLearning-ExplainedDE.html): 
+- [What's Machine Learning, Really? | Comprehensive Guide & Explanation](https://bahaerdogan.com/MachineLearning-Explained.html): 
+- [Mac Kısayolları Rehberi | macOS için Temel Klavye Kısayolları](https://bahaerdogan.com/MacShortcutsTR.html): 
+- [Mac Shortcuts Guide | Essential Keyboard Shortcuts for macOS](https://bahaerdogan.com/MacShortcuts.html): 
+- [The Ergenekon Epic | Ancient Turkish Legend](https://bahaerdogan.com/ErgenekonEpicTR.html): 
+- [The Ergenekon Epic | Ancient Turkish Legend](https://bahaerdogan.com/ErgenekonEpic.html): 
+- [Videodan Nesne Hızını Nasıl Tahmin Ederiz? | Bilgisayarlı Görü Rehberi](https://bahaerdogan.com/DistanceCalculatingMethodsTR.html): 
+- [Geschwindigkeit aus Videos schätzen](https://bahaerdogan.com/DistanceCalculatingMethodsDE.html): 
+- [How to Estimate Object Speed from Video | Computer Vision Guide](https://bahaerdogan.com/DistanceCalculatingMethods.html): 
+- [YZ Modelleri Hak Etmediğimiz Parayı mı Kazandırıyor?](https://bahaerdogan.com/DeservingMoneyTR.html): 
+- [Are AI Models Making Us Earn Money We Don't Deserve? | AI Ethics Guide](https://bahaerdogan.com/DeservingMoney.html): 
+- [Netflix'ten TikTok'a: Yapay Zekâ Ne İstediğinizi Nasıl Biliyor?](https://bahaerdogan.com/AlgorithmsExplainedTR.html): 
+- [Von Netflix bis TikTok: Wie KI weiß, was du magst](https://bahaerdogan.com/AlgorithmsExplainedDE.html): 
+- [From Netflix to TikTok: How AI Knows What You Like | Opinion](https://bahaerdogan.com/AlgorithmsExplained.html): 
+- [Agentic AI ve Üretken AI: Mimari Farklar ve Sohbetbotlara Etkisi | Teknik Bakış](https://bahaerdogan.com/AgenticAivsGenAiTR.html): 
+- [Agentic AI vs Generative AI: Die Unterschiede](https://bahaerdogan.com/AgenticAivsGenAiDE.html): 
+- [Agentic AI vs Generative AI: Architectural Differences and Chatbot Impact | AI Technology Guide](https://bahaerdogan.com/AgenticAivsGenAi.html): 
+- [Agentic AI Derinlemesine: Teknik Yapılar, Planlama Modelleri ve Otonom Orkestrasyon | Teknik Rehber](https://bahaerdogan.com/AgenticAiTechDepthTR.html): 
+- [Agentic AI im Detail: Technischer Deep-Dive](https://bahaerdogan.com/AgenticAiTechDepthDE.html): 
+- [Agentic AI in Depth: Technical Structures, Planning Models, and Autonomous Orchestration | AI Technology Guide](https://bahaerdogan.com/AgenticAiTechDepth.html): 
+- [Yapay Zekâ Ajanları (Agentic AI) Nedir? | Teknik Rehber](https://bahaerdogan.com/AgenticAiExplainedTR.html): 
+- [Was sind KI‑Agenten oder Agentic AI?](https://bahaerdogan.com/AgenticAiExplainedDE.html): 
+- [What Are AI Agents or Agentic AI? | AI Technology Guide](https://bahaerdogan.com/AgenticAiExplained.html): 
+- [Savunma Teknolojilerinde Yapay Zekânın Rolü](https://bahaerdogan.com/AI-DefenseTR.html): 
+- [Die Rolle der Künstlichen Intelligenz in Verteidigungstechnologien](https://bahaerdogan.com/AI-DefenseDE.html): 
+- [The Role of Artificial Intelligence in Defense Technologies | AI Security Guide](https://bahaerdogan.com/AI-Defense.html): 
