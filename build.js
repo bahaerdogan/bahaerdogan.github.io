@@ -9,6 +9,24 @@ const stat = promisify(fs.stat);
 const readFileAsync = promisify(fs.readFile);
 const writeFileAsync = promisify(fs.writeFile);
 
+const {
+    BASE_URL, EXCLUDED, NOT_ARTICLES, PERSON,
+    groupKeyOf, langOf, readMeta,
+} = require('./tools/site-meta');
+
+/** Load every page's real metadata once per build. */
+function collectPages() {
+    const pages = new Map();
+    for (const file of glob.sync('*.html')) {
+        try {
+            pages.set(file, readMeta(file, fs.readFileSync(file, 'utf8')));
+        } catch (e) {
+            console.error(`Could not read metadata for ${file}:`, e.message);
+        }
+    }
+    return pages;
+}
+
 // Basic XML escape for text and attribute values
 function xmlEscape(value) {
     if (value == null) return '';
@@ -50,7 +68,7 @@ async function minifyCSS() {
     
     const failed = results.filter(r => !r.success);
     if (failed.length > 0) {
-        console.warn(`CSS minification completed with ${failed.length} failures`);
+        throw new Error(`CSS minification failed for: ${failed.map(f => f.file).join(', ')}`);
     }
 }
 
@@ -83,18 +101,24 @@ async function minifyJS() {
     
     const failed = results.filter(r => !r.success);
     if (failed.length > 0) {
-        console.warn(`JS minification completed with ${failed.length} failures`);
+        // Previously this only warned, so the build continued and shipped the
+        // previous .min.js — stale code reaching production with no signal.
+        throw new Error(`JS minification failed for: ${failed.map(f => f.file).join(', ')}`);
     }
 }
 
 // Convert images to WebP
 async function convertToWebP() {
     const sharp = require('sharp');
-    const imageFiles = glob.sync('img/*.{png,jpg,jpeg}');
-    
+    // Originals live in img/_originals/ and are not deployed: they were ~55 MB of
+    // multi-megabyte PNGs sitting next to the WebP versions actually being served.
+    const imageFiles = glob.sync('img/{,_originals/}*.{png,jpg,jpeg}');
+
     const results = await Promise.all(imageFiles.map(async (file) => {
         try {
-            const outputPath = file.replace(/\.(png|jpg|jpeg)$/, '.webp');
+            const outputPath = file
+                .replace('img/_originals/', 'img/')
+                .replace(/\.(png|jpg|jpeg)$/, '.webp');
             
             // Check if WebP already exists and is newer than source
             try {
@@ -135,7 +159,6 @@ async function convertToWebP() {
 // Tweak icon font CSS to avoid FOIT
 async function tweakIconFontCSS() {
     const targets = [
-        'lib/font-awesome/css/font-awesome.min.css',
         'lib/ionicons/css/ionicons.min.css'
     ];
     
@@ -144,10 +167,6 @@ async function tweakIconFontCSS() {
             const css = await readFileAsync(file, 'utf8');
             let updated = css;
             
-            if (file.includes('font-awesome') && !/font-display\s*:\s*swap/.test(css)) {
-                updated = updated.replace(/(@font-face\{[^}]*font-family:\s*'FontAwesome';)([^}]*\})/,
-                    (m, p1, p2) => `${p1}font-display:swap;${p2}`);
-            }
             if (file.includes('ionicons') && !/font-display\s*:\s*swap/.test(updated)) {
                 updated = updated.replace(/(@font-face\{[^}]*font-family:\s*"Ionicons";)([^}]*\})/,
                     (m, p1, p2) => `${p1}font-display:swap;${p2}`);
@@ -199,6 +218,26 @@ async function optimizeHTML() {
             if (!/BlogPosts\.html$/i.test(file)) {
                 html = html.replace(/\n?\s*<script[^>]*src=["']js\/blog\.min\.js["'][^>]*><\/script>/gi, '');
             }
+
+            // The stylesheets for the libraries stripped above were still being
+            // shipped in the critical path, along with animate.css (no animate__
+            // classes exist anywhere in the markup).
+            for (const dead of [
+                'lib/animate/animate.min.css',
+                'lib/owlcarousel/assets/owl.carousel.min.css',
+                'lib/lightbox/css/lightbox.min.css',
+            ]) {
+                html = html.replace(new RegExp(`<link[^>]*href=["']${dead.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')}["'][^>]*>`, 'gi'), '');
+            }
+
+            // Nothing is served from jsDelivr except KaTeX, on the two pages that need it.
+            if (!/katex/i.test(html)) {
+                html = html.replace(/<link[^>]*rel=["']preconnect["'][^>]*cdn\.jsdelivr\.net[^>]*>|<link[^>]*cdn\.jsdelivr\.net[^>]*rel=["']preconnect["'][^>]*>/gi, '');
+            }
+
+            // Never re-introduce the full-screen preloader overlay: it gated first
+            // paint on window.load and left a blank page whenever JS failed.
+            html = html.replace(/<div\s+id=["']preloader["']\s*>\s*<\/div>/gi, '');
 
             // EmailJS has been removed - now using Cloudflare Workers
 
@@ -252,128 +291,100 @@ async function optimizeHTML() {
 
 // Generate sitemap.xml and robots.txt
 async function generateSitemapAndRobots() {
-    const baseUrl = 'https://bahaerdogan.com';
-    const htmlFiles = glob.sync('*.html');
+    const pages = collectPages();
 
-    // Build language groups: { base: { en: file, tr: trFile, de: deFile } }
-    const groups = {};
-    for (const file of htmlFiles) {
-        const isIndex = file.toLowerCase() === 'index.html';
-        if (isIndex) continue; // will handle index separately
-        const isTr = /TR\.html$/i.test(file);
-        const isDe = /DE\.html$/i.test(file);
-        const base = isTr
-            ? file.replace(/TR\.html$/i, '')
-            : isDe
-                ? file.replace(/DE\.html$/i, '')
-                : file.replace(/\.html$/i, '');
-        groups[base] = groups[base] || {};
-        if (isTr) groups[base].tr = file; else if (isDe) groups[base].de = file; else groups[base].en = file;
+    // Group translations. groupKeyOf handles both `XxxTR.html` and `xxx-tr.html`;
+    // the old /TR\.html$/i test silently split the -tr pages into their own group.
+    const groups = new Map();
+    for (const [file, meta] of pages) {
+        if (file === 'index.html') continue;
+        if (meta.noindex) continue;
+        const key = groupKeyOf(file);
+        if (!groups.has(key)) groups.set(key, {});
+        groups.get(key)[meta.lang] = meta;
     }
 
-    const urlEntries = [];
-    // Add index
-    try {
-        const stats = await stat('index.html');
-        urlEntries.push({
-            enLoc: `${baseUrl}/`,
-            lastmod: new Date(stats.mtime).toISOString(),
-            alternates: [
-                { hreflang: 'en', href: `${baseUrl}/` },
-                { hreflang: 'x-default', href: `${baseUrl}/` }
-            ]
+    const entries = [];
+    const home = pages.get('index.html');
+    if (home) {
+        entries.push({
+            loc: `${BASE_URL}/`,
+            lastmod: home.lastmod,
+            priority: '1.0',
+            alternates: [{ hreflang: 'en', href: `${BASE_URL}/` }, { hreflang: 'x-default', href: `${BASE_URL}/` }],
         });
-    } catch (_) {}
+    }
 
-    for (const [base, langs] of Object.entries(groups)) {
-        const enFile = langs.en;
-        const trFile = langs.tr;
-        const deFile = langs.de;
-        const lastStatFile = trFile || enFile; // pick one existing to time-stamp
-        try {
-            const stats = await stat(lastStatFile);
-            const lastmod = new Date(stats.mtime).toISOString();
-            const enLoc = enFile ? `${baseUrl}/${enFile}` : undefined;
-            const trLoc = trFile ? `${baseUrl}/${trFile}` : undefined;
-            const deLoc = deFile ? `${baseUrl}/${deFile}` : undefined;
-            const alternates = [];
-            if (enLoc) alternates.push({ hreflang: 'en', href: enLoc });
-            if (trLoc) alternates.push({ hreflang: 'tr', href: trLoc });
-            if (deLoc) alternates.push({ hreflang: 'de', href: deLoc });
-            const xDefault = enLoc || trLoc || deLoc;
-            if (xDefault) alternates.push({ hreflang: 'x-default', href: xDefault });
+    for (const langs of groups.values()) {
+        const alternates = [];
+        for (const l of ['en', 'tr', 'de']) if (langs[l]) alternates.push({ hreflang: l, href: langs[l].url });
+        const xDefault = (langs.en || langs.tr || langs.de);
+        if (xDefault) alternates.push({ hreflang: 'x-default', href: xDefault.url });
 
-            urlEntries.push({ enLoc: enLoc || trLoc || deLoc, trLoc, lastmod, alternates });
-        } catch (_) {
-            // ignore
+        for (const l of ['en', 'tr', 'de']) {
+            if (!langs[l]) continue;
+            entries.push({ loc: langs[l].url, lastmod: langs[l].lastmod, priority: '0.7', alternates });
         }
     }
 
     const sitemap = [
         '<?xml version="1.0" encoding="UTF-8"?>',
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
-        ...urlEntries.map(u => {
-            const loc = u.enLoc || u.trLoc;
+        ...entries.map(u => {
             const alt = (u.alternates || []).map(a => `    <xhtml:link rel="alternate" hreflang="${xmlEscape(a.hreflang)}" href="${xmlEscape(a.href)}" />`).join('\n');
-            return `  <url>\n    <loc>${xmlEscape(loc)}</loc>\n    <lastmod>${xmlEscape(u.lastmod)}</lastmod>\n${alt}\n    <changefreq>weekly</changefreq>\n    <priority>${(loc || '').endsWith('/') ? '1.0' : '0.7'}</priority>\n  </url>`;
+            return `  <url>\n    <loc>${xmlEscape(u.loc)}</loc>\n    <lastmod>${xmlEscape(u.lastmod)}</lastmod>\n${alt}\n    <priority>${u.priority}</priority>\n  </url>`;
         }),
         '</urlset>'
     ].join('\n');
 
-    fs.writeFileSync('sitemap.xml', sitemap);
+    fs.writeFileSync('sitemap.xml', sitemap + '\n');
 
+    const disallow = [...EXCLUDED].sort().map(f => `Disallow: /${f}`);
     const robots = [
         'User-agent: *',
         'Allow: /',
-        `Sitemap: ${baseUrl}/sitemap.xml`
+        ...disallow,
+        '',
+        `Sitemap: ${BASE_URL}/sitemap.xml`,
+        ''
     ].join('\n');
-
     fs.writeFileSync('robots.txt', robots);
 
-    console.log('Generated sitemap.xml and robots.txt');
+    const skipped = [...pages.values()].filter(m => m.noindex).length;
+    console.log(`Generated sitemap.xml (${entries.length} urls, ${skipped} excluded) and robots.txt`);
 }
 
 // Generate RSS feed
 async function generateRSS() {
-    const baseUrl = 'https://bahaerdogan.com';
-    const htmlFiles = glob.sync('*.html', { ignore: ['index.html', 'BlogPosts.html'] });
-    const items = [];
+    const pages = collectPages();
+    const items = [...pages.values()]
+        .filter(m => !NOT_ARTICLES.has(m.file) && !m.noindex && m.lang === 'en')
+        .sort((a, b) => (a.datePublished < b.datePublished ? 1 : -1));
 
-    for (const file of htmlFiles) {
-        try {
-            const content = fs.readFileSync(file, 'utf8');
-            const titleMatch = content.match(/<title>([^<]+)<\/title>/i);
-            const descMatch = content.match(/<meta[^>]+name=["']description["'][^>]*content=["']([^"']+)["'][^>]*>/i) || content.match(/<meta[^>]+content=["']([^"']+)["'][^>]*name=["']description["'][^>]*>/i);
-            const stats = await stat(file);
-            const lastmod = new Date(stats.mtime).toUTCString();
-            const link = file.toLowerCase() === 'index.html' ? `${baseUrl}/` : `${baseUrl}/${file}`;
-            items.push({
-                title: titleMatch ? titleMatch[1] : file.replace('.html', ''),
-                description: descMatch ? descMatch[1] : '',
-                link,
-                pubDate: lastmod
-            });
-        } catch (_) {
-            // ignore
-        }
-    }
+    const rfc822 = (iso) => new Date(iso).toUTCString();
 
     const rss = [
         '<?xml version="1.0" encoding="UTF-8"?>',
-        '<rss version="2.0">',
+        '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">',
         '  <channel>',
-        '    <title>Baha Erdoğan Blog</title>',
-        `    <link>${baseUrl}</link>`,
-        '    <description>Articles on AI, technology, history and more</description>',
+        '    <title>Baha Erdoğan — Engineering Notes</title>',
+        `    <link>${BASE_URL}/</link>`,
+        `    <atom:link href="${BASE_URL}/feed.xml" rel="self" type="application/rss+xml" />`,
+        '    <description>Articles on AI, computer vision, engineering and technology.</description>',
+        '    <language>en</language>',
+        `    <lastBuildDate>${rfc822(items[0] ? items[0].dateModified : new Date())}</lastBuildDate>`,
         ...items.map(i => (
-            `    <item>\n      <title><![CDATA[${i.title}]]></title>\n      <link>${xmlEscape(i.link)}</link>\n      <guid>${xmlEscape(i.link)}</guid>\n      <pubDate>${xmlEscape(i.pubDate)}</pubDate>\n      <description><![CDATA[${i.description}]]></description>\n    </item>`
+            `    <item>\n      <title><![CDATA[${i.title}]]></title>\n      <link>${xmlEscape(i.url)}</link>\n      <guid isPermaLink="true">${xmlEscape(i.url)}</guid>\n` +
+            // pubDate is the real first-commit date, so subscribers stop seeing
+            // the entire archive republished on every deploy.
+            `      <pubDate>${rfc822(i.datePublished)}</pubDate>\n      <description><![CDATA[${i.description}]]></description>\n    </item>`
         )),
         '  </channel>',
         '</rss>'
     ].join('\n');
 
-    fs.writeFileSync('feed.xml', rss);
-    console.log('Generated feed.xml');
+    fs.writeFileSync('feed.xml', rss + '\n');
+    console.log(`Generated feed.xml (${items.length} English articles)`);
 }
 
 // Inject hreflang, canonical, OG meta, and language toggle links
@@ -409,9 +420,12 @@ async function updateI18nHeadsAndToggle() {
             let cleaned = html.replace(/<link\s+[^>]*rel=["']canonical["'][^>]*>/gi, '');
             cleaned = cleaned.replace(/<link\s+[^>]*rel=["']alternate["'][^>]*hreflang=["'][^"']+["'][^>]*>/gi, '');
             
-            // Also remove any OG meta tags that we'll be re-injecting
-            cleaned = cleaned.replace(/<meta\s+[^>]*property=["']og:(title|description|url|type)["'][^>]*>/gi, '');
-            
+            // OpenGraph and Twitter tags are owned entirely by
+            // enrichBlogSEOAndSchema, which runs after this step and derives them
+            // from parsed page metadata. This function used to strip them here and
+            // only re-add them for TR/DE pages, so every English page silently lost
+            // og:title, og:description, og:url and og:type.
+
             // Now inject the new tags
             return cleaned.replace(/<head>([\s\S]*?)<\/head>/i, (m) => {
                 // Place after opening <head>
@@ -436,7 +450,7 @@ async function updateI18nHeadsAndToggle() {
             const order = { 'Deutsch': 1, 'English': 2, 'Türkçe': 3 };
             const sorted = links.slice().sort((a, b) => (order[a.label] || 99) - (order[b.label] || 99));
             const items = sorted.map(l => `<a class=\"dropdown-item\" href=\"${l.href}\">${l.label}</a>`).join('\n      ');
-            const dropdown = `  <li class=\"nav-item dropdown language-switcher\">\n    <a class=\"nav-link dropdown-toggle\" href=\"#\" id=\"langDropdown\" role=\"button\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n      <i class=\"fa fa-language\"></i> Language\n    </a>\n    <div class=\"dropdown-menu dropdown-menu-right\" aria-labelledby=\"langDropdown\">\n      ${items}\n    </div>\n  </li>`;
+            const dropdown = `  <li class=\"nav-item dropdown language-switcher\">\n    <a class=\"nav-link dropdown-toggle\" href=\"#\" id=\"langDropdown\" role=\"button\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n      <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"1em\" height=\"1em\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\" class=\"icon\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><line x1=\"2\" y1=\"12\" x2=\"22\" y2=\"12\"/><path d=\"M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z\"/></svg> Language\n    </a>\n    <div class=\"dropdown-menu dropdown-menu-right\" aria-labelledby=\"langDropdown\">\n      ${items}\n    </div>\n  </li>`;
 
             // Insert before closing </ul> in navbar-nav
             return updated.replace(/(<ul\s+class=["']navbar-nav["'][^>]*>[\s\S]*?)(<\/ul>)/i, (match, before, closing) => {
@@ -507,10 +521,6 @@ async function updateI18nHeadsAndToggle() {
                 const ogUrl = trUrl || enUrl || deUrl;
                 if (ogUrl) {
                     trInserts.push(
-                        `<meta property="og:title" content="${ogTitle}">`,
-                        `<meta property="og:description" content="${ogDesc}">`,
-                        `<meta property="og:url" content="${ogUrl}">`,
-                        `<meta property="og:type" content="article">`
                     );
                 }
             }
@@ -541,10 +551,6 @@ async function updateI18nHeadsAndToggle() {
                 const ogUrlDe = deUrl || enUrl || trUrl;
                 if (ogUrlDe) {
                     deInserts.push(
-                        `<meta property="og:title" content="${ogTitleDe}">`,
-                        `<meta property="og:description" content="${ogDescDe}">`,
-                        `<meta property="og:url" content="${ogUrlDe}">`,
-                        `<meta property="og:type" content="article">`
                     );
                 }
             }
@@ -562,89 +568,80 @@ async function updateI18nHeadsAndToggle() {
 
 // Enrich Blog SEO, BreadcrumbList & Article Schema, and normalize heading hierarchy across all articles
 async function enrichBlogSEOAndSchema() {
-    const htmlFiles = glob.sync('*.html');
-    const baseUrl = 'https://bahaerdogan.com';
+    const pages = collectPages();
 
-    for (const file of htmlFiles) {
-        if (file === 'index.html' || file === 'BlogPosts.html') continue;
+    for (const [file, meta] of pages) {
+        if (NOT_ARTICLES.has(file)) continue;
         try {
             let html = await readFileAsync(file, 'utf8');
 
-            const titleMatch = html.match(/<title>(.*?)<\/title>/i);
-            const descMatch = html.match(/<meta[^>]*name=["']description["'][^>]*content=["'](.*?)["']/i);
-            const imageMatch = html.match(/<meta[^>]*property=["']og:image["'][^>]*content=["'](.*?)["']/i);
-            
-            const rawTitle = titleMatch ? titleMatch[1].trim() : '';
-            const title = rawTitle.replace(/\s*\|\s*(Bahaerdogan|Baha Erdoğan|Deutsch|Türkçe|Opinion|AI Technology Guide|Computer Vision Guide|Data Science Guide|AI Development Guide|Historical Perspective Guide)/gi, '').trim() || 'Article';
-            const description = descMatch ? descMatch[1].trim() : '';
-            const imageUrl = imageMatch ? imageMatch[1].trim() : `${baseUrl}/img/AgenticAi1.webp`;
-            const articleUrl = `${baseUrl}/${file}`;
+            const graph = [
+                {
+                    "@type": "BlogPosting",
+                    "@id": `${meta.url}#article`,
+                    "isPartOf": { "@type": "WebPage", "@id": meta.url },
+                    "headline": meta.title,
+                    "description": meta.description,
+                    "image": meta.image,
+                    "inLanguage": meta.lang,
+                    "mainEntityOfPage": meta.url,
+                    // Real dates, from git history. Never hardcode these again.
+                    "datePublished": meta.datePublished,
+                    "dateModified": meta.dateModified,
+                    // The full Person node is inlined, not referenced by @id from
+                    // another page: Google parses each page independently, so a
+                    // cross-page @id reference resolves to nothing.
+                    "author": PERSON,
+                    "publisher": PERSON
+                },
+                {
+                    "@type": "BreadcrumbList",
+                    "@id": `${meta.url}#breadcrumb`,
+                    "itemListElement": [
+                        { "@type": "ListItem", "position": 1, "name": "Home", "item": `${BASE_URL}/` },
+                        { "@type": "ListItem", "position": 2, "name": "Blog", "item": `${BASE_URL}/BlogPosts.html` },
+                        { "@type": "ListItem", "position": 3, "name": meta.title, "item": meta.url }
+                    ]
+                }
+            ];
 
-            const lang = file.endsWith('TR.html') || file.endsWith('-tr.html') ? 'tr' : (file.endsWith('DE.html') ? 'de' : 'en');
+            const jsonLdTag = `<script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@graph": graph })}</script>`;
 
-            const schemaGraph = {
-                "@context": "https://schema.org",
-                "@graph": [
-                    {
-                        "@type": "BlogPosting",
-                        "@id": `${articleUrl}#article`,
-                        "isPartOf": {
-                            "@type": "WebPage",
-                            "@id": articleUrl
-                        },
-                        "headline": title,
-                        "description": description,
-                        "image": imageUrl,
-                        "inLanguage": lang,
-                        "mainEntityOfPage": articleUrl,
-                        "datePublished": "2024-03-20",
-                        "dateModified": "2026-07-26",
-                        "author": {
-                            "@type": "Person",
-                            "@id": "https://bahaerdogan.com/#person",
-                            "name": "Baha Erdoğan",
-                            "url": "https://bahaerdogan.com",
-                            "jobTitle": "Computer Engineer & AI R&D Specialist"
-                        },
-                        "publisher": {
-                            "@type": "Person",
-                            "@id": "https://bahaerdogan.com/#person",
-                            "name": "Baha Erdoğan"
-                        }
-                    },
-                    {
-                        "@type": "BreadcrumbList",
-                        "@id": `${articleUrl}#breadcrumb`,
-                        "itemListElement": [
-                            {
-                                "@type": "ListItem",
-                                "position": 1,
-                                "name": "Home",
-                                "item": `${baseUrl}/`
-                            },
-                            {
-                                "@type": "ListItem",
-                                "position": 2,
-                                "name": "Blog",
-                                "item": `${baseUrl}/BlogPosts.html`
-                            },
-                            {
-                                "@type": "ListItem",
-                                "position": 3,
-                                "name": title,
-                                "item": articleUrl
-                            }
-                        ]
-                    }
-                ]
-            };
-
-            const jsonLdTag = `<script type="application/ld+json">${JSON.stringify(schemaGraph)}</script>`;
-
+            // OpenGraph and Twitter were previously limited to og:image, so every
+            // share fell back to whatever the crawler could guess.
+            const social = [
+                ['property', 'og:type', 'article'],
+                ['property', 'og:title', meta.title],
+                ['property', 'og:description', meta.description],
+                ['property', 'og:url', meta.url],
+                ['property', 'og:locale', meta.lang === 'tr' ? 'tr_TR' : meta.lang === 'de' ? 'de_DE' : 'en_US'],
+                ['property', 'article:published_time', meta.datePublished],
+                ['property', 'article:modified_time', meta.dateModified],
+                ['property', 'article:author', 'https://www.linkedin.com/in/bahaerdogan/'],
+                ['name', 'twitter:card', 'summary_large_image'],
+                ['name', 'twitter:title', meta.title],
+                ['name', 'twitter:description', meta.description],
+                ['name', 'twitter:image', meta.image],
+            ];
+            // Strip every tag this function owns, then re-insert the whole block in
+            // a fixed order. Replacing tags in place while also re-appending the
+            // JSON-LD made the output order flip on alternate runs, so consecutive
+            // builds produced different bytes for identical input.
+            for (const [attr, key] of social) {
+                html = html.replace(new RegExp(`<meta[^>]*${attr}=["']${key.replace(/:/g, '\\:')}["'][^>]*>`, 'gi'), '');
+            }
             html = html.replace(/<script[^>]*type=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/gi, '');
-            html = html.replace('</head>', `${jsonLdTag}</head>`);
 
-            html = html.replace(/<h2[^>]*class=["'][^"']*intro-title[^"']*["'][^>]*>([\s\S]*?)<\/h2>/gi, '<div class="mb-4 intro-title h2 display-4 font-weight-bold text-white">$1</div>');
+            const socialTags = social
+                .filter(([, , value]) => value)
+                .map(([attr, key, value]) => {
+                    const esc = String(value).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+                    return `<meta content="${esc}" ${attr}="${key}">`;
+                })
+                .join('');
+
+            html = html.replace('</head>', `${socialTags}${jsonLdTag}</head>`);
+
             html = html.replace(/<h5([^>]*class=["'][^"']*sidebar-title[^"']*["'][^>]*)>([\s\S]*?)<\/h5>/gi, '<h3$1>$2</h3>');
 
             await writeFileAsync(file, html, 'utf8');
@@ -652,43 +649,239 @@ async function enrichBlogSEOAndSchema() {
             console.error(`Error enriching schema for ${file}:`, e.message);
         }
     }
-    console.log('Enriched JSON-LD Article & BreadcrumbList schema and corrected heading hierarchy for all blog pages');
+    console.log(`Enriched schema, OpenGraph and Twitter cards for ${pages.size} pages (real dates, per-page images)`);
 }
 
-// Generate llms.txt and llms-full.txt for AI Search engines (GEO)
+// Generate llms.txt (index) and llms-full.txt (actual full text) for AI search engines
 async function generateLlmsTxt() {
-    const htmlFiles = glob.sync('*.html');
-    const articles = [];
+    const pages = collectPages();
+    const articles = [...pages.values()]
+        .filter(m => !NOT_ARTICLES.has(m.file) && !m.noindex)
+        .sort((a, b) => (a.datePublished < b.datePublished ? 1 : -1));
 
-    for (const file of htmlFiles) {
-        if (file === 'index.html' || file === 'BlogPosts.html' || file.startsWith('BlogTemplate')) continue;
-        try {
-            const html = await readFileAsync(file, 'utf8');
-            const titleMatch = html.match(/<title>(.*?)<\/title>/i);
-            const descMatch = html.match(/<meta[^>]*name=["']description["'][^>]*content=["'](.*?)["']/i);
-            const title = titleMatch ? titleMatch[1].replace(/\s*\|\s*(Bahaerdogan|Baha Erdoğan|Deutsch|Türkçe)/gi, '').trim() : file;
-            const description = descMatch ? descMatch[1].trim() : '';
-            articles.push({ file, title, description });
-        } catch (e) {}
+    const header = [
+        '# Baha Erdoğan',
+        '> Computer Engineer & AI R&D Specialist at Huawei R&D.',
+        '',
+        `- Website: ${BASE_URL}`,
+        '- Author: Baha Erdoğan',
+        '- Focus areas: Artificial Intelligence, Computer Vision, Machine Learning, C++, Python, Deep Learning, Software Architecture',
+        '- GitHub: https://github.com/bahaerdogan',
+        '- LinkedIn: https://www.linkedin.com/in/bahaerdogan/',
+        '- Languages: English, Türkçe, Deutsch',
+        ''
+    ];
+
+    // llms.txt: a link index.
+    const index = [
+        ...header,
+        '## Publications & Engineering Notes',
+        '',
+        ...articles.map(a => `- [${a.title}](${a.url}) — ${a.description || 'No description available.'}`),
+        ''
+    ].join('\n');
+    await writeFileAsync('llms.txt', index, 'utf8');
+
+    // llms-full.txt: the actual article text. The previous build wrote the exact
+    // same string to both files, which made llms-full.txt worthless.
+    const full = [
+        ...header,
+        '## Full text of all publications',
+        '',
+        ...articles.map(a => [
+            `---`,
+            ``,
+            `# ${a.title}`,
+            ``,
+            `URL: ${a.url}`,
+            `Language: ${a.lang}`,
+            `Published: ${a.datePublished}`,
+            `Modified: ${a.dateModified}`,
+            ``,
+            a.text,
+            ``
+        ].join('\n')),
+        ''
+    ].join('\n');
+    await writeFileAsync('llms-full.txt', full, 'utf8');
+
+    const kb = (s) => `${Math.round(Buffer.byteLength(s) / 1024)} KB`;
+    console.log(`Generated llms.txt (${articles.length} entries, ${kb(index)}) and llms-full.txt (${kb(full)} of article text)`);
+}
+
+/**
+ * Generate the sidebar search script as an external file, per language.
+ *
+ * Every page previously carried this list inline, hardcoded and slightly
+ * different, which produced ~65 distinct inline scripts. Combined with the
+ * per-page GA config below, the CSP needed 90 SHA-256 hashes and broke whenever
+ * any page changed. Now there are three cacheable files and one hash.
+ */
+async function generateSearchScripts() {
+    const pages = collectPages();
+    const KEYWORDS = (title) => [...new Set(
+        title.toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, ' ').split(/\s+/).filter(w => w.length > 3)
+    )];
+
+    for (const lang of ['en', 'tr', 'de']) {
+        const posts = [...pages.values()]
+            .filter(m => !NOT_ARTICLES.has(m.file) && !m.noindex && m.lang === lang)
+            .map(m => ({ title: m.title, url: m.file, keywords: KEYWORDS(m.title) }));
+        if (!posts.length) continue;
+
+        const notFound = { en: 'No matching posts found.', tr: 'Eşleşen yazı bulunamadı.', de: 'Keine passenden Beiträge gefunden.' }[lang];
+
+        const code = `// Generated by build.js — do not edit.
+(function () {
+  var blogPosts = ${JSON.stringify(posts)};
+  window.searchBlog = function () {
+    var input = document.getElementById('search-input');
+    if (!input) return false;
+    var q = input.value.toLowerCase().trim();
+    if (!q) return false;
+    var hit = blogPosts.filter(function (p) {
+      return p.title.toLowerCase().indexOf(q) !== -1 || p.keywords.some(function (k) { return k.indexOf(q) !== -1; });
+    })[0];
+    if (hit) { window.location.href = hit.url; } else { alert(${JSON.stringify(notFound)}); }
+    return false;
+  };
+})();
+`;
+        const file = `js/blog-search${lang === 'en' ? '' : '-' + lang}.js`;
+        await writeFileAsync(file, code, 'utf8');
+        const min = await Terser.minify(code, { compress: true, mangle: true });
+        await writeFileAsync(file.replace('.js', '.min.js'), min.code, 'utf8');
+    }
+    console.log('Generated external blog-search scripts (replaces ~65 distinct inline scripts)');
+}
+
+/**
+ * Replace the per-page inline search data and the per-page GA config with
+ * references that are byte-identical across the site.
+ */
+async function externaliseInlineScripts() {
+    for (const file of glob.sync('*.html')) {
+        let html = await readFileAsync(file, 'utf8');
+        const before = html;
+        const lang = langOf(file);
+        const src = `js/blog-search${lang === 'en' ? '' : '-' + lang}.min.js`;
+
+        html = html.replace(/<script(?![^>]*\ssrc=)[^>]*>\s*(?:const|var)\s+blogPosts\s*=[\s\S]*?<\/script>/gi,
+            fs.existsSync(src) ? `<script src="${src}" defer="defer"></script>` : '');
+
+        // GA4 already records document.title, so the hardcoded page_title/page_location
+        // object only served to make every page's inline script unique.
+        html = html.replace(/(gtag\("config","G-ZGTWHSMVV7")\s*,\s*\{[\s\S]*?\}(\))/g, '$1$2');
+
+        if (html !== before) await writeFileAsync(file, html, 'utf8');
+    }
+    console.log('Externalised inline search data and normalised the analytics snippet');
+}
+
+/**
+ * Regenerate the Content-Security-Policy in _headers from the inline scripts
+ * that are actually present.
+ *
+ * The hashes were previously maintained by hand, so any edit to any page
+ * silently invalidated the policy. `<script type="application/ld+json">` is a
+ * data block, not executable script, so it is deliberately excluded — hashing
+ * per-page JSON-LD is what pushed the old policy to 90 hashes.
+ */
+async function generateCSP() {
+    const crypto = require('crypto');
+    const hashes = new Set();
+
+    for (const file of glob.sync('*.html')) {
+        const html = await readFileAsync(file, 'utf8');
+        for (const m of html.matchAll(/<script(?![^>]*\ssrc=)([^>]*)>([\s\S]*?)<\/script>/gi)) {
+            const [, attrs, body] = m;
+            if (!body.trim() || /ld\+json/i.test(attrs)) continue;
+            hashes.add(`'sha256-${crypto.createHash('sha256').update(body, 'utf8').digest('base64')}'`);
+        }
     }
 
-    const llmsTxtContent = `# Baha Erdoğan
-> Computer Engineer & AI R&D Specialist at Huawei R&D
+    const csp = [
+        "default-src 'self'",
+        "img-src 'self' data: https:",
+        "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net",
+        "font-src 'self' data: https://cdn.jsdelivr.net",
+        `script-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://cdn.jsdelivr.net ${[...hashes].sort().join(' ')}`,
+        "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://comment-handler.baha-erdogann.workers.dev",
+        "frame-ancestors 'self'",
+        "base-uri 'self'",
+        "form-action 'self'",
+    ].join('; ') + ';';
 
-- Website: https://bahaerdogan.com
-- Author: Baha Erdoğan
-- Focus Areas: Artificial Intelligence, Computer Vision, Machine Learning, C++, Python, Deep Learning, Software Architecture
-- GitHub: https://github.com/bahaerdogan
-- LinkedIn: https://www.linkedin.com/in/bahaerdogan/
+    const headersPath = '_headers';
+    let headers = await readFileAsync(headersPath, 'utf8');
+    headers = headers.replace(/^(\s*)Content-Security-Policy:.*$/m, `$1Content-Security-Policy: ${csp}`);
+    await writeFileAsync(headersPath, headers, 'utf8');
 
-## Publications & Engineering Notes
+    console.log(`Regenerated CSP in _headers (${hashes.size} inline-script hashes)`);
+}
 
-${articles.map(a => `- [${a.title}](https://bahaerdogan.com/${a.file}): ${a.description}`).join('\n')}
-`;
+/**
+ * Fail the build on the defect classes that previously shipped to production
+ * unnoticed. Each check corresponds to a real bug found in the audit.
+ */
+async function verify() {
+    const problems = [];
+    const files = glob.sync('*.html');
 
-    await writeFileAsync('llms.txt', llmsTxtContent, 'utf8');
-    await writeFileAsync('llms-full.txt', llmsTxtContent, 'utf8');
-    console.log('Generated llms.txt and llms-full.txt for AI Search Engines');
+    for (const file of files) {
+        const html = fs.readFileSync(file, 'utf8');
+
+        if (!/<body/i.test(html)) problems.push(`${file}: no <body> element (page renders blank)`);
+        if (!/<main/i.test(html)) problems.push(`${file}: no <main> landmark`);
+        if (/user-scalable\s*=\s*no|maximum-scale\s*=\s*1/i.test(html)) problems.push(`${file}: viewport blocks pinch-zoom (WCAG 1.4.4)`);
+        if (/id=["']preloader["']/.test(html)) problems.push(`${file}: preloader overlay reintroduced`);
+        if (/class="[^"]*\bfa-[a-z]/.test(html)) problems.push(`${file}: Font Awesome class reintroduced but the stylesheet is gone`);
+
+        const h1 = (html.match(/<h1\b/gi) || []).length;
+        if (h1 !== 1) problems.push(`${file}: ${h1} <h1> elements, expected exactly 1`);
+
+        // Duplicate script tags double-fired analytics and double-bound handlers.
+        const srcs = [...html.matchAll(/<script[^>]*\bsrc=["']([^"']+)["']/gi)].map(m => m[1].split('?')[0]);
+        const dupes = srcs.filter((s, i) => srcs.indexOf(s) !== i);
+        if (dupes.length) problems.push(`${file}: duplicate script src ${[...new Set(dupes)].join(', ')}`);
+
+        // Images without intrinsic size are the site's main layout-shift source.
+        for (const tag of html.match(/<img\b[^>]*>/gi) || []) {
+            if (!/\bwidth=/.test(tag) || !/\bheight=/.test(tag)) {
+                problems.push(`${file}: <img> without width/height — ${tag.slice(0, 70)}…`);
+                break;
+            }
+        }
+
+        // Referenced local assets must exist.
+        for (const m of html.matchAll(/(?:src|href)=["'](img\/[^"']+)["']/gi)) {
+            if (!fs.existsSync(decodeURIComponent(m[1]))) problems.push(`${file}: missing asset ${m[1]}`);
+        }
+
+        // LaTeX with no math renderer renders as literal backslashes.
+        if (/\\\(|\\\[/.test(html.replace(/<[^>]+>/g, ' ')) && !/katex|mathjax/i.test(html)) {
+            problems.push(`${file}: contains LaTeX but loads no math renderer`);
+        }
+
+        for (const ld of html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/gi) || []) {
+            const json = ld.replace(/^<script[^>]*>/, '').replace(/<\/script>$/, '');
+            let parsed;
+            try { parsed = JSON.parse(json); } catch (e) { problems.push(`${file}: invalid JSON-LD (${e.message})`); continue; }
+            for (const node of parsed['@graph'] || [parsed]) {
+                if (node['@type'] !== 'BlogPosting') continue;
+                if (!node.description) problems.push(`${file}: BlogPosting schema has an empty description`);
+                if (node.datePublished === '2024-03-20') problems.push(`${file}: hardcoded placeholder datePublished`);
+            }
+        }
+    }
+
+    if (problems.length) {
+        console.error(`\nBuild verification found ${problems.length} problem(s):`);
+        for (const p of problems.slice(0, 40)) console.error(`  ✗ ${p}`);
+        if (problems.length > 40) console.error(`  … and ${problems.length - 40} more`);
+        throw new Error('Build verification failed');
+    }
+    console.log(`Verification passed: ${files.length} pages clean`);
 }
 
 // Main build process
@@ -711,8 +904,6 @@ async function build() {
         console.log('Generating RSS feed...');
         await generateRSS();
 
-        console.log('Enriching Blog SEO, Schema & Headings...');
-        await enrichBlogSEOAndSchema();
 
         console.log('Generating llms.txt for AI search engines...');
         await generateLlmsTxt();
@@ -720,12 +911,27 @@ async function build() {
         console.log('Injecting i18n meta and toggles...');
         await updateI18nHeadsAndToggle();
 
+        console.log('Enriching Blog SEO, Schema & Headings...');
+        await enrichBlogSEOAndSchema();
+
         console.log('Tweaking icon font CSS (font-display: swap)...');
         await tweakIconFontCSS();
 
+        console.log('Generating search scripts...');
+        await generateSearchScripts();
+
+        console.log('Externalising inline scripts...');
+        await externaliseInlineScripts();
+
         console.log('Optimizing and minifying HTML...');
         await optimizeHTML();
-        
+
+        console.log('Regenerating Content-Security-Policy...');
+        await generateCSP();
+
+        console.log('Verifying output...');
+        await verify();
+
         console.log('Build completed successfully!');
     } catch (error) {
         console.error('Build failed:', error);

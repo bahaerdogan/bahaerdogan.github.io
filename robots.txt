@@ -1,3 +1,13 @@
 User-agent: *
 Allow: /
+Disallow: /AgenticAiTechDepthDE.html
+Disallow: /BlogTemplate.html
+Disallow: /BlogTemplateDE.html
+Disallow: /BlogTemplateTR.html
+Disallow: /DistanceCalculatingMethodsDE.html
+Disallow: /MachineLearning-ExplainedDE.html
+Disallow: /MachineLearningAnomalyDetectionDE.html
+Disallow: /TypesOfAgenticAiDE.html
+Disallow: /ValuePerKilogramForProsperityDE.html
+
 Sitemap: https://bahaerdogan.com/sitemap.xml

@@ -2100,3 +2100,33 @@ footer .credits a {
     transform: scale(0.98);
   }
 }
+/* Inline SVG icons (replaced Font Awesome: ~30 KB of CSS and ~500 KB of fonts
+   were being loaded to draw nine glyphs). */
+.icon {
+  display: inline-block;
+  vertical-align: -0.125em;
+  width: 1em;
+  height: 1em;
+}
+
+.icon-spin {
+  animation: icon-spin 0.9s linear infinite;
+}
+
+@keyframes icon-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Respect the OS-level reduced-motion preference across the whole site.
+   The template shipped a typing animation, 1500 ms scroll tweens, fade
+   transitions and an infinite spinner with no way to opt out. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

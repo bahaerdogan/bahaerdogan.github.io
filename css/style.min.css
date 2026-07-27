@@ -356,3 +356,11 @@ footer .copyright{font-size:.9rem}
 .blog-preview-box{cursor:pointer}
 .blog-preview-box:active{transform:scale(.98)}
 }
+.icon{display:inline-block;vertical-align:-.125em;width:1em;height:1em}
+.icon-spin{animation:.9s linear infinite icon-spin}
+@keyframes icon-spin{
+to{transform:rotate(360deg)}
+}
+@media (prefers-reduced-motion:reduce){
+*,::after,::before{animation-duration:0s!important;animation-iteration-count:1!important;transition-duration:0s!important;scroll-behavior:auto!important}
+}

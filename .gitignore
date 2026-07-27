@@ -30,3 +30,8 @@ wrangler-*.log
 dist/
 .wrangler/
 
+
+# Image originals: kept locally for re-encoding, not deployed.
+# Recoverable from git history via the pre-audit-fixes tag if ever needed.
+img/_originals/
+tools/.image-dims.json

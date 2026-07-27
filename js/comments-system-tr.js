@@ -99,7 +99,7 @@
 
     // Yorumları render et
     const commentsHtml = comments.map(comment => `
-      <div class="comment mb-4 p-3 border-bottom" data-comment-id="${escapeHtml(comment.id)}">
+      <div class="comment mb-4 p-3 border-bottom" data-comment-id="${escapeAttr(comment.id)}">
         <div class="d-flex justify-content-between align-items-start mb-2">
           <h5 class="mb-0">
             <i class="fa fa-user-circle text-primary mr-2"></i>
@@ -107,7 +107,7 @@
           </h5>
           <small class="text-muted">
             <i class="fa fa-clock-o mr-1"></i>
-            ${escapeHtml(comment.date)}
+            ${escapeHtml(formatDate(comment.date))}
           </small>
         </div>
         <p class="mb-0 comment-message">${escapeHtml(comment.message).replace(/\n/g, '<br>')}</p>
@@ -148,7 +148,7 @@
     // Submit butonunu devre dışı bırak
     const originalButtonText = submitButton.textContent;
     submitButton.disabled = true;
-    submitButton.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Gönderiliyor...';
+    submitButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="icon icon-spin"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Gönderiliyor...`;
 
     try {
       const response = await fetch(`${API_BASE_URL}/comments`, {
@@ -238,7 +238,7 @@
     }
 
     const commentHtml = `
-      <div class="comment mb-4 p-3 border-bottom comment-new-highlight" data-comment-id="${escapeHtml(comment.id)}">
+      <div class="comment mb-4 p-3 border-bottom comment-new-highlight" data-comment-id="${escapeAttr(comment.id)}">
         <div class="d-flex justify-content-between align-items-start mb-2">
           <h5 class="mb-0">
             <i class="fa fa-user-circle text-primary mr-2"></i>
@@ -247,7 +247,7 @@
           </h5>
           <small class="text-muted">
             <i class="fa fa-clock-o mr-1"></i>
-            ${escapeHtml(comment.date)}
+            ${escapeHtml(formatDate(comment.date))}
           </small>
         </div>
         <p class="mb-0 comment-message">${escapeHtml(comment.message).replace(/\n/g, '<br>')}</p>
@@ -274,8 +274,27 @@
    */
   function escapeHtml(str) {
     const div = document.createElement('div');
-    div.textContent = str;
+    div.textContent = str == null ? '' : String(str);
     return div.innerHTML;
+  }
+
+  /**
+   * escapeHtml() is a text-node escaper and leaves quotes intact, so it must not
+   * be used inside an attribute. This one is safe there.
+   */
+  function escapeAttr(str) {
+    return String(str == null ? '' : str).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  /** The Worker returns ISO 8601; formatting belongs on the client. */
+  function formatDate(iso) {
+    const d = new Date(iso);
+    if (isNaN(d)) return iso || '';
+    return d.toLocaleDateString('tr-TR', {
+      year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
+    });
   }
 
   /**

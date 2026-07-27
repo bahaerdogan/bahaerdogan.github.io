@@ -1,35 +1,31 @@
-# Cloudflare Workers Configuration
-# Documentation: https://developers.cloudflare.com/workers/
+# Cloudflare Workers configuration
+# https://developers.cloudflare.com/workers/
 
 name = "comment-handler"
 main = "worker.js"
-compatibility_date = "2024-01-01"
+compatibility_date = "2024-09-23"
 
-# KV Namespace bindings
 [[kv_namespaces]]
 binding = "KV_COMMENTS"
-id = "d912fbb92ac3468ca187733c28055a28" # blog-comments KV namespace
+id = "d912fbb92ac3468ca187733c28055a28" # blog-comments
 
-# Routes - Deploy to your custom domain
-# Uncomment and configure after setting up your domain in Cloudflare
+[vars]
+MAIL_FROM = "Bahaerdogan <no-reply@bahaerdogan.com>"
+MAIL_TO = "baha@bahaerdogan.com"
+
+# Secrets — never commit these. Set with:
+#   wrangler secret put RESEND_API_KEY
+#   wrangler secret put TURNSTILE_SECRET   (optional; spam protection is skipped when unset)
+
+[observability]
+enabled = true
+
+# Deploy with `wrangler deploy` rather than pasting into the dashboard, so the
+# committed source and the running Worker cannot drift apart.
+#
+# To serve the API from the apex domain instead of *.workers.dev, uncomment the
+# route below and update API_BASE_URL in js/contact.js and js/comments-system*.js,
+# plus connect-src in _headers.
 # routes = [
-#   { pattern = "bahaerdogan.com/api/comments*", zone_name = "bahaerdogan.com" }
+#   { pattern = "bahaerdogan.com/api/*", zone_name = "bahaerdogan.com" }
 # ]
-
-# Workers subdomain route (for testing before custom domain)
-# Access at: https://bahaerdogan-comments.YOUR_SUBDOMAIN.workers.dev
-
-# Environment variables (optional)
-# [env.production]
-# vars = { ENVIRONMENT = "production" }
-
-# [env.staging]
-# vars = { ENVIRONMENT = "staging" }
-
-# Observability (optional - requires paid plan)
-# [observability]
-# enabled = true
-
-# Limits (requires paid plan - commented out for free tier)
-# [limits]
-# cpu_ms = 50
