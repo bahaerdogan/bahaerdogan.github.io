@@ -8,6 +8,19 @@
 //--//-->   STYLES GENERALES
 ======================================*/
 
+/* Brand blue, split by contrast role.
+
+   --brand is the identity colour. It is fine on backgrounds, borders, fills and
+   any text sitting on a dark surface, none of which WCAG measures against white.
+
+   --brand-ink is the same hue darkened for text on light surfaces. #48abec is
+   2.53:1 on white and fails WCAG 2.2 SC 1.4.3 (AA needs 4.5:1); #0a5fc4 is
+   6.09:1 and passes with headroom. Use it for any blue text on white. */
+:root {
+  --brand: #48abec;
+  --brand-ink: #0a5fc4;
+}
+
 :focus-visible {
   outline: 3px solid #0078ff !important;
   outline-offset: 2px !important;
@@ -28,7 +41,7 @@ h6 {
 }
 
 a {
-  color: #0078ff;
+  color: var(--brand-ink);
   transition: all 0.25s ease-in-out;
 }
 
@@ -43,7 +56,7 @@ a:hover {
 }
 
 .color-a {
-  color: #0078ff;
+  color: var(--brand-ink);
 }
 
 .color-d {
@@ -214,15 +227,25 @@ a:hover {
   display: inline-block;
 }
 
+/* Centres an inline SVG rather than a font glyph: the old `line-height: 1.4`
+   trick only worked because Ionicons shipped its own baseline metrics. */
 .socials .ico-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   height: 40px;
   width: 40px;
-  font-size: 1.7rem;
+  font-size: 1.35rem;
   border-radius: 50%;
-  line-height: 1.4;
   margin: 0 15px 0 0;
   box-shadow: 0 0 0 3px #48abec;
   transition: all 500ms ease;
+}
+
+/* The wrapper is already centring the glyph; drop the baseline nudge that the
+   generic .icon rule applies for inline-text use. */
+.socials .ico-circle .icon {
+  vertical-align: 0;
 }
 
 .socials .ico-circle:hover {
@@ -250,8 +273,11 @@ a:hover {
   line-height: 2;
 }
 
-.list-ico span {
-  color: #48abec;
+/* `span` covered the old icon-font markup; `.icon` covers the inline SVG that
+   replaced it. Both are kept so the rule survives either form. */
+.list-ico span,
+.list-ico > li > .icon {
+  color: var(--brand-ink);
   margin-right: 10px;
 }
 
@@ -345,61 +371,17 @@ a:hover {
   z-index: 11;
 }
 
-.back-to-top i {
-  padding-top: 12px;
+/* jQuery's fadeIn writes an inline `display`, so this must not change the
+   display mode. `i` no longer matches — the glyph is an inline SVG now — so the
+   same centring nudge is applied to `.icon`. */
+.back-to-top i,
+.back-to-top .icon {
+  margin-top: 13px;
   color: #fff;
 }
 
-/* Prelaoder */
-
-#preloader {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 9999;
-  overflow: hidden;
-  background: #fff;
-}
-
-#preloader:before {
-  content: "";
-  position: fixed;
-  top: calc(50% - 30px);
-  left: calc(50% - 30px);
-  border: 6px solid #f2f2f2;
-  border-top: 6px solid #48abec;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  -webkit-animation: animate-preloader 1s linear infinite;
-  animation: animate-preloader 1s linear infinite;
-}
-
-@-webkit-keyframes animate-preloader {
-  0% {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-
-  100% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes animate-preloader {
-  0% {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-
-  100% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
-}
+/* The #preloader rules and their infinite spin keyframes were deleted along with
+   the markup: no page carries a #preloader element any more. */
 
 /*======================================
 //--//-->   NAVBAR
@@ -421,6 +403,14 @@ a:hover {
   position: relative;
   padding-right: 10px;
   padding-left: 0;
+}
+
+/* Nav labels must not break mid-phrase. The item set is the same in all three
+   languages now, and the Turkish labels are longer ("Ana Sayfa", "Gönüllülük"),
+   which wrapped "Ana Sayfa" onto two lines. The bar still fits at the md
+   breakpoint; below it Bootstrap collapses to the toggler anyway. */
+.navbar-b .nav-link {
+  white-space: nowrap;
 }
 
 .navbar-b.navbar-trans .nav-link,
@@ -486,7 +476,7 @@ a:hover {
 }
 
 .navbar-b.navbar-reduce .nav-link {
-  color: #48abec;
+  color: var(--brand-ink);
 }
 
 .navbar-b.navbar-reduce .nav-link:before {
@@ -494,18 +484,18 @@ a:hover {
 }
 
 .navbar-b.navbar-reduce .nav-link:hover {
-  color: #48abec;
+  color: var(--brand-ink);
 }
 
 .navbar-b.navbar-reduce .show > .nav-link,
 .navbar-b.navbar-reduce .active > .nav-link,
 .navbar-b.navbar-reduce .nav-link.show,
 .navbar-b.navbar-reduce .nav-link.active {
-  color: #48abec;
+  color: var(--brand-ink);
 }
 
 .navbar-b.navbar-reduce .navbar-brand {
-  color: #48abec;
+  color: var(--brand-ink);
 }
 
 .navbar-b.navbar-reduce .navbar-toggler span {
@@ -763,7 +753,7 @@ a:hover {
 }
 
 .service-box .s-title a:hover {
-  color: #0078ff;
+  color: var(--brand-ink);
 }
 
 .service-box .s-description {
@@ -832,17 +822,17 @@ a:hover {
 }
 
 .work-content .w-more .w-ctegory {
-  color: #48abec;
+  color: var(--brand-ink);
 }
 
 .work-content .w-like {
   font-size: 2.5rem;
-  color: #48abec;
+  color: var(--brand-ink);
   float: right;
 }
 
 .work-content .w-like a {
-  color: #48abec;
+  color: var(--brand-ink);
 }
 
 .work-content .w-like .num-like {
@@ -885,7 +875,7 @@ a:hover {
 
 .testimonial-box .comit {
   font-size: 2rem;
-  color: #48abec;
+  color: var(--brand-ink);
   background-color: #fff;
   width: 52px;
   height: 52px;
@@ -1061,12 +1051,18 @@ a:hover {
   gap: 0.5rem;
 }
 
-.widget-tags ul li a {
+/* Tags are labels, not destinations. They used to be <a href="#">, which put
+   five focusable elements per page in the tab order that did nothing except
+   jump the reader back to the top. They are <span> now; the selector keeps the
+   anchor form too in case a real tag archive is added later. */
+.widget-tags ul li a,
+.widget-tags ul li .tag {
   display: inline-block;
   padding: 0.25rem 0.75rem;
   background-color: #f8f9fa;
   border-radius: 20px;
   font-size: 0.875rem;
+  color: #4a5568;
 }
 
 /*======================================
@@ -1108,7 +1104,7 @@ footer .credits a {
 ======================================*/
 
 #sendmessage {
-  color: #48abec;
+  color: var(--brand-ink);
   border: 1px solid #48abec;
   display: none;
   text-align: center;
@@ -1711,7 +1707,7 @@ footer .credits a {
 }
 
 .blog-preview-title a:hover {
-  color: #48abec;
+  color: var(--brand-ink);
   transform: translateX(5px);
 }
 
@@ -1739,7 +1735,8 @@ footer .credits a {
   gap: 5px;
 }
 
-.reading-time i {
+.reading-time i,
+.reading-time .icon {
   font-size: 14px;
 }
 
@@ -1757,7 +1754,7 @@ footer .credits a {
   border-radius: 25px;
   transition: all 0.3s ease;
   border: 2px solid #48abec;
-  color: #48abec;
+  color: var(--brand-ink);
   background: transparent;
 }
 
@@ -1768,12 +1765,14 @@ footer .credits a {
   box-shadow: 0 8px 25px rgba(72, 171, 236, 0.3);
 }
 
-.view-all-posts .btn i {
+.view-all-posts .btn i,
+.view-all-posts .btn .icon {
   margin-left: 8px;
   transition: transform 0.3s ease;
 }
 
-.view-all-posts .btn:hover i {
+.view-all-posts .btn:hover i,
+.view-all-posts .btn:hover .icon {
   transform: translateX(3px);
 }
 
@@ -1822,7 +1821,7 @@ footer .credits a {
   
   .navbar-nav .nav-link:hover {
     background: rgba(72, 171, 236, 0.1);
-    color: #48abec;
+    color: var(--brand-ink);
   }
   
   /* Hero section improvements */
@@ -1903,7 +1902,7 @@ footer .credits a {
   
   .about-info .title-s {
     font-weight: 600;
-    color: #48abec;
+    color: var(--brand-ink);
   }
   
   .about-me .lead {

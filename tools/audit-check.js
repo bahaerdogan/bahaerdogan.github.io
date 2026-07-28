@@ -125,6 +125,104 @@ const CHECKS = [
   }, true],
   ['Repo2', 'No filenames with spaces or parentheses in img/',
     () => fs.readdirSync(path.join(ROOT, 'img')).filter((f) => /[ ()]/.test(f)).length, 0],
+
+  // --- Second pass, July 2026: items the first remediation left open ---
+
+  ['H4d', 'Ionicons removed (CSS and font files)',
+    () => count((s) => /ionicons|class="[^"]*\bion-[a-z]/.test(s)) === 0 && !exists('lib/ionicons'), true],
+
+  ['A11y5', 'Blue text on light backgrounds meets WCAG AA', () => {
+    // #48abec is 2.53:1 on white. Only the breadcrumb over the dark hero overlay
+    // may still use it as a text colour.
+    const css = read('css/style.css');
+    const textUses = (css.match(/^\s*color:\s*#48abec;/gm) || []).length;
+    return textUses <= 1;
+  }, true],
+
+  ['A11y6', 'No dead href="#" tag or category links',
+    () => count((s) => /<a href="#"[^>]*>(?!\s*<svg)/.test(
+      s.replace(/<li class="nav-item dropdown language-switcher"[\s\S]*?<\/li>/g, '')
+       .replace(/<a href="#" class="back-to-top"[\s\S]*?<\/a>/g, '')
+    )), 0],
+
+  ['A11y7', 'No inline event handlers (they cannot run under the CSP)',
+    () => count((s) => /\son(click|submit|load|error|mouseover)=/i.test(s)), 0],
+
+  ['Nav', 'Primary navigation is identical within each language', () => {
+    const sets = new Set();
+    for (const [, s] of pages) {
+      const nav = (s.match(/<ul class="navbar-nav">([\s\S]*?)<\/ul>/) || [])[1];
+      if (!nav) continue;
+      const labels = [...nav.matchAll(/class="js-scroll nav-link[^"]*">([^<]+)</g)].map((m) => m[1]);
+      if (labels.length) sets.add(labels.join('|'));
+    }
+    return sets.size; // one per language: en, tr, de
+  }, 3],
+
+  ['Brand', 'One spelling of the name everywhere',
+    () => count((s) => /Bahaerdogan/.test(s)), 0],
+  ['Brand2', 'No invalid sameAs (a YouTube handle cannot contain "ğ")',
+    () => count((s) => /youtube\.com\/[^"<\s]*ğ/.test(s.match(/"sameAs":\[[^\]]*\]/)?.[0] || '')), 0],
+
+  ['GDPR', 'A privacy policy exists in all three languages',
+    () => ['privacy.html', 'privacy-tr.html', 'privacy-de.html'].every(exists), true],
+  ['GDPR2', 'Every page links the privacy policy',
+    // The six noindexed German stubs carry no footer chrome at all.
+    () => count((s) => !/legal-link/.test(s) && !/name="robots" content="noindex"/.test(s)
+                     && !/content="noindex"/.test(s)), 0],
+  ['GDPR3', 'Analytics consent defaults to denied before gtag config', () => {
+    const s = html['index.html'] || '';
+    const boot = (s.match(/<script>[^<]*gtag[^<]*<\/script>/) || [''])[0];
+    const dflt = boot.indexOf('"default"') >= 0 ? boot.indexOf('"default"') : boot.indexOf("'default'");
+    const cfg = boot.indexOf('"config"') >= 0 ? boot.indexOf('"config"') : boot.indexOf("'config'");
+    return dflt > -1 && cfg > -1 && dflt < cfg && /analytics_storage:"denied"|analytics_storage:'denied'/.test(boot);
+  }, true],
+  ['GDPR4', 'Commenter IP is hashed, never stored raw',
+    () => /ipKey\(/.test(read('cloudflare-worker/worker.js'))
+       && !/ratelimit:\$\{clientIP\}/.test(read('cloudflare-worker/worker.js')), true],
+
+  ['CSP', 'Content-Security-Policy is enforced via <meta> (GitHub Pages reads no header file)',
+    () => count((s) => !/http-equiv="Content-Security-Policy"/.test(s)), 0],
+  ['CSP2', 'Every inline script is covered by a CSP hash', () => {
+    const crypto = require('crypto');
+    const headers = read('_headers');
+    const missing = new Set();
+    for (const [, s] of pages) {
+      for (const m of s.matchAll(/<script(?![^>]*\ssrc=)(?![^>]*application\/ld\+json)[^>]*>([\s\S]*?)<\/script>/g)) {
+        const h = `sha256-${crypto.createHash('sha256').update(m[1]).digest('base64')}`;
+        if (!headers.includes(h)) missing.add(h);
+      }
+    }
+    return missing.size;
+  }, 0],
+  ['CSP3', 'Only one server-config file is shipped',
+    () => [exists('.htaccess'), exists('_headers')].filter(Boolean).length, 1],
+
+  ['Search', 'Sidebar search uses the generated index, not a stale copy',
+    () => !/handleSearch/.test(read('js/main.js'))
+       && /addEventListener\('submit'/.test(read('js/blog-search.js')), true],
+
+  ['PWA', 'theme-color pages have a manifest to belong to',
+    () => count((s) => /name="theme-color"/.test(s) && !/rel="manifest"/.test(s)), 0],
+
+  ['Dead', 'No calls to functions that do not exist',
+    () => count((s) => /scrollToTop\(\)/.test(s)), 0],
+
+  ['Footer', 'Every page has a footer landmark',
+    () => count((s) => !/<footer[\s>]/.test(s)), 0],
+
+  ['Build', 'No tag is duplicated by a non-idempotent build step', () => {
+    // Every one of these is written by the build. More than one per page means a
+    // strip-then-reinsert step stopped matching — usually because the minifier
+    // sorted the attributes out from under an order-dependent regex.
+    const singletons = [
+      /<meta[^>]*http-equiv=["']Content-Security-Policy["'][^>]*>/gi,
+      /<link[^>]*rel="manifest"[^>]*>/gi,
+      /<p class="legal-link">/g,
+      /<script type="application\/ld\+json">/g,
+    ];
+    return count((s) => singletons.some((re) => (s.match(re) || []).length > 1));
+  }, 0],
 ];
 
 let pass = 0;

@@ -32,7 +32,15 @@ const EXCLUDED = new Set([
   'ValuePerKilogramForProsperityDE.html',
 ]);
 
-const NOT_ARTICLES = new Set(['index.html', 'BlogPosts.html']);
+const NOT_ARTICLES = new Set([
+  'index.html',
+  'BlogPosts.html',
+  // The privacy policy is a legal notice, not a blog post — it must not carry
+  // BlogPosting schema, an author byline or a reading time.
+  'privacy.html',
+  'privacy-tr.html',
+  'privacy-de.html',
+]);
 
 /** The canonical author entity, inlined into every article so Google can resolve it. */
 const PERSON = {
@@ -74,7 +82,25 @@ function groupKeyOf(file) {
     .toLowerCase();
 }
 
-/** Real last-modified date from git, falling back to mtime for untracked files. */
+/**
+ * Date of the HEAD commit — the fallback for files git does not know about yet.
+ *
+ * mtime cannot be used: the build rewrites every page it touches, so an
+ * untracked page would carry a new lastmod on every single build and put a
+ * fresh timestamp into sitemap.xml each time. That is the exact "lastmod is the
+ * build timestamp" defect the audit raised, reintroduced through the back door.
+ */
+let headDateCache = null;
+function headDate() {
+  if (headDateCache) return headDateCache;
+  try {
+    headDateCache = execFileSync('git', ['log', '--format=%aI', '-1'], { encoding: 'utf8' }).trim();
+  } catch (_) { /* not a git repo */ }
+  if (!headDateCache) headDateCache = new Date().toISOString();
+  return headDateCache;
+}
+
+/** Real last-modified date from git; HEAD's date for files not yet committed. */
 const dateCache = new Map();
 function gitDate(file, which = 'modified') {
   const key = `${file}:${which}`;
@@ -87,10 +113,70 @@ function gitDate(file, which = 'modified') {
     const out = execFileSync('git', args, { encoding: 'utf8' }).trim();
     if (out) iso = out.split('\n').pop().trim();
   } catch (_) { /* not a git repo, or file untracked */ }
-  if (!iso) {
-    try { iso = new Date(fs.statSync(file).mtime).toISOString(); } catch (_) { iso = new Date().toISOString(); }
-  }
+  if (!iso) iso = headDate();
   dateCache.set(key, iso);
+  return iso;
+}
+
+/**
+ * Date of the last commit that changed a page's *visible text*.
+ *
+ * `gitDate(file, 'modified')` returns the last commit to touch the file at all,
+ * which is wrong for `lastmod`: a site-wide mechanical pass (adding <main>,
+ * fixing the viewport meta, swapping icon fonts) rewrites all 51 files in one
+ * commit and re-dates every article to the same instant. Google discards
+ * `lastmod` when it isn't consistently accurate, so a uniform value throws away
+ * the signal for the whole sitemap.
+ *
+ * This walks the file's history newest-first and returns the date of the newest
+ * commit whose rendered text differs from the version before it. Markup-only
+ * commits are skipped, so lastmod tracks what a reader would actually notice.
+ */
+const contentDateCache = new Map();
+function contentDate(file) {
+  if (contentDateCache.has(file)) return contentDateCache.get(file);
+
+  const visibleText = (html) => {
+    try {
+      const root = parse(html);
+      root.querySelectorAll('script, style, noscript').forEach((n) => n.remove());
+      return root.structuredText.replace(/\s+/g, ' ').trim();
+    } catch (_) {
+      return html;
+    }
+  };
+
+  let result = null;
+  try {
+    const log = execFileSync('git', ['log', '--format=%H %aI', '--', file], { encoding: 'utf8' }).trim();
+    const commits = log ? log.split('\n').map((l) => {
+      const i = l.indexOf(' ');
+      return { sha: l.slice(0, i), date: l.slice(i + 1) };
+    }) : [];
+
+    const textAt = (sha) => {
+      try {
+        return visibleText(execFileSync('git', ['show', `${sha}:${file}`], { encoding: 'utf8', maxBuffer: 1 << 26 }));
+      } catch (_) {
+        return null; // file did not exist at that commit
+      }
+    };
+
+    for (let i = 0; i < commits.length; i++) {
+      const now = textAt(commits[i].sha);
+      if (now === null) break;
+      const prev = i + 1 < commits.length ? textAt(commits[i + 1].sha) : null;
+      // Newest commit whose text differs from its predecessor — or the commit
+      // that introduced the file, when there is no predecessor.
+      if (prev === null || prev !== now) {
+        result = commits[i].date;
+        break;
+      }
+    }
+  } catch (_) { /* not a git repo */ }
+
+  const iso = result || gitDate(file, 'modified');
+  contentDateCache.set(file, iso);
   return iso;
 }
 
@@ -169,9 +255,11 @@ function readMeta(file, html) {
     lang: langOf(file),
     text,
     datePublished: dateOnly(gitDate(file, 'published')),
-    dateModified: dateOnly(gitDate(file, 'modified')),
-    lastmod: gitDate(file, 'modified'),
+    // Both track real content change, so a markup-only build pass does not
+    // re-date every article to the same instant.
+    dateModified: dateOnly(contentDate(file)),
+    lastmod: contentDate(file),
   };
 }
 
-module.exports = { BASE_URL, EXCLUDED, NOT_ARTICLES, PERSON, langOf, groupKeyOf, gitDate, dateOnly, readMeta };
+module.exports = { BASE_URL, EXCLUDED, NOT_ARTICLES, PERSON, langOf, groupKeyOf, gitDate, contentDate, dateOnly, readMeta };

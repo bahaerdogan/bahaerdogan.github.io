@@ -89,7 +89,7 @@ async function handlePostComment(request, env, ctx) {
   try {
     const clientIP = request.headers.get('CF-Connecting-IP') || 'unknown';
 
-    const limited = await checkRateLimit(env, `ratelimit:${clientIP}`, LIMITS.comment);
+    const limited = await checkRateLimit(env, `ratelimit:${await ipKey(clientIP)}`, LIMITS.comment);
     if (limited) return json({ error: t.rate(limited) }, 429, request);
 
     const data = await readJson(request);
@@ -157,7 +157,7 @@ async function handleContactForm(request, env, ctx) {
   try {
     const clientIP = request.headers.get('CF-Connecting-IP') || 'unknown';
 
-    const limited = await checkRateLimit(env, `contact:${clientIP}`, LIMITS.contact);
+    const limited = await checkRateLimit(env, `contact:${await ipKey(clientIP)}`, LIMITS.contact);
     if (limited) return json({ error: t.rate(limited) }, 429, request);
 
     const data = await readJson(request);
@@ -245,6 +245,18 @@ async function readJson(request) {
   } catch (_) {
     return null;
   }
+}
+
+/**
+ * Rate-limit bucket derived from the caller's IP.
+ *
+ * The IP itself is never written to KV: the key is a truncated SHA-256 digest,
+ * which still separates callers but is not personal data at rest. Buckets carry
+ * a one-hour TTL, so nothing survives the rate-limit window either way.
+ */
+async function ipKey(ip) {
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(`rl:${ip}`));
+  return [...new Uint8Array(digest)].slice(0, 12).map((b) => b.toString(16).padStart(2, '0')).join('');
 }
 
 /** Returns minutes remaining if the caller is over the limit, otherwise null. */

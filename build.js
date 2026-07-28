@@ -14,6 +14,36 @@ const {
     groupKeyOf, langOf, readMeta,
 } = require('./tools/site-meta');
 
+const GA_ID = 'G-ZGTWHSMVV7';
+
+/**
+ * The inline analytics bootstrap, with Consent Mode v2 established before the
+ * first `config` call.
+ *
+ * Order matters and is the whole point of this block:
+ *   1. define gtag/dataLayer
+ *   2. `consent default` — everything non-essential denied
+ *   3. replay a previously stored grant, so a returning visitor who opted in is
+ *      not re-gated while the deferred banner script is still loading
+ *   4. only then `config`, which is what emits page_view
+ *
+ * `wait_for_update` gives the banner a window to call `consent update` before
+ * GA decides how to handle the hit.
+ */
+const GA_BOOTSTRAP = '<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}'
+    + "gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',"
+    + "analytics_storage:'denied',personalization_storage:'denied',functionality_storage:'granted',"
+    + "security_storage:'granted',wait_for_update:500});"
+    + "try{var c=JSON.parse(localStorage.getItem('cookie-consent'));"
+    + "if(c&&c.analytics){gtag('consent','update',{analytics_storage:'granted'})}}catch(e){}"
+    + `gtag('js',new Date);gtag('config','${GA_ID}')</script>`;
+
+/** Matches the existing inline bootstrap in whatever form the last build left it. */
+const GA_BOOTSTRAP_RE = new RegExp(
+    `<script>(?:(?!<\\/script>)[\\s\\S])*?gtag\\((?:"|')config(?:"|'),\\s*(?:"|')${GA_ID}(?:"|')\\)[\\s\\S]*?<\\/script>`,
+    'g'
+);
+
 /** Load every page's real metadata once per build. */
 function collectPages() {
     const pages = new Map();
@@ -156,39 +186,10 @@ async function convertToWebP() {
     }
 }
 
-// Tweak icon font CSS to avoid FOIT
-async function tweakIconFontCSS() {
-    const targets = [
-        'lib/ionicons/css/ionicons.min.css'
-    ];
-    
-    const results = await Promise.all(targets.map(async (file) => {
-        try {
-            const css = await readFileAsync(file, 'utf8');
-            let updated = css;
-            
-            if (file.includes('ionicons') && !/font-display\s*:\s*swap/.test(updated)) {
-                updated = updated.replace(/(@font-face\{[^}]*font-family:\s*"Ionicons";)([^}]*\})/,
-                    (m, p1, p2) => `${p1}font-display:swap;${p2}`);
-            }
-            
-            if (updated !== css) {
-                await writeFileAsync(file, updated, 'utf8');
-                console.log(`Updated font-display: swap in ${file}`);
-                return { file, success: true, modified: true };
-            }
-            return { file, success: true, modified: false };
-        } catch (error) {
-            console.error(`Failed to update font-display in ${file}:`, error.message);
-            return { file, success: false, error };
-        }
-    }));
-    
-    const failed = results.filter(r => !r.success);
-    if (failed.length > 0) {
-        console.warn(`Font CSS updates completed with ${failed.length} failures`);
-    }
-}
+// Icon fonts are gone. Font Awesome and Ionicons were together costing ~81 KB of
+// render-blocking CSS and ~1.3 MB of font files to draw 23 glyphs; both are now
+// inline SVG (see tools/replace-fontawesome.js and tools/replace-ionicons.js), so
+// there is no @font-face left to patch font-display onto.
 
 // Optimize and minify HTML files
 async function optimizeHTML() {
@@ -571,12 +572,16 @@ async function enrichBlogSEOAndSchema() {
     const pages = collectPages();
 
     for (const [file, meta] of pages) {
-        if (NOT_ARTICLES.has(file)) continue;
+        // These two carry hand-authored schema and are left alone.
+        if (file === 'index.html' || file === 'BlogPosts.html') continue;
+        // Everything else still gets OpenGraph and a schema node — a legal page
+        // is not a BlogPosting, but it is not exempt from having a share card.
+        const isArticle = !NOT_ARTICLES.has(file);
         try {
             let html = await readFileAsync(file, 'utf8');
 
-            const graph = [
-                {
+            const primary = isArticle
+                ? {
                     "@type": "BlogPosting",
                     "@id": `${meta.url}#article`,
                     "isPartOf": { "@type": "WebPage", "@id": meta.url },
@@ -593,15 +598,33 @@ async function enrichBlogSEOAndSchema() {
                     // cross-page @id reference resolves to nothing.
                     "author": PERSON,
                     "publisher": PERSON
-                },
+                }
+                : {
+                    "@type": "WebPage",
+                    "@id": `${meta.url}#webpage`,
+                    "name": meta.title,
+                    "description": meta.description,
+                    "inLanguage": meta.lang,
+                    "url": meta.url,
+                    "dateModified": meta.dateModified,
+                    "publisher": PERSON
+                };
+
+            const graph = [
+                primary,
                 {
                     "@type": "BreadcrumbList",
                     "@id": `${meta.url}#breadcrumb`,
-                    "itemListElement": [
-                        { "@type": "ListItem", "position": 1, "name": "Home", "item": `${BASE_URL}/` },
-                        { "@type": "ListItem", "position": 2, "name": "Blog", "item": `${BASE_URL}/BlogPosts.html` },
-                        { "@type": "ListItem", "position": 3, "name": meta.title, "item": meta.url }
-                    ]
+                    "itemListElement": isArticle
+                        ? [
+                            { "@type": "ListItem", "position": 1, "name": "Home", "item": `${BASE_URL}/` },
+                            { "@type": "ListItem", "position": 2, "name": "Blog", "item": `${BASE_URL}/BlogPosts.html` },
+                            { "@type": "ListItem", "position": 3, "name": meta.title, "item": meta.url }
+                        ]
+                        : [
+                            { "@type": "ListItem", "position": 1, "name": "Home", "item": `${BASE_URL}/` },
+                            { "@type": "ListItem", "position": 2, "name": meta.title, "item": meta.url }
+                        ]
                 }
             ];
 
@@ -610,14 +633,17 @@ async function enrichBlogSEOAndSchema() {
             // OpenGraph and Twitter were previously limited to og:image, so every
             // share fell back to whatever the crawler could guess.
             const social = [
-                ['property', 'og:type', 'article'],
+                ['property', 'og:type', isArticle ? 'article' : 'website'],
                 ['property', 'og:title', meta.title],
                 ['property', 'og:description', meta.description],
                 ['property', 'og:url', meta.url],
                 ['property', 'og:locale', meta.lang === 'tr' ? 'tr_TR' : meta.lang === 'de' ? 'de_DE' : 'en_US'],
-                ['property', 'article:published_time', meta.datePublished],
-                ['property', 'article:modified_time', meta.dateModified],
-                ['property', 'article:author', 'https://www.linkedin.com/in/bahaerdogan/'],
+                // article:* is meaningless on a non-article and Facebook ignores it.
+                ...(isArticle ? [
+                    ['property', 'article:published_time', meta.datePublished],
+                    ['property', 'article:modified_time', meta.dateModified],
+                    ['property', 'article:author', 'https://www.linkedin.com/in/bahaerdogan/'],
+                ] : []),
                 ['name', 'twitter:card', 'summary_large_image'],
                 ['name', 'twitter:title', meta.title],
                 ['name', 'twitter:description', meta.description],
@@ -734,7 +760,7 @@ async function generateSearchScripts() {
         const code = `// Generated by build.js — do not edit.
 (function () {
   var blogPosts = ${JSON.stringify(posts)};
-  window.searchBlog = function () {
+  function searchBlog() {
     var input = document.getElementById('search-input');
     if (!input) return false;
     var q = input.value.toLowerCase().trim();
@@ -744,7 +770,19 @@ async function generateSearchScripts() {
     })[0];
     if (hit) { window.location.href = hit.url; } else { alert(${JSON.stringify(notFound)}); }
     return false;
-  };
+  }
+  window.searchBlog = searchBlog;
+
+  // Bound here rather than with an inline onsubmit attribute, which a
+  // Content-Security-Policy that carries script hashes will refuse to run.
+  // The markup previously called handleSearch(), a *different* function in
+  // main.js built on a hardcoded two-entry list, so the sidebar search could
+  // only ever find two of the ${posts.length} posts and reported every other
+  // query as "not found".
+  document.addEventListener('DOMContentLoaded', function () {
+    var form = document.getElementById('search-form');
+    if (form) form.addEventListener('submit', function (e) { e.preventDefault(); searchBlog(); });
+  });
 })();
 `;
         const file = `js/blog-search${lang === 'en' ? '' : '-' + lang}.js`;
@@ -773,9 +811,275 @@ async function externaliseInlineScripts() {
         // object only served to make every page's inline script unique.
         html = html.replace(/(gtag\("config","G-ZGTWHSMVV7")\s*,\s*\{[\s\S]*?\}(\))/g, '$1$2');
 
+        // Inline event handlers cannot run under a CSP that carries script
+        // hashes ('unsafe-inline' is ignored once a hash or nonce is present).
+        // These are all bound from real script files instead:
+        //   onsubmit="return handleSearch(event)"  -> js/blog-search*.js
+        //   onclick="scrollToTop()"                -> js/main.js
+        //   onload="renderMathInElement(...)"      -> js/katex-init.js
+        html = html.replace(/\s+onsubmit="return handleSearch\(event\)"/g, '');
+        html = html.replace(/\s+onclick="scrollToTop\(\)"/g, '');
+        html = html.replace(
+            /(<script[^>]*auto-render\.min\.js[^>]*?)\s+onload=(?:"[^"]*"|'[^']*')([^>]*><\/script>)/g,
+            '$1$2<script defer="defer" src="js/katex-init.min.js"></script>'
+        );
+
+        // Consent Mode v2 must be established *before* the first `config` call.
+        // The banner in main.js set `consent default` correctly but shipped with
+        // `defer`, so it ran after this head snippet had already sent a page_view
+        // — analytics fired ungated on every first visit. Rewriting the whole
+        // bootstrap here keeps the ordering guarantee in one place, and the CSP
+        // hash for it is regenerated further down the build.
+        html = html.replace(GA_BOOTSTRAP_RE, GA_BOOTSTRAP);
+
         if (html !== before) await writeFileAsync(file, html, 'utf8');
     }
     console.log('Externalised inline search data and normalised the analytics snippet');
+}
+
+/**
+ * Link the web app manifest from every page.
+ *
+ * The pages already declared `theme-color` and `apple-mobile-web-app-capable`
+ * but there was no manifest for them to belong to — a half-configured PWA that
+ * Lighthouse flags and that gives Android no icon to install with.
+ */
+async function linkManifest() {
+    const tag = '<link href="manifest.webmanifest" rel="manifest">';
+    let changed = 0;
+    for (const file of glob.sync('*.html')) {
+        const html = await readFileAsync(file, 'utf8');
+        if (html.includes('rel="manifest"')) continue;
+        const updated = html.replace(/(<link href="img\/favicon\.png" rel="icon">)/, `$1${tag}`);
+        if (updated !== html) {
+            await writeFileAsync(file, updated, 'utf8');
+            changed++;
+        }
+    }
+    console.log(`Linked the web app manifest from ${changed} pages`);
+}
+
+/**
+ * Turn dead `href="#"` anchors into plain text.
+ *
+ * Every article page carried an anchor for its category and five for its tags,
+ * none of which led anywhere. For a keyboard user that is six focusable
+ * elements per page that do nothing except scroll the page back to the top.
+ *
+ * The Bootstrap dropdown toggle and the back-to-top control also use href="#",
+ * but both are wired to real behaviour, so they are left alone.
+ */
+async function removeDeadAnchors() {
+    const { parse } = require('node-html-parser');
+
+    let changed = 0;
+    let removed = 0;
+    for (const file of glob.sync('*.html')) {
+        const html = await readFileAsync(file, 'utf8');
+        const root = parse(html);
+
+        const dead = [
+            ...root.querySelectorAll('.widget-tags ul li a'),
+            ...root.querySelectorAll('.post-meta a'),
+        ].filter((a) => (a.getAttribute('href') || '').trim() === '#');
+        if (!dead.length) continue;
+
+        let updated = html;
+        for (const a of dead) {
+            updated = updated.replace(a.outerHTML, `<span class="tag">${a.innerHTML}</span>`);
+        }
+        if (updated !== html) {
+            await writeFileAsync(file, updated, 'utf8');
+            changed++;
+            removed += dead.length;
+        }
+    }
+    console.log(`Replaced ${removed} dead href="#" anchors with text across ${changed} pages`);
+}
+
+/**
+ * Give every page the same primary navigation.
+ *
+ * The site shipped nine different nav sets: the homepage had Experience but the
+ * articles did not, the articles ordered Voluntary before Projects, BlogPosts
+ * dropped Voluntary, and TypesOfAgenticAiDE had lost everything except "Blog".
+ * That is a WCAG 2.2 SC 3.2.3 (Consistent Navigation) failure and it makes the
+ * site feel like several sites.
+ *
+ * Labels stay localised — that is better for the reader — but the item set and
+ * their order are now identical everywhere. The language-switcher <li> is owned
+ * by updateI18nHeadsAndToggle and is carried across untouched.
+ */
+async function normaliseNavigation() {
+    const LABELS = {
+        en: ['Home', 'About', 'Blog', 'Experience', 'Projects', 'Voluntary', 'Contact'],
+        tr: ['Ana Sayfa', 'Hakkında', 'Blog', 'Deneyim', 'Projeler', 'Gönüllülük', 'İletişim'],
+        de: ['Startseite', 'Über mich', 'Blog', 'Erfahrung', 'Projekte', 'Ehrenamt', 'Kontakt'],
+    };
+    const SECTIONS = ['home', 'about', 'blog', 'experience', 'projects', 'voluntary', 'contact'];
+
+    // Operated on the raw string, not a parsed tree: node-html-parser re-serialises
+    // the switcher's inline SVG (`<circle/>` becomes `<circle></circle>`), so the
+    // node's outerHTML never appears verbatim in the file and a replace() against
+    // it silently matches nothing.
+    const NAV_RE = /<ul class="navbar-nav">([\s\S]*?)<\/ul>/;
+    const SWITCHER_RE = /<li class="nav-item dropdown language-switcher"[\s\S]*$/;
+
+    let changed = 0;
+    for (const file of glob.sync('*.html')) {
+        const html = await readFileAsync(file, 'utf8');
+        const m = html.match(NAV_RE);
+        if (!m) continue;
+
+        const isHome = file === 'index.html';
+        const labels = LABELS[langOf(file)] || LABELS.en;
+
+        // The language switcher is always the final <li>; keep it byte-for-byte.
+        const switcherMatch = m[1].match(SWITCHER_RE);
+        const switcher = switcherMatch ? switcherMatch[0] : '';
+
+        const items = SECTIONS.map((section, i) => {
+            let href;
+            if (section === 'blog') href = isHome ? '#blog' : 'BlogPosts.html';
+            else if (isHome) href = `#${section}`;
+            else href = section === 'home' ? 'index.html' : `index.html#${section}`;
+
+            const active = (isHome && section === 'home') || (!isHome && section === 'blog') ? ' active' : '';
+            return `<li class="nav-item"><a href="${href}" class="js-scroll nav-link${active}">${labels[i]}</a></li>`;
+        }).join('');
+
+        const rebuilt = `<ul class="navbar-nav">${items}${switcher}</ul>`;
+        if (m[0] === rebuilt) continue;
+
+        const updated = html.replace(NAV_RE, () => rebuilt);
+        if (updated === html) {
+            console.warn(`  ! navigation rewrite did not apply to ${file}`);
+            continue;
+        }
+        await writeFileAsync(file, updated, 'utf8');
+        changed++;
+    }
+    console.log(`Normalised primary navigation on ${changed} pages`);
+}
+
+/**
+ * Use one spelling of the name everywhere.
+ *
+ * The site shipped three variants: "Bahaerdogan" in the navbar, the <title>
+ * suffix, the footer and og:site_name, but "Baha Erdoğan" in JSON-LD and
+ * llms.txt. The homepage — the page that anchors the entity for Google's
+ * Knowledge Graph and for LLM retrieval — used the wrong one.
+ *
+ * Only the capitalised form is rewritten; the lowercase "bahaerdogan" inside
+ * bahaerdogan.com, github.com/bahaerdogan and the LinkedIn URL is left intact.
+ */
+async function unifyBrandName() {
+    let changed = 0;
+    for (const file of glob.sync('*.html')) {
+        const html = await readFileAsync(file, 'utf8');
+        const updated = html.replace(/Bahaerdogan/g, 'Baha Erdoğan');
+        if (updated !== html) {
+            await writeFileAsync(file, updated, 'utf8');
+            changed++;
+        }
+    }
+    console.log(`Unified the brand name to "Baha Erdoğan" across ${changed} pages`);
+}
+
+/**
+ * Repair visible breadcrumbs that describe a different article.
+ *
+ * Several pages carried a breadcrumb copy-pasted from whichever page they were
+ * cloned from: the export-economics essay and the blog template both read
+ * "Anomaly Detection in Machine Learning", and the macOS cheatsheet and the
+ * earnings essay both read "Data". Google flags a visible/markup mismatch, and
+ * the label is simply wrong for the reader.
+ *
+ * Only breadcrumbs that share *no* significant word with the page title are
+ * rewritten. A deliberately shortened label ("The Role of AI in Defense
+ * Technologies" for a longer headline) is good UX and is left alone.
+ */
+async function fixVisibleBreadcrumbs() {
+    const { parse } = require('node-html-parser');
+    const significant = (s) => new Set(
+        s.toLowerCase()
+            .normalize('NFD').replace(/[̀-ͯ]/g, '')
+            .replace(/[^\p{L}\p{N}\s]/gu, ' ')
+            .split(/\s+/)
+            .filter((w) => w.length > 3)
+    );
+
+    let fixed = 0;
+    for (const file of glob.sync('*.html')) {
+        const html = await readFileAsync(file, 'utf8');
+        const root = parse(html);
+        const crumbs = root.querySelectorAll('.breadcrumb .breadcrumb-item');
+        if (!crumbs.length) continue;
+
+        const last = crumbs[crumbs.length - 1];
+        const current = last.text.trim();
+        const title = (root.querySelector('title')?.text || '').replace(/\s*\|.*$/, '').trim();
+        if (!current || !title) continue;
+
+        // A word counts as shared if either form starts with the other, so German
+        // compounds match their base ("Verteidigung" / "Verteidigungstechnologien")
+        // and a legitimately shortened label is not treated as a wrong one.
+        const a = [...significant(current)];
+        const b = [...significant(title)];
+        const overlaps = a.some((w) => b.some((v) => v.startsWith(w) || w.startsWith(v)));
+        if (overlaps) continue;
+
+        const escaped = title.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+        const updated = html.replace(last.outerHTML, last.outerHTML.replace(current, escaped));
+        if (updated !== html) {
+            await writeFileAsync(file, updated, 'utf8');
+            console.log(`  breadcrumb in ${file}: "${current}" -> "${title}"`);
+            fixed++;
+        }
+    }
+    console.log(`Corrected ${fixed} breadcrumbs that named a different article`);
+}
+
+/**
+ * Guarantee every page has a footer, and link the privacy policy from it in the
+ * page's own language.
+ *
+ * A policy nobody can reach is not a policy, and this is its only permanent
+ * link, so the page stays discoverable to crawlers. Four pages (BlogPosts and
+ * the three privacy pages cloned from it) had no <footer> element at all.
+ */
+async function ensureFooterAndLegalLink() {
+    const LABEL = { en: 'Privacy Policy', tr: 'Gizlilik Politikası', de: 'Datenschutz' };
+    const HREF = { en: 'privacy.html', tr: 'privacy-tr.html', de: 'privacy-de.html' };
+
+    const footerFor = (inner) =>
+        `<footer><div class="container"><div class="row"><div class="col-sm-12">`
+        + `<div class="copyright-box">${inner}</div></div></div></div></footer>`;
+
+    let linked = 0;
+    let added = 0;
+
+    for (const file of glob.sync('*.html')) {
+        let html = await readFileAsync(file, 'utf8');
+        const before = html;
+        const lang = langOf(file);
+        const link = `<p class="legal-link"><a href="${HREF[lang]}">${LABEL[lang]}</a></p>`;
+        const copyright = '<p class="copyright">&copy; Copyright <strong>Baha Erdoğan </strong>All Rights Reserved</p>';
+
+        if (!/<footer[\s>]/i.test(html)) {
+            // Footer belongs after the main landmark, not inside it.
+            if (html.includes('</main>')) {
+                html = html.replace('</main>', `</main>${footerFor(copyright + link)}`);
+                added++;
+            }
+        } else if (!html.includes('class="legal-link"')) {
+            html = html.replace(/(<p class="copyright">[\s\S]*?<\/p>)/, `$1${link}`);
+            linked++;
+        }
+
+        if (html !== before) await writeFileAsync(file, html, 'utf8');
+    }
+    console.log(`Privacy policy linked from ${linked} footers; added ${added} missing footers`);
 }
 
 /**
@@ -817,7 +1121,42 @@ async function generateCSP() {
     headers = headers.replace(/^(\s*)Content-Security-Policy:.*$/m, `$1Content-Security-Policy: ${csp}`);
     await writeFileAsync(headersPath, headers, 'utf8');
 
-    console.log(`Regenerated CSP in _headers (${hashes.size} inline-script hashes)`);
+    // The site is served by GitHub Pages, which reads neither `_headers`
+    // (Cloudflare Pages / Netlify) nor `.htaccess` (Apache) — verified against
+    // production, where no security header is present at all. Until the host
+    // changes, the <meta> element is the only way any of this policy takes
+    // effect, so it is emitted as well and kept byte-identical to the header.
+    //
+    // `frame-ancestors` is dropped: it is invalid in a meta policy and browsers
+    // log a console error for it. Clickjacking therefore still needs a real
+    // header (X-Frame-Options / frame-ancestors) from the host.
+    const metaCsp = csp
+        .split('; ')
+        .filter((d) => !/^frame-ancestors\b/.test(d))
+        .join('; ');
+    const metaTag = `<meta http-equiv="Content-Security-Policy" content="${metaCsp.replace(/"/g, '&quot;')}">`;
+
+    let injected = 0;
+    for (const file of glob.sync('*.html')) {
+        let html = await readFileAsync(file, 'utf8');
+        const before = html;
+        // Attribute-order-independent on purpose: html-minifier-terser runs with
+        // sortAttributes, so after one pass the tag is
+        // `<meta content="…" http-equiv="…">`. Anchoring on http-equiv being
+        // first is what made an earlier version of this append a second policy
+        // on every build — the same class of bug as the og:image regex that the
+        // audit traced the fabricated schema back to.
+        html = html.replace(/<meta[^>]*http-equiv=["']Content-Security-Policy["'][^>]*>/gi, '');
+        // Must be the first thing in <head>: a meta policy only governs content
+        // that appears after it.
+        html = html.replace(/<head>/i, `<head>${metaTag}`);
+        if (html !== before) {
+            await writeFileAsync(file, html, 'utf8');
+            injected++;
+        }
+    }
+
+    console.log(`Regenerated CSP (${hashes.size} inline-script hashes) in _headers and ${injected} <meta> tags`);
 }
 
 /**
@@ -914,14 +1253,28 @@ async function build() {
         console.log('Enriching Blog SEO, Schema & Headings...');
         await enrichBlogSEOAndSchema();
 
-        console.log('Tweaking icon font CSS (font-display: swap)...');
-        await tweakIconFontCSS();
-
         console.log('Generating search scripts...');
         await generateSearchScripts();
 
         console.log('Externalising inline scripts...');
         await externaliseInlineScripts();
+
+        // Icon-font replacement runs every build, not once by hand: a page
+        // restored from git history came back carrying <span class="ion-…">
+        // and a stylesheet link to a directory that no longer exists.
+        console.log('Replacing any icon-font markup with inline SVG...');
+        require('child_process').execFileSync(process.execPath, ['tools/replace-fontawesome.js'], { stdio: 'inherit' });
+        require('child_process').execFileSync(process.execPath, ['tools/replace-ionicons.js'], { stdio: 'inherit' });
+
+        console.log('Ensuring footers and privacy link...');
+        await ensureFooterAndLegalLink();
+
+        console.log('Normalising navigation, brand name, breadcrumbs and dead links...');
+        await normaliseNavigation();
+        await unifyBrandName();
+        await fixVisibleBreadcrumbs();
+        await removeDeadAnchors();
+        await linkManifest();
 
         console.log('Optimizing and minifying HTML...');
         await optimizeHTML();

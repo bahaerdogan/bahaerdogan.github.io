@@ -10,14 +10,9 @@
 		}
 	});
 
-	// Preloader with improved fade animation
-	$(window).on('load', function () {
-		if ($('#preloader').length) {
-			$('#preloader').delay(100).fadeOut('slow', function () {
-				$(this).remove();
-			});
-		}
-	});
+	// The preloader was removed: it was an opaque full-screen overlay that only
+	// faded on window.load, so the page stayed blank until every stylesheet,
+	// script and image had finished — and stayed blank forever if JS failed.
 
 	// Back to top button with smooth animation
 	$(window).scroll(function() {
@@ -34,8 +29,12 @@
 		return false;
 	});
 
-	// Improved scroll to top functionality
-	$('.scrolltop-mf').on("click", function (e) {
+	// Improved scroll to top functionality.
+	// `.floating-action-btn` is included because its markup called an inline
+	// onclick="scrollToTop()" that was never defined anywhere — the button threw
+	// a ReferenceError on every click. Inline handlers are also blocked by a CSP
+	// that carries script hashes, so the binding belongs here either way.
+	$('.scrolltop-mf, .floating-action-btn').on("click", function (e) {
 		e.preventDefault();
 		$('html, body').animate({
 			scrollTop: 0
@@ -291,18 +290,14 @@
 		},
 		
 		setupGoogleConsentMode() {
+			// `consent default` is issued by the inline snippet in <head>, before
+			// gtag's `config` call. It cannot be done here: this file is deferred,
+			// so it runs after the page_view has already been sent, and a default
+			// arriving that late is ignored. Only the shim is guaranteed here.
 			window.dataLayer = window.dataLayer || [];
-			function gtag(){dataLayer.push(arguments);}
-			window.gtag = gtag;
-			
-			// Default consent state (denied for regions requiring consent)
-			gtag('consent', 'default', {
-				ad_storage: 'denied',
-				analytics_storage: 'denied',
-				personalization_storage: 'denied',
-				functionality_storage: 'granted',
-				security_storage: 'granted'
-			});
+			if (typeof window.gtag !== 'function') {
+				window.gtag = function () { window.dataLayer.push(arguments); };
+			}
 		},
 		
 		checkExistingConsent() {
@@ -676,30 +671,19 @@
 		},
 		
 		updateConsent(analytics) {
-			if (typeof gtag === 'function') {
-				gtag('consent', 'update', {
-					analytics_storage: analytics ? 'granted' : 'denied'
-				});
-				
-				if (analytics) {
-					this.initGoogleAnalytics();
-				}
-			}
+			if (typeof gtag !== 'function') return;
+			// `consent update` is all that is needed: gtag replays the hit it was
+			// already holding. Re-running `config` here used to send a *second*
+			// page_view — once when consent was granted, and again on every
+			// subsequent page load for a returning visitor who had accepted.
+			gtag('consent', 'update', {
+				analytics_storage: analytics ? 'granted' : 'denied',
+				ad_storage: analytics ? 'granted' : 'denied',
+				ad_user_data: analytics ? 'granted' : 'denied',
+				ad_personalization: analytics ? 'granted' : 'denied'
+			});
 		},
 		
-		initGoogleAnalytics() {
-			try {
-				gtag('js', new Date());
-				gtag('config', 'G-ZGTWHSMVV7', {
-					page_title: document.title,
-					page_location: window.location.href,
-					page_path: window.location.pathname,
-					send_page_view: true
-				});
-			} catch (err) {
-				console.warn('GA init failed:', err);
-			}
-		}
 	};
 	
 	// Make CookieConsent globally available
@@ -707,37 +691,9 @@
 
 	// EmailJS removed - now using Cloudflare Workers for comments and contact form
 
-	// Blog search functionality
-	const initBlogSearch = () => {
-		const blogPosts = [
-			{ title: "One of the precious metals, Data", url: "PreciousMetalData.html", keywords: ["data", "technology", "ai", "artificial intelligence", "precious"] },
-			{ title: "Why is knowing history important?", url: "WhyToLearnHistory.html", keywords: ["history", "learning", "knowledge", "importance"] },
-			// ... existing blog posts ...
-		];
-
-		window.handleSearch = (event) => {
-			event.preventDefault();
-			const searchTerm = document.getElementById('search-input').value.toLowerCase();
-			
-			if (!searchTerm.trim()) {
-				return false;
-			}
-
-			const results = blogPosts.filter(post => {
-				const titleMatch = post.title.toLowerCase().includes(searchTerm);
-				const keywordMatch = post.keywords.some(keyword => keyword.includes(searchTerm));
-				return titleMatch || keywordMatch;
-			});
-
-			if (results.length > 0) {
-				window.location.href = results[0].url;
-			} else {
-				alert('No matching posts found.');
-			}
-
-			return false;
-		};
-	};
+	// Blog search lives in the generated js/blog-search*.min.js, which carries the
+	// real post index and binds the form itself. The version that used to live here
+	// shadowed it with a hardcoded two-entry list, so most searches found nothing.
 
 	// Comment system functionality
 	const initCommentSystem = () => {
@@ -776,7 +732,6 @@
 	// Initialize all components
 	document.addEventListener('DOMContentLoaded', () => {
 		CookieConsent.init();
-		initBlogSearch();
 		initCommentSystem();
 		// ... other existing initializations ...
 	});

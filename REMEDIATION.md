@@ -122,7 +122,10 @@ Comments already in KV were stored HTML-escaped. New ones are stored raw. Any ex
 
 ---
 
-## Deliberately not done
+## Deliberately not done (first pass)
+
+> Superseded — see "Second pass" below. All but two of these are now done.
+
 
 - **Ionicons (50 KB CSS + 800 KB fonts for 18 glyphs).** Font Awesome was 9 well-known shapes I could author confidently; Ionicons is 18 and I'd be guessing at glyph paths I can't visually verify. Worth doing with the real SVGs to hand — it's the last easy 50 KB off the critical path.
 - **`src/` → `dist/` split.** You chose to patch in place. The build is idempotent now, so the corruption class is closed, but source and output still live in the same files and the committed HTML is still minified and hard to diff.
@@ -131,3 +134,100 @@ Comments already in KV were stored HTML-escaped. New ones are stored raw. Any ex
 - **All prose.** Everything in "Things That Still Feel AI Generated" stands. The Agentic AI series is still four overlapping articles with no first-hand experience, and it's still the weakest content on an engineering portfolio.
 
 The single highest-value remaining item is unchanged from the audit: **one article about something you actually built at Huawei, with numbers, code, and one thing that went wrong.**
+
+---
+
+# Second pass — 28 July 2026
+
+Closes everything the first pass left open except the two content items, and fixes
+six defects found while doing it that neither the audit nor the first pass caught.
+
+`npm run verify` — build + **53** checks (was 34). Build is idempotent: two
+consecutive runs produce byte-identical output.
+
+## Confirmed against production first
+
+`curl -sI https://bahaerdogan.com` returns `server: cloudflare`,
+`x-github-request-id`, `via: varnish` — and **not one security header**. H5 is
+confirmed: the site is served by GitHub Pages, which reads neither `_headers`
+(Cloudflare Pages / Netlify) nor `.htaccess` (Apache). The entire CSP, HSTS and
+cache policy were inert.
+
+## Not previously found
+
+1. **The sidebar search was wired to the wrong function on 42 pages.** The form
+   called `handleSearch()`, defined in `main.js` over a hardcoded two-entry list
+   with a `// ... existing blog posts ...` placeholder. The real index —
+   `searchBlog()` in the generated `blog-search.js`, with all 18 posts — was
+   never called. Every query except two reported "No matching posts found."
+2. **`scrollToTop()` did not exist.** `BlogPosts.html`'s floating action button
+   called it via inline `onclick`; the function is defined nowhere in the repo,
+   so the button threw a ReferenceError on every click.
+3. **Four dead social links.** Facebook, Instagram, Pinterest and Twitter icons
+   sat in `<a href="">`, and an empty href re-navigates to the current page.
+   Removed rather than converted.
+4. **`BlogPosts.html` had no `<footer>`** — nor did the pages generated from it.
+5. **Three breadcrumbs pointed at `#`** ("Home", "Library") instead of real pages.
+6. **`.back-to-top i`, `.reading-time i` and `.view-all-posts .btn i` were dead
+   selectors** — the first pass replaced those `<i>` glyphs with `<svg>` but left
+   the CSS targeting `i`, so the back-to-top icon lost its centring.
+
+## Done
+
+**Ionicons removed.** 18 glyphs to inline SVG, `lib/ionicons` deleted (51 KB CSS
++ 4 font files, 812 KB). Every glyph was rendered in a browser and visually
+checked before finishing — that was the blocker last time. Render-blocking CSS is
+now **165 KB** (Bootstrap 141 + own 25), down from ~320 KB.
+
+**Contrast.** Introduced `--brand` / `--brand-ink`. `#48abec` stays for
+backgrounds, borders and fills; text on light surfaces uses `#0a5fc4` (6.09:1,
+clears AA with headroom). The one exception is the breadcrumb over the hero's
+`rgba(0,0,0,.7)` overlay, where the light blue is correct and darkening it would
+*reduce* contrast. `a { color: #0078ff }` (4.09:1) was also below AA and moved.
+
+**GDPR.** Privacy policy in EN/TR/DE, linked from every footer, covering each
+actual data flow with its lawful basis and retention. Consent Mode v2 now runs
+**before** `gtag('config')` — it was in a `defer`red script, so a page_view fired
+ungated on every first visit. Verified in-browser: no `_ga` cookie before
+consent, cookies appear after Accept. `initGoogleAnalytics()` removed: it re-ran
+`config` after consent, double-counting every consenting visitor on every page.
+Commenter IPs are now hashed (truncated SHA-256) rather than used raw as KV keys.
+
+**CSP actually enforced.** Emitted as `<meta http-equiv>` on all 54 pages, kept
+byte-identical to `_headers` minus `frame-ancestors` (invalid in meta). This
+required removing all inline event handlers first — including the KaTeX
+`onload=`, which would otherwise have silently un-rendered the maths again, the
+audit's single most damaging finding. Confirmed in-browser: 11 KaTeX nodes
+render, zero raw LaTeX tokens, no CSP violations. `.htaccess` deleted.
+
+**Navigation, brand, breadcrumbs.** Nav normalised to one item set per language
+(was nine different sets; one German page had lost everything but "Blog").
+"Bahaerdogan" → "Baha Erdoğan" everywhere. The invalid `youtube.com/c/bahaerdoğan`
+`sameAs` removed — a YouTube handle cannot contain `ğ`. 335 dead `href="#"` tag
+and category anchors became text. Breadcrumbs naming a different article fixed;
+deliberately shortened ones left alone.
+
+**Also.** `lastmod` now tracks the last commit that changed a page's *visible
+text*, so a site-wide markup pass no longer re-dates all 42 URLs to one instant
+(Google discards a uniform `lastmod`). Web app manifest added for the
+already-declared `theme-color`. Dead `#preloader` CSS and JS removed. "Engineed"
+→ "Engineered". Single-density `imagesrcset` dropped.
+
+## Still open
+
+- **`src/` → `dist/` split.** Still patched in place.
+- **The prose.** Unchanged, and still the highest-value item: one article about
+  something you actually built at Huawei, with numbers, code, and one thing that
+  went wrong.
+
+## Two things need you
+
+1. **`RESEND_API_KEY`** — the contact form stays broken until it is set. See
+   "What you need to do" above.
+2. **Security headers still need a real host.** The `<meta>` CSP works, but
+   HSTS, `X-Frame-Options` and `frame-ancestors` cannot be set from markup.
+   Move to Cloudflare Pages (where `_headers` works as written) or add a
+   Cloudflare Transform Rule.
+3. **The YouTube URL is still wrong in visible text** (`youtube.com/bahaerdoğan`
+   on the homepage). I removed it from the schema but did not guess a
+   replacement — tell me the real handle and it is a one-line fix.

@@ -1,0 +1,16 @@
+{
+  "name": "Baha Erdoğan — Computer Engineer & AI R&D Specialist",
+  "short_name": "Baha Erdoğan",
+  "description": "Portfolio and publication hub: AI, computer vision, engineering and essays.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#0078ff",
+  "lang": "en",
+  "icons": [
+    { "src": "img/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "img/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "img/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
