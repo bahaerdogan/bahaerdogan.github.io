@@ -191,6 +191,255 @@ async function convertToWebP() {
 // inline SVG (see tools/replace-fontawesome.js and tools/replace-ionicons.js), so
 // there is no @font-face left to patch font-display onto.
 
+/**
+ * Render the blog surfaces: the home page grid, and the blog index's featured
+ * article, statistics, filter bar and card grid.
+ *
+ * Why this runs at build time rather than in the browser:
+ *
+ * BlogPosts.html was authored as a client-rendered page — `#blogGrid` (empty),
+ * `#loadingSpinner` ("Loading articles…"), `#noResults`, `.filter-btn`
+ * elements and four `.stat-number` divs hardcoded to 0 — but the script that was
+ * meant to fill them was never written. Nothing in the repo referenced
+ * `#blogGrid`, `#totalPosts` or `data-category`, so the page shipped a permanent
+ * spinner and four zeros. That is the "0 posts" bug: not a broken pipeline, an
+ * absent one.
+ *
+ * Rebuilding it client-side would have reintroduced the same class of failure
+ * plus an empty grid until JS parses. Rendering here means the articles are in
+ * the HTML for crawlers, the LCP image is discoverable by the preload scanner,
+ * and every count comes from the file listing.
+ */
+async function renderBlogSurfaces() {
+    const B = require('./tools/blog-render.js');
+    const { parse } = require('node-html-parser');
+    const { CATEGORIES, categoryLabel } = require('./tools/site-meta.js');
+
+    const HOME = { 'index.html': 'en' };
+    const INDEXES = { 'BlogPosts.html': 'en' };
+
+    // --- Home page: newest six, in the existing #blog section ---
+    for (const [file, lang] of Object.entries(HOME)) {
+        if (!fs.existsSync(file)) continue;
+        const html = await readFileAsync(file, 'utf8');
+        const root = parse(html);
+        const section = root.querySelector('#blog');
+        if (!section) continue;
+
+        const posts = B.collectPosts(lang);
+        const dims = await B.probeDims(posts);
+
+        // Keep the section's own title box; replace only the cards.
+        //
+        // The already-rendered `.post-grid` has to be matched first. Anchoring
+        // solely on the legacy `.row` of `.card-blog` markup worked once and then
+        // silently stopped: after the first build there was no such row left, so
+        // the home grid froze at whatever six articles existed that day and never
+        // picked up a new post again.
+        const target = section.querySelector('.post-grid')
+            || section.querySelectorAll('.container > .row').find((r) => r.querySelectorAll('article, .card-blog').length > 0);
+        if (!target) continue;
+
+        target.replaceWith(parse(B.renderHomeGrid(posts, lang, dims, 6)));
+
+        await writeFileAsync(file, root.toString(), 'utf8');
+        console.log(`  ${file}: home grid → ${Math.min(6, posts.length)} cards`);
+    }
+
+    // --- Blog index: featured + stats + toolbar + grid ---
+    for (const [file, lang] of Object.entries(INDEXES)) {
+        if (!fs.existsSync(file)) continue;
+        const html = await readFileAsync(file, 'utf8');
+        const root = parse(html);
+
+        const posts = B.collectPosts(lang);
+        if (!posts.length) continue;
+        const dims = await B.probeDims(posts);
+        const stats = B.statsFor(posts);
+
+        // Statistics, derived. The markup keeps its ids so any external link or
+        // style targeting them still resolves.
+        const setStat = (id, n) => {
+            const el = root.querySelector(`#${id}`);
+            if (el) el.set_content(String(n));
+        };
+        setStat('totalPosts', stats.total);
+        setStat('aiPosts', stats.AI);
+        setStat('techPosts', stats.Technology);
+        setStat('historyPosts', stats.History);
+
+        // The hero's hand-written search box and category buttons are replaced by
+        // the generated toolbar, whose labels carry live counts and whose
+        // categories match the taxonomy rather than a stale guess.
+        const searchContainer = root.querySelector('.blog-hero .search-container');
+        if (searchContainer) searchContainer.remove();
+
+        const grid = root.querySelector('.blog-grid .container');
+        if (!grid) continue;
+
+        const featured = posts[0];
+        const rest = posts.slice(1);
+
+        grid.set_content(
+            B.renderFeatured(featured, lang, dims) +
+            `<div class="blog-toolbar"><div class="blog-toolbar__inner">` +
+                B.renderFilters(posts, lang) +
+                `<div class="blog-search">` +
+                    `<svg class="icon blog-search__icon" viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>` +
+                    `<label class="sr-only" for="blogFilterInput">${B.esc(B.t(lang, 'search'))}</label>` +
+                    `<input id="blogFilterInput" class="blog-search__input" type="search" autocomplete="off" placeholder="${B.esc(B.t(lang, 'search'))}…">` +
+                `</div>` +
+            `</div></div>` +
+            `<h2 class="sr-only">${B.esc(B.t(lang, 'latest'))}</h2>` +
+            `<div class="post-grid" id="blogGrid">` +
+                rest.map((p) => B.renderCard(p, lang, { dims })).join('') +
+            `</div>` +
+            `<p class="blog-empty" id="blogEmpty" hidden>${B.esc(B.t(lang, 'none'))}</p>` +
+            `<div class="blog-loadmore"><button type="button" class="blog-loadmore__btn" id="blogLoadMore">${B.esc(B.t(lang, 'more'))}</button></div>`
+        );
+
+        // Filter/search/load-more enhancement. Deferred, and purely additive:
+        // every card is already in the DOM above.
+        let out = root.toString();
+        if (!/js\/blog-index\.min\.js/.test(out)) {
+            out = out.replace(/<\/body>/i, '<script defer="defer" src="js/blog-index.min.js"></script></body>');
+        }
+
+        await writeFileAsync(file, out, 'utf8');
+        console.log(`  ${file}: ${stats.total} posts (AI ${stats.AI}, Tech ${stats.Technology}, History ${stats.History}, Finance ${stats.Finance})`);
+    }
+}
+
+/**
+ * Article page furniture: table of contents, share links, previous/next and
+ * related articles.
+ *
+ * All four are generated here rather than in the browser, for the same reason
+ * the card grids are: they are navigation, so they need to exist for crawlers
+ * and for readers whose JS has not run. The only client-side part is the TOC's
+ * active-section highlight and the copy-link button, both of which degrade to
+ * a plain anchor list and a visible URL if the script never loads.
+ */
+async function enhanceArticlePages() {
+    const B = require('./tools/blog-render.js');
+    const { parse } = require('node-html-parser');
+    const { categoryLabel } = require('./tools/site-meta.js');
+
+    const LBL = {
+        en: { toc: 'On this page', share: 'Share', copy: 'Copy link', copied: 'Link copied', prev: 'Previous', next: 'Next', related: 'Related articles' },
+        tr: { toc: 'Bu sayfada', share: 'Paylaş', copy: 'Bağlantıyı kopyala', copied: 'Bağlantı kopyalandı', prev: 'Önceki', next: 'Sonraki', related: 'İlgili yazılar' },
+        de: { toc: 'Auf dieser Seite', share: 'Teilen', copy: 'Link kopieren', copied: 'Link kopiert', prev: 'Zurück', next: 'Weiter', related: 'Verwandte Artikel' },
+    };
+
+    const slug = (s) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+        .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60);
+
+    let touched = 0;
+
+    for (const lang of ['en', 'tr', 'de']) {
+        const posts = B.collectPosts(lang);
+        if (posts.length < 2) continue;
+        const dims = await B.probeDims(posts);
+
+        for (let i = 0; i < posts.length; i++) {
+            const post = posts[i];
+            const html = await readFileAsync(post.file, 'utf8');
+            const root = parse(html);
+
+            const box = root.querySelector('.post-box');
+            const sidebar = root.querySelector('.col-md-4');
+            if (!box) continue;
+
+            const L = LBL[lang] || LBL.en;
+
+            // --- Stable heading ids, then the TOC built from them ---
+            const heads = box.querySelectorAll('h2, h3');
+            const seen = new Set();
+            const items = [];
+            for (const h of heads) {
+                const text = h.text.replace(/\s+/g, ' ').trim();
+                if (!text) continue;
+                let id = h.getAttribute('id') || slug(text);
+                while (seen.has(id)) id += '-x';
+                seen.add(id);
+                h.setAttribute('id', id);
+                items.push({ id, text, level: h.tagName.toLowerCase() });
+            }
+
+            if (sidebar && items.length >= 3) {
+                const existing = sidebar.querySelector('.widget-toc');
+                const toc = `<div class="widget-sidebar widget-toc">` +
+                    `<h3 class="w-title">${B.esc(L.toc)}</h3>` +
+                    `<nav aria-label="${B.esc(L.toc)}"><ul class="toc-list">` +
+                    items.map((it) => `<li class="toc-item toc-item--${it.level}"><a href="#${B.esc(it.id)}">${B.esc(it.text)}</a></li>`).join('') +
+                    `</ul></nav></div>`;
+                if (existing) existing.replaceWith(parse(toc));
+                else sidebar.insertAdjacentHTML('afterbegin', toc);
+            }
+
+            // --- Share links. No tracking scripts, just URLs. ---
+            const shareUrl = encodeURIComponent(post.url);
+            const shareText = encodeURIComponent(B.displayTitle(post));
+            const shareBlock = `<div class="post-share">` +
+                `<span class="post-share__label">${B.esc(L.share)}</span>` +
+                `<a class="post-share__btn" href="https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">` +
+                    `<svg class="icon" viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>` +
+                `</a>` +
+                `<a class="post-share__btn" href="https://twitter.com/intent/tweet?url=${shareUrl}&amp;text=${shareText}" target="_blank" rel="noopener noreferrer" aria-label="X">` +
+                    `<svg class="icon" viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>` +
+                `</a>` +
+                `<button type="button" class="post-share__btn post-share__copy" data-url="${B.esc(post.url)}" data-copied="${B.esc(L.copied)}" aria-label="${B.esc(L.copy)}">` +
+                    `<svg class="icon" viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>` +
+                `</button>` +
+            `</div>`;
+
+            const oldShare = box.querySelector('.post-share');
+            if (oldShare) oldShare.replaceWith(parse(shareBlock));
+            else box.insertAdjacentHTML('beforeend', shareBlock);
+
+            // --- Previous / next, in the same reading order as the index ---
+            const prev = posts[i - 1]; // newer
+            const next = posts[i + 1]; // older
+            const navLink = (p, dir, label) => p
+                ? `<a class="post-nav__link post-nav__link--${dir}" href="${B.esc(p.file)}" rel="${dir}">` +
+                      `<span class="post-nav__dir">${B.esc(label)}</span>` +
+                      `<span class="post-nav__title">${B.esc(B.displayTitle(p))}</span>` +
+                  `</a>`
+                : `<span class="post-nav__link post-nav__link--empty"></span>`;
+            const navBlock = `<nav class="post-nav" aria-label="${B.esc(L.prev)} / ${B.esc(L.next)}">` +
+                navLink(prev, 'prev', L.prev) + navLink(next, 'next', L.next) + `</nav>`;
+
+            // --- Related: same category, nearest neighbours, never itself ---
+            const related = posts
+                .filter((p) => p.file !== post.file && p.category === post.category)
+                .slice(0, 3);
+            const relatedBlock = related.length
+                ? `<section class="post-related" aria-labelledby="related-h">` +
+                      `<h2 class="post-related__title" id="related-h">${B.esc(L.related)}</h2>` +
+                      `<div class="post-grid post-grid--related">` +
+                      related.map((p) => B.renderCard(p, lang, { dims })).join('') +
+                      `</div></section>`
+                : '';
+
+            const col = box.parentNode;
+            const oldNav = col.querySelector('.post-nav');
+            const oldRel = col.querySelector('.post-related');
+            if (oldNav) oldNav.remove();
+            if (oldRel) oldRel.remove();
+            col.insertAdjacentHTML('beforeend', navBlock + relatedBlock);
+
+            let out = root.toString();
+            if (!/js\/article-extras\.min\.js/.test(out)) {
+                out = out.replace(/<\/body>/i, '<script defer="defer" src="js/article-extras.min.js"></script></body>');
+            }
+            await writeFileAsync(post.file, out, 'utf8');
+            touched++;
+        }
+    }
+
+    console.log(`  enhanced ${touched} article pages (TOC, share, prev/next, related)`);
+}
+
 // Optimize and minify HTML files
 async function optimizeHTML() {
     const htmlFiles = glob.sync('*.html');
@@ -254,8 +503,12 @@ async function optimizeHTML() {
 
             // Add lazy-loading to images lacking it
             html = html.replace(/<img(?![^>]*\bloading=)([^>]*?)>/gi, (m, attrs) => {
-                // Skip if explicitly marked eager
+                // Skip if explicitly marked eager. `fetchpriority="high"` is the
+                // LCP marker the card renderer emits: lazy-loading an image that
+                // was just declared the highest-priority fetch is contradictory,
+                // and it is exactly the H2 defect the audit raised.
                 if (/\bdata-no-lazy\b/i.test(attrs)) return `<img${attrs}>`;
+                if (/\bfetchpriority\s*=\s*["']?high\b/i.test(attrs)) return `<img${attrs}>`;
                 // Add decoding async as well
                 let updated = attrs;
                 updated += ' loading="lazy" decoding="async"';
@@ -1252,6 +1505,12 @@ async function build() {
 
         console.log('Enriching Blog SEO, Schema & Headings...');
         await enrichBlogSEOAndSchema();
+
+        console.log('Rendering blog surfaces (home grid, featured, stats, cards)...');
+        await renderBlogSurfaces();
+
+        console.log('Enhancing article pages (TOC, share, prev/next, related)...');
+        await enhanceArticlePages();
 
         console.log('Generating search scripts...');
         await generateSearchScripts();

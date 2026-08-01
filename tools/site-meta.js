@@ -62,6 +62,63 @@ const PERSON = {
   ],
 };
 
+/**
+ * Article taxonomy, keyed by translation group so the Turkish and German
+ * variants inherit their English original's category automatically.
+ *
+ * This is the site's frontmatter. There is no CMS and no markdown layer, so the
+ * category has to be declared somewhere; declaring it once per *group* is what
+ * keeps `MachineLearning-Explained`, `…TR` and `…DE` from drifting apart.
+ *
+ * Nothing downstream counts articles by hand — the statistics, the filter bar
+ * and the category badges are all derived from this plus the file listing, so
+ * adding an article updates every number on the site.
+ *
+ * The pages previously carried a free-text category in their visible post-meta,
+ * which had drifted into seven overlapping labels: "AI" and "Artificial
+ * intelligence" both existed, `AlgorithmsExplained` (a recommender-systems
+ * explainer) was filed under "Economy", and every Agentic AI piece was "Technology".
+ */
+const CATEGORIES = ['AI', 'Technology', 'History', 'Finance'];
+
+const CATEGORY_OF_GROUP = {
+  // AI
+  'agenticaiexplained': 'AI',
+  'agenticaitechdepth': 'AI',
+  'agenticaivsgenai': 'AI',
+  'typesofagenticai': 'AI',
+  'machinelearning-explained': 'AI',
+  'machinelearninganomalydetection': 'AI',
+  'whataimeanstoyou': 'AI',
+  'ai-and-human-job-competition': 'AI',
+  'ai-defense': 'AI',
+  // Technology
+  'distancecalculatingmethods': 'Technology',
+  'algorithmsexplained': 'Technology',
+  'macshortcuts': 'Technology',
+  'preciousmetaldata': 'Technology',
+  // History
+  'whytolearnhistory': 'History',
+  'oguzkaganepic': 'History',
+  'ergenekonepic': 'History',
+  // Finance
+  'valueperkilogramforprosperity': 'Finance',
+  'deservingmoney': 'Finance',
+};
+
+/** Localised badge/filter labels. The stored category stays language-neutral. */
+const CATEGORY_LABELS = {
+  AI: { en: 'AI', tr: 'Yapay Zekâ', de: 'KI' },
+  Technology: { en: 'Technology', tr: 'Teknoloji', de: 'Technologie' },
+  History: { en: 'History', tr: 'Tarih', de: 'Geschichte' },
+  Finance: { en: 'Finance', tr: 'Ekonomi', de: 'Wirtschaft' },
+};
+
+const categoryLabel = (cat, lang) => (CATEGORY_LABELS[cat] || {})[lang] || cat;
+
+/** Words per minute for the reading-time estimate. */
+const WPM = 200;
+
 /** Language of a page, from its filename convention. */
 function langOf(file) {
   if (/TR\.html$/i.test(file) || /-tr\.html$/i.test(file)) return 'tr';
@@ -136,10 +193,22 @@ const contentDateCache = new Map();
 function contentDate(file) {
   if (contentDateCache.has(file)) return contentDateCache.get(file);
 
+  // Build-generated furniture is excluded. The table of contents, share row,
+  // previous/next links and related-article cards are all derived from other
+  // pages, so publishing any article would otherwise count as a content change
+  // on every article that links to it — re-dating the whole sitemap at once,
+  // which is the "uniform lastmod" defect Google discards the feed for.
+  // Only the author's own prose should move a page's dateModified.
+  const GENERATED = [
+    'script', 'style', 'noscript',
+    '.widget-toc', '.post-share', '.post-nav', '.post-related',
+    '.post-grid', '.blog-toolbar', '.stats-container',
+  ].join(', ');
+
   const visibleText = (html) => {
     try {
       const root = parse(html);
-      root.querySelectorAll('script, style, noscript').forEach((n) => n.remove());
+      root.querySelectorAll(GENERATED).forEach((n) => n.remove());
       return root.structuredText.replace(/\s+/g, ' ').trim();
     } catch (_) {
       return html;
@@ -229,6 +298,10 @@ function readMeta(file, html) {
     '.widget-sidebar', '.sidebar-content', '.list-sidebar',
     '.comment-form', '.comments-section', '#comments',
     '.breadcrumb', '.blog-sidebar', '.col-md-4',
+    // Build-generated furniture. These carry other articles' titles and
+    // excerpts, so counting them inflates both the reading-time estimate and
+    // the llms-full.txt body with navigation text that is not this article.
+    '.post-share', '.post-nav', '.post-related', '.widget-toc',
   ].join(', ')).forEach((n) => n.remove());
 
   // Insert real separators: node-html-parser concatenates text nodes with no
@@ -244,6 +317,10 @@ function readMeta(file, html) {
     .join('\n')
     .trim();
 
+  const lang = langOf(file);
+  const category = CATEGORY_OF_GROUP[groupKeyOf(file)] || '';
+  const words = text ? text.split(/\s+/).filter(Boolean).length : 0;
+
   return {
     file,
     url: file === 'index.html' ? `${BASE_URL}/` : `${BASE_URL}/${file}`,
@@ -252,7 +329,13 @@ function readMeta(file, html) {
     description,
     image,
     noindex,
-    lang: langOf(file),
+    lang,
+    category,
+    categoryLabel: category ? categoryLabel(category, lang) : '',
+    words,
+    // Rounded up so a 292-word post reads "2 min" rather than "1 min", which
+    // consistently under-promises on these articles.
+    readingTime: Math.max(1, Math.ceil(words / WPM)),
     text,
     datePublished: dateOnly(gitDate(file, 'published')),
     // Both track real content change, so a markup-only build pass does not
@@ -262,4 +345,8 @@ function readMeta(file, html) {
   };
 }
 
-module.exports = { BASE_URL, EXCLUDED, NOT_ARTICLES, PERSON, langOf, groupKeyOf, gitDate, contentDate, dateOnly, readMeta };
+module.exports = {
+  BASE_URL, EXCLUDED, NOT_ARTICLES, PERSON,
+  CATEGORIES, CATEGORY_OF_GROUP, CATEGORY_LABELS, categoryLabel, WPM,
+  langOf, groupKeyOf, gitDate, contentDate, dateOnly, readMeta,
+};

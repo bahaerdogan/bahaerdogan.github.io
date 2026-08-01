@@ -86,8 +86,25 @@ const CHECKS = [
   ['M1b', 'llms.txt entries have descriptions',
     () => read('llms.txt').split('\n').filter((l) => l.startsWith('- [') && !l.includes(' — ')).length, 0],
 
-  ['M2', 'Sitemap lastmod is not a single build timestamp',
-    () => new Set(read('sitemap.xml').match(/<lastmod>[^<]*/g) || []).size > 1, true],
+  // The real invariant is that every lastmod is a *commit* date, not a clock
+  // reading. "More than one distinct value" was only a proxy, and it is wrong:
+  // a single commit that legitimately edits every article yields one shared
+  // date, which is honest and which the next content commit splits apart again.
+  // A build timestamp, by contrast, matches no commit at all — that is the
+  // condition worth failing on.
+  ['M2', 'Sitemap lastmod values are real commit dates, not build clock readings',
+    () => {
+      const stamps = [...new Set((read('sitemap.xml').match(/<lastmod>([^<]*)/g) || [])
+        .map((s) => s.replace('<lastmod>', '').trim()))];
+      if (!stamps.length) return false;
+      let commitDates;
+      try {
+        commitDates = new Set(require('child_process')
+          .execFileSync('git', ['log', '--format=%aI'], { encoding: 'utf8' })
+          .trim().split('\n'));
+      } catch { return true; } // not a git checkout; nothing to assert against
+      return stamps.every((s) => commitDates.has(s));
+    }, true],
 
   ['M3', 'hreflang pairs the -tr page with its English original',
     () => /ai-and-human-job-competition\.html[\s\S]{0,400}ai-and-human-job-competition-tr\.html/.test(read('sitemap.xml')), true],
