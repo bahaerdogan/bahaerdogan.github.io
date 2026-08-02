@@ -299,7 +299,7 @@ Baha
 URL: https://bahaerdogan.com/TypesOfAgenticAi.html
 Language: en
 Published: 2025-07-29
-Modified: 2026-07-28
+Modified: 2026-08-01
 
 Types of Agentic AI and How to Build Your First Agent
 Baha Erdoğan
@@ -493,7 +493,7 @@ Bir ajanı programlamazsınız. Düşünmeyi ve eylemeyi öğretirsiniz—sonra 
 URL: https://bahaerdogan.com/AgenticAiExplained.html
 Language: en
 Published: 2025-07-27
-Modified: 2026-07-28
+Modified: 2026-08-01
 
 What Are AI Agents or Agentic AI?
 Baha Erdoğan
@@ -583,7 +583,7 @@ Yorumlar
 URL: https://bahaerdogan.com/AgenticAiTechDepth.html
 Language: en
 Published: 2025-07-27
-Modified: 2026-07-28
+Modified: 2026-08-01
 
 Agentic AI in Depth: Technical Structures, Planning Models, and Autonomous Orchestration
 Baha Erdoğan
@@ -1539,7 +1539,7 @@ Yorumlar
 URL: https://bahaerdogan.com/DeservingMoney.html
 Language: en
 Published: 2024-06-11
-Modified: 2026-07-28
+Modified: 2026-08-01
 
 Are AI Models Making Us Earn Money We Don't Deserve?
 Baha Erdoğan
@@ -1873,7 +1873,7 @@ Yorumlar
 URL: https://bahaerdogan.com/PreciousMetalData.html
 Language: en
 Published: 2024-06-11
-Modified: 2026-07-28
+Modified: 2026-08-01
 
 One of the precious metals, Data.
 Baha Erdoğan
@@ -2041,7 +2041,7 @@ Yorumlar
 URL: https://bahaerdogan.com/WhyToLearnHistory.html
 Language: en
 Published: 2024-06-11
-Modified: 2026-07-28
+Modified: 2026-08-01
 
 Why is knowing history important?
 Baha Erdoğan

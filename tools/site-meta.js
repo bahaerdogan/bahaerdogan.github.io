@@ -292,6 +292,18 @@ function readMeta(file, html) {
   // Readable body text, used for llms-full.txt. Sidebars, the comment widget and
   // the breadcrumb are boilerplate repeated on all 50 pages — including them
   // would make the file mostly duplicate navigation instead of article text.
+  // Tags, from the sidebar widget the pages already carry. Read *before* the
+  // boilerplate strip below, which removes `.col-md-4` — and with it
+  // `.widget-tags` — so that llms-full.txt gets article prose rather than
+  // navigation. Extracting afterwards silently yielded zero tags on all 49
+  // articles. Deduplicated case-insensitively so "AI" and "ai" are one tag.
+  const tags = [...new Map(
+    root.querySelectorAll('.widget-tags .tag')
+      .map((n) => n.text.replace(/\s+/g, ' ').trim())
+      .filter(Boolean)
+      .map((t) => [t.toLowerCase(), t])
+  ).values()];
+
   const main = root.querySelector('main') || root.querySelector('body') || root;
   main.querySelectorAll([
     'script', 'style', 'nav', 'footer', 'aside',
@@ -321,6 +333,33 @@ function readMeta(file, html) {
   const category = CATEGORY_OF_GROUP[groupKeyOf(file)] || '';
   const words = text ? text.split(/\s+/).filter(Boolean).length : 0;
 
+  // Excerpt: 140–180 characters, cut on a sentence boundary rather than
+  // mid-clause. The meta description is preferred when it already fits, since
+  // it was written for the purpose; otherwise the first substantial paragraph
+  // is used. Falling back to a hard character slice would strand half a
+  // sentence followed by an ellipsis, which reads as broken rather than brief.
+  const sentenceExcerpt = (source) => {
+    const s = (source || '').replace(/\s+/g, ' ').trim();
+    if (!s) return '';
+    if (s.length <= 180) return s;
+    let out = '';
+    for (const part of s.split(/(?<=[.!?…])\s+/)) {
+      if (!out) { out = part; if (out.length >= 140) break; continue; }
+      if ((out + ' ' + part).length > 180) break;
+      out += ' ' + part;
+      if (out.length >= 140) break;
+    }
+    // A single sentence longer than the window: trim to the last whole word.
+    if (out.length > 180) out = out.slice(0, 180).replace(/\s+\S*$/, '') + '…';
+    return out;
+  };
+
+  const firstPara = root.querySelectorAll('.post-box p, main p')
+    .map((n) => n.text.replace(/\s+/g, ' ').trim())
+    .find((t) => t.length > 80 && !/^(Home|Blog|Share|Comments)\b/i.test(t)) || '';
+
+  const excerpt = sentenceExcerpt(description && description.length >= 140 ? description : (firstPara || description));
+
   return {
     file,
     url: file === 'index.html' ? `${BASE_URL}/` : `${BASE_URL}/${file}`,
@@ -332,6 +371,8 @@ function readMeta(file, html) {
     lang,
     category,
     categoryLabel: category ? categoryLabel(category, lang) : '',
+    tags,
+    excerpt,
     words,
     // Rounded up so a 292-word post reads "2 min" rather than "1 min", which
     // consistently under-promises on these articles.

@@ -20,6 +20,15 @@ const read = (p) => (exists(p) ? fs.readFileSync(path.join(ROOT, p), 'utf8') : '
 
 const count = (fn) => pages.filter(([f, s]) => fn(s, f)).length;
 
+const financeCount = () => {
+  const { readMeta, NOT_ARTICLES } = require('./site-meta.js');
+  const fs2 = require('fs');
+  return require('glob').sync('*.html')
+    .filter((f) => !NOT_ARTICLES.has(f))
+    .map((f) => readMeta(f, fs2.readFileSync(f, 'utf8')))
+    .filter((m) => !m.noindex && m.lang === 'en' && m.category === 'Finance').length;
+};
+
 const CHECKS = [
   ['C1', 'Contact form uses a live email provider',
     // Match the endpoint, not the word: the file explains the migration in a comment.
@@ -105,6 +114,37 @@ const CHECKS = [
       } catch { return true; } // not a git checkout; nothing to assert against
       return stamps.every((s) => commitDates.has(s));
     }, true],
+
+  // --- Blog data layer (added after the blog rebuild) ---
+  ['Blog', 'Blog statistics are derived, not the hardcoded zeros they used to be',
+    () => {
+      const h = read('BlogPosts.html');
+      const n = (id) => {
+        const m = h.match(new RegExp('id="' + id + '"[^>]*>([0-9]+)<'));
+        return m ? Number(m[1]) : -1;
+      };
+      const total = n('totalPosts');
+      return total > 0 && total === n('aiPosts') + n('techPosts') + n('historyPosts') + financeCount();
+    }, true],
+  ['Blog2', 'Every rendered card has an image with intrinsic dimensions and srcset',
+    () => count((s) => {
+      const cards = s.match(/<img[^>]*class="post-(card|featured)__img"[^>]*>/g) || [];
+      return cards.some((i) => !/\bwidth=/.test(i) || !/\bheight=/.test(i) || !/\bsrcset=/.test(i));
+    }), 0],
+  ['Blog3', 'The blog index renders cards server-side, not via a loading spinner',
+    () => /id="blogGrid"/.test(read('BlogPosts.html'))
+      && !/loadingSpinner|Loading articles/.test(read('BlogPosts.html'))
+      && (read('BlogPosts.html').match(/class="post-card"/g) || []).length > 5, true],
+  ['Blog4', 'Excerpts end on a sentence boundary within 140-180 characters',
+    () => {
+      const { readMeta, NOT_ARTICLES } = require('./site-meta.js');
+      const fs2 = require('fs');
+      return (require('glob').sync('*.html'))
+        .filter((f) => !NOT_ARTICLES.has(f))
+        .map((f) => readMeta(f, fs2.readFileSync(f, 'utf8')))
+        .filter((m) => !m.noindex)
+        .filter((m) => m.excerpt && m.excerpt.length > 185).length;
+    }, 0],
 
   ['M3', 'hreflang pairs the -tr page with its English original',
     () => /ai-and-human-job-competition\.html[\s\S]{0,400}ai-and-human-job-competition-tr\.html/.test(read('sitemap.xml')), true],

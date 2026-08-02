@@ -409,10 +409,8 @@ async function enhanceArticlePages() {
             const navBlock = `<nav class="post-nav" aria-label="${B.esc(L.prev)} / ${B.esc(L.next)}">` +
                 navLink(prev, 'prev', L.prev) + navLink(next, 'next', L.next) + `</nav>`;
 
-            // --- Related: same category, nearest neighbours, never itself ---
-            const related = posts
-                .filter((p) => p.file !== post.file && p.category === post.category)
-                .slice(0, 3);
+            // --- Related: ranked by shared tags, then category, then recency ---
+            const related = B.relatedTo(post, posts, 3);
             const relatedBlock = related.length
                 ? `<section class="post-related" aria-labelledby="related-h">` +
                       `<h2 class="post-related__title" id="related-h">${B.esc(L.related)}</h2>` +
@@ -1543,6 +1541,9 @@ async function build() {
 
         console.log('Verifying output...');
         await verify();
+
+        console.log('Validating articles...');
+        require('./tools/validate-articles.js').validateArticles();
 
         console.log('Build completed successfully!');
     } catch (error) {

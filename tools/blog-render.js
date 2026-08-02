@@ -28,22 +28,62 @@ const esc = (s) => String(s == null ? '' : s)
  * the attributes still have to be right: a wrong ratio in width/height is worse
  * than none, because the browser reserves the wrong box and shifts twice.
  */
+/** Widths generated for card/featured srcset. */
+const SRCSET_WIDTHS = [480, 960, 1440];
+
 async function probeDims(posts) {
   const sharp = require('sharp');
+  const path = require('path');
   const out = {};
+
   await Promise.all(posts.map(async (p) => {
     const rel = String(p.image).replace(/^https?:\/\/[^/]+\//, '').replace(/^\.?\//, '');
+    let meta = null;
     try {
-      const { width, height } = await sharp(rel).metadata();
-      if (width && height) out[p.file] = { width, height };
+      meta = await sharp(rel).metadata();
     } catch {
       // Image missing locally. 16:9 matches the CSS crop, so the box is still
       // reserved at the right size and nothing shifts.
-      out[p.file] = { width: 1600, height: 900 };
+      out[p.file] = { width: 1600, height: 900, srcset: '' };
+      return;
     }
+
+    const { width, height } = meta;
+    const dir = path.dirname(rel);
+    const base = path.basename(rel).replace(/\.[^.]+$/, '');
+
+    // Only downscale. Upscaling a 1536px source to 1440 is free bytes for no
+    // extra detail, and emitting a descriptor wider than the source makes the
+    // browser pick a file that is not actually sharper.
+    const widths = SRCSET_WIDTHS.filter((w) => w < width);
+    const parts = [];
+
+    await Promise.all(widths.map(async (w) => {
+      const outRel = `${dir}/${base}-${w}.webp`;
+      if (!fs.existsSync(outRel)) {
+        try {
+          await sharp(rel).resize({ width: w }).webp({ quality: 78 }).toFile(outRel);
+        } catch { return; }
+      }
+      parts.push(`${outRel} ${w}w`);
+    }));
+
+    parts.push(`${rel} ${width}w`);
+    parts.sort((a, b) => parseInt(a.match(/(\d+)w$/)[1], 10) - parseInt(b.match(/(\d+)w$/)[1], 10));
+
+    out[p.file] = { width, height, srcset: parts.join(', ') };
   }));
+
   return out;
 }
+
+/**
+ * `sizes` for the card grid: three columns above 991px, two down to 641px, one
+ * below, inside a 1140px container with 28px gutters. Stated in the same order
+ * the CSS breakpoints are evaluated so the browser picks before layout.
+ */
+const CARD_SIZES = '(min-width: 992px) 352px, (min-width: 641px) calc(50vw - 40px), calc(100vw - 40px)';
+const FEATURED_SIZES = '(min-width: 861px) 627px, calc(100vw - 40px)';
 
 const DATE_LOCALE = { en: 'en-GB', tr: 'tr-TR', de: 'de-DE' };
 const fmtDate = (iso, lang) => {
@@ -86,10 +126,46 @@ function displayTitle(post) {
   return cut.length >= 12 ? cut : post.title.trim();
 }
 
-function excerptOf(post, max = 150) {
-  const d = (post.description || '').replace(/\s+/g, ' ').trim();
-  if (d.length <= max) return d;
-  return d.slice(0, max).replace(/\s+\S*$/, '') + '…';
+/**
+ * Card excerpt. `readMeta` already produces a 140–180 character, sentence-boundary
+ * excerpt; this only falls back to the description when a page has none.
+ */
+function excerptOf(post) {
+  return post.excerpt || (post.description || '').replace(/\s+/g, ' ').trim();
+}
+
+/**
+ * Related articles, ranked rather than "first three in the same category".
+ *
+ * Shared tags dominate the score because they are the closest thing the site
+ * has to a topic signal — two Agentic AI pieces share four or five tags, while
+ * an Agentic AI piece and a macOS shortcuts guide share none. Category is worth
+ * less on its own (nine articles sit in AI, so it barely discriminates), and
+ * publication proximity is only a tiebreak so results stay stable rather than
+ * arbitrary.
+ */
+function relatedTo(post, posts, limit = 3) {
+  const tagsOf = (p) => new Set((p.tags || []).map((t) => t.toLowerCase()));
+  const mine = tagsOf(post);
+
+  return posts
+    .filter((p) => p.file !== post.file)
+    .map((p) => {
+      const theirs = tagsOf(p);
+      let shared = 0;
+      mine.forEach((t) => { if (theirs.has(t)) shared++; });
+      const union = new Set([...mine, ...theirs]).size || 1;
+      const jaccard = shared / union;
+      const sameCategory = p.category === post.category ? 1 : 0;
+      // Days apart, damped — only ever separates otherwise-equal candidates.
+      const gap = Math.abs(new Date(p.datePublished) - new Date(post.datePublished)) / 86400000;
+      const recency = 1 / (1 + gap / 365);
+      return { p, score: shared * 3 + jaccard * 2 + sameCategory * 1.5 + recency * 0.25 };
+    })
+    .filter((x) => x.score > 0)
+    .sort((a, b) => b.score - a.score || a.p.title.localeCompare(b.p.title))
+    .slice(0, limit)
+    .map((x) => x.p);
 }
 
 /**
@@ -98,14 +174,15 @@ function excerptOf(post, max = 150) {
  * than three competing ones (image, title, CTA).
  */
 function renderCard(post, lang, { dims, eager = false } = {}) {
-  const d = dims[post.file] || { width: 1600, height: 900 };
+  const d = dims[post.file] || { width: 1600, height: 900, srcset: '' };
   const src = String(post.image).replace(/^https?:\/\/[^/]+\//, '');
   const loading = eager ? '' : ' loading="lazy"';
   const priority = eager ? ' fetchpriority="high"' : '';
+  const responsive = d.srcset ? ` srcset="${esc(d.srcset)}" sizes="${esc(CARD_SIZES)}"` : '';
   return `<article class="post-card">` +
     `<a class="post-card__link" href="${esc(post.file)}">` +
       `<span class="post-card__media">` +
-        `<img class="post-card__img" src="${esc(src)}" alt="${esc(post.title)}" width="${d.width}" height="${d.height}"${loading}${priority} decoding="async">` +
+        `<img class="post-card__img" src="${esc(src)}" alt="${esc(post.title)}" width="${d.width}" height="${d.height}"${responsive}${loading}${priority} decoding="async">` +
       `</span>` +
       `<span class="post-card__body">` +
         `<span class="post-card__badge" data-cat="${esc(post.category)}">${esc(categoryLabel(post.category, lang))}</span>` +
@@ -133,12 +210,13 @@ function renderHomeGrid(posts, lang, dims, limit = 6) {
 
 /** Large hero treatment for the newest article on the blog index. */
 function renderFeatured(post, lang, dims) {
-  const d = dims[post.file] || { width: 1600, height: 900 };
+  const d = dims[post.file] || { width: 1600, height: 900, srcset: '' };
   const src = String(post.image).replace(/^https?:\/\/[^/]+\//, '');
+  const responsive = d.srcset ? ` srcset="${esc(d.srcset)}" sizes="${esc(FEATURED_SIZES)}"` : '';
   return `<article class="post-featured">` +
     `<a class="post-featured__link" href="${esc(post.file)}">` +
       `<span class="post-featured__media">` +
-        `<img class="post-featured__img" src="${esc(src)}" alt="${esc(post.title)}" width="${d.width}" height="${d.height}" fetchpriority="high" decoding="async">` +
+        `<img class="post-featured__img" src="${esc(src)}" alt="${esc(post.title)}" width="${d.width}" height="${d.height}"${responsive} fetchpriority="high" decoding="async">` +
       `</span>` +
       `<span class="post-featured__body">` +
         `<span class="post-featured__badges">` +
@@ -146,7 +224,7 @@ function renderFeatured(post, lang, dims) {
           `<span class="post-card__badge" data-cat="${esc(post.category)}">${esc(categoryLabel(post.category, lang))}</span>` +
         `</span>` +
         `<h2 class="post-featured__title">${esc(displayTitle(post))}</h2>` +
-        `<span class="post-featured__excerpt">${esc(excerptOf(post, 220))}</span>` +
+        `<span class="post-featured__excerpt">${esc(excerptOf(post))}</span>` +
         `<span class="post-card__meta">` +
           `<time datetime="${esc(post.datePublished)}">${esc(fmtDate(post.datePublished, lang))}</time>` +
           `<span class="post-card__dot" aria-hidden="true">·</span>` +
@@ -174,4 +252,4 @@ function renderFilters(posts, lang) {
   `</div>`;
 }
 
-module.exports = { collectPosts, statsFor, probeDims, displayTitle, renderCard, renderHomeGrid, renderFeatured, renderFilters, excerptOf, fmtDate, t, esc };
+module.exports = { collectPosts, statsFor, probeDims, displayTitle, relatedTo, renderCard, renderHomeGrid, renderFeatured, renderFilters, excerptOf, fmtDate, t, esc };
