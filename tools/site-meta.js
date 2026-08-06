@@ -358,7 +358,13 @@ function readMeta(file, html) {
     .map((n) => n.text.replace(/\s+/g, ' ').trim())
     .find((t) => t.length > 80 && !/^(Home|Blog|Share|Comments)\b/i.test(t)) || '';
 
-  const excerpt = sentenceExcerpt(description && description.length >= 140 ? description : (firstPara || description));
+  // The meta description is written for this purpose, so it wins whenever it is
+  // substantive. Requiring >=140 chars was too strict: a well-written 120-char
+  // description lost to whatever the first paragraph happened to open with,
+  // which on several articles is a weaker line than the description it replaced.
+  const excerpt = sentenceExcerpt(
+    description && description.length >= 100 ? description : (firstPara || description)
+  );
 
   return {
     file,

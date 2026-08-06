@@ -438,6 +438,111 @@ async function enhanceArticlePages() {
     console.log(`  enhanced ${touched} article pages (TOC, share, prev/next, related)`);
 }
 
+/**
+ * Theme system: font preload, the FOUC-free theme bootstrap, and the nav toggle.
+ *
+ * The bootstrap has to be inline and synchronous in <head>. Deferring it — or
+ * moving it to an external file — means the browser paints the light theme,
+ * then repaints dark once the script runs, which is a full-page flash on every
+ * navigation for anyone using dark mode. It is deliberately the only inline
+ * script added here; generateCSP() runs afterwards and hashes it automatically.
+ */
+async function applyThemeSystem() {
+    const { parse } = require('node-html-parser');
+
+    // Kept on one line: this string is hashed into the CSP, so any whitespace
+    // change invalidates the hash. generateCSP() recomputes it each build.
+    const BOOTSTRAP = `(function(){try{var t=localStorage.getItem('theme');`
+        + `if(t==='dark'||t==='light'){document.documentElement.setAttribute('data-theme',t);}}catch(e){}})();`;
+
+    const TOGGLE = '<button type="button" class="theme-toggle" aria-pressed="false" aria-label="Switch to dark theme">'
+        + '<svg class="icon theme-toggle__moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>'
+        + '<svg class="icon theme-toggle__sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'
+        + '</button>';
+
+    let touched = 0;
+
+    for (const file of glob.sync('*.html')) {
+        const html = await readFileAsync(file, 'utf8');
+        const root = parse(html);
+        const head = root.querySelector('head');
+        if (!head) continue;
+
+        let changed = false;
+
+        // Preload only the latin subset. latin-ext is Turkish-only and is
+        // fetched on demand by unicode-range; preloading it would download
+        // 74 KB that an English page never draws a glyph from.
+        if (!root.querySelector('link[href*="inter-latin-wght"]')) {
+            head.insertAdjacentHTML('afterbegin',
+                '<link rel="preload" href="lib/fonts/inter-latin-wght.woff2" as="font" type="font/woff2" crossorigin>');
+            changed = true;
+        }
+
+        // Bootstrap must run before the stylesheet paints, so it goes first.
+        //
+        // Guarded by a marker attribute, never by the script's own source text.
+        // The first version of this tested for `localStorage.getItem('theme')`,
+        // but html-minifier rewrites the literal to double quotes, so the guard
+        // stopped matching after the first build and a fresh copy was appended
+        // every run — 2 bootstraps, then 4. Attributes survive minification.
+        //
+        // Existing copies are removed first, so a tree that already accumulated
+        // duplicates is repaired by the next build rather than needing a manual
+        // pass.
+        // Matched two ways: by marker (current form) and by content (copies the
+        // earlier, unmarked version left behind, in either quoting style).
+        const priorInits = root.querySelectorAll('script').filter((n) =>
+            n.hasAttribute('data-theme-init') ||
+            (!n.getAttribute('src') && /localStorage\.getItem\(.theme.\)/.test(n.text)));
+
+        priorInits.forEach((n) => n.remove());
+        head.insertAdjacentHTML('afterbegin', `<script data-theme-init>${BOOTSTRAP}</script>`);
+        if (priorInits.length !== 1) changed = true;
+
+        // Toggle sits beside the hamburger rather than inside the collapse, so
+        // it stays reachable on mobile without opening the menu.
+        const toggler = root.querySelector('.navbar-toggler');
+        if (toggler && !root.querySelector('.theme-toggle')) {
+            toggler.insertAdjacentHTML('beforebegin', TOGGLE);
+            changed = true;
+        }
+
+        // Per-page <style> blocks sit after the external stylesheet, so at equal
+        // specificity they win — `section.blog-grid { background: #f5f5f5 }` was
+        // painting a light slab behind the whole card grid in dark mode, and no
+        // amount of extra rules in style.css could override it without an
+        // !important arms race. The declarations are rewritten to tokens at the
+        // source instead, so they follow the theme like everything else.
+        const SURFACE_MAP = [
+            [/background(-color)?:\s*#f5f5f5\b/gi, 'background$1: var(--surface-page)'],
+            [/background(-color)?:\s*#f8f9fa\b/gi, 'background$1: var(--surface-sunken)'],
+            [/background(-color)?:\s*(#fff(fff)?|white)\b/gi, 'background$1: var(--surface)'],
+        ];
+
+        for (const styleEl of root.querySelectorAll('style')) {
+            let css = styleEl.text;
+            if (!css || !/background/i.test(css)) continue;
+            const before = css;
+            // Skip gradients: their stops are brand colours, not surfaces.
+            css = css.split(/(?=[^{}]*\{)/).map((rule) =>
+                /gradient\(/i.test(rule) ? rule : SURFACE_MAP.reduce((acc, [re, to]) => acc.replace(re, to), rule)
+            ).join('');
+            if (css !== before) { styleEl.set_content(css); changed = true; }
+        }
+
+        let out = root.toString();
+        if (!/js\/theme-toggle\.min\.js/.test(out)) {
+            out = out.replace(/<\/body>/i, '<script defer="defer" src="js/theme-toggle.min.js"></script></body>');
+            changed = true;
+        }
+
+        if (changed) { await writeFileAsync(file, out, 'utf8'); touched++; }
+    }
+
+    console.log(`  theme system applied to ${touched} pages`);
+}
+
 // Optimize and minify HTML files
 async function optimizeHTML() {
     const htmlFiles = glob.sync('*.html');
@@ -1509,6 +1614,9 @@ async function build() {
 
         console.log('Enhancing article pages (TOC, share, prev/next, related)...');
         await enhanceArticlePages();
+
+        console.log('Applying theme system (font preload, theme bootstrap, toggle)...');
+        await applyThemeSystem();
 
         console.log('Generating search scripts...');
         await generateSearchScripts();

@@ -146,6 +146,25 @@ const CHECKS = [
         .filter((m) => m.excerpt && m.excerpt.length > 185).length;
     }, 0],
 
+  // Inline scripts were invisible to the 'duplicate <script src>' check, so a
+  // build step whose idempotency guard tested minifiable source text could
+  // append a fresh copy every run undetected. It did: 1 -> 2 -> 4.
+  ['Theme', 'Exactly one inline theme bootstrap per page',
+    () => count((s) => (s.match(/localStorage\.getItem\(.theme.\)/g) || []).length !== 1), 0],
+  ['Theme2', 'No inline script body appears more than once on a page',
+    () => count((s) => {
+      const bodies = [...s.matchAll(/<script(?![^>]*\ssrc=)[^>]*>([\s\S]*?)<\/script>/gi)]
+        .map((m) => m[1].trim()).filter((b) => b.length > 40);
+      return bodies.some((b, i) => bodies.indexOf(b) !== i);
+    }), 0],
+  ['Theme3', 'Dark theme is reachable by preference and by explicit override',
+    () => /prefers-color-scheme:\s*dark/.test(read('css/style.min.css'))
+      // clean-css strips attribute-selector quotes, so match either form.
+      && /\[data-theme=["']?dark["']?\]/.test(read('css/style.min.css')), true],
+  ['Font', 'Inter is self-hosted and preloaded, not fetched from a CDN',
+    () => exists('lib/fonts/inter-latin-wght.woff2')
+      && count((s) => !/rel="preload"[^>]*inter-latin-wght|inter-latin-wght[^>]*rel="preload"/.test(s)) === 0, true],
+
   ['M3', 'hreflang pairs the -tr page with its English original',
     () => /ai-and-human-job-competition\.html[\s\S]{0,400}ai-and-human-job-competition-tr\.html/.test(read('sitemap.xml')), true],
 

@@ -2607,3 +2607,424 @@ a.post-nav__link:hover {
 .post-grid--related .post-card__body { padding: 16px 16px 14px; }
 .post-grid--related .post-card__title { font-size: 1rem; }
 .post-grid--related .post-card__excerpt { display: none; }
+
+/*======================================================================
+//--//-->   2026 DESIGN SYSTEM
+//
+//  A token layer, declared last so it wins over the 2018 template values
+//  without editing fifty scattered colour literals. Every surface, text and
+//  border colour below resolves through a semantic token, which is what makes
+//  a dark theme possible at all — the template hardcoded #fff on cards and
+//  #16202a on titles, so no amount of toggling would have worked.
+======================================================================*/
+
+/* Self-hosted Inter. Two subsets: `latin` covers English and German (ü ö ä ß),
+   `latin-ext` carries the Turkish ı ğ ş İ. The unicode-range split means an
+   English page never downloads the 74 KB Turkish file. Self-hosted rather than
+   CDN because font-src is 'self' and a third-party font is a render-blocking
+   request to someone else's uptime. */
+@font-face {
+  font-family: 'InterVar';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('../lib/fonts/inter-latin-wght.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+                 U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC,
+                 U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'InterVar';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('../lib/fonts/inter-latin-ext-wght.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+                 U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF,
+                 U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+:root {
+  /* Neutral ramp — cool grey, so the brand blue reads as intentional. */
+  --surface:        #ffffff;
+  --surface-page:   #f6f8fb;
+  --surface-sunken: #eef2f7;
+  --surface-raised: #ffffff;
+
+  --text:           #0f172a;
+  --text-muted:     #475569;
+  --text-subtle:    #64748b;
+  --text-inverse:   #ffffff;
+
+  --border:         #e3e8ef;
+  --border-strong:  #cbd5e1;
+
+  /* --brand is the identity colour (fills, rules, decorative).
+     --brand-ink is the text-safe variant: 6.09:1 on white.
+     --brand-wash backs badges and subtle highlights. */
+  --brand:          #48abec;
+  --brand-ink:      #0a5fc4;
+  --brand-wash:     #eaf2fd;
+  --brand-contrast: #ffffff;
+
+  /* Layered shadows. Two stacked shadows read as depth; one reads as a border. */
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, .06);
+  --shadow-md: 0 1px 2px rgba(15, 23, 42, .06), 0 8px 24px rgba(15, 23, 42, .07);
+  --shadow-lg: 0 2px 4px rgba(15, 23, 42, .07), 0 18px 40px rgba(15, 23, 42, .12);
+  --shadow-xl: 0 2px 4px rgba(15, 23, 42, .08), 0 28px 60px rgba(15, 23, 42, .16);
+
+  /* Spacing scale. The template used ad-hoc rem values; these give the layout
+     room to breathe and keep vertical rhythm consistent between sections. */
+  --space-2xs: .375rem;
+  --space-xs:  .75rem;
+  --space-sm:  1.25rem;
+  --space-md:  2rem;
+  --space-lg:  3.25rem;
+  --space-xl:  5rem;
+  --space-2xl: 7.5rem;
+
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --radius-pill: 999px;
+
+  --ease: cubic-bezier(.22, .61, .36, 1);
+
+  color-scheme: light;
+}
+
+/* Dark theme. Declared twice on purpose: once behind prefers-color-scheme so a
+   first-time visitor gets their OS preference with no JS, and once behind an
+   explicit [data-theme] so the toggle can override it in either direction.
+   The :root[data-theme="light"] block has to exist too, otherwise a user on a
+   dark OS could never choose light. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --surface:        #131a24;
+    --surface-page:   #0b1017;
+    --surface-sunken: #1c2530;
+    --surface-raised: #182029;
+
+    --text:           #e8edf4;
+    --text-muted:     #a3b0c2;
+    --text-subtle:    #8695aa;
+    --text-inverse:   #0b1017;
+
+    --border:         #243040;
+    --border-strong:  #35455a;
+
+    /* Inverted: a 6:1-on-white blue is unreadable on near-black. This is
+       9.06:1 on --surface-page. */
+    --brand:          #58b4f0;
+    --brand-ink:      #7ab8f5;
+    --brand-wash:     #16283c;
+    --brand-contrast: #08111c;
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, .5);
+    --shadow-md: 0 1px 2px rgba(0, 0, 0, .5), 0 8px 24px rgba(0, 0, 0, .45);
+    --shadow-lg: 0 2px 4px rgba(0, 0, 0, .55), 0 18px 40px rgba(0, 0, 0, .5);
+    --shadow-xl: 0 2px 4px rgba(0, 0, 0, .6), 0 28px 60px rgba(0, 0, 0, .55);
+
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --surface:        #131a24;
+  --surface-page:   #0b1017;
+  --surface-sunken: #1c2530;
+  --surface-raised: #182029;
+
+  --text:           #e8edf4;
+  --text-muted:     #a3b0c2;
+  --text-subtle:    #8695aa;
+  --text-inverse:   #0b1017;
+
+  --border:         #243040;
+  --border-strong:  #35455a;
+
+  --brand:          #58b4f0;
+  --brand-ink:      #7ab8f5;
+  --brand-wash:     #16283c;
+  --brand-contrast: #08111c;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, .5);
+  --shadow-md: 0 1px 2px rgba(0, 0, 0, .5), 0 8px 24px rgba(0, 0, 0, .45);
+  --shadow-lg: 0 2px 4px rgba(0, 0, 0, .55), 0 18px 40px rgba(0, 0, 0, .5);
+  --shadow-xl: 0 2px 4px rgba(0, 0, 0, .6), 0 28px 60px rgba(0, 0, 0, .55);
+
+  color-scheme: dark;
+}
+
+/*--------------------------------------
+  Typography
+--------------------------------------*/
+
+body {
+  font-family: 'InterVar', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--surface-page);
+  color: var(--text);
+  font-feature-settings: 'cv02' 1, 'cv03' 1, 'cv04' 1, 'ss01' 1;
+  letter-spacing: -0.005em;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: inherit;
+  color: var(--text);
+  letter-spacing: -0.022em;
+  line-height: 1.18;
+}
+
+/* Fluid scale — clamps rather than breakpoint steps, so headings track the
+   viewport instead of jumping. */
+h1, .title-a { font-size: clamp(2.1rem, 1.4rem + 2.6vw, 3.4rem); font-weight: 700; }
+h2           { font-size: clamp(1.6rem, 1.2rem + 1.5vw, 2.3rem); font-weight: 700; }
+h3           { font-size: clamp(1.15rem, 1rem + .6vw, 1.45rem);  font-weight: 650; }
+
+p { color: var(--text-muted); line-height: 1.72; }
+
+a { color: var(--brand-ink); }
+a:hover { color: var(--brand-ink); opacity: .82; }
+
+/*--------------------------------------
+  Surfaces retinted through tokens
+--------------------------------------*/
+
+.post-card,
+.post-featured,
+.post-nav__link,
+.box-shadow-full,
+.widget-sidebar,
+.stats-container .stat-item,
+.blog-search__input,
+.blog-filter__btn,
+.post-share__btn {
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+.post-card, .post-featured { box-shadow: var(--shadow-md); }
+.post-card:hover { box-shadow: var(--shadow-lg); }
+.post-featured:hover { box-shadow: var(--shadow-xl); }
+
+.post-card__title, .post-featured__title, .post-nav__title, .post-related__title { color: var(--text); }
+.post-card__excerpt, .post-featured__excerpt { color: var(--text-muted); }
+.post-card__meta { color: var(--text-subtle); }
+.post-card__cta, .post-nav__dir { color: var(--brand-ink); }
+.post-card__badge { background: var(--brand-wash); color: var(--brand-ink); }
+.post-card__badge--solid { background: var(--brand-ink); color: var(--brand-contrast); }
+.post-card__media, .post-featured__media { background: var(--surface-sunken); }
+
+.blog-toolbar {
+  background: color-mix(in srgb, var(--surface-page) 86%, transparent);
+  border-bottom-color: var(--border);
+}
+.blog-filter__btn { color: var(--text-muted); }
+.blog-filter__btn.is-active { background: var(--brand-ink); border-color: var(--brand-ink); color: var(--brand-contrast); }
+.blog-search__input { color: var(--text); }
+.blog-search__input::placeholder { color: var(--text-subtle); }
+.blog-search__icon { color: var(--text-subtle); }
+.blog-empty { color: var(--text-muted); }
+
+.toc-list { border-left-color: var(--border); }
+.toc-item a { color: var(--text-muted); }
+.toc-item a:hover, .toc-item a.is-active { color: var(--brand-ink); }
+.toc-item a.is-active { border-left-color: var(--brand-ink); }
+
+.post-share { border-top-color: var(--border); }
+.post-share__label { color: var(--text-muted); }
+.post-share__btn { color: var(--text-muted); }
+.post-share__btn:hover { background: var(--brand-ink); border-color: var(--brand-ink); color: var(--brand-contrast); }
+
+.stats-container .stat-number { color: var(--brand-ink); }
+.stats-container .stat-label { color: var(--text-muted); }
+
+.blog-loadmore__btn { border-color: var(--brand-ink); color: var(--brand-ink); background: transparent; }
+.blog-loadmore__btn:hover { background: var(--brand-ink); color: var(--brand-contrast); }
+
+footer { color: var(--text-muted); }
+footer .credits a { color: var(--brand-ink); }
+
+/*--------------------------------------
+  Whitespace — let the layout breathe
+--------------------------------------*/
+
+.sect-pt4 { padding-top: var(--space-xl); }
+.sect-4   { padding: var(--space-xl) 0; }
+.title-box { margin-bottom: var(--space-lg); }
+.post-grid { gap: var(--space-md); margin-top: var(--space-sm); }
+.post-card__body { padding: var(--space-sm) var(--space-sm) 1.15rem; }
+.post-featured__body { padding: var(--space-md) 2.4rem; }
+.post-featured { margin-bottom: var(--space-lg); }
+.box-shadow-full { padding: var(--space-md); border-radius: var(--radius-md); }
+.widget-sidebar { border-radius: var(--radius-md); }
+
+.post-card { border-radius: var(--radius-md); }
+.post-featured { border-radius: var(--radius-lg); }
+
+/*--------------------------------------
+  Hero — softer gradient, real contrast
+--------------------------------------*/
+
+/* The template laid white text over a fixed-attachment photograph, so contrast
+   depended on whichever pixels happened to sit behind it. This replaces the
+   overlay with a deterministic gradient: the text colour is now known-good
+   regardless of the image, and background-attachment: fixed is dropped because
+   it forces a repaint on every scroll frame. */
+.intro .overlay-mf,
+.intro-single .overlay-mf {
+  background: linear-gradient(135deg, rgba(9, 16, 26, .93) 0%, rgba(12, 32, 58, .86) 55%, rgba(10, 95, 196, .72) 100%);
+}
+
+.bg-image { background-attachment: scroll; }
+
+.intro .intro-title,
+.intro-single .intro-title { letter-spacing: -0.03em; text-wrap: balance; }
+
+.intro .intro-subtitle { color: rgba(255, 255, 255, .88); }
+
+/*--------------------------------------
+  Motion
+--------------------------------------*/
+
+.post-card, .post-featured, .post-nav__link {
+  transition: transform .3s var(--ease), box-shadow .3s var(--ease), border-color .2s ease;
+}
+
+/* Any transform-based motion is opt-out. The reduced-motion block earlier in
+   this file neutralises durations globally; these rules additionally remove the
+   displacement itself, because a 0s transform still moves the element. */
+@media (prefers-reduced-motion: reduce) {
+  .post-card:hover,
+  .post-featured:hover,
+  a.post-nav__link:hover,
+  .post-card:active { transform: none; }
+  .post-card:hover .post-card__img,
+  .post-featured:hover .post-featured__img { transform: none; }
+  .post-card__cta .icon { transition: none; }
+  .post-grid > .post-card { animation: none; }
+}
+
+/*--------------------------------------
+  Theme toggle
+--------------------------------------*/
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  margin-left: .75rem;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, .28);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color .2s ease, border-color .2s ease;
+}
+
+.theme-toggle:hover { background: rgba(255, 255, 255, .14); }
+
+/* Once the navbar goes solid-white on scroll the button sits on light. */
+.navbar-reduce .theme-toggle { border-color: var(--border-strong); color: var(--text-muted); }
+.navbar-reduce .theme-toggle:hover { background: var(--surface-sunken); }
+
+.theme-toggle__sun { display: none; }
+:root[data-theme="dark"] .theme-toggle__sun { display: block; }
+:root[data-theme="dark"] .theme-toggle__moon { display: none; }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-toggle__sun { display: block; }
+  :root:not([data-theme="light"]) .theme-toggle__moon { display: none; }
+}
+
+/*----------------------------------------------------------------------
+  Template surfaces, retinted through tokens.
+
+  The 2018 template hardcoded #fff / #f5f5f5 / #f8f9fa on eighteen selectors in
+  this file and on seven more inside per-page <style> blocks. Any of them left
+  untouched paints a light slab in dark mode — `section.blog-grid` was doing
+  exactly that behind the whole card grid.
+
+  These are declared here, last, rather than edited in place: the originals stay
+  readable as template history, and every surface in the site now resolves
+  through one of four tokens.
+----------------------------------------------------------------------*/
+
+.box-shadow-full,
+.service-box,
+.work-box,
+.post-box,
+.widget-sidebar,
+.blog-content .post-box,
+.blog-preview-box,
+.comment,
+.blog-card,
+.stats-container,
+.testimonial-box .comit {
+  background-color: var(--surface);
+  color: var(--text);
+}
+
+.blog-mf,
+.blog-grid,
+.view-all-posts,
+.blog-hero {
+  background-color: var(--surface-page);
+}
+
+.widget-tags ul li .tag,
+.filter-btn,
+.search-input {
+  background-color: var(--surface-sunken);
+  color: var(--text-muted);
+  border-color: var(--border);
+}
+
+.navbar-b.navbar-reduce { background-color: var(--surface); }
+.navbar-b.navbar-reduce .nav-link { color: var(--brand-ink); }
+.navbar-b.navbar-reduce .navbar-brand { color: var(--brand-ink); }
+.navbar-toggler span { background-color: var(--text); }
+
+/* Bordered/edged bits that read as seams once the surface goes dark. */
+.widget-sidebar, .post-box, .box-shadow-full, .blog-card {
+  border: 1px solid var(--border);
+}
+
+/* The hero keeps light-on-dark text in both themes — it sits on the gradient
+   overlay, not on a token surface — so it must not inherit --text. */
+.intro .intro-title,
+.intro-single .intro-title,
+.intro .intro-subtitle,
+.blog-hero .title-a,
+.blog-hero .subtitle-a { color: #fff; }
+
+.blog-hero { background: linear-gradient(135deg, #0f2744 0%, #143a63 55%, #0a5fc4 100%); }
+
+/* Article prose inherits the token text colour rather than the template's
+   near-black, which is unreadable on a dark surface. */
+.post-box p, .post-box li, .blog-content p, .blog-content li { color: var(--text-muted); }
+.post-box h2, .post-box h3, .post-box h4 { color: var(--text); }
+.post-box blockquote { color: var(--text-muted); border-left-color: var(--brand); }
+
+/* Code and math need their own surface or they vanish against a dark card. */
+.post-box pre, .post-box code { background: var(--surface-sunken); color: var(--text); }
+
+/* Theme switching must not animate.
+
+   The template puts `transition: all .25s` on every <a>, so flipping the theme
+   animated each link's colour independently — a visible smear across the page,
+   and a pile of needless repaints on a change that should be instantaneous. It
+   also leaves colours stuck mid-interpolation if the tab stops ticking
+   transitions partway through. The toggle adds this class for one frame. */
+:root.theme-switching,
+:root.theme-switching *,
+:root.theme-switching *::before,
+:root.theme-switching *::after {
+  transition: none !important;
+}
