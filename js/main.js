@@ -353,9 +353,9 @@
 					<div class="cookie-content">
 						<p>${lang.message}</p>
 						<div class="cookie-buttons">
-							<button class="cookie-btn accept" onclick="CookieConsent.acceptAll()">${lang.accept}</button>
-							<button class="cookie-btn reject" onclick="CookieConsent.rejectAll()">${lang.reject}</button>
-							<button class="cookie-btn settings" onclick="CookieConsent.showSettings()">${lang.settings}</button>
+							<button class="cookie-btn accept" data-cookie-action="acceptAll">${lang.accept}</button>
+							<button class="cookie-btn reject" data-cookie-action="rejectAll">${lang.reject}</button>
+							<button class="cookie-btn settings" data-cookie-action="showSettings">${lang.settings}</button>
 						</div>
 					</div>
 				</div>
@@ -364,7 +364,7 @@
 					<div class="cookie-modal-content">
 						<div class="cookie-modal-header">
 							<h3>Cookie Settings</h3>
-							<button class="cookie-close" onclick="CookieConsent.hideSettings()">&times;</button>
+							<button class="cookie-close" data-cookie-action="hideSettings">&times;</button>
 						</div>
 						<div class="cookie-modal-body">
 							<div class="cookie-category">
@@ -377,13 +377,22 @@
 							</div>
 						</div>
 						<div class="cookie-modal-footer">
-							<button class="cookie-btn" onclick="CookieConsent.savePreferences()">${lang.save}</button>
+							<button class="cookie-btn" data-cookie-action="savePreferences">${lang.save}</button>
 						</div>
 					</div>
 				</div>
 			`;
 			
 			document.body.insertAdjacentHTML('beforeend', bannerHTML);
+			// Bound here, not with onclick="" attributes: the page's Content-Security-Policy
+			// blocks inline event handlers, which left every button dead and analytics
+			// consent permanently denied.
+			['cookie-banner', 'cookie-settings'].forEach((id) => {
+				document.getElementById(id).addEventListener('click', (event) => {
+					const button = event.target.closest('[data-cookie-action]');
+					if (button) this[button.dataset.cookieAction]();
+				});
+			});
 			this.addStyles();
 		},
 		

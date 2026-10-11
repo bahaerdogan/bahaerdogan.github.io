@@ -274,6 +274,20 @@ const CHECKS = [
   ['CSP3', 'Only one server-config file is shipped',
     () => [exists('.htaccess'), exists('_headers')].filter(Boolean).length, 1],
 
+  // The cookie banner's onclick="" buttons were blocked by the CSP from July to
+  // October 2026, so nobody could grant consent and analytics recorded nothing.
+  ['CSP4', 'No inline event handlers (the CSP silently blocks them)',
+    () => [...pages.map(([, s]) => s), ...glob.sync('js/*.js', { cwd: ROOT, ignore: 'js/*.min.js' }).map(read)]
+      .reduce((n, s) => n + (s.match(/<[a-z][^<>]*\son[a-z]+=["']/gi) || []).length, 0), 0],
+
+  // Every script is deferred, so document order is execution order. main.js is
+  // wrapped in (jQuery); loaded first, none of it ran on 19 article pages.
+  ['Order', 'main.min.js loads after the jQuery it is wrapped in', () => count((s) => {
+    const srcs = [...s.matchAll(/<script\b[^>]*\ssrc="([^"]+)"/g)].map((m) => m[1]);
+    const main = srcs.indexOf('js/main.min.js');
+    return main !== -1 && !srcs.slice(0, main).includes('lib/jquery/jquery.min.js');
+  }), 0],
+
   ['Search', 'Sidebar search uses the generated index, not a stale copy',
     () => !/handleSearch/.test(read('js/main.js'))
        && /addEventListener\('submit'/.test(read('js/blog-search.js')), true],

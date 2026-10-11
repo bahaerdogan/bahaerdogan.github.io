@@ -102,6 +102,14 @@ async function handlePostComment(request, env, ctx) {
     if (!isLength(message, 10, 5000)) return json({ error: t.message }, 400, request);
     if (!isSafeSlug(slug)) return json({ error: t.slug }, 400, request);
 
+    // Every junk comment so far has been one run of random letters
+    // ("ZduOjgAZQYvGnyEZZwEHvqBu"); no real comment is 10+ letters with no space
+    // or punctuation. Answer as if it was posted, so the bot has nothing to adapt
+    // to, but store nothing and send no notification.
+    if (isGibberish(message)) {
+      return json({ success: true, message: t.commentOk }, 200, request);
+    }
+
     if (!(await verifyTurnstile(env, turnstileToken, clientIP))) {
       return json({ error: t.spam }, 403, request);
     }
@@ -298,6 +306,7 @@ const publicView = (c) => ({ id: c.id, name: c.name, message: c.message, date: c
 const isLength = (v, min, max) => typeof v === 'string' && v.trim().length >= min && v.trim().length <= max;
 const isValidEmail = (e) => typeof e === 'string' && e.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.trim());
 const isSafeSlug = (s) => typeof s === 'string' && /^[A-Za-z0-9._-]{1,120}$/.test(s);
+const isGibberish = (m) => /^[A-Za-z]+$/.test(m.trim());
 
 function corsHeaders(request) {
   const origin = request.headers.get('Origin');
