@@ -282,7 +282,7 @@ async function renderBlogSurfaces() {
 
         grid.set_content(
             B.renderFeatured(featured, lang, dims) +
-            `<div class="blog-toolbar"><div class="blog-toolbar__inner">` +
+            `<div class="blog-toolbar js-only"><div class="blog-toolbar__inner">` +
                 B.renderFilters(posts, lang) +
                 `<div class="blog-search">` +
                     `<svg class="icon blog-search__icon" viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>` +
@@ -295,7 +295,7 @@ async function renderBlogSurfaces() {
                 rest.map((p) => B.renderCard(p, lang, { dims })).join('') +
             `</div>` +
             `<p class="blog-empty" id="blogEmpty" hidden>${B.esc(B.t(lang, 'none'))}</p>` +
-            `<div class="blog-loadmore"><button type="button" class="blog-loadmore__btn" id="blogLoadMore">${B.esc(B.t(lang, 'more'))}</button></div>`
+            `<div class="blog-loadmore js-only"><button type="button" class="blog-loadmore__btn" id="blogLoadMore">${B.esc(B.t(lang, 'more'))}</button></div>`
         );
 
         // Filter/search/load-more enhancement. Deferred, and purely additive:
@@ -331,7 +331,18 @@ async function enhanceArticlePages() {
         de: { toc: 'Auf dieser Seite', share: 'Teilen', copy: 'Link kopieren', copied: 'Link kopiert', prev: 'Zurück', next: 'Weiter', related: 'Verwandte Artikel' },
     };
 
-    const slug = (s) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+    // Turkish letters must be mapped before NFD. `ı` (U+0131) has no canonical
+    // decomposition, so stripping combining marks leaves it intact, and the
+    // ASCII filter then deletes it outright: "Ağırlık ve Ölçüm" became
+    // "ag-rl-k-ve-olcum". `İ` decomposes to "I" + a dot above, which is worse —
+    // the dot survives as a separator. Both are pre-mapped here.
+    const TR_MAP = { 'ı': 'i', 'İ': 'i', 'ğ': 'g', 'Ğ': 'g', 'ş': 's', 'Ş': 's',
+                     'ç': 'c', 'Ç': 'c', 'ö': 'o', 'Ö': 'o', 'ü': 'u', 'Ü': 'u',
+                     'ä': 'a', 'Ä': 'a', 'ß': 'ss' };
+    const slug = (s) => s
+        .replace(/[ıİğĞşŞçÇöÖüÜäÄß]/g, (c) => TR_MAP[c] || c)
+        .toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
         .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60);
 
     let touched = 0;
@@ -541,6 +552,73 @@ async function applyThemeSystem() {
     }
 
     console.log(`  theme system applied to ${touched} pages`);
+}
+
+/**
+ * Hero rework: typography-led, no photograph, no typing animation.
+ *
+ * The old hero layered white text over a fixed-attachment AI-generated
+ * landscape, with Typed.js retyping "Computer Engineer / AI R&D Specialist /
+ * Problem Solver" on a loop. Three problems: contrast depended on whichever
+ * pixels sat behind the text, the raw comma-joined string was visible until
+ * Typed.js initialised (a flash plus a layout shift), and an infinite animation
+ * is a reduced-motion liability. The roles are now static markup.
+ *
+ * Idempotent: re-running finds `.hero-modern` and rewrites it from the same
+ * source values rather than appending.
+ */
+async function modernizeHero() {
+    const { parse } = require('node-html-parser');
+    let touched = 0;
+
+    for (const file of glob.sync('*.html')) {
+        const html = await readFileAsync(file, 'utf8');
+        const root = parse(html);
+        const intro = root.querySelector('.intro');
+        if (!intro || !root.querySelector('.text-slider-items, .hero-modern')) continue;
+
+        const name = (root.querySelector('.intro-title')?.text || 'Baha Erdoğan').trim();
+
+        // Roles come from whatever the slider was cycling, so the copy stays the
+        // author's rather than something invented here.
+        const sliderText = root.querySelector('.text-slider-items')?.text
+            || root.querySelector('.hero-modern__roles')?.getAttribute('data-roles')
+            || 'Computer Engineer,AI R&D Specialist,Problem Solver';
+        const roles = sliderText.split(',').map((r) => r.trim()).filter(Boolean);
+
+        const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+        intro.setAttribute('class', 'route intro hero-modern');
+        intro.removeAttribute('style'); // drops background-image:url(hero-home.webp)
+
+        intro.set_content(
+            '<div class="hero-modern__engraving" aria-hidden="true"></div>' +
+            '<div class="container hero-modern__inner">' +
+                `<p class="hero-modern__eyebrow">${esc(roles[0] || '')}</p>` +
+                `<h1 class="intro-title hero-modern__name">${esc(name)}</h1>` +
+                `<p class="hero-modern__roles" data-roles="${esc(roles.join(','))}">` +
+                    roles.map((r) => `<span class="hero-modern__role">${esc(r)}</span>`)
+                         .join('<span class="hero-modern__sep" aria-hidden="true"></span>') +
+                '</p>' +
+                '<div class="hero-modern__actions">' +
+                    '<a class="hero-btn hero-btn--primary" href="BlogPosts.html">Read the writing</a>' +
+                    '<a class="hero-btn hero-btn--ghost" href="#about">About me</a>' +
+                '</div>' +
+            '</div>'
+        );
+
+        let out = root.toString();
+        // Typed.js only ever drove the hero; nothing else on the page uses it.
+        out = out.replace(/\s*<script[^>]*lib\/typed\/typed\.min\.js[^>]*><\/script>/gi, '');
+        // Drop the now-unused hero image preload.
+        out = out.replace(/<link[^>]*hero-home\.webp[^>]*>\s*/gi, '');
+
+        await writeFileAsync(file, out, 'utf8');
+        touched++;
+    }
+
+    console.log(`  hero modernised on ${touched} page(s)`);
 }
 
 // Optimize and minify HTML files
@@ -1580,9 +1658,45 @@ async function verify() {
 }
 
 // Main build process
+/**
+ * Snapshot every file the build is about to mutate, so a validation failure can
+ * be rolled back instead of leaving a half-written tree.
+ *
+ * A true src/ -> dist/ split is the right long-term answer, but this repo is
+ * served from its own root by GitHub Pages: introducing dist/ changes the
+ * deployment contract, not just the build. This gives the property that
+ * actually matters in the meantime — validation gates the result, and a failing
+ * build leaves the working tree exactly as it found it, rather than reporting
+ * damage it has already done.
+ */
+async function withRollback(run) {
+    const tracked = glob.sync('*.html')
+        .concat(glob.sync('{sitemap.xml,feed.xml,llms.txt,llms-full.txt,robots.txt}'));
+
+    const snapshot = new Map();
+    for (const f of tracked) {
+        try { snapshot.set(f, fs.readFileSync(f)); } catch { /* not yet present */ }
+    }
+
+    try {
+        return await run();
+    } catch (err) {
+        let restored = 0;
+        for (const [f, buf] of snapshot) {
+            try {
+                if (!fs.readFileSync(f).equals(buf)) { fs.writeFileSync(f, buf); restored++; }
+            } catch { /* file vanished; nothing to restore onto */ }
+        }
+        console.error(`\n  Rolled back ${restored} file(s) — the working tree is unchanged.`);
+        throw err;
+    }
+}
+
 async function build() {
     try {
         console.log('Starting build process...');
+
+        await withRollback(async () => {
         
         console.log('Minifying CSS files...');
         await minifyCSS();
@@ -1614,6 +1728,9 @@ async function build() {
 
         console.log('Enhancing article pages (TOC, share, prev/next, related)...');
         await enhanceArticlePages();
+
+        console.log('Modernising hero...');
+        await modernizeHero();
 
         console.log('Applying theme system (font preload, theme bootstrap, toggle)...');
         await applyThemeSystem();
@@ -1652,6 +1769,7 @@ async function build() {
 
         console.log('Validating articles...');
         require('./tools/validate-articles.js').validateArticles();
+        });
 
         console.log('Build completed successfully!');
     } catch (error) {

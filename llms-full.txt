@@ -1121,7 +1121,7 @@ This is the essence of the Ergenekon Epic, a tale of resilience, rebirth, and th
 
 ---
 
-# The Ergenekon Epic | Ancient Turkish Legend
+# Ergenekon Destanı | Kadim Türk Efsanesi
 
 URL: https://bahaerdogan.com/ErgenekonEpicTR.html
 Language: tr
@@ -1402,7 +1402,7 @@ Modified: 2026-07-28
 
 From Netflix to TikTok: How AI Knows What You Like
 Baha Erdoğan
-Economy
+Recommendation Systems
 Introduction: Why AI Feels Like Magic (But Isn't)
 Have you ever opened Netflix and thought, "Wow, that's exactly what I wanted to watch"? Or scrolled through TikTok only to get eerily accurate content that matches your humor, interests, or mood?
 It's not magic. It's machine learning.

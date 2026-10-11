@@ -38,7 +38,11 @@
     cards.forEach(function (card) {
       var badge = card.querySelector('.post-card__badge');
       card.setAttribute('data-category', badge ? (badge.getAttribute('data-cat') || '') : '');
-      card._haystack = (card.textContent || '').toLowerCase();
+      // Tags live in the article's sidebar widget, not in the card, so the
+      // visible text alone never matched a tag query — "orchestration" returned
+      // nothing despite being a tag on two posts. The build emits them as
+      // data-tags; they are appended to the haystack here.
+      card._haystack = ((card.textContent || '') + ' ' + (card.getAttribute('data-tags') || '')).toLowerCase();
     });
 
     function matches(card) {
@@ -101,6 +105,12 @@
         }
       });
     }
+
+    // Controls are inert until their handlers are bound, so they stay hidden
+    // for JS-off visitors and reveal only once they actually work.
+    Array.prototype.forEach.call(document.querySelectorAll('.js-only'), function (el) {
+      el.style.display = '';
+    });
 
     apply(true);
   });

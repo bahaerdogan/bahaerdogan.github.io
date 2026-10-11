@@ -31,6 +31,11 @@ const esc = (s) => String(s == null ? '' : s)
 /** Widths generated for card/featured srcset. */
 const SRCSET_WIDTHS = [480, 960, 1440];
 
+// Metadata and variant state are cached for the life of the build. probeDims()
+// is called once per language per surface — three times per run — and without
+// this it re-read every source image's header each time.
+const dimCache = new Map();
+
 async function probeDims(posts) {
   const sharp = require('sharp');
   const path = require('path');
@@ -38,6 +43,9 @@ async function probeDims(posts) {
 
   await Promise.all(posts.map(async (p) => {
     const rel = String(p.image).replace(/^https?:\/\/[^/]+\//, '').replace(/^\.?\//, '');
+
+    if (dimCache.has(rel)) { out[p.file] = dimCache.get(rel); return; }
+
     let meta = null;
     try {
       meta = await sharp(rel).metadata();
@@ -60,7 +68,19 @@ async function probeDims(posts) {
 
     await Promise.all(widths.map(async (w) => {
       const outRel = `${dir}/${base}-${w}.webp`;
-      if (!fs.existsSync(outRel)) {
+
+      // Regenerate when the variant is missing OR older than its source.
+      // Existence alone was not enough: replacing the artwork behind a post left
+      // every -480/-960/-1440 file showing the previous image forever, which is
+      // invisible on a desktop check and wrong for every phone.
+      let stale = true;
+      try {
+        stale = fs.statSync(rel).mtimeMs > fs.statSync(outRel).mtimeMs;
+      } catch {
+        stale = true; // variant absent
+      }
+
+      if (stale) {
         try {
           await sharp(rel).resize({ width: w }).webp({ quality: 78 }).toFile(outRel);
         } catch { return; }
@@ -71,7 +91,9 @@ async function probeDims(posts) {
     parts.push(`${rel} ${width}w`);
     parts.sort((a, b) => parseInt(a.match(/(\d+)w$/)[1], 10) - parseInt(b.match(/(\d+)w$/)[1], 10));
 
-    out[p.file] = { width, height, srcset: parts.join(', ') };
+    const entry = { width, height, srcset: parts.join(', ') };
+    dimCache.set(rel, entry);
+    out[p.file] = entry;
   }));
 
   return out;
@@ -82,7 +104,7 @@ async function probeDims(posts) {
  * below, inside a 1140px container with 28px gutters. Stated in the same order
  * the CSS breakpoints are evaluated so the browser picks before layout.
  */
-const CARD_SIZES = '(min-width: 992px) 352px, (min-width: 641px) calc(50vw - 40px), calc(100vw - 40px)';
+const CARD_SIZES = '(min-width: 992px) 361px, (min-width: 641px) calc(50vw - 40px), calc(100vw - 40px)';
 const FEATURED_SIZES = '(min-width: 861px) 627px, calc(100vw - 40px)';
 
 const DATE_LOCALE = { en: 'en-GB', tr: 'tr-TR', de: 'de-DE' };
@@ -160,9 +182,14 @@ function relatedTo(post, posts, limit = 3) {
       // Days apart, damped — only ever separates otherwise-equal candidates.
       const gap = Math.abs(new Date(p.datePublished) - new Date(post.datePublished)) / 86400000;
       const recency = 1 / (1 + gap / 365);
-      return { p, score: shared * 3 + jaccard * 2 + sameCategory * 1.5 + recency * 0.25 };
+      // Relevance gate. Recency alone must never qualify an article: it is
+      // always > 0, so the old `score > 0` filter matched everything and
+      // `ErgenekonEpic` recommended `MacShortcuts`. An article is related only
+      // if it shares a tag or a category; recency then orders what survives.
+      const relevant = shared > 0 || sameCategory === 1;
+      return { p, relevant, score: shared * 3 + jaccard * 2 + sameCategory * 1.5 + recency * 0.25 };
     })
-    .filter((x) => x.score > 0)
+    .filter((x) => x.relevant)
     .sort((a, b) => b.score - a.score || a.p.title.localeCompare(b.p.title))
     .slice(0, limit)
     .map((x) => x.p);
@@ -179,7 +206,11 @@ function renderCard(post, lang, { dims, eager = false } = {}) {
   const loading = eager ? '' : ' loading="lazy"';
   const priority = eager ? ' fetchpriority="high"' : '';
   const responsive = d.srcset ? ` srcset="${esc(d.srcset)}" sizes="${esc(CARD_SIZES)}"` : '';
-  return `<article class="post-card">` +
+  // data-tags feeds the client-side search haystack. Tags live in the sidebar
+  // widget, not in the card, so without this a query for a tag term like
+  // "orchestration" matched nothing.
+  const tagAttr = (post.tags && post.tags.length) ? ` data-tags="${esc(post.tags.join(' '))}"` : '';
+  return `<article class="post-card"${tagAttr}>` +
     `<a class="post-card__link" href="${esc(post.file)}">` +
       `<span class="post-card__media">` +
         `<img class="post-card__img" src="${esc(src)}" alt="${esc(post.title)}" width="${d.width}" height="${d.height}"${responsive}${loading}${priority} decoding="async">` +
