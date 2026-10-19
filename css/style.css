@@ -407,8 +407,8 @@ a:hover {
 
 /* Nav labels must not break mid-phrase. The item set is the same in all three
    languages now, and the Turkish labels are longer ("Ana Sayfa", "Gönüllülük"),
-   which wrapped "Ana Sayfa" onto two lines. The bar still fits at the md
-   breakpoint; below it Bootstrap collapses to the toggler anyway. */
+   which wrapped "Ana Sayfa" onto two lines. The bar only fits from ~1280px,
+   so it collapses below xl — see "Navigation breakpoint" near the end. */
 .navbar-b .nav-link {
   white-space: nowrap;
 }
@@ -1183,9 +1183,9 @@ footer .credits a {
 }
 
 .button-a {
-  background-color: #48abec;
-  color: #fff;
-  border-color: #d7ebf8;
+  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-2) 100%);
+  color: #04140f;
+  border-color: transparent;
 }
 
 .button-big {
@@ -2348,7 +2348,7 @@ footer .credits a {
 
 .blog-toolbar {
   position: sticky;
-  top: 0;
+  top: 70px;
   z-index: 20;
   padding: 14px 0;
   margin-bottom: 30px;
@@ -2473,7 +2473,15 @@ footer .credits a {
 //--//-->   ARTICLE EXTRAS (TOC / SHARE / NAV / RELATED)
 ======================================*/
 
-.widget-toc { position: sticky; top: 88px; }
+.blog-wrapper .col-md-4 {
+  position: sticky;
+  top: 88px;
+  align-self: flex-start;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+}
+
+.widget-toc { position: static; }
 
 .toc-list { list-style: none; padding-left: 0; margin: 0; border-left: 2px solid #e6eaef; }
 
@@ -3135,7 +3143,7 @@ footer .credits a { color: var(--brand-ink); }
   position: absolute;
   inset: -20%;
   pointer-events: none;
-  opacity: .5;
+  opacity: .35;
   background-image:
     repeating-linear-gradient(58deg,  var(--brand) 0 1px, transparent 1px 9px),
     repeating-linear-gradient(-58deg, var(--brand-2) 0 1px, transparent 1px 13px),
@@ -3350,3 +3358,229 @@ section.route, .sect-4, .sect-pt4 { padding-top: var(--space-2xl); padding-botto
   .cookie-buttons { justify-content: stretch; }
   .cookie-btn { flex: 1 1 auto; text-align: center; justify-content: center; }
 }
+
+/*----------------------------------------------------------------------
+  Hero-modern targeted fixes
+  
+  .hero-modern uses the new token-based surface (--surface-page / --brand-wash),
+  NOT the dark photo overlay that the old .intro used. The old rules
+  .intro .intro-title { color:#fff } and @media(max-width:768px){display:none}
+  were written for the photo hero and must not bleed into the modern layout.
+----------------------------------------------------------------------*/
+
+/* Force the modern hero name to use the page text token in both themes.
+   Specificity 0,3,0 beats the old 0,2,0 rule and the dark-theme 0,2,0 rule. */
+.hero-modern .hero-modern__name,
+.hero-modern .intro-title {
+  color: var(--text) !important;
+}
+
+/* The same photo-hero mobile rules gave the name a dark drop shadow
+   (rgba(0,0,0,.5) 2px 2px 4px), which smeared the dark text on the light
+   surface, and a 2.5rem size that out-ranked the clamp() scale below 768px
+   (the name rendered at 32px). Desktop keeps its current size. */
+.hero-modern .hero-modern__name,
+.hero-modern .intro-title,
+.hero-modern .intro-subtitle { text-shadow: none; }
+
+@media (max-width: 768px) {
+  .hero-modern .hero-modern__name { font-size: clamp(3rem, 1.6rem + 6vw, 6.5rem); }
+}
+
+/* Un-hide the name on mobile. The old rule was written assuming a duplicate
+   name in the navbar, which the modern hero does not have. */
+@media (max-width: 768px) {
+  .hero-modern .hero-modern__name,
+  .hero-modern .intro-title {
+    display: block !important;
+  }
+}
+
+/* On very small screens the clamp floor (3rem) is fine; reduce letter-spacing
+   slightly so the name fits on one line. */
+@media (max-width: 480px) {
+  .hero-modern__name { letter-spacing: -0.06em; }
+}
+
+/* Blog-toolbar mobile: reduce sticky offset to match the collapsed navbar height. */
+@media (max-width: 768px) {
+  .blog-toolbar { top: 64px; }
+}
+
+/*----------------------------------------------------------------------
+  Navigation breakpoint
+
+  The bar carries seven or eight items, and the Turkish and German labels are
+  long. Measured, it overflowed the viewport from 768px up to ~1280px (DE) and
+  ~1240px (TR), pushing the last items off-screen where they could not be
+  reached. The markup now collapses at xl (navbar-expand-xl), and the panel
+  styles that used to sit behind max-width: 768px — where they also collided
+  with md expansion at exactly 768px, painting white links on a white panel —
+  cover the whole collapsed range, through tokens so the panel follows the
+  theme. 1199.98px matches Bootstrap's own xl boundary.
+----------------------------------------------------------------------*/
+
+@media (max-width: 1199.98px) {
+  #mainNav .navbar-collapse {
+    margin-top: 10px;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    -webkit-backdrop-filter: none;
+            backdrop-filter: none;
+    box-shadow: var(--shadow-lg);
+    max-height: calc(100vh - 96px);
+    overflow-y: auto;
+  }
+
+  #mainNav .navbar-nav .nav-item { margin: 2px 0; padding-left: 0; }
+
+  #mainNav .navbar-collapse .nav-link {
+    padding: 12px 16px;
+    border-radius: 8px;
+    color: var(--text);
+  }
+
+  #mainNav .navbar-collapse .nav-link.active { color: var(--brand-ink); }
+  #mainNav .navbar-collapse .nav-link:hover { background: var(--surface-sunken); color: var(--brand-ink); }
+
+  /* The desktop underline marks the active item in a row; in a stacked list it
+     floated beside the panel, detached from any label. */
+  #mainNav .navbar-collapse .nav-link:before { display: none; }
+}
+
+/* The hamburger bars were hard-coded #1B1B1B once the bar turned solid, which
+   made the close control invisible on the dark surface. */
+.navbar-b.navbar-reduce .navbar-toggler span { background-color: var(--text); }
+
+/*----------------------------------------------------------------------
+  Text colours the token layer missed
+
+  The 2018 template hard-coded near-black text (#1e1e1e, #333, #4e4e4e, #666,
+  #999) on these selectors. On the dark surface they measured 1.05–3.05:1 —
+  every article title was effectively invisible in dark mode — and #999 meta
+  text was 2.85:1 on white in light mode. Hero contexts keep their own white
+  rules, which out-rank these.
+----------------------------------------------------------------------*/
+
+.title-s,
+.article-title,
+.service-box .s-title a,
+.blog-preview-title,
+.blog-preview-title a,
+.job-title { color: var(--text); }
+
+.subtitle-a,
+.skill-mf span,
+.work-content .w-more,
+.article-content,
+.blog-content .article-content,
+.blog-preview-excerpt,
+.job-date { color: var(--text-muted); }
+
+.card-blog .post-date,
+.blog-preview-meta,
+.reading-time { color: var(--text-subtle); }
+
+/* Bootstrap's #6c757d is 4.07:1 on the dark page and 4.41:1 on the light one.
+   Bootstrap declares it !important, so the override has to as well. */
+.text-muted { color: var(--text-muted) !important; }
+
+/* "Current" badge in the series widget: Bootstrap blue, off-palette, 3.98:1. */
+.badge-primary { background-color: var(--brand-ink); color: var(--brand-contrast); }
+
+/* Alerts carry their own foreground; the global p colour must not override it
+   (muted grey on Bootstrap's yellow measured 1.99:1). */
+.alert p { color: inherit; }
+
+/*----------------------------------------------------------------------
+  Cookie settings dialog
+
+  These layout rules used to be injected at runtime by js/main.js. Because that
+  <style> landed after this stylesheet it won every tie, so the banner showed
+  the old blue buttons and #555 text (2.56:1 in dark mode) instead of the
+  design above. The colours now come from tokens; only layout is kept.
+----------------------------------------------------------------------*/
+
+.cookie-content p { margin: 0; color: var(--text-muted); }
+
+.cookie-modal {
+  position: fixed;
+  inset: 0;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(4, 10, 16, .6);
+}
+
+.cookie-modal-content {
+  width: 100%;
+  max-width: 420px;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 0;
+}
+
+.cookie-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.cookie-modal-header h3 { margin: 0; font-size: 1.15rem; color: var(--text); }
+.cookie-close { min-width: 44px; min-height: 44px; font-size: 1.4rem; line-height: 1; }
+.cookie-modal-body { padding: 8px 20px; }
+
+.cookie-category label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.cookie-category input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--brand-ink); }
+.cookie-category small { display: block; margin-left: 26px; color: var(--text-muted); }
+.cookie-modal-footer { padding: 16px 20px 20px; text-align: right; }
+
+/* Expanded bar (xl and up). The container stops growing at 1140px, so the
+   German labels overran the content edge by ~75px at every desktop width. The
+   per-item spacing is tightened to fit; the underline offset tracks it (item
+   padding + link padding) so it still starts under the label. */
+@media (min-width: 1200px) {
+  .navbar-b.navbar-trans .nav-item,
+  .navbar-b.navbar-reduce .nav-item { padding-left: 2px; padding-right: 4px; }
+
+  .navbar-expand-xl .navbar-nav .nav-link { padding-left: .4rem; padding-right: .4rem; }
+
+  .navbar-b.navbar-trans .nav-link:before,
+  .navbar-b.navbar-reduce .nav-link:before { margin-left: 8px; }
+}
+
+/* The solid (scrolled / menu-open) bar had `padding: 15px 0` on phones while
+   the transparent one kept Bootstrap's 1rem sides, so the brand jumped 16px
+   to the screen edge the moment the menu opened or the page scrolled. */
+#mainNav.navbar-reduce { padding-left: 1rem; padding-right: 1rem; }
+
+/* Flex was shrinking the round theme toggle to an 18px sliver whenever the
+   nav row was full (every article page at desktop widths). */
+.theme-toggle { flex: 0 0 38px; }
+
+/* Each separator dot is its own flex item, so when the roles wrapped on a phone
+   a dot was stranded at the end of a line. Below the width where all three fit
+   on one line, they stack and the dots go. */
+@media (max-width: 575.98px) {
+  .hero-modern__roles { flex-direction: column; align-items: flex-start; gap: .2rem; }
+  .hero-modern__sep { display: none; }
+}
+
+/* Two template blues the identity layer missed: the active/hover underline in
+   the solid navbar (#48abec) and the homepage preview-card header band
+   (#48abec -> #667eea). Same gradient the hero's primary button uses. */
+.navbar-b.navbar-reduce .nav-link:before { background-color: var(--brand); }
+.blog-preview-header { background: linear-gradient(135deg, var(--brand) 0%, var(--brand-2) 100%); }

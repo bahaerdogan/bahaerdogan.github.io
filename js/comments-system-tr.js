@@ -162,7 +162,10 @@
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.error || `HTTP ${response.status}`);
+        // The Worker's errors are written for visitors and already localised
+        // (validation, rate limit, spam check), so they are shown as sent.
+        // Only a failure without one falls back to the generic message.
+        throw Object.assign(new Error(result.error || `HTTP ${response.status}`), { forVisitor: Boolean(result.error) });
       }
 
       // Başarılı!
@@ -176,18 +179,7 @@
 
     } catch (error) {
       console.error('Yorum gönderme hatası:', error);
-      let errorMessage = 'Yorum gönderilemedi. Lütfen tekrar deneyin.';
-      
-      // Özel hata mesajları
-      if (error.message.includes('Rate limit') || error.message.includes('aşıldı')) {
-        errorMessage = error.message;
-      } else if (error.message.includes('spam')) {
-        errorMessage = 'Yorumunuz spam olarak işaretlendi. Lütfen düzenleyip tekrar deneyin.';
-      } else if (error.message.includes('karakter')) {
-        errorMessage = error.message;
-      }
-
-      showAlert(errorAlert, errorMessage);
+      showAlert(errorAlert, error.forVisitor ? error.message : 'Yorum gönderilemedi. Lütfen tekrar deneyin.');
 
     } finally {
       // Submit butonunu yeniden etkinleştir

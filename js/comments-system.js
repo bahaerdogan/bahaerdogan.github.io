@@ -157,7 +157,10 @@
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.error || `HTTP ${response.status}`);
+        // The Worker's errors are written for visitors and already localised
+        // (validation, rate limit, spam check), so they are shown as sent.
+        // Only a failure without one falls back to the generic message.
+        throw Object.assign(new Error(result.error || `HTTP ${response.status}`), { forVisitor: Boolean(result.error) });
       }
 
       // Success!
@@ -171,16 +174,7 @@
 
     } catch (error) {
       console.error('Comment submission error:', error);
-      let errorMessage = 'Failed to submit comment. Please try again.';
-      
-      // Handle specific error messages
-      if (error.message.includes('Rate limit')) {
-        errorMessage = error.message;
-      } else if (error.message.includes('spam')) {
-        errorMessage = 'Your comment was flagged as spam. Please revise and try again.';
-      }
-
-      showAlert(errorAlert, errorMessage);
+      showAlert(errorAlert, error.forVisitor ? error.message : 'Failed to submit comment. Please try again.');
 
     } finally {
       // Re-enable submit button

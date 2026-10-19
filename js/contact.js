@@ -70,7 +70,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 const result = await response.json();
                 
                 if (!response.ok) {
-                    throw new Error(result.error || `HTTP ${response.status}`);
+                    // The Worker's errors are written for visitors (validation, rate
+                    // limit, spam check), so they are shown as sent. Only a failure
+                    // without one falls back to the generic message.
+                    throw Object.assign(new Error(result.error || `HTTP ${response.status}`), { forVisitor: Boolean(result.error) });
                 }
                 
                 // Success!
@@ -83,16 +86,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
             } catch (error) {
                 console.error('Contact form error:', error);
-                let errorMessage = 'Failed to send message. Please try again later.';
-                
-                // Handle specific error messages
-                if (error.message.includes('Rate limit')) {
-                    errorMessage = error.message;
-                } else if (error.message.includes('characters')) {
-                    errorMessage = error.message;
-                }
-                
-                errorMessageDiv.textContent = errorMessage;
+                errorMessageDiv.textContent = error.forVisitor ? error.message : 'Failed to send message. Please try again later.';
                 errorMessageDiv.classList.remove('d-none');
                 
             } finally {

@@ -1126,7 +1126,7 @@ This is the essence of the Ergenekon Epic, a tale of resilience, rebirth, and th
 URL: https://bahaerdogan.com/ErgenekonEpicTR.html
 Language: tr
 Published: 2024-07-25
-Modified: 2026-07-28
+Modified: 2026-10-11
 
 Blog Detayları
 Ergenekon Destanı
@@ -1398,7 +1398,7 @@ Yorumlar
 URL: https://bahaerdogan.com/AlgorithmsExplained.html
 Language: en
 Published: 2024-06-11
-Modified: 2026-07-28
+Modified: 2026-10-11
 
 From Netflix to TikTok: How AI Knows What You Like
 Baha Erdoğan

@@ -358,8 +358,18 @@ async function enhanceArticlePages() {
             const root = parse(html);
 
             const box = root.querySelector('.post-box');
-            const sidebar = root.querySelector('.col-md-4');
             if (!box) continue;
+
+            // Some legacy DE pages shipped a second .col-md-4 with a duplicate
+            // search/archive sidebar. Keep the first column (TOC lands here) and
+            // drop any extras so the layout does not stack two sidebars.
+            const articleRow = box.parentNode;
+            if (articleRow) {
+                const sideCols = articleRow.querySelectorAll(':scope > .col-md-4');
+                for (let j = 1; j < sideCols.length; j++) sideCols[j].remove();
+            }
+
+            const sidebar = root.querySelector('.col-md-4');
 
             const L = LBL[lang] || LBL.en;
 

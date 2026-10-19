@@ -24,6 +24,10 @@
     if (!grid) return;
 
     var cards = Array.prototype.slice.call(grid.querySelectorAll('.post-card'));
+    // The featured post sits above the grid and is not paged, but it must still
+    // answer to search and the category filter: it used to stay on screen next
+    // to "no results" for any query.
+    var featured = document.querySelector('.post-featured');
     var filterBtns = Array.prototype.slice.call(document.querySelectorAll('.blog-filter__btn'));
     var input = document.getElementById('blogFilterInput');
     var empty = document.getElementById('blogEmpty');
@@ -35,8 +39,9 @@
 
     // Cache each card's searchable text once rather than re-reading the DOM on
     // every keystroke.
-    cards.forEach(function (card) {
-      var badge = card.querySelector('.post-card__badge');
+    cards.concat(featured ? [featured] : []).forEach(function (card) {
+      // [data-cat]: the featured card's first badge is "Featured", not its category.
+      var badge = card.querySelector('.post-card__badge[data-cat]');
       card.setAttribute('data-category', badge ? (badge.getAttribute('data-cat') || '') : '');
       // Tags live in the article's sidebar widget, not in the card, so the
       // visible text alone never matched a tag query — "orchestration" returned
@@ -64,9 +69,12 @@
         card.hidden = visible > shown;
       });
 
-      var total = cards.filter(matches).length;
+      var featuredMatches = featured ? matches(featured) : false;
+      if (featured) featured.hidden = !featuredMatches;
+
+      var total = cards.filter(matches).length + (featuredMatches ? 1 : 0);
       if (empty) empty.hidden = total !== 0;
-      if (moreBtn) moreBtn.parentNode.hidden = total <= shown;
+      if (moreBtn) moreBtn.parentNode.hidden = cards.filter(matches).length <= shown;
     }
 
     filterBtns.forEach(function (btn) {
@@ -107,9 +115,13 @@
     }
 
     // Controls are inert until their handlers are bound, so they stay hidden
-    // for JS-off visitors and reveal only once they actually work.
-    Array.prototype.forEach.call(document.querySelectorAll('.js-only'), function (el) {
-      el.style.display = '';
+    // for JS-off visitors and reveal only once they actually work. The class is
+    // removed rather than `style.display = ''`: clearing an inline style that was
+    // never set left the stylesheet's `.js-only { display: none }` in force, so
+    // search, the filters and "Load more" were never shown and 11 of 18 posts
+    // could not be reached from this page.
+    Array.prototype.slice.call(document.querySelectorAll('.js-only')).forEach(function (el) {
+      el.classList.remove('js-only');
     });
 
     apply(true);
