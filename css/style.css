@@ -3120,114 +3120,6 @@ footer .credits a { color: var(--brand-ink); }
 .blog-hero { background: linear-gradient(135deg, #04211c 0%, #065f46 55%, var(--brand-2) 100%); }
 
 /*----------------------------------------------------------------------
-  Hero — typography-led, engraving motif
-----------------------------------------------------------------------*/
-
-.hero-modern {
-  position: relative;
-  display: flex;
-  align-items: center;
-  min-height: clamp(30rem, 74vh, 44rem);
-  padding: var(--space-2xl) 0 var(--space-xl);
-  background:
-    radial-gradient(70rem 42rem at 18% -12%, var(--brand-wash) 0%, transparent 62%),
-    var(--surface-page);
-  overflow: hidden;
-}
-
-/* Guilloché-style line engraving, the texture used on banknotes and share
-   certificates. Pure CSS: three sets of hairlines at different angles and
-   periods, so they interfere into a moiré rather than reading as stripes. Kept
-   near-invisible — it should register as texture, not pattern. */
-.hero-modern__engraving {
-  position: absolute;
-  inset: -20%;
-  pointer-events: none;
-  opacity: .35;
-  background-image:
-    repeating-linear-gradient(58deg,  var(--brand) 0 1px, transparent 1px 9px),
-    repeating-linear-gradient(-58deg, var(--brand-2) 0 1px, transparent 1px 13px),
-    repeating-linear-gradient(2deg,   var(--brand) 0 1px, transparent 1px 23px);
-  -webkit-mask-image: radial-gradient(58rem 40rem at 78% 44%, #000 0%, transparent 72%);
-          mask-image: radial-gradient(58rem 40rem at 78% 44%, #000 0%, transparent 72%);
-}
-
-:root[data-theme="dark"] .hero-modern__engraving { opacity: .32; }
-
-.hero-modern__inner { position: relative; z-index: 1; max-width: 62rem; }
-
-.hero-modern__eyebrow {
-  margin-bottom: var(--space-xs);
-  color: var(--brand-ink);
-  font-size: .82rem;
-  font-weight: 650;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-}
-
-.hero-modern__name {
-  margin: 0 0 var(--space-sm);
-  font-size: clamp(3rem, 1.6rem + 6vw, 6.5rem);
-  font-weight: 700;
-  line-height: .96;
-  letter-spacing: -0.045em;
-  color: var(--text);
-  text-wrap: balance;
-}
-
-.hero-modern__roles {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-xs);
-  margin-bottom: var(--space-md);
-  color: var(--text-muted);
-  font-size: clamp(1rem, .9rem + .4vw, 1.2rem);
-}
-
-/* Replaces the retyping animation: all three roles are present in the markup
-   from first paint, so there is no flash of raw comma-joined text and nothing
-   loops forever. */
-.hero-modern__sep {
-  width: 4px; height: 4px;
-  border-radius: 50%;
-  background: var(--brand);
-  opacity: .75;
-}
-
-.hero-modern__actions { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
-
-.hero-btn {
-  display: inline-flex;
-  align-items: center;
-  padding: .85rem 1.6rem;
-  border-radius: var(--radius-pill);
-  font-weight: 600;
-  font-size: .95rem;
-  border: 1px solid transparent;
-  transition: transform .25s var(--ease), box-shadow .25s var(--ease), background-color .2s ease;
-}
-
-.hero-btn--primary {
-  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-2) 100%);
-  color: #04140f;
-  box-shadow: 0 8px 24px var(--brand-glow);
-}
-
-.hero-btn--ghost { border-color: var(--border-strong); color: var(--text); }
-.hero-btn--ghost:hover { border-color: var(--brand-ink); color: var(--brand-ink); }
-.hero-btn:hover { transform: translateY(-2px); }
-.hero-btn--primary:hover { box-shadow: 0 14px 34px var(--brand-glow); color: #04140f; }
-
-/* The modern hero sits on a light surface, so the navbar can no longer assume
-   white text over a photograph. */
-.hero-modern ~ * .navbar-b.navbar-trans .nav-link,
-body:has(.hero-modern) .navbar-b.navbar-trans .nav-link,
-body:has(.hero-modern) .navbar-b.navbar-trans .navbar-brand { color: var(--text); }
-body:has(.hero-modern) .navbar-b.navbar-trans .theme-toggle { border-color: var(--border-strong); color: var(--text-muted); }
-body:has(.hero-modern) .navbar-toggler span { background-color: var(--text); }
-
-/*----------------------------------------------------------------------
   Breathing room
 ----------------------------------------------------------------------*/
 
@@ -3271,7 +3163,7 @@ section.route, .sect-4, .sect-pt4 { padding-top: var(--space-2xl); padding-botto
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-btn:hover, .card-blog:hover, .blog-preview-box:hover { transform: none; }
+  .card-blog:hover, .blog-preview-box:hover { transform: none; }
 }
 
 /*----------------------------------------------------------------------
@@ -3357,49 +3249,6 @@ section.route, .sect-4, .sect-pt4 { padding-top: var(--space-2xl); padding-botto
   .cookie-content, #cookie-banner .cookie-content { flex-direction: column; align-items: stretch; }
   .cookie-buttons { justify-content: stretch; }
   .cookie-btn { flex: 1 1 auto; text-align: center; justify-content: center; }
-}
-
-/*----------------------------------------------------------------------
-  Hero-modern targeted fixes
-  
-  .hero-modern uses the new token-based surface (--surface-page / --brand-wash),
-  NOT the dark photo overlay that the old .intro used. The old rules
-  .intro .intro-title { color:#fff } and @media(max-width:768px){display:none}
-  were written for the photo hero and must not bleed into the modern layout.
-----------------------------------------------------------------------*/
-
-/* Force the modern hero name to use the page text token in both themes.
-   Specificity 0,3,0 beats the old 0,2,0 rule and the dark-theme 0,2,0 rule. */
-.hero-modern .hero-modern__name,
-.hero-modern .intro-title {
-  color: var(--text) !important;
-}
-
-/* The same photo-hero mobile rules gave the name a dark drop shadow
-   (rgba(0,0,0,.5) 2px 2px 4px), which smeared the dark text on the light
-   surface, and a 2.5rem size that out-ranked the clamp() scale below 768px
-   (the name rendered at 32px). Desktop keeps its current size. */
-.hero-modern .hero-modern__name,
-.hero-modern .intro-title,
-.hero-modern .intro-subtitle { text-shadow: none; }
-
-@media (max-width: 768px) {
-  .hero-modern .hero-modern__name { font-size: clamp(3rem, 1.6rem + 6vw, 6.5rem); }
-}
-
-/* Un-hide the name on mobile. The old rule was written assuming a duplicate
-   name in the navbar, which the modern hero does not have. */
-@media (max-width: 768px) {
-  .hero-modern .hero-modern__name,
-  .hero-modern .intro-title {
-    display: block !important;
-  }
-}
-
-/* On very small screens the clamp floor (3rem) is fine; reduce letter-spacing
-   slightly so the name fits on one line. */
-@media (max-width: 480px) {
-  .hero-modern__name { letter-spacing: -0.06em; }
 }
 
 /* Blog-toolbar mobile: reduce sticky offset to match the collapsed navbar height. */
@@ -3571,16 +3420,8 @@ section.route, .sect-4, .sect-pt4 { padding-top: var(--space-2xl); padding-botto
    nav row was full (every article page at desktop widths). */
 .theme-toggle { flex: 0 0 38px; }
 
-/* Each separator dot is its own flex item, so when the roles wrapped on a phone
-   a dot was stranded at the end of a line. Below the width where all three fit
-   on one line, they stack and the dots go. */
-@media (max-width: 575.98px) {
-  .hero-modern__roles { flex-direction: column; align-items: flex-start; gap: .2rem; }
-  .hero-modern__sep { display: none; }
-}
-
 /* Two template blues the identity layer missed: the active/hover underline in
    the solid navbar (#48abec) and the homepage preview-card header band
-   (#48abec -> #667eea). Same gradient the hero's primary button uses. */
+   (#48abec -> #667eea). Same gradient as the other brand fills. */
 .navbar-b.navbar-reduce .nav-link:before { background-color: var(--brand); }
 .blog-preview-header { background: linear-gradient(135deg, var(--brand) 0%, var(--brand-2) 100%); }

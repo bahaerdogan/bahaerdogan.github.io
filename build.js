@@ -565,19 +565,24 @@ async function applyThemeSystem() {
 }
 
 /**
- * Hero rework: typography-led, no photograph, no typing animation.
+ * Photo hero: full-screen landscape, dark overlay, Typed.js cycling the roles.
  *
- * The old hero layered white text over a fixed-attachment AI-generated
- * landscape, with Typed.js retyping "Computer Engineer / AI R&D Specialist /
- * Problem Solver" on a loop. Three problems: contrast depended on whichever
- * pixels sat behind the text, the raw comma-joined string was visible until
- * Typed.js initialised (a flash plus a layout shift), and an infinite animation
- * is a reduced-motion liability. The roles are now static markup.
+ * Between 2026-10-11 and 2026-10-20 the homepage used a typography-only
+ * `.hero-modern` instead. The photo version is the preferred look, so this
+ * rewrites either variant back to it, keeping what the rework fixed:
+ *   - the comma-joined roles stay hidden until Typed.js runs (.text-slider-items
+ *     is display:none), and main.js reads them from that markup;
+ *   - reduced-motion users get the roles as static text (main.js);
+ *   - the hero image is preloaded per breakpoint, so phones fetch only the
+ *     portrait crop the stylesheet swaps in below 769px instead of both.
  *
- * Idempotent: re-running finds `.hero-modern` and rewrites it from the same
+ * Idempotent: re-running rebuilds the hero and its preloads from the same
  * source values rather than appending.
  */
-async function modernizeHero() {
+const HERO_DESKTOP_IMG = 'img/hero-home.webp';
+const HERO_MOBILE_IMG = 'img/mainphotomobile.webp'; // set in style.css @media (max-width: 768px)
+
+async function restorePhotoHero() {
     const { parse } = require('node-html-parser');
     let touched = 0;
 
@@ -589,8 +594,6 @@ async function modernizeHero() {
 
         const name = (root.querySelector('.intro-title')?.text || 'Baha Erdoğan').trim();
 
-        // Roles come from whatever the slider was cycling, so the copy stays the
-        // author's rather than something invented here.
         const sliderText = root.querySelector('.text-slider-items')?.text
             || root.querySelector('.hero-modern__roles')?.getAttribute('data-roles')
             || 'Computer Engineer,AI R&D Specialist,Problem Solver';
@@ -599,36 +602,44 @@ async function modernizeHero() {
         const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
             .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-        intro.setAttribute('class', 'route intro hero-modern');
-        intro.removeAttribute('style'); // drops background-image:url(hero-home.webp)
+        intro.setAttribute('class', 'route bg-image intro');
+        intro.setAttribute('style', `background-image:url('${HERO_DESKTOP_IMG}')`);
 
         intro.set_content(
-            '<div class="hero-modern__engraving" aria-hidden="true"></div>' +
-            '<div class="container hero-modern__inner">' +
-                `<p class="hero-modern__eyebrow">${esc(roles[0] || '')}</p>` +
-                `<h1 class="intro-title hero-modern__name">${esc(name)}</h1>` +
-                `<p class="hero-modern__roles" data-roles="${esc(roles.join(','))}">` +
-                    roles.map((r) => `<span class="hero-modern__role">${esc(r)}</span>`)
-                         .join('<span class="hero-modern__sep" aria-hidden="true"></span>') +
+            '<div class="overlay-itro"></div>' +
+            '<div class="display-table intro-content"><div class="table-cell"><div class="container">' +
+                `<h1 class="intro-title mb-4">${esc(name)}</h1>` +
+                '<p class="intro-subtitle">' +
+                    `<span class="text-slider-items">${esc(roles.join(','))}</span>` +
+                    '<span class="text-slider"></span>' +
                 '</p>' +
-                '<div class="hero-modern__actions">' +
-                    '<a class="hero-btn hero-btn--primary" href="BlogPosts.html">Read the writing</a>' +
-                    '<a class="hero-btn hero-btn--ghost" href="#about">About me</a>' +
-                '</div>' +
-            '</div>'
+            '</div></div></div>'
         );
 
+        // A CSS background is invisible to the preload scanner, so without these
+        // the LCP image would only start downloading once style.min.css parsed.
+        root.querySelectorAll('link[rel="preload"][as="image"]')
+            .filter((l) => /hero-home\.webp|mainphotomobile/.test(l.getAttribute('href') || ''))
+            .forEach((l) => l.remove());
+        const firstSheet = root.querySelector('head link[rel="stylesheet"]');
+        const preloads =
+            `<link rel="preload" as="image" href="${HERO_DESKTOP_IMG}" media="(min-width: 769px)" fetchpriority="high">` +
+            `<link rel="preload" as="image" href="${HERO_MOBILE_IMG}" media="(max-width: 768px)" fetchpriority="high">`;
+        if (firstSheet) firstSheet.insertAdjacentHTML('beforebegin', preloads);
+        else root.querySelector('head')?.insertAdjacentHTML('beforeend', preloads);
+
         let out = root.toString();
-        // Typed.js only ever drove the hero; nothing else on the page uses it.
-        out = out.replace(/\s*<script[^>]*lib\/typed\/typed\.min\.js[^>]*><\/script>/gi, '');
-        // Drop the now-unused hero image preload.
-        out = out.replace(/<link[^>]*hero-home\.webp[^>]*>\s*/gi, '');
+        // Typed.js drives the hero; main.js must load after it.
+        if (!/lib\/typed\/typed\.min\.js/.test(out)) {
+            out = out.replace(/(<script[^>]*src=["']js\/main\.min\.js["'])/i,
+                '<script defer="defer" src="lib/typed/typed.min.js"></script>$1');
+        }
 
         await writeFileAsync(file, out, 'utf8');
         touched++;
     }
 
-    console.log(`  hero modernised on ${touched} page(s)`);
+    console.log(`  photo hero on ${touched} page(s)`);
 }
 
 // Optimize and minify HTML files
@@ -1739,8 +1750,8 @@ async function build() {
         console.log('Enhancing article pages (TOC, share, prev/next, related)...');
         await enhanceArticlePages();
 
-        console.log('Modernising hero...');
-        await modernizeHero();
+        console.log('Restoring photo hero...');
+        await restorePhotoHero();
 
         console.log('Applying theme system (font preload, theme bootstrap, toggle)...');
         await applyThemeSystem();

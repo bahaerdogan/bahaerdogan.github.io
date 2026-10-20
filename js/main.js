@@ -126,12 +126,21 @@
 	const initTextSlider = () => {
 		if ($('.text-slider').length === 1) {
 			try {
-				var strings = [
-					'Computer Engineer',
-					'AI Enthusiast', 
-					'Problem Solver'
-				];
-				
+				// Roles come from the markup so the typed copy matches what
+				// crawlers read in .text-slider-items.
+				var strings = $('.text-slider-items').text().split(',')
+					.map(function(s) { return s.trim(); })
+					.filter(Boolean);
+				if (!strings.length) {
+					strings = ['Computer Engineer', 'AI R&D Specialist', 'Problem Solver'];
+				}
+
+				// No endless retyping for reduced-motion users: show the roles once.
+				if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+					$('.text-slider').text(strings.join(' · ')).css('white-space', 'normal').show();
+					return;
+				}
+
 				// Destroy existing instance if it exists
 				if (window.typedInstance) {
 					window.typedInstance.destroy();
