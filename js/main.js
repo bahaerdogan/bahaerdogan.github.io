@@ -58,31 +58,20 @@
 
 	// Enhanced smooth scrolling navigation
 	$('a.js-scroll').on("click", function (e) {
-		e.preventDefault();
-		const href = $(this).attr('href');
-		
-		// If it's an external link (contains index.html)
-		if (href.includes('index.html')) {
-			// If it has a hash, we need to handle the scroll after page load
-			if (href.includes('#')) {
-				const [url, hash] = href.split('#');
-				window.location.href = url;
-				// The target page will handle the scroll to the section
-			} else {
-				// Just a regular link to index.html
-				window.location.href = href;
-			}
-		} else {
-			// Internal page scrolling
-			if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
-				var target = $(this.hash);
-				target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
-				if (target.length) {
-					$('html, body').animate({
-						scrollTop: (target.offset().top - navHeight + 5)
-					}, 1000, "easeInOutExpo");
-					return false;
-				}
+		if (!this.hash) return;
+		const samePage =
+			location.pathname.replace(/^\//, '').replace(/^index\.html$/, '') ===
+			this.pathname.replace(/^\//, '').replace(/^index\.html$/, '') &&
+			location.hostname === this.hostname;
+		if (samePage) {
+			var target = $(this.hash);
+			target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+			if (target.length) {
+				e.preventDefault();
+				$('html, body').animate({
+					scrollTop: (target.offset().top - navHeight + 5)
+				}, 1000, "easeInOutExpo");
+				return false;
 			}
 		}
 	});

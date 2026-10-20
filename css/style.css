@@ -2474,14 +2474,26 @@ footer .credits a {
 ======================================*/
 
 .blog-wrapper .col-md-4 {
-  position: sticky;
-  top: 88px;
-  align-self: flex-start;
-  max-height: calc(100vh - 100px);
-  overflow-y: auto;
+  position: static;
+  max-height: none;
+  overflow: visible;
 }
 
-.widget-toc { position: static; }
+.widget-toc {
+  position: sticky;
+  top: 90px;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  margin-bottom: 0;
+}
+
+@media (max-width: 767.98px) {
+  .widget-toc {
+    position: static;
+    max-height: none;
+    overflow: visible;
+  }
+}
 
 .toc-list { list-style: none; padding-left: 0; margin: 0; border-left: 2px solid #e6eaef; }
 
@@ -2597,24 +2609,26 @@ a.post-nav__link:hover {
 
 /* --- Related --- */
 
-.post-related { margin-top: 46px; }
+.post-related { margin-top: 56px; }
 
 .post-related__title {
-  margin-bottom: 20px;
-  font-size: 1.4rem;
+  margin-bottom: 24px;
+  font-size: 1.5rem;
   font-weight: 700;
   color: #16202a;
 }
 
-/* The article column is narrower than the page, so related cards sit two-up and
-   drop to one on small screens rather than reusing the three-column track. */
-.post-grid--related { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+/* Related articles sit outside the 2-column article+sidebar row and span the
+   full container width in a 3-column grid on desktop. */
+.post-grid--related { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+
+@media (max-width: 991px) { .post-grid--related { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; } }
 
 @media (max-width: 640px) { .post-grid--related { grid-template-columns: minmax(0, 1fr); } }
 
-.post-grid--related .post-card__body { padding: 16px 16px 14px; }
-.post-grid--related .post-card__title { font-size: 1rem; }
-.post-grid--related .post-card__excerpt { display: none; }
+.post-grid--related .post-card__body { padding: 20px 20px 18px; }
+.post-grid--related .post-card__title { font-size: 1.08rem; }
+.post-grid--related .post-card__excerpt { display: block; }
 
 /*======================================================================
 //--//-->   2026 DESIGN SYSTEM
@@ -3424,4 +3438,349 @@ section.route, .sect-4, .sect-pt4 { padding-top: var(--space-2xl); padding-botto
    the solid navbar (#48abec) and the homepage preview-card header band
    (#48abec -> #667eea). Same gradient as the other brand fills. */
 .navbar-b.navbar-reduce .nav-link:before { background-color: var(--brand); }
-.blog-preview-header { background: linear-gradient(135deg, var(--brand) 0%, var(--brand-2) 100%); }
+
+/*----------------------------------------------------------------------
+  1. Navbar Theme Toggle & Language Dropdown Cohesion
+----------------------------------------------------------------------*/
+
+/* Position .theme-toggle on the far right after .navbar-collapse on desktop,
+   and right before the hamburger .navbar-toggler on mobile, so it never floats
+   as a stray circle next to the "Baha Erdoğan" brand logo. */
+@media (min-width: 1200px) {
+  #mainNav .container {
+    display: flex;
+    align-items: center;
+  }
+  #mainNav .navbar-collapse {
+    order: 1;
+  }
+  #mainNav .theme-toggle {
+    order: 2;
+    margin-left: 0.65rem;
+  }
+}
+
+@media (max-width: 1199.98px) {
+  #mainNav .theme-toggle {
+    margin-left: auto;
+    margin-right: 0.5rem;
+  }
+}
+
+.navbar-b .dropdown-menu {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg);
+  padding: 0.4rem;
+  margin-top: 0.6rem;
+}
+
+.navbar-b .dropdown-menu .dropdown-item {
+  color: var(--text);
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.navbar-b .dropdown-menu .dropdown-item:hover,
+.navbar-b .dropdown-menu .dropdown-item:focus {
+  background-color: var(--brand-wash);
+  color: var(--brand-ink);
+}
+
+.navbar-b .dropdown-menu .dropdown-item.active {
+  background-color: rgba(16, 185, 129, 0.16);
+  color: var(--brand-ink);
+  font-weight: 600;
+}
+
+/*----------------------------------------------------------------------
+  2. Unified Blog Header Banner (.intro-single & .intro-eyebrow)
+----------------------------------------------------------------------*/
+
+.intro-single {
+  height: 280px;
+}
+
+.intro-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 16px;
+  margin-bottom: 14px;
+  border-radius: 999px;
+  background: rgba(16, 185, 129, 0.16);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: #34d399;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.intro-single .breadcrumb {
+  margin-bottom: 0;
+  padding: 0.25rem 0;
+  flex-wrap: wrap;
+}
+
+/*----------------------------------------------------------------------
+  3. Cohesive Dark-Glass Form Inputs & Search Boxes
+----------------------------------------------------------------------*/
+
+.form-control,
+.input-mf,
+.comment-system .input-mf,
+.blog-search__input,
+.search-input,
+#search-input {
+  background-color: #111a1e;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  color: #e5e7eb;
+  border-radius: 10px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.blog-search__input {
+  border-radius: 999px;
+}
+
+.form-control::placeholder,
+.input-mf::placeholder,
+.blog-search__input::placeholder,
+.search-input::placeholder,
+#search-input::placeholder {
+  color: #6b7280;
+  opacity: 1;
+}
+
+.form-control:focus,
+.input-mf:focus,
+.comment-system .input-mf:focus,
+.blog-search__input:focus,
+.search-input:focus,
+#search-input:focus {
+  background-color: #111a1e;
+  color: #e5e7eb;
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+  outline: none;
+}
+
+:root[data-theme="light"] .form-control,
+:root[data-theme="light"] .input-mf,
+:root[data-theme="light"] .comment-system .input-mf,
+:root[data-theme="light"] .blog-search__input,
+:root[data-theme="light"] .search-input,
+:root[data-theme="light"] #search-input {
+  background-color: var(--surface-sunken);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: var(--text);
+}
+
+:root[data-theme="light"] .form-control:focus,
+:root[data-theme="light"] .input-mf:focus,
+:root[data-theme="light"] .comment-system .input-mf:focus,
+:root[data-theme="light"] .blog-search__input:focus,
+:root[data-theme="light"] .search-input:focus,
+:root[data-theme="light"] #search-input:focus {
+  background-color: var(--surface);
+  color: var(--text);
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+}
+
+.sidebar-search .input-group {
+  display: flex;
+  gap: 8px;
+}
+
+.sidebar-search #search-input {
+  border-radius: 10px;
+}
+
+.sidebar-search .btn-search {
+  background-color: rgba(16, 185, 129, 0.16);
+  border: 1px solid rgba(16, 185, 129, 0.28);
+  color: var(--brand-ink);
+  border-radius: 10px;
+  padding: 0.5rem 0.9rem;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.sidebar-search .btn-search:hover {
+  background-color: var(--brand);
+  border-color: var(--brand);
+  color: #04140f;
+}
+
+/*----------------------------------------------------------------------
+  4. Explore More Blog Posts Cards (Subtle Dark Emerald Gradient)
+----------------------------------------------------------------------*/
+
+.blog-preview-header {
+  height: 58px;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.18), rgba(6, 78, 59, 0.35));
+  border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.blog-category {
+  background: rgba(16, 185, 129, 0.14);
+  color: var(--brand-ink);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  box-shadow: none;
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.blog-preview-box::before {
+  background: linear-gradient(90deg, var(--brand), var(--brand-2));
+}
+
+/*----------------------------------------------------------------------
+  5. Seamless Section Transition (Voluntary -> Contact / Footer)
+----------------------------------------------------------------------*/
+
+.footer-paralax,
+.footer-paralax.sect-mt4 {
+  margin-top: 0;
+  padding-top: 1rem;
+  background-image: none !important;
+  background-color: var(--surface-page);
+}
+
+.footer-paralax .overlay-mf {
+  background-color: var(--surface-page);
+  opacity: 1;
+}
+
+.contact-mf {
+  margin-top: 0;
+}
+
+.footer-paralax footer,
+.footer-paralax footer .credits a {
+  color: var(--text-muted);
+}
+
+/*----------------------------------------------------------------------
+  6. About Me Card Alignment & Pill Links
+----------------------------------------------------------------------*/
+
+.about-profile {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-right: 0.5rem;
+}
+
+.about-profile__header {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.about-mf .about-img {
+  margin-bottom: 0;
+  flex: 0 0 112px;
+}
+
+.about-mf .about-img img {
+  margin-left: 0;
+  width: 112px;
+  height: 112px;
+  object-fit: cover;
+  border-radius: 16px !important;
+  border: 1px solid rgba(16, 185, 129, 0.28);
+}
+
+.about-info {
+  padding-bottom: 0;
+}
+
+.about-info p {
+  margin-bottom: 0.25rem;
+}
+
+.about-info__name {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.25;
+}
+
+.about-info__role {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--brand-ink);
+}
+
+.about-info__org {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 0 !important;
+}
+
+.about-links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.about-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.6rem 0.9rem;
+  border-radius: 12px;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.24);
+  color: var(--text);
+  font-size: 0.86rem;
+  font-weight: 500;
+  text-decoration: none;
+  min-width: 0;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.about-pill:first-child {
+  grid-column: 1 / -1;
+}
+
+.about-pill .icon {
+  flex: 0 0 auto;
+  color: var(--brand-ink);
+  font-size: 1rem;
+}
+
+.about-pill span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.about-pill:hover,
+.about-pill:focus {
+  background: rgba(16, 185, 129, 0.16);
+  border-color: #10b981;
+  color: var(--brand-ink);
+  transform: translateY(-1px);
+  opacity: 1;
+}
+
+@media (max-width: 576px) {
+  .about-profile__header {
+    flex-direction: column;
+    text-align: center;
+  }
+  .about-links {
+    grid-template-columns: 1fr;
+  }
+}

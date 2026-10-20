@@ -232,10 +232,10 @@ function renderCard(post, lang, { dims, eager = false } = {}) {
   `</article>`;
 }
 
-/** The newest N articles, for the home page. */
+/** The newest N articles, for the home page (below the fold, so lazy-loaded). */
 function renderHomeGrid(posts, lang, dims, limit = 6) {
   return `<div class="post-grid">` +
-    posts.slice(0, limit).map((p, i) => renderCard(p, lang, { dims, eager: i === 0 })).join('') +
+    posts.slice(0, limit).map((p) => renderCard(p, lang, { dims, eager: false })).join('') +
   `</div>`;
 }
 

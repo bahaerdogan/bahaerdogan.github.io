@@ -311,6 +311,223 @@ async function renderBlogSurfaces() {
 }
 
 /**
+ * Unify all blog post pages onto a single canonical detail layout, header
+ * banner (.intro-single with subtle eyebrow badge + breadcrumb), featured image
+ * (.post-thumb), .post-meta with sole <h1>, and 2-column .row (.col-md-8 +
+ * .col-md-4).
+ */
+async function unifyBlogTemplates() {
+    const B = require('./tools/blog-render.js');
+    const { parse } = require('node-html-parser');
+    const sharp = require('sharp');
+    const pages = collectPages();
+
+    const HOME_LBL = { en: 'Home', tr: 'Ana Sayfa', de: 'Startseite' };
+    const SEARCH_LBL = {
+        en: { title: 'Search', placeholder: 'Search for...' },
+        tr: { title: 'Ara', placeholder: 'Blogda ara...' },
+        de: { title: 'Suche', placeholder: 'Suchen...' },
+    };
+    const RECENT_LBL = { en: 'Recent Posts', tr: 'Son Yazılar', de: 'Neueste Beiträge' };
+    const TAGS_LBL = { en: 'Tags', tr: 'Etiketler', de: 'Schlagwörter' };
+
+    const dimCache = new Map();
+    const getDim = async (relPath) => {
+        if (dimCache.has(relPath)) return dimCache.get(relPath);
+        try {
+            const m = await sharp(relPath).metadata();
+            const d = { width: m.width || 1536, height: m.height || 1024 };
+            dimCache.set(relPath, d);
+            return d;
+        } catch {
+            return { width: 1536, height: 1024 };
+        }
+    };
+
+    let unified = 0;
+    for (const [file, meta] of pages) {
+        if (NOT_ARTICLES.has(file)) continue;
+        const html = await readFileAsync(file, 'utf8');
+        const root = parse(html);
+
+        const htmlEl = root.querySelector('html');
+        if (htmlEl) htmlEl.setAttribute('lang', meta.lang);
+
+        const bodyEl = root.querySelector('body');
+        if (bodyEl && !bodyEl.getAttribute('id')) bodyEl.setAttribute('id', 'page-top');
+
+        const head = root.querySelector('head');
+        if (head) {
+            // Remove legacy inline <style> tags on blog post pages so all blog
+            // pages rely on the unified stylesheet.
+            head.querySelectorAll('style').forEach((s) => s.remove());
+            if (!head.querySelector('link[href*="bootstrap.min.css"]')) {
+                const styleLink = head.querySelector('link[href*="style.min.css"]');
+                const bootTag = '<link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">';
+                if (styleLink) styleLink.insertAdjacentHTML('beforebegin', bootTag);
+                else head.insertAdjacentHTML('beforeend', bootTag);
+            }
+        }
+
+        // Ensure #mainNav has the collapsible menu container so normaliseNavigation
+        // and updateI18nHeadsAndToggle can populate every article's navbar.
+        const navContainer = root.querySelector('#mainNav .container');
+        if (navContainer && !navContainer.querySelector('#navbarDefault')) {
+            navContainer.insertAdjacentHTML('beforeend',
+                '<button class="collapsed navbar-toggler" type="button" aria-label="Toggle navigation" aria-controls="navbarDefault" aria-expanded="false" data-target="#navbarDefault" data-toggle="collapse"><span></span> <span></span> <span></span></button>' +
+                '<div class="collapse justify-content-end navbar-collapse" id="navbarDefault"><ul class="navbar-nav"></ul></div>'
+            );
+        }
+
+        // Unify .intro-single header banner: replace generic "BLOG DETAILS" or
+        // duplicate <h1> with a subtle eyebrow badge + accurate breadcrumb.
+        const introSingle = root.querySelector('.intro-single');
+        const homeLabel = HOME_LBL[meta.lang] || HOME_LBL.en;
+        const eyebrow = meta.categoryLabel ? `Blog · ${meta.categoryLabel}` : 'Blog';
+        const introInner =
+            `<div class="overlay-mf"></div>` +
+            `<div class="display-table intro-content"><div class="table-cell"><div class="container">` +
+                `<span class="intro-eyebrow">${B.esc(eyebrow)}</span>` +
+                `<ol class="breadcrumb d-flex justify-content-center">` +
+                    `<li class="breadcrumb-item"><a href="/">${B.esc(homeLabel)}</a></li>` +
+                    `<li class="breadcrumb-item"><a href="BlogPosts.html">Blog</a></li>` +
+                    `<li class="breadcrumb-item active">${B.esc(meta.title)}</li>` +
+                `</ol>` +
+            `</div></div></div>`;
+
+        if (introSingle) {
+            introSingle.setAttribute('class', 'bg-image route intro intro-single');
+            introSingle.setAttribute('style', "background-image:url('img/hero-article.webp')");
+            introSingle.set_content(introInner);
+        }
+
+        // Normalize .blog-wrapper columns (.col-lg-8.col-md-12 -> .col-md-8, .col-md-12.col-lg-4 -> .col-md-4)
+        const blogWrapper = root.querySelector('.blog-wrapper');
+        if (blogWrapper) {
+            const box = blogWrapper.querySelector('.post-box');
+            if (box && box.parentNode) {
+                box.parentNode.setAttribute('class', 'col-md-8');
+            }
+            const legacySide = blogWrapper.querySelector('.col-lg-4');
+            if (legacySide) {
+                legacySide.setAttribute('class', 'col-md-4');
+            }
+
+            // Ensure .post-box has .post-meta with <h1 class="article-title"> and .post-thumb
+            if (box) {
+                let postMeta = box.querySelector('.post-meta');
+                if (!postMeta) {
+                    const metaHtml =
+                        `<div class="post-meta">` +
+                            `<h1 class="article-title">${B.esc(meta.title)}</h1>` +
+                            `<ul>` +
+                                `<li><svg aria-hidden="true" class="icon" fill="none" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" xmlns="http://www.w3.org/2000/svg"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> <span class="tag">Baha Erdoğan</span></li>` +
+                                `<li><svg aria-hidden="true" class="icon" fill="none" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" xmlns="http://www.w3.org/2000/svg"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" x2="7.01" y1="7" y2="7"></line></svg> <span class="tag">${B.esc(meta.categoryLabel || 'Technology')}</span></li>` +
+                            `</ul>` +
+                        `</div>`;
+                    box.insertAdjacentHTML('afterbegin', metaHtml);
+                } else {
+                    const titleEl = postMeta.querySelector('.article-title, h1, h2');
+                    if (titleEl && titleEl.tagName.toLowerCase() !== 'h1') {
+                        titleEl.replaceWith(parse(`<h1 class="article-title">${titleEl.innerHTML}</h1>`));
+                    }
+                }
+
+                let postThumb = box.querySelector('.post-thumb');
+                const relImg = (meta.image || '').replace(`${BASE_URL}/`, '');
+                const imgFile = relImg && fs.existsSync(relImg) ? relImg : 'img/AgenticAi1.webp';
+                const dim = await getDim(imgFile);
+                if (!postThumb) {
+                    const thumbHtml =
+                        `<div class="post-thumb">` +
+                            `<img alt="${B.esc(meta.title)}" class="img-fluid" decoding="async" fetchpriority="high" data-no-lazy height="${dim.height}" src="${B.esc(imgFile)}" width="${dim.width}">` +
+                        `</div>`;
+                    box.insertAdjacentHTML('afterbegin', thumbHtml);
+                } else {
+                    const img = postThumb.querySelector('img');
+                    if (img) {
+                        if (!(img.getAttribute('alt') || '').trim()) img.setAttribute('alt', meta.title);
+                        img.setAttribute('decoding', 'async');
+                        img.setAttribute('fetchpriority', 'high');
+                        img.setAttribute('data-no-lazy', '');
+                        img.removeAttribute('loading');
+                        if (!img.getAttribute('width') || !img.getAttribute('height')) {
+                            img.setAttribute('width', String(dim.width));
+                            img.setAttribute('height', String(dim.height));
+                        }
+                    }
+                }
+            }
+
+            // Ensure .blog-wrapper .row has a .col-md-4 sidebar with Search, Recent Posts, and Tags
+            const row = blogWrapper.querySelector('.container > .row');
+            const S = SEARCH_LBL[meta.lang] || SEARCH_LBL.en;
+            const R = RECENT_LBL[meta.lang] || RECENT_LBL.en;
+            const T = TAGS_LBL[meta.lang] || TAGS_LBL.en;
+            const defaultTags = meta.lang === 'tr'
+                ? ['Yapay Zekâ', 'Makine Öğrenimi', 'Teknoloji', 'Veri Bilimi', 'İnovasyon']
+                : meta.lang === 'de'
+                    ? ['Künstliche Intelligenz', 'Machine Learning', 'Technologie']
+                    : ['Artificial Intelligence', 'Machine Learning', 'Technology', 'Data Science', 'AI'];
+            const tagItems = (meta.tags && meta.tags.length ? meta.tags : defaultTags)
+                .map((t) => `<li><span class="tag">${B.esc(t)}</span></li>`).join('');
+            const searchWidgetHtml =
+                `<div class="widget-sidebar sidebar-search">` +
+                    `<h3 class="sidebar-title">${B.esc(S.title)}</h3>` +
+                    `<div class="sidebar-content"><form id="search-form"><div class="input-group">` +
+                        `<input class="form-control" id="search-input" aria-label="${B.esc(S.placeholder)}" placeholder="${B.esc(S.placeholder)}">` +
+                        `<span class="input-group-btn"><button class="btn btn-search btn-secondary" type="submit" aria-label="${B.esc(S.title)}"><svg aria-hidden="true" class="icon" fill="none" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8"></circle><line x1="21" x2="16.65" y1="21" y2="16.65"></line></svg></button></span>` +
+                    `</div></form></div>` +
+                `</div>`;
+            const tagsWidgetHtml =
+                `<div class="widget-sidebar widget-tags"><h3 class="sidebar-title">${B.esc(T)}</h3><div class="sidebar-content"><ul>${tagItems}</ul></div></div>`;
+
+            if (row && !row.querySelector('.col-md-4')) {
+                const sidebarHtml =
+                    `<div class="col-md-4">` +
+                        searchWidgetHtml +
+                        `<div class="widget-sidebar"><h3 class="sidebar-title">${B.esc(R)}</h3><div class="sidebar-content"><ul class="list-sidebar"></ul></div></div>` +
+                        tagsWidgetHtml +
+                    `</div>`;
+                row.insertAdjacentHTML('beforeend', sidebarHtml);
+            } else if (row) {
+                const sideCol = row.querySelector('.col-md-4');
+                if (sideCol && !sideCol.querySelector('.sidebar-search')) {
+                    sideCol.insertAdjacentHTML('afterbegin', searchWidgetHtml);
+                }
+                if (sideCol && !sideCol.querySelector('.widget-tags')) {
+                    const toc = sideCol.querySelector('.widget-toc');
+                    if (toc) toc.insertAdjacentHTML('beforebegin', tagsWidgetHtml);
+                    else sideCol.insertAdjacentHTML('beforeend', tagsWidgetHtml);
+                }
+            }
+        }
+
+        // Remove legacy template contact form / fake phone number inside article footers
+        const footerParalax = root.querySelector('.footer-paralax');
+        if (footerParalax) {
+            const legacyContact = footerParalax.querySelector('.contact-mf');
+            if (legacyContact) {
+                const parentContainer = legacyContact.closest('.container');
+                if (parentContainer && !parentContainer.querySelector('footer')) parentContainer.remove();
+                else legacyContact.remove();
+            }
+            const credits = footerParalax.querySelector('.credits');
+            if (credits) credits.set_content('');
+        }
+
+        // Normalize Leave a Reply & Comments wrapper column classes outside .blog-wrapper
+        root.querySelectorAll('.col-md-8.offset-md-2').forEach((el) => {
+            el.setAttribute('class', 'col-lg-8 col-md-10 mx-auto');
+        });
+
+        await writeFileAsync(file, root.toString(), 'utf8');
+        unified++;
+    }
+    console.log(`  unified blog template structure across ${unified} article pages`);
+}
+
+/**
  * Article page furniture: table of contents, share links, previous/next and
  * related articles.
  *
@@ -326,9 +543,9 @@ async function enhanceArticlePages() {
     const { categoryLabel } = require('./tools/site-meta.js');
 
     const LBL = {
-        en: { toc: 'On this page', share: 'Share', copy: 'Copy link', copied: 'Link copied', prev: 'Previous', next: 'Next', related: 'Related articles' },
-        tr: { toc: 'Bu sayfada', share: 'Paylaş', copy: 'Bağlantıyı kopyala', copied: 'Bağlantı kopyalandı', prev: 'Önceki', next: 'Sonraki', related: 'İlgili yazılar' },
-        de: { toc: 'Auf dieser Seite', share: 'Teilen', copy: 'Link kopieren', copied: 'Link kopiert', prev: 'Zurück', next: 'Weiter', related: 'Verwandte Artikel' },
+        en: { toc: 'On this page', share: 'Share', copy: 'Copy link', copied: 'Link copied', prev: 'Previous', next: 'Next', related: 'Related articles', recent: 'Recent Posts' },
+        tr: { toc: 'Bu sayfada', share: 'Paylaş', copy: 'Bağlantıyı kopyala', copied: 'Bağlantı kopyalandı', prev: 'Önceki', next: 'Sonraki', related: 'İlgili yazılar', recent: 'Son Yazılar' },
+        de: { toc: 'Auf dieser Seite', share: 'Teilen', copy: 'Link kopieren', copied: 'Link kopiert', prev: 'Zurück', next: 'Weiter', related: 'Verwandte Artikel', recent: 'Neueste Beiträge' },
     };
 
     // Turkish letters must be mapped before NFD. `ı` (U+0131) has no canonical
@@ -351,10 +568,15 @@ async function enhanceArticlePages() {
         const posts = B.collectPosts(lang);
         if (posts.length < 2) continue;
         const dims = await B.probeDims(posts);
+        const recentPosts = posts.slice(0, 5);
 
-        for (let i = 0; i < posts.length; i++) {
-            const post = posts[i];
-            const html = await readFileAsync(post.file, 'utf8');
+        // Also include noindexed articles of this language for sidebar/recent-post cleanup
+        const allLangFiles = glob.sync('*.html').filter((f) => !NOT_ARTICLES.has(f) && langOf(f) === lang);
+
+        for (const file of allLangFiles) {
+            const idx = posts.findIndex((p) => p.file === file);
+            const post = idx >= 0 ? posts[idx] : readMeta(file, await readFileAsync(file, 'utf8'));
+            const html = await readFileAsync(file, 'utf8');
             const root = parse(html);
 
             const box = root.querySelector('.post-box');
@@ -363,18 +585,45 @@ async function enhanceArticlePages() {
             // Some legacy DE pages shipped a second .col-md-4 with a duplicate
             // search/archive sidebar. Keep the first column (TOC lands here) and
             // drop any extras so the layout does not stack two sidebars.
-            const articleRow = box.parentNode;
+            const articleRow = box.parentNode?.parentNode;
             if (articleRow) {
                 const sideCols = articleRow.querySelectorAll(':scope > .col-md-4');
                 for (let j = 1; j < sideCols.length; j++) sideCols[j].remove();
             }
 
             const sidebar = root.querySelector('.col-md-4');
-
             const L = LBL[lang] || LBL.en;
 
+            if (sidebar) {
+                // Remove duplicate "Archives" widget and trim "Recent Post" to 5 newest items
+                const widgets = sidebar.querySelectorAll('.widget-sidebar');
+                for (const w of widgets) {
+                    const titleEl = w.querySelector('.sidebar-title, .w-title');
+                    const tText = (titleEl?.text || '').trim().toLowerCase();
+                    if (tText === 'archives' || tText === 'arşiv' || tText === 'archiv') {
+                        w.remove();
+                    } else if (
+                        tText === 'recent post' ||
+                        tText === 'recent posts' ||
+                        tText === 'son yazılar' ||
+                        tText === 'neueste beiträge'
+                    ) {
+                        if (titleEl) titleEl.set_content(B.esc(L.recent));
+                        const ul = w.querySelector('.list-sidebar');
+                        if (ul) {
+                            ul.set_content(
+                                recentPosts
+                                    .map((rp) => `<li><a href="${B.esc(rp.file)}">${B.esc(B.displayTitle(rp))}</a></li>`)
+                                    .join('')
+                            );
+                        }
+                    }
+                }
+            }
+
             // --- Stable heading ids, then the TOC built from them ---
-            const heads = box.querySelectorAll('h2, h3');
+            let heads = box.querySelectorAll('h2, h3');
+            if (heads.length < 3) heads = box.querySelectorAll('h2, h3, h4');
             const seen = new Set();
             const items = [];
             for (const h of heads) {
@@ -384,18 +633,22 @@ async function enhanceArticlePages() {
                 while (seen.has(id)) id += '-x';
                 seen.add(id);
                 h.setAttribute('id', id);
-                items.push({ id, text, level: h.tagName.toLowerCase() });
+                items.push({ id, text, level: h.tagName.toLowerCase() === 'h4' ? 'h3' : h.tagName.toLowerCase() });
             }
 
-            if (sidebar && items.length >= 3) {
+            if (sidebar) {
                 const existing = sidebar.querySelector('.widget-toc');
-                const toc = `<div class="widget-sidebar widget-toc">` +
-                    `<h3 class="w-title">${B.esc(L.toc)}</h3>` +
-                    `<nav aria-label="${B.esc(L.toc)}"><ul class="toc-list">` +
-                    items.map((it) => `<li class="toc-item toc-item--${it.level}"><a href="#${B.esc(it.id)}">${B.esc(it.text)}</a></li>`).join('') +
-                    `</ul></nav></div>`;
-                if (existing) existing.replaceWith(parse(toc));
-                else sidebar.insertAdjacentHTML('afterbegin', toc);
+                if (existing) existing.remove();
+                if (items.length >= 2) {
+                    const toc = `<div class="widget-sidebar widget-toc">` +
+                        `<h3 class="w-title">${B.esc(L.toc)}</h3>` +
+                        `<nav aria-label="${B.esc(L.toc)}"><ul class="toc-list">` +
+                        items.map((it) => `<li class="toc-item toc-item--${it.level}"><a href="#${B.esc(it.id)}">${B.esc(it.text)}</a></li>`).join('') +
+                        `</ul></nav></div>`;
+                    // Place TOC as the last widget in .col-md-4 so static widgets
+                    // above it scroll naturally and never collide with the sticky TOC.
+                    sidebar.insertAdjacentHTML('beforeend', toc);
+                }
             }
 
             // --- Share links. No tracking scripts, just URLs. ---
@@ -418,40 +671,47 @@ async function enhanceArticlePages() {
             if (oldShare) oldShare.replaceWith(parse(shareBlock));
             else box.insertAdjacentHTML('beforeend', shareBlock);
 
-            // --- Previous / next, in the same reading order as the index ---
-            const prev = posts[i - 1]; // newer
-            const next = posts[i + 1]; // older
-            const navLink = (p, dir, label) => p
-                ? `<a class="post-nav__link post-nav__link--${dir}" href="${B.esc(p.file)}" rel="${dir}">` +
-                      `<span class="post-nav__dir">${B.esc(label)}</span>` +
-                      `<span class="post-nav__title">${B.esc(B.displayTitle(p))}</span>` +
-                  `</a>`
-                : `<span class="post-nav__link post-nav__link--empty"></span>`;
-            const navBlock = `<nav class="post-nav" aria-label="${B.esc(L.prev)} / ${B.esc(L.next)}">` +
-                navLink(prev, 'prev', L.prev) + navLink(next, 'next', L.next) + `</nav>`;
+            root.querySelectorAll('.post-nav, .post-related').forEach((n) => n.remove());
 
-            // --- Related: ranked by shared tags, then category, then recency ---
-            const related = B.relatedTo(post, posts, 3);
-            const relatedBlock = related.length
-                ? `<section class="post-related" aria-labelledby="related-h">` +
-                      `<h2 class="post-related__title" id="related-h">${B.esc(L.related)}</h2>` +
-                      `<div class="post-grid post-grid--related">` +
-                      related.map((p) => B.renderCard(p, lang, { dims })).join('') +
-                      `</div></section>`
-                : '';
+            if (idx >= 0) {
+                // --- Previous / next, in the same reading order as the index ---
+                const prev = posts[idx - 1]; // newer
+                const next = posts[idx + 1]; // older
+                const navLink = (p, dir, label) => p
+                    ? `<a class="post-nav__link post-nav__link--${dir}" href="${B.esc(p.file)}" rel="${dir}">` +
+                          `<span class="post-nav__dir">${B.esc(label)}</span>` +
+                          `<span class="post-nav__title">${B.esc(B.displayTitle(p))}</span>` +
+                      `</a>`
+                    : `<span class="post-nav__link post-nav__link--empty"></span>`;
+                const navBlock = `<nav class="post-nav" aria-label="${B.esc(L.prev)} / ${B.esc(L.next)}">` +
+                    navLink(prev, 'prev', L.prev) + navLink(next, 'next', L.next) + `</nav>`;
 
-            const col = box.parentNode;
-            const oldNav = col.querySelector('.post-nav');
-            const oldRel = col.querySelector('.post-related');
-            if (oldNav) oldNav.remove();
-            if (oldRel) oldRel.remove();
-            col.insertAdjacentHTML('beforeend', navBlock + relatedBlock);
+                // --- Related: ranked by shared tags, then category, then recency ---
+                const related = B.relatedTo(post, posts, 3);
+                const relatedBlock = related.length
+                    ? `<section class="post-related" aria-labelledby="related-h">` +
+                          `<h2 class="post-related__title" id="related-h">${B.esc(L.related)}</h2>` +
+                          `<div class="post-grid post-grid--related">` +
+                          related.map((p) => B.renderCard(p, lang, { dims })).join('') +
+                          `</div></section>`
+                    : '';
+
+                const col = box.parentNode;
+                col.insertAdjacentHTML('beforeend', navBlock);
+                // Place Related Articles outside the 2-column .row so the right
+                // sidebar stops at the end of the article text and Related Articles
+                // spans the full container width in a 3-column grid.
+                const row = col.parentNode;
+                if (relatedBlock && row) {
+                    row.insertAdjacentHTML('afterend', relatedBlock);
+                }
+            }
 
             let out = root.toString();
             if (!/js\/article-extras\.min\.js/.test(out)) {
                 out = out.replace(/<\/body>/i, '<script defer="defer" src="js/article-extras.min.js"></script></body>');
             }
-            await writeFileAsync(post.file, out, 'utf8');
+            await writeFileAsync(file, out, 'utf8');
             touched++;
         }
     }
@@ -848,18 +1108,13 @@ async function updateI18nHeadsAndToggle() {
     const baseUrl = 'https://bahaerdogan.com';
     const htmlFiles = glob.sync('*.html');
 
-    // Group EN/TR/DE triplets
+    // Group EN/TR/DE triplets using groupKeyOf & langOf (handles both XxxTR.html and xxx-tr.html)
     const groups = {};
     for (const file of htmlFiles) {
-        const isTr = /TR\.html$/i.test(file);
-        const isDe = /DE\.html$/i.test(file);
-        const base = isTr
-            ? file.replace(/TR\.html$/i, '')
-            : isDe
-                ? file.replace(/DE\.html$/i, '')
-                : file.replace(/\.html$/i, '');
-        groups[base] = groups[base] || {};
-        if (isTr) groups[base].tr = file; else if (isDe) groups[base].de = file; else groups[base].en = file;
+        const key = groupKeyOf(file);
+        const lang = langOf(file);
+        groups[key] = groups[key] || {};
+        groups[key][lang] = file;
     }
 
     for (const [base, langs] of Object.entries(groups)) {
@@ -875,12 +1130,6 @@ async function updateI18nHeadsAndToggle() {
             // Clean before inject: remove existing canonical and hreflang tags
             let cleaned = html.replace(/<link\s+[^>]*rel=["']canonical["'][^>]*>/gi, '');
             cleaned = cleaned.replace(/<link\s+[^>]*rel=["']alternate["'][^>]*hreflang=["'][^"']+["'][^>]*>/gi, '');
-            
-            // OpenGraph and Twitter tags are owned entirely by
-            // enrichBlogSEOAndSchema, which runs after this step and derives them
-            // from parsed page metadata. This function used to strip them here and
-            // only re-add them for TR/DE pages, so every English page silently lost
-            // og:title, og:description, og:url and og:type.
 
             // Now inject the new tags
             return cleaned.replace(/<head>([\s\S]*?)<\/head>/i, (m) => {
@@ -905,15 +1154,31 @@ async function updateI18nHeadsAndToggle() {
             // Sort links in desired order: Deutsch, English, Türkçe
             const order = { 'Deutsch': 1, 'English': 2, 'Türkçe': 3 };
             const sorted = links.slice().sort((a, b) => (order[a.label] || 99) - (order[b.label] || 99));
-            const items = sorted.map(l => `<a class=\"dropdown-item\" href=\"${l.href}\">${l.label}</a>`).join('\n      ');
-            const dropdown = `  <li class=\"nav-item dropdown language-switcher\">\n    <a class=\"nav-link dropdown-toggle\" href=\"#\" id=\"langDropdown\" role=\"button\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n      <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"1em\" height=\"1em\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\" class=\"icon\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><line x1=\"2\" y1=\"12\" x2=\"22\" y2=\"12\"/><path d=\"M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z\"/></svg> Language\n    </a>\n    <div class=\"dropdown-menu dropdown-menu-right\" aria-labelledby=\"langDropdown\">\n      ${items}\n    </div>\n  </li>`;
+            const items = sorted.map(l => `<a class="dropdown-item${l.active ? ' active' : ''}" href="${l.href}">${l.label}</a>`).join('\n      ');
+            const dropdown = `  <li class="nav-item dropdown language-switcher">\n    <a class="nav-link dropdown-toggle" href="#" id="langDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\n      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="icon"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Language\n    </a>\n    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="langDropdown">\n      ${items}\n    </div>\n  </li>`;
 
             // Insert before closing </ul> in navbar-nav
             return updated.replace(/(<ul\s+class=["']navbar-nav["'][^>]*>[\s\S]*?)(<\/ul>)/i, (match, before, closing) => {
-                // Check if dropdown already exists (shouldn't after cleaning, but safety check)
                 if (before.includes('language-switcher')) return match;
                 return before + '\n' + dropdown + '\n' + closing;
             });
+        };
+
+        const enHref = enFile ? (enFile.toLowerCase() === 'index.html' ? '/' : enFile) : null;
+        const buildDropdownLinks = (currentLang) => {
+            if (!trFile && !deFile) {
+                // Standalone pages (index.html, BlogPosts.html, BlogTemplate.html)
+                return [
+                    { href: enHref || '/', label: 'English', active: currentLang === 'en' },
+                    { href: 'WhyBuildingAiStartupIsHardTR.html', label: 'Türkçe', active: false },
+                    { href: 'AI-DefenseDE.html', label: 'Deutsch', active: false },
+                ];
+            }
+            return [
+                ...(enHref ? [{ href: enHref, label: 'English', active: currentLang === 'en' }] : []),
+                ...(trFile ? [{ href: trFile, label: 'Türkçe', active: currentLang === 'tr' }] : []),
+                ...(deFile ? [{ href: deFile, label: 'Deutsch', active: currentLang === 'de' }] : []),
+            ];
         };
 
         // Read EN/TR/DE files
@@ -937,7 +1202,7 @@ async function updateI18nHeadsAndToggle() {
         const alternates = [];
         if (enUrl) alternates.push(`<link rel="alternate" hreflang="en" href="${enUrl}">`);
         if (trUrl) alternates.push(`<link rel="alternate" hreflang="tr" href="${trUrl}">`);
-        if (deUrl) alternates.push(`<link rel=\"alternate\" hreflang=\"de\" href=\"${deUrl}\">`);
+        if (deUrl) alternates.push(`<link rel="alternate" hreflang="de" href="${deUrl}">`);
         const xDefault = enUrl || trUrl || deUrl;
         if (xDefault) alternates.push(`<link rel="alternate" hreflang="x-default" href="${xDefault}">`);
 
@@ -956,36 +1221,18 @@ async function updateI18nHeadsAndToggle() {
         if (enHtml && (trUrl || deUrl || enUrl)) {
             const enInserts = [enCanonical, ...alternates].filter(Boolean);
             enHtml = injectHead(enHtml, enInserts);
-            enHtml = injectLanguageLinks(enHtml, [
-                ...(trFile ? [{ href: trFile, label: 'Türkçe' }] : []),
-                ...(deFile ? [{ href: deFile, label: 'Deutsch' }] : [])
-            ]);
+            enHtml = injectLanguageLinks(enHtml, buildDropdownLinks('en'));
             await writeFileAsync(enFile, enHtml, 'utf8');
         }
 
         // Update TR
         if (trHtml) {
             const trInserts = [trCanonical, ...alternates].filter(Boolean);
-            // Add/update meta description if missing or empty
             if (!/name=["']description["']/i.test(trHtml)) {
                 trInserts.push(`<meta name="description" content="${buildTrDescription(trTitle || enTitle)}">`);
             }
-            // Add OG tags if missing basic OG
-            if (!/property=["']og:title["']/i.test(trHtml)) {
-                const ogTitle = (trTitle || enTitle || '').replace(/\s*\|\s*Türkçe/i, '') || 'Baha Erdoğan';
-                const ogDesc = buildTrDescription(trTitle || enTitle);
-                const ogUrl = trUrl || enUrl || deUrl;
-                if (ogUrl) {
-                    trInserts.push(
-                    );
-                }
-            }
-            // Inject into head and add language links
             trHtml = injectHead(trHtml, trInserts);
-            trHtml = injectLanguageLinks(trHtml, [
-                ...(enFile ? [{ href: enFile, label: 'English' }] : []),
-                ...(deFile ? [{ href: deFile, label: 'Deutsch' }] : [])
-            ]);
+            trHtml = injectLanguageLinks(trHtml, buildDropdownLinks('tr'));
             await writeFileAsync(trFile, trHtml, 'utf8');
         }
 
@@ -1001,20 +1248,8 @@ async function updateI18nHeadsAndToggle() {
             if (!/name=["']description["']/i.test(deHtml)) {
                 deInserts.push(`<meta name="description" content="${buildDeDescription(deTitle || enTitle || trTitle)}">`);
             }
-            if (!/property=["']og:title["']/i.test(deHtml)) {
-                const ogTitleDe = (deTitle || enTitle || trTitle || '').replace(/\s*\|\s*Deutsch/i, '') || 'Baha Erdoğan';
-                const ogDescDe = buildDeDescription(deTitle || enTitle || trTitle);
-                const ogUrlDe = deUrl || enUrl || trUrl;
-                if (ogUrlDe) {
-                    deInserts.push(
-                    );
-                }
-            }
             deHtml = injectHead(deHtml, deInserts);
-            deHtml = injectLanguageLinks(deHtml, [
-                ...(enFile ? [{ href: enFile, label: 'English' }] : []),
-                ...(trFile ? [{ href: trFile, label: 'Türkçe' }] : [])
-            ]);
+            deHtml = injectLanguageLinks(deHtml, buildDropdownLinks('de'));
             await writeFileAsync(deFile, deHtml, 'utf8');
         }
     }
@@ -1262,6 +1497,10 @@ async function externaliseInlineScripts() {
         html = html.replace(/<script(?![^>]*\ssrc=)[^>]*>\s*(?:const|var)\s+blogPosts\s*=[\s\S]*?<\/script>/gi,
             fs.existsSync(src) ? `<script src="${src}" defer="defer"></script>` : '');
 
+        if (html.includes('id="search-form"') && fs.existsSync(src) && !html.includes(`src="${src}"`)) {
+            html = html.replace(/<\/body>/i, `<script src="${src}" defer="defer"></script></body>`);
+        }
+
         // GA4 already records document.title, so the hardcoded page_title/page_location
         // object only served to make every page's inline script unique.
         html = html.replace(/(gtag\("config","G-ZGTWHSMVV7")\s*,\s*\{[\s\S]*?\}(\))/g, '$1$2');
@@ -1397,20 +1636,24 @@ async function normaliseNavigation() {
             let href;
             if (section === 'blog') href = isHome ? '#blog' : 'BlogPosts.html';
             else if (isHome) href = `#${section}`;
-            else href = section === 'home' ? 'index.html' : `index.html#${section}`;
+            else href = section === 'home' ? '/' : `/#${section}`;
 
             const active = (isHome && section === 'home') || (!isHome && section === 'blog') ? ' active' : '';
             return `<li class="nav-item"><a href="${href}" class="js-scroll nav-link${active}">${labels[i]}</a></li>`;
         }).join('');
 
         const rebuilt = `<ul class="navbar-nav">${items}${switcher}</ul>`;
-        if (m[0] === rebuilt) continue;
+        let updated = html.replace(NAV_RE, () => rebuilt);
 
-        const updated = html.replace(NAV_RE, () => rebuilt);
-        if (updated === html) {
-            console.warn(`  ! navigation rewrite did not apply to ${file}`);
-            continue;
+        // Normalize internal links pointing to index.html or index.html#... to clean root paths (/ and /#...)
+        if (!isHome) {
+            updated = updated.replace(/(<a[^>]*class="[^"]*navbar-brand[^"]*"[^>]*href=")[^"]*(")/gi, '$1/$2');
+            updated = updated.replace(/(<a[^>]*href=")[^"]*("[^>]*class="[^"]*navbar-brand[^"]*")/gi, '$1/$2');
         }
+        updated = updated.replace(/href="index\.html#([^"]+)"/gi, 'href="/#$1"');
+        updated = updated.replace(/href="index\.html"/gi, 'href="/"');
+
+        if (updated === html) continue;
         await writeFileAsync(file, updated, 'utf8');
         changed++;
     }
@@ -1727,6 +1970,9 @@ async function build() {
         
         console.log('Converting images to WebP...');
         await convertToWebP();
+
+        console.log('Unifying blog post templates...');
+        await unifyBlogTemplates();
 
         console.log('Generating sitemap and robots.txt...');
         await generateSitemapAndRobots();

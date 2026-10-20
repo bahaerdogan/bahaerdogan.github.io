@@ -47,7 +47,7 @@ function validateArticles() {
       const href = a.getAttribute('href') || '';
       if (!href || /^(https?:|mailto:|tel:|#|data:)/i.test(href)) continue;
       const target = href.split('#')[0].split('?')[0];
-      if (!target) continue;
+      if (!target || target === '/') continue;
       if (!existing.has(target) && !fs.existsSync(target)) err(`broken internal link → ${target}`);
     }
 

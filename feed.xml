@@ -6,9 +6,16 @@
     <atom:link href="https://bahaerdogan.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>Articles on AI, computer vision, engineering and technology.</description>
     <language>en</language>
-    <lastBuildDate>Tue, 28 Jul 2026 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 20 Oct 2026 00:00:00 GMT</lastBuildDate>
     <item>
-      <title><![CDATA[Will Artificial Intelligence Replace My Job? | AI & Future of Work]]></title>
+      <title><![CDATA[Why Building an AI Startup Is So Hard: Production Reality]]></title>
+      <link>https://bahaerdogan.com/WhyBuildingAiStartupIsHard.html</link>
+      <guid isPermaLink="true">https://bahaerdogan.com/WhyBuildingAiStartupIsHard.html</guid>
+      <pubDate>Tue, 20 Oct 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Why do most AI startups fail in production? An engineering look at vibe coding, inference unit economics, RAG architecture, and real-world system design.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Will Artificial Intelligence Replace My Job?]]></title>
       <link>https://bahaerdogan.com/ai-and-human-job-competition.html</link>
       <guid isPermaLink="true">https://bahaerdogan.com/ai-and-human-job-competition.html</guid>
       <pubDate>Sat, 09 Aug 2025 00:00:00 GMT</pubDate>
@@ -57,21 +64,21 @@
       <description><![CDATA[Explore the transformative role of artificial intelligence in modern defense technologies. Learn about AI applications in military systems, cybersecurity, and national security.]]></description>
     </item>
     <item>
-      <title><![CDATA[The Ergenekon Epic | Ancient Turkish Legend]]></title>
+      <title><![CDATA[The Ergenekon Epic]]></title>
       <link>https://bahaerdogan.com/ErgenekonEpic.html</link>
       <guid isPermaLink="true">https://bahaerdogan.com/ErgenekonEpic.html</guid>
       <pubDate>Thu, 25 Jul 2024 00:00:00 GMT</pubDate>
       <description><![CDATA[Explore the ancient Turkish legend of Ergenekon, a tale of survival, rebirth, and the origins of the Turkish people. Learn about this important piece of Turkish cultural heritage.]]></description>
     </item>
     <item>
-      <title><![CDATA[Mac Shortcuts Guide | Essential Keyboard Shortcuts for macOS]]></title>
+      <title><![CDATA[Mac Shortcuts Guide]]></title>
       <link>https://bahaerdogan.com/MacShortcuts.html</link>
       <guid isPermaLink="true">https://bahaerdogan.com/MacShortcuts.html</guid>
       <pubDate>Thu, 25 Jul 2024 00:00:00 GMT</pubDate>
       <description><![CDATA[A comprehensive guide to essential Mac keyboard shortcuts for improved productivity. Learn system-wide shortcuts, Finder commands, and application-specific shortcuts.]]></description>
     </item>
     <item>
-      <title><![CDATA[The Oğuz Kağan Epic | Ancient Turkish Legend]]></title>
+      <title><![CDATA[The Oğuz Kağan Epic]]></title>
       <link>https://bahaerdogan.com/OguzKaganEpic.html</link>
       <guid isPermaLink="true">https://bahaerdogan.com/OguzKaganEpic.html</guid>
       <pubDate>Thu, 25 Jul 2024 00:00:00 GMT</pubDate>
@@ -99,14 +106,14 @@
       <description><![CDATA[Learn how to estimate object speed from video using computer vision techniques without prior information or calibration. Comprehensive guide with practical examples.]]></description>
     </item>
     <item>
-      <title><![CDATA[What's Machine Learning, Really? | Comprehensive Guide & Explanation]]></title>
+      <title><![CDATA[What's Machine Learning, Really?]]></title>
       <link>https://bahaerdogan.com/MachineLearning-Explained.html</link>
       <guid isPermaLink="true">https://bahaerdogan.com/MachineLearning-Explained.html</guid>
       <pubDate>Tue, 11 Jun 2024 00:00:00 GMT</pubDate>
       <description><![CDATA[A comprehensive explanation of machine learning, its types, and how it actually works - beyond the hype and misconceptions. Learn about supervised, unsupervised, and reinforcement learning.]]></description>
     </item>
     <item>
-      <title><![CDATA[Anomaly Detection in Machine Learning | Technical Guide & Examples]]></title>
+      <title><![CDATA[Anomaly Detection in Machine Learning]]></title>
       <link>https://bahaerdogan.com/MachineLearningAnomalyDetection.html</link>
       <guid isPermaLink="true">https://bahaerdogan.com/MachineLearningAnomalyDetection.html</guid>
       <pubDate>Tue, 11 Jun 2024 00:00:00 GMT</pubDate>

@@ -83,6 +83,7 @@ const CATEGORIES = ['AI', 'Technology', 'History', 'Finance'];
 
 const CATEGORY_OF_GROUP = {
   // AI
+  'whybuildingaistartupishard': 'AI',
   'agenticaiexplained': 'AI',
   'agenticaitechdepth': 'AI',
   'agenticaivsgenai': 'AI',
@@ -257,9 +258,10 @@ function readMeta(file, html) {
 
   const titleEl = root.querySelector('title');
   const rawTitle = titleEl ? titleEl.text.trim() : '';
-  const title = rawTitle
-    .replace(/\s*\|\s*(Bahaerdogan|Baha Erdoğan|Deutsch|Türkçe|Opinion|AI Technology Guide|Computer Vision Guide|Data Science Guide|AI Development Guide|Historical Perspective Guide|AI Security Guide|AI Ethics Guide)/gi, '')
-    .trim() || path.basename(file, '.html');
+  const title = (!NOT_ARTICLES.has(file)
+    ? rawTitle.split('|')[0]
+    : rawTitle.replace(/\s*\|\s*(Bahaerdogan|Baha Erdoğan|Deutsch|Türkçe)/gi, '')
+  ).trim() || path.basename(file, '.html');
 
   const metaContent = (sel) => {
     const el = root.querySelector(sel);
@@ -313,12 +315,12 @@ function readMeta(file, html) {
     // Build-generated furniture. These carry other articles' titles and
     // excerpts, so counting them inflates both the reading-time estimate and
     // the llms-full.txt body with navigation text that is not this article.
-    '.post-share', '.post-nav', '.post-related', '.widget-toc',
+    '.post-share', '.post-nav', '.post-related', '.widget-toc', '.intro-eyebrow',
   ].join(', ')).forEach((n) => n.remove());
 
   // Insert real separators: node-html-parser concatenates text nodes with no
   // whitespace, which would run headings into the following sentence.
-  const BOILERPLATE = /^(Blog Details|Leave a Reply|Comments|Recent Post|Archives|Tags|Search|Name \*|Email \*|Comment \*|Submit Comment|Home|Blog|0)$/i;
+  const BOILERPLATE = /^(Blog Details|Blog Detayları|Blog-Details|Leave a Reply|Comments|Recent Post|Archives|Tags|Search|Name \*|Email \*|Comment \*|Submit Comment|Home|Blog|0)$/i;
 
   const text = main.structuredText
     .replace(/[ \t]+/g, ' ')
