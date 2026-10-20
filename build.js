@@ -369,14 +369,20 @@ async function unifyBlogTemplates() {
             }
         }
 
-        // Ensure #mainNav has the collapsible menu container so normaliseNavigation
-        // and updateI18nHeadsAndToggle can populate every article's navbar.
+        // Ensure #mainNav has the collapsible menu container and hamburger button
+        // so normaliseNavigation, updateI18nHeadsAndToggle and applyThemeSystem
+        // can populate every article's navbar.
         const navContainer = root.querySelector('#mainNav .container');
         if (navContainer && !navContainer.querySelector('#navbarDefault')) {
             navContainer.insertAdjacentHTML('beforeend',
                 '<button class="collapsed navbar-toggler" type="button" aria-label="Toggle navigation" aria-controls="navbarDefault" aria-expanded="false" data-target="#navbarDefault" data-toggle="collapse"><span></span> <span></span> <span></span></button>' +
                 '<div class="collapse justify-content-end navbar-collapse" id="navbarDefault"><ul class="navbar-nav"></ul></div>'
             );
+        } else if (navContainer && !navContainer.querySelector('.navbar-toggler')) {
+            const collapse = navContainer.querySelector('#navbarDefault');
+            const togglerHtml = '<button class="collapsed navbar-toggler" type="button" aria-label="Toggle navigation" aria-controls="navbarDefault" aria-expanded="false" data-target="#navbarDefault" data-toggle="collapse"><span></span> <span></span> <span></span></button>';
+            if (collapse) collapse.insertAdjacentHTML('beforebegin', togglerHtml);
+            else navContainer.insertAdjacentHTML('beforeend', togglerHtml);
         }
 
         // Unify .intro-single header banner: replace generic "BLOG DETAILS" or
@@ -389,7 +395,7 @@ async function unifyBlogTemplates() {
             `<div class="display-table intro-content"><div class="table-cell"><div class="container">` +
                 `<span class="intro-eyebrow">${B.esc(eyebrow)}</span>` +
                 `<ol class="breadcrumb d-flex justify-content-center">` +
-                    `<li class="breadcrumb-item"><a href="/">${B.esc(homeLabel)}</a></li>` +
+                    `<li class="breadcrumb-item"><a href="index.html">${B.esc(homeLabel)}</a></li>` +
                     `<li class="breadcrumb-item"><a href="BlogPosts.html">Blog</a></li>` +
                     `<li class="breadcrumb-item active">${B.esc(meta.title)}</li>` +
                 `</ol>` +
@@ -1164,12 +1170,12 @@ async function updateI18nHeadsAndToggle() {
             });
         };
 
-        const enHref = enFile ? (enFile.toLowerCase() === 'index.html' ? '/' : enFile) : null;
+        const enHref = enFile || null;
         const buildDropdownLinks = (currentLang) => {
             if (!trFile && !deFile) {
                 // Standalone pages (index.html, BlogPosts.html, BlogTemplate.html)
                 return [
-                    { href: enHref || '/', label: 'English', active: currentLang === 'en' },
+                    { href: enHref || 'index.html', label: 'English', active: currentLang === 'en' },
                     { href: 'WhyBuildingAiStartupIsHardTR.html', label: 'Türkçe', active: false },
                     { href: 'AI-DefenseDE.html', label: 'Deutsch', active: false },
                 ];
@@ -1636,7 +1642,7 @@ async function normaliseNavigation() {
             let href;
             if (section === 'blog') href = isHome ? '#blog' : 'BlogPosts.html';
             else if (isHome) href = `#${section}`;
-            else href = section === 'home' ? '/' : `/#${section}`;
+            else href = section === 'home' ? 'index.html' : `index.html#${section}`;
 
             const active = (isHome && section === 'home') || (!isHome && section === 'blog') ? ' active' : '';
             return `<li class="nav-item"><a href="${href}" class="js-scroll nav-link${active}">${labels[i]}</a></li>`;
@@ -1645,13 +1651,49 @@ async function normaliseNavigation() {
         const rebuilt = `<ul class="navbar-nav">${items}${switcher}</ul>`;
         let updated = html.replace(NAV_RE, () => rebuilt);
 
-        // Normalize internal links pointing to index.html or index.html#... to clean root paths (/ and /#...)
+        // Use relative index.html / index.html#... links in markup so navigation
+        // works across file://, subdirectory previews, and root servers alike
+        // (js/main.js cleans /index.html in the address bar via history.replaceState on HTTP/S).
         if (!isHome) {
-            updated = updated.replace(/(<a[^>]*class="[^"]*navbar-brand[^"]*"[^>]*href=")[^"]*(")/gi, '$1/$2');
-            updated = updated.replace(/(<a[^>]*href=")[^"]*("[^>]*class="[^"]*navbar-brand[^"]*")/gi, '$1/$2');
+            updated = updated.replace(/(<a[^>]*class="[^"]*navbar-brand[^"]*"[^>]*href=")[^"]*(")/gi, '$1index.html$2');
+            updated = updated.replace(/(<a[^>]*href=")[^"]*("[^>]*class="[^"]*navbar-brand[^"]*")/gi, '$1index.html$2');
         }
-        updated = updated.replace(/href="index\.html#([^"]+)"/gi, 'href="/#$1"');
-        updated = updated.replace(/href="index\.html"/gi, 'href="/"');
+        updated = updated.replace(/href="\/#([^"]+)"/gi, 'href="index.html#$1"');
+        updated = updated.replace(/href="\/"/gi, 'href="index.html"');
+
+        // Ensure every page with #mainNav loads the full Bootstrap 4 + easing + main.js
+        // dependency chain so mobile collapse, the Language dropdown (requires Popper.js),
+        // and smooth-scroll / navbar-reduce work on every page.
+        if (updated.includes('id="mainNav"')) {
+            if (!updated.includes('lib/jquery/jquery.min.js')) {
+                const navScripts =
+                    '<script defer="defer" src="lib/jquery/jquery.min.js"></script>' +
+                    '<script defer="defer" src="lib/popper/popper.min.js"></script>' +
+                    '<script defer="defer" src="lib/bootstrap/js/bootstrap.min.js"></script>' +
+                    '<script defer="defer" src="lib/easing/easing.min.js"></script>' +
+                    '<script defer="defer" src="js/main.min.js"></script>';
+                updated = updated.replace(/<\/body>/i, `${navScripts}</body>`);
+            } else {
+                if (updated.includes('lib/bootstrap/js/bootstrap.min.js') && !updated.includes('lib/popper/popper.min.js')) {
+                    updated = updated.replace(
+                        /(<script[^>]*src=["']lib\/bootstrap\/js\/bootstrap\.min\.js["'][^>]*>)/i,
+                        '<script defer="defer" src="lib/popper/popper.min.js"></script>$1'
+                    );
+                }
+                if (updated.includes('js/main.min.js') && !updated.includes('lib/easing/easing.min.js')) {
+                    updated = updated.replace(
+                        /(<script[^>]*src=["']js\/main\.min\.js["'][^>]*>)/i,
+                        '<script defer="defer" src="lib/easing/easing.min.js"></script>$1'
+                    );
+                }
+            }
+        }
+
+        // Clean up unminified or duplicate comment scripts on TR pages
+        updated = updated.replace(/src=["']js\/comments-system-tr\.js["']/gi, 'src="js/comments-system-tr.min.js"');
+        if (updated.includes('js/comments-system-tr.min.js') && updated.includes('js/comments-system.min.js')) {
+            updated = updated.replace(/<script[^>]*src=["']js\/comments-system\.min\.js["'][^>]*><\/script>/gi, '');
+        }
 
         if (updated === html) continue;
         await writeFileAsync(file, updated, 'utf8');

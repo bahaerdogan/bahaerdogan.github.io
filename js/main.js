@@ -1,7 +1,25 @@
 (function ($) {
 	"use strict";
-	var nav = $('nav');
-	var navHeight = nav.outerHeight();
+	var nav = $('#mainNav');
+	if (!nav.length) nav = $('nav').first();
+	var navHeight = nav.outerHeight() || 70;
+	var easeName = ($.easing && $.easing.easeInOutExpo) ? "easeInOutExpo" : "swing";
+
+	// Keep the address bar clean (/ and /#section) when served over HTTP(S),
+	// while using relative index.html links in markup so file:// and subdirectory
+	// previews work natively without broken root links.
+	if ((window.location.protocol === 'http:' || window.location.protocol === 'https:') && /\/index\.html$/i.test(window.location.pathname)) {
+		try {
+			window.history.replaceState(null, '', window.location.pathname.replace(/\/index\.html$/i, '/') + window.location.search + window.location.hash);
+		} catch (e) {}
+	}
+	if (window.location.protocol === 'file:') {
+		$('a[href="/"], a[href^="/#"]').each(function () {
+			var h = $(this).attr('href');
+			if (h === '/') $(this).attr('href', 'index.html');
+			else if (h && h.indexOf('/#') === 0) $(this).attr('href', 'index.html' + h.slice(1));
+		});
+	}
 	
 	// Navbar toggle handler with improved functionality
 	$('.navbar-toggler').on('click', function() {
@@ -25,7 +43,7 @@
 
 	$('.back-to-top').click(function(e){
 		e.preventDefault();
-		$('html, body').animate({scrollTop: 0}, 1500, 'easeInOutExpo');
+		$('html, body').animate({scrollTop: 0}, 1500, easeName);
 		return false;
 	});
 
@@ -43,7 +61,7 @@
 
 	// Counter initialization with viewport check
 	const initCounter = () => {
-		if ($('.counter').length) {
+		if ($('.counter').length && $.fn.counterUp) {
 			$('.counter').counterUp({
 				delay: 15,
 				time: 2000
@@ -56,39 +74,43 @@
 		initCounter();
 	});
 
-	// Enhanced smooth scrolling navigation
+	// Enhanced smooth scrolling navigation (only for in-page #hash links;
+	// cross-page links like index.html#about must navigate normally)
 	$('a.js-scroll').on("click", function (e) {
-		if (!this.hash) return;
-		const samePage =
-			location.pathname.replace(/^\//, '').replace(/^index\.html$/, '') ===
-			this.pathname.replace(/^\//, '').replace(/^index\.html$/, '') &&
-			location.hostname === this.hostname;
-		if (samePage) {
-			var target = $(this.hash);
-			target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
-			if (target.length) {
-				e.preventDefault();
-				$('html, body').animate({
-					scrollTop: (target.offset().top - navHeight + 5)
-				}, 1000, "easeInOutExpo");
-				return false;
-			}
+		const rawHref = $(this).attr('href') || '';
+		if (!rawHref.startsWith('#') || rawHref === '#') return;
+		var target = $(this.hash);
+		target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+		if (target.length) {
+			e.preventDefault();
+			navHeight = nav.outerHeight() || 70;
+			$('html, body').animate({
+				scrollTop: (target.offset().top - navHeight + 5)
+			}, 1000, easeName);
+			return false;
 		}
 	});
 
 	// Responsive menu handling
 	$('.js-scroll').on("click", function () {
-		$('.navbar-collapse').collapse('hide');
+		if ($.fn && $.fn.collapse) {
+			$('.navbar-collapse').collapse('hide');
+		}
 	});
 
-	// Enhanced scrollspy with error handling
-	try {
-		$('body').scrollspy({
-			target: '#mainNav',
-			offset: navHeight
-		});
-	} catch (e) {
-		console.warn('Scrollspy initialization failed:', e);
+	// Only initialize scrollspy on pages whose navbar has in-page section anchors
+	// (index.html). On blog pages, scrollspy has 0 targets and its _clear()
+	// strips the .active class from the Blog nav item and Language dropdown.
+	const hasInPageNav = $('#mainNav a.nav-link[href^="#"]:not([href="#"])').length > 0;
+	if (hasInPageNav && $.fn && $.fn.scrollspy) {
+		try {
+			$('body').scrollspy({
+				target: '#mainNav',
+				offset: navHeight
+			});
+		} catch (e) {
+			console.warn('Scrollspy initialization failed:', e);
+		}
 	}
 
 	// Improved navbar animation
@@ -105,9 +127,9 @@
 		}
 
 		if (scroll > top) {
-			$('.scrolltop-mf').fadeIn(1000, "easeInOutExpo");
+			$('.scrolltop-mf').fadeIn(1000, easeName);
 		} else {
-			$('.scrolltop-mf').fadeOut(1000, "easeInOutExpo");
+			$('.scrolltop-mf').fadeOut(1000, easeName);
 		}
 	});
 
@@ -218,8 +240,10 @@
 	$(window).on('resize', function() {
 		clearTimeout(resizeTimer);
 		resizeTimer = setTimeout(function() {
-			navHeight = nav.outerHeight();
-			$('body').scrollspy('refresh');
+			navHeight = nav.outerHeight() || 70;
+			if (hasInPageNav && $.fn && $.fn.scrollspy && $('body').data('bs.scrollspy')) {
+				$('body').scrollspy('refresh');
+			}
 			
 			// Reinitialize text slider on resize for better mobile sync
 			if (window.innerWidth <= 768) {
@@ -509,9 +533,10 @@
 			const hash = window.location.hash;
 			const target = $(hash);
 			if (target.length) {
+				navHeight = nav.outerHeight() || 70;
 				$('html, body').animate({
 					scrollTop: (target.offset().top - navHeight + 5)
-				}, 1000, "easeInOutExpo");
+				}, 1000, easeName);
 			}
 		}
 	});
