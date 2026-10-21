@@ -105,7 +105,7 @@ Modified: 2026-10-20
 
 Die Rolle der Künstlichen Intelligenz in Verteidigungstechnologien
 Baha Erdoğan
-Technologie
+KI
 Als Informatikingenieur kann ich mit Überzeugung sagen, dass Verteidigungssysteme zu den robustesten und strengst gesicherten Softwareumgebungen gehören. Für Außenstehende wirken sie nahezu undurchdringlich – mit Schichten aus Verschlüsselung und komplexer Architektur. Aber: Sind diese Systeme wirklich unverwundbar?
 Beginnen wir fundamental: Passwörter. Technisch sind sie Zeichenketten aus Buchstaben, Ziffern und Symbolen. Je länger und vielfältiger, desto sicherer. In militärischen Systemen skaliert beides dramatisch – das erklärt einen Teil der Resilienz.
 Auch klassische Kryptographie spielt weiter eine Rolle – vom historischen Beispiel der Caesar‑Chiffre bis zu modernen Verfahren. Doch mit KI verschieben wir die Grenzen: Mustererkennung in Supergeschwindigkeit, Simulationen in großem Maßstab – Fähigkeiten, die menschliche Grenzen übertreffen können.
@@ -124,6 +124,8 @@ Published: 2025-08-10
 Modified: 2026-10-20
 
 Was sind KI‑Agenten oder Agentic AI?
+Baha Erdoğan
+KI
 Die Grundlage autonomer Künstlicher Intelligenz
 Während künstliche Intelligenz kontinuierlich Branchen transformiert und Produktivität neu definiert, gewinnt ein mächtiges Konzept in Wirtschaft, Forschung und Entwicklung zunehmend an Bedeutung: Agentic AI. Weit entfernt von einem flüchtigen Trend stellt Agentic AI einen bahnbrechenden Wandel dar, wie intelligente Systeme mit Daten, Werkzeugen und menschlichen Zielen interagieren.
 Im Kern dieser Entwicklung steht der KI-Agent: ein autonomes, zielorientiertes System mit der Fähigkeit zur Wahrnehmung, zum Denken und zum Handeln.
@@ -158,7 +160,7 @@ Agentic AI schafft die Grundlage für die intelligenten Systeme von morgen. Von 
 Während die Technologie reift, können wir mehr und mehr verallgemeinerte, anpassungsfähige Agenten erwarten, die nahtlos von Plattform zu Plattform, von Branche zu Branche und von Arbeitsablauf zu Arbeitsablauf wechseln. Ihr Wert liegt nicht darin, was sie automatisieren können, sondern darin, wie sie denken, sich anpassen und zusammenarbeiten, um menschliche Aufgaben zu erfüllen.
 Das ist nicht sprachverstehendes KI. Das ist KI, die liefert.
 Demnächst: In Teil zwei dieser Serie werden wir die Unterschiede zwischen Agentic AI und Generative AI erkunden und wie diese Unterscheidungen die Zukunft intelligenter Assistenten und digitaler Erfahrungen prägen.
-Einen Kommentar hinterlassen
+Kommentar hinterlassen
 Kommentare
 
 ---
@@ -171,6 +173,8 @@ Published: 2025-08-10
 Modified: 2026-10-20
 
 Agentic AI vs Generative AI: Die Unterschiede
+Baha Erdoğan
+KI
 Kurzüberblick
 Generative AI erzeugt Inhalte (Text, Bild, Code) als direkte Antwort auf Eingaben. Agentic AI geht weiter: Agenten formulieren Ziele, planen Schritte, rufen Tools auf, reflektieren Ergebnisse und handeln iterativ.
 Architekturvergleich
@@ -186,7 +190,7 @@ Klare Tool‑Schnittstellen und Berechtigungen.
 Speicher‑ und Reflexionsmechanismen bewusst designen.
 Human‑in‑the‑Loop bei risikobehafteten Aktionen.
 Weiterlesen: Was sind KI‑Agenten oder Agentic AI?
-Einen Kommentar hinterlassen
+Kommentar hinterlassen
 Kommentare
 
 ---
@@ -258,7 +262,7 @@ Modified: 2026-10-20
 
 Yapay Zekâ İşimi Elimden Alacak mı?
 Baha Erdoğan
-AI
+Yapay Zekâ
 Arkadaşlarımla konuşurken konunun ister istemez buraya geldiğini fark ettim. Aslında yapay zekanın kullanım alanları ve gelişme kabiliyetleri yanında, hayatımıza getireceği değişikliklerin yalnızca bir tanesi olmasına rağmen, bu soru sohbetlerde veya başkalarını dinlerken en çok karşılaştığım konu.
 Bu mesele, hızlı bir şekilde hype’a girmiş bir konu. Ben ise ChatGPT ortalarda yokken yapay zeka mühendisliğine uluslararası projelerle başlamış biri olarak, bugünün abartılarına veya yermelerine takılmadan, o günkü vizyonumla ilerlemeye çalışıyorum. Bazen zor olabiliyor ama sorulara böyle yaklaşırım.
 Ana tekniğim şu: “Bu işin ekonomisi ve tekniği neye müsaade ediyor?”
@@ -382,7 +386,7 @@ Modified: 2026-10-20
 
 Types of Agentic AI and How to Build Your First Agent
 Baha Erdoğan
-Technology
+AI
 "Agentic systems are not monolithic. They are modular and goal-oriented, and the differences between the types are what decide which one survives production."
 Introduction: From Knowledge to Action
 Agentic AI is a radical innovation in the operation of intelligent systems—not merely responding to questions, but actively reasoning, planning, and acting to advance goals.
@@ -479,7 +483,7 @@ Modified: 2026-10-20
 
 Agentic AI Türleri ve İlk Ajanınızı Nasıl Kurarsınız
 Baha Erdoğan
-Technology
+Yapay Zekâ
 "Agentic sistemler tek tip değildir; modülerdir, hedef odaklıdır ve etki için tasarlanır. Türlerini ve süreçlerini anlamak, prototipten üretime yol haritasını açar."
 Giriş: Bilgiden Eyleme
 Agentic AI, zeki sistemlerin çalışma biçiminde köklü bir yeniliktir: Sadece yanıt vermekle kalmaz; hedefler doğrultusunda akıl yürütür, planlar ve eyleme geçer.
@@ -563,6 +567,8 @@ Sonuç: Agentic Çağ Başladı
 Dil modelleri pasif motorlar olmaktan çıkıp dinamik aktörlere dönüşüyor. Ajan türlerini, nasıl inşa edileceğini ve nerede konuşlandırılacağını anlamak, bir sonraki fazda avantaj sağlar.
 Doğru tasarlanan agentic sistemler; özerklik, işbirliği ve zekâyı insan sınırlarının ötesine taşıyacak şekilde evrilir.
 Bir ajanı programlamazsınız. Düşünmeyi ve eylemeyi öğretirsiniz—sonra ona amaç verirsiniz.
+Yorum Yapın
+Yorumlar
 
 ---
 
@@ -575,7 +581,7 @@ Modified: 2026-10-20
 
 What Are AI Agents or Agentic AI?
 Baha Erdoğan
-Technology
+AI
 Foundations of Autonomous Systems
 Artificial intelligence is undergoing a fundamental shift in how these systems are built—moving away from static text generation toward dynamic, goal-driven execution. This architecture, known as Agentic AI, marks the transition from passive prediction engines to autonomous computational agents capable of perception, planning, tool usage, and adaptive decision-making.
 Unlike traditional Large Language Models (LLMs) that produce one-shot text outputs, an AI agent operates iteratively within an environment, adjusting its approach based on runtime feedback and execution constraints.
@@ -615,7 +621,7 @@ Modified: 2026-10-20
 
 Yapay Zekâ Ajanları (Agentic AI) Nedir?
 Baha Erdoğan
-Teknoloji
+Yapay Zekâ
 Otonom Yapay Zekânın Temelleri
 Yapay zekâ sektörleri dönüştürmeye ve verimliliği yeniden tanımlamaya devam ederken, iş, araştırma ve geliştirme çevrelerinde güçlü bir kavram giderek daha fazla dikkat çekiyor: agentic AI. Geçici bir trend olmaktan çok uzak olan agentic AI, akıllı sistemlerin veriler, araçlar ve insan amaçları ile nasıl etkileşime girdiğinde çığır açan bir değişimi temsil ediyor.
 Bu gelişimin merkezinde AI ajanı bulunuyor: algılama, akıl yürütme ve eylem kapasitesine sahip otonom, hedef odaklı bir sistem.
@@ -664,7 +670,7 @@ Modified: 2026-10-20
 
 Agentic AI in Depth: Technical Structures, Planning Models, and Autonomous Orchestration
 Baha Erdoğan
-Technology
+AI
 "Agentic AI is not magic—it's engineering. Through symbolic planning, memory management, orchestration, and modular architecture, we enable operative intelligence."
 As AI systems become more autonomous and context sensitive, agentic AI is a paradigm that calls for deeper architectural understanding. Agentic AI is more than definitions and comparisons and instead represents a fusion of intelligent planning structures, interaction protocols, and dynamic orchestration models that realize goal-directed behavior.
 This third episode of our series explores agentic AI from systems engineering and technical perspectives—unveiling its internal workings, theoretical underpinnings, and deployment methods that set it apart from reactive or generative-only systems.
@@ -734,7 +740,7 @@ Modified: 2026-10-20
 
 Agentic AI Derinlemesine: Teknik Yapılar, Planlama Modelleri ve Otonom Orkestrasyon
 Baha Erdoğan
-Teknoloji
+Yapay Zekâ
 "Agentic AI sihir değil, mühendisliktir. Sembolik planlama, bellek yönetimi, orkestrasyon ve modüler mimari ile çalışan zekâyı mümkün kılıyoruz."
 YZ sistemleri daha otonom ve bağlama duyarlı hâle geldikçe, Agentic AI daha derin bir mimari kavrayış gerektiriyor. Agentic AI; yalnızca tanım ve karşılaştırmalardan ibaret değil, planlama yapıları, etkileşim protokolleri ve dinamik orkestrasyon modellerinin hedef odaklı davranışı mümkün kıldığı bütüncül bir tasarım yaklaşımıdır.
 Bu yazı; Agentic AI’yi sistem mühendisliği ve teknik açıdan ele alır; reaktif ya da yalnızca üretken sistemlerden ayıran iç işleyişi, kuramsal temelleri ve devreye alma yöntemlerini özetler.
@@ -836,7 +842,7 @@ Modified: 2026-10-20
 
 Agentic AI vs Generative AI: Architectural Differences and Chatbot Impact
 Baha Erdoğan
-Technology
+AI
 "The shift from Generative to Agentic AI is not merely an algorithmic upgrade—it is an architectural transition from stateless inference to persistent state orchestration."
 The Architectural Divide: Inference vs. Execution
 In production, the key bottleneck of Large Language Models (LLMs) is rarely raw inference quality—it is the lack of execution state. Traditional Generative AI operates as a stateless prediction engine: given an input prompt context \(C\), it computes a probabilistic output \(Y \sim P(Y|C)\) in a single turn.
@@ -888,7 +894,7 @@ Modified: 2026-10-20
 
 Agentic AI ve Üretken AI: Mimari Farklar ve Sohbetbotlara Etkisi
 Baha Erdoğan
-Technology
+Yapay Zekâ
 "Üretken YZ'den Agentic AI'ye geçiş, teknik bir başarıdan ziyade akıllı sistemlerin tasarımında köklü bir dönüşümdür."
 Giriş: İki Paradigma, Tek Evrim
 Üretken YZ'den Agentic AI'ye geçiş, mimarinin, hedeflerin ve gerçek kullanımın tamamen değişmesidir. İkisi de çekirdekte LLM kullanır; ancak tasarım ve uygulama farklıdır. Bu yazı; farkları ve özellikle otonom sohbetbot platformlarına etkisini teknik açıdan ele alır.
@@ -971,7 +977,7 @@ Modified: 2026-10-20
 
 From Prediction to Impact: What Artificial Intelligence Actually Means for You
 Baha Erdoğan
-Technology
+AI
 "Statistical prediction is replacing explicit code branches across modern software infrastructure."
 The Shift from Explicit Logic to Statistical Heuristics
 Historically, software behavior was defined by deterministic rules: if (condition) execute_action(). Modern application backends increasingly rely on probabilistic inference engines. When you open a mapping application, load an e-commerce feed, or submit a payment, background machine learning models evaluate feature vectors to predict route latency, content relevance, or transaction fraud risk in real time.
@@ -1009,7 +1015,7 @@ Modified: 2026-10-20
 
 Tahminden Etkiye: Yapay Zekâ Sizin İçin Ne İfade Ediyor?
 Baha Erdoğan
-Teknoloji
+Yapay Zekâ
 "Yapay zekâyı anlamadan da ondan etkilenirsiniz—ta ki ihtiyaç duyana kadar."
 Yapay zekâ, sessizce gelecek tasarımından bugünün temel altyapısına dönüştü. Sadece laboratuvarlarda değil; arka planda çevrimiçi deneyimi kişiselleştiriyor, lojistiği optimize ediyor ve sektörleri dönüştürüyor.
 Farkında olsanız da olmasanız da makine öğrenimi destekli YZ, günlük kararlarınıza çoktan etki ediyor. Peki bu sizin için ne demek ve neden önemli?
@@ -1080,7 +1086,7 @@ Modified: 2026-10-20
 
 Makine Öğrenimi Gerçekten Nedir?
 Baha Erdoğan
-Teknoloji
+Yapay Zekâ
 Eğer Netflix'in size nasıl dizi önerdiğini, e-postanızın hangi mesajların spam olduğunu nasıl bildiğini veya kendi kendine giden arabaların dur işaretlerini nasıl tanıdığını hiç merak ettiyseniz, makine öğrenimini zaten eylem halinde gördünüz demektir. Peki, makine öğrenimi tam olarak nedir? Ve gerçekten insanların anladığı anlamda bir "öğrenme" midir?
 Makineler Öğrenmez—Hesaplama Yaparlar
 Öncelikle gerçeği kabul edelim: Makineler aslında öğrenmez. En azından insanlar veya hayvanlar gibi öğrenmezler. Öğrenmeyi düşündüğümüzde, bilgiyi özümseme, yeni deneyimlere uyum sağlama ve bilgiyi yaratıcı bir şekilde uygulama sürecini hayal ederiz. Ancak makinelerin sezgisi veya anlayışı yoktur. Sahip oldukları şey, büyük miktarda veriyi işleyebilme, kalıpları tanımlayabilme ve matematiksel formüller kullanarak tahmin yapabilme yeteneğidir.
@@ -1114,6 +1120,8 @@ Sonuç
 Makine öğrenimi sihir değil—matematiktir. Düşünmez, hissetmez veya bizim gibi öğrenmez, ancak desenleri tanıyabilir ve veriye dayalı kararlar alabilir. Makine öğreniminin ne olduğunu (ve ne olmadığını) anlayarak, onun yeteneklerini ve sınırlamalarını abartıya kapılmadan değerlendirebiliriz.
 Bir dahaki sefere yapay zeka destekli bir öneri, bir sesli asistanın sorularınızı yanıtlaması veya yolda bir otonom araç gördüğünüzde şunu bilin: Gerçekten öğrenmiyor. Sadece, deneyimle optimize edilmiş ancak yalnızca programlandığı sınırlar içinde çalışan son derece sofistike bir matematiksel formülü takip ediyor.
 Andriy Burkov'un The Hundred-Page Machine Learning Book adlı kitabındaki kavramlardan esinlenilmiştir.
+Yorum Yapın
+Yorumlar
 
 ---
 
@@ -1126,7 +1134,7 @@ Modified: 2026-10-20
 
 The Role of Artificial Intelligence in Defense Technologies
 Baha Erdoğan
-Defense
+AI
 Security Architecture in Mission-Critical Systems
 Defense software environments are engineered under the strictest security paradigms in computing. Fortified with multi-layered encryption, zero-trust network architectures, and hardware-level isolation, these systems are designed to withstand sophisticated adversary attacks. However, as computational capabilities evolve, a critical question emerges: how resilient are traditional defense architectures against AI-driven threats?
 The Mathematical Foundations of Encryption
@@ -1154,7 +1162,7 @@ Modified: 2026-10-20
 
 Savunma Teknolojilerinde Yapay Zekânın Rolü
 Baha Erdoğan
-Savunma
+Yapay Zekâ
 Bir bilgisayar mühendisi olarak şunu rahatlıkla söyleyebilirim: Savunma sistemleri, yazılım dünyasının en sağlam ve en sıkı korunan yapıları arasındadır. Dışarıdan bakan bizler için bile çoğu zaman katman katman şifreleme ve karmaşık mimariyle adeta aşılmaz görünürler. Peki asıl soru şu: Gerçekten yenilmezler mi?
 Temelden başlayalım: Parolalar. Teknik olarak parola; harf, rakam ve sembollerden oluşan bir bileşimdir. "A, B, C, D, E, 0, 1, 2, 3, 4, 5, *, ?, !, #, %, &" gibi bir karakter kümesinden 3 karakterlik bir parola seçtiğimizi düşünün. 17 × 17 × 17 olasılık çıkar. Bu basit örnek, parolanın gücünü uzunluk ve karakter çeşitliliğinin belirlediğini gösterir.
 Askeri düzey savunma teknolojileri gibi karmaşık yapılarda bu değişkenler olağanüstü ölçüde büyür. Karakter kümesi yüzlerce öğeyi içerebilir, parolalar yüzlerce hatta milyonlarca karakter olabilir. Bu karmaşıklık, güvenliğin temel parçalarından biridir.
@@ -1377,7 +1385,7 @@ Kod Düzenleyici (VS Code, Xcode)
 ⌘ + Shift + ] / [ – Açık Sekmeler Arasında Geçiş
 ⌘ + Shift + X – VS Code Uzantıları'nı Aç
 ⌘ + / – Satırı Yorumla/Yorumu Kaldır
-Yorum Bırakın
+Yorum Yapın
 Yorumlar
 
 ---
@@ -1457,7 +1465,7 @@ Ezelî Efsane
 Böylece Oğuz Kağan'ın destanı çağları aşarak yankılanır; bozkırın rüzgârı fısıldar, fetihlerini hatırlayan ırmaklar terennüm eder. Adı yıldızlara yazılmıştır; ruhu kurtlarla koşar, kanı daha doğmamış alp erlerin damarlarında akar.
 Oğuz Kağan yalnız bir kişi değildi—bir halkın kaderi, göklerin sesi ve uçsuz bucaksız yurtların hakanıydı.
 Ve hikâyesi asla sönmeyecek…
-Yorum Bırakın
+Yorum Yapın
 Yorumlar
 
 ---
@@ -1471,7 +1479,7 @@ Modified: 2026-10-20
 
 From Netflix to TikTok: How AI Knows What You Like
 Baha Erdoğan
-Recommendation Systems
+Technology
 Introduction: Why AI Feels Like Magic (But Isn't)
 Have you ever opened Netflix and thought, "Wow, that's exactly what I wanted to watch"? Or scrolled through TikTok only to get eerily accurate content that matches your humor, interests, or mood?
 It's not magic. It's machine learning.
@@ -1611,7 +1619,7 @@ Modified: 2026-10-20
 
 Are AI Models Making Us Earn Money We Don't Deserve?
 Baha Erdoğan
-Artificial intelligence
+Finance
 Artificial Intelligence (AI) is reshaping the business landscape, sparking concerns among those who have spent years equating hard work with deserved compensation. Many professionals worry that AI tools are diminishing the effort required in their jobs, leading to questions about the value of their labor and whether they are earning the money they truly deserve.
 The AI Revolution: A Double-Edged Sword
 As a computer engineer, I frequently work through AI-related content. Most discussions emphasize AI's capabilities, limitations, integration processes, training data, and technological advancements. However, a significant portion of the conversation is dominated by the fear that AI might replace human jobs. But are we overlooking the human ability to adapt and shape the world?
@@ -1635,7 +1643,7 @@ Modified: 2026-10-20
 
 YZ Modelleri Hak Etmediğimiz Parayı mı Kazandırıyor?
 Baha Erdoğan
-Yapay Zekâ
+Ekonomi
 Yapay zekâ iş dünyasını dönüştürürken, yıllardır çok çalışma = hak edilen ücret denkliğine inananlarda kaygı yaratıyor. Pek çok profesyonel, YZ araçlarının işte harcanan çabayı azalttığını görerek emeğin değerini ve gerçekten hak ettiği ücreti alıp almadığını sorguluyor.
 YZ Devrimi: İki Uçlu Kılıç
 Bir bilgisayar mühendisi olarak YZ içeriklerini yakından takip ediyorum. Tartışmalar çoğunlukla YZ’nin yetenekleri, sınırları, entegrasyonu, verisi ve teknik ilerlemeleri üzerinde dönüyor. Ancak konuşmanın büyük bir kısmını “işleri elimizden alacak mı?” kaygısı kaplıyor. Peki insanın uyum sağlama ve dünyayı şekillendirme yetisini gözden kaçırıyor olabilir miyiz?
@@ -1661,7 +1669,7 @@ Modified: 2026-10-20
 
 How to Estimate Object Speed from Video without Prior Information
 Baha Erdoğan
-Computer Vision
+Technology
 The Metric Bottleneck in Monocular Video Analysis
 Estimating target velocity from uncalibrated monocular camera feeds is a fundamental ill-posed problem in computer vision. Standard pixel displacement \(\Delta p = (u_2 - u_1, v_2 - v_1)\) across sequential video frames does not map directly to physical velocity \(\vec{v} \in \mathbb{R}^3\) without recovering camera intrinsics \(\mathbf{K}\), depth map \(Z(u,v)\), and dynamic scale factor \(\gamma\).
 The Core Challenge: Scale Ambiguity
@@ -1703,7 +1711,7 @@ Modified: 2026-10-20
 
 Ön Bilgi Olmadan Videodan Nesne Hızı Nasıl Tahmin Edilir?
 Baha Erdoğan
-Bilgisayarlı Görü
+Teknoloji
 Bir videoya bakıp “Bu nesne ne kadar hızlı?” diye düşündüğünüz oldu mu? Otoyolda hızlanan bir araba, sprint atan bir sporcu ya da gece göğünde kayan bir cisim olabilir. Kamera kalibrasyonu yok, bilinen nesne boyutu yok, referans ölçüm yokken bunu çıkarmak CSI sahnesi gibi gelebilir.
 İyi haber: Modern bilgisayarlı görme teknikleri ve biraz YZ ile sıradan videolardan şaşırtıcı derecede isabetli hız tahminleri elde edebiliriz.
 Zorluk: Referans Olmadan Hız
@@ -1770,7 +1778,7 @@ Modified: 2026-10-20
 
 What's machine learning, really?
 Baha Erdoğan
-Technology
+AI
 If you've ever wondered how Netflix recommends shows, how your email knows which messages are spam, or how self-driving cars recognize stop signs, you've already encountered machine learning in action. But what exactly is machine learning? And is it really "learning" in the way humans understand it?
 Machines Don't Learn—They Calculate
 Let's start with the truth: machines don't actually learn. At least, not in the way humans or animals do. When we think of learning, we imagine a process of absorbing information, adapting to new experiences, and applying knowledge creatively. Machines, on the other hand, don't have intuition or understanding. What they do have is a way to process vast amounts of data, identify patterns, and use mathematical formulas to make predictions.
@@ -1816,7 +1824,7 @@ Modified: 2026-10-20
 
 Anomaly Detection in Machine Learning: A Technical Overview
 Baha Erdoğan
-Technology
+AI
 Anomaly Detection in Machine Learning: A Technical Overview
 Introduction
 Anomaly detection is a fundamental problem in machine learning, involving the identification of rare instances that deviate significantly from the majority of data. It is widely applied in fraud detection, cybersecurity, industrial defect detection, and predictive maintenance. Unlike traditional supervised learning problems, anomaly detection typically deals with highly imbalanced datasets, requiring specialized methods to effectively model and detect outliers.
@@ -1878,7 +1886,7 @@ Modified: 2026-10-20
 
 Makine Öğreniminde Anomali Tespiti: Teknik Bir Genel Bakış
 Baha Erdoğan
-Teknoloji
+Yapay Zekâ
 Makine Öğreniminde Anomali Tespiti: Teknik Bir Genel Bakış
 Giriş
 Anomali tespiti, makine öğreniminde verinin büyük çoğunluğundan önemli ölçüde sapan nadir örneklerin belirlenmesi problemidir. Sahtekarlık tespiti, siber güvenlik, endüstriyel arıza tespiti ve kestirimci bakım gibi birçok alanda yaygın olarak kullanılır. Geleneksel denetimli öğrenme problemlerinden farklı olarak, anomali tespiti genellikle çok dengesiz veri kümeleriyle çalışır ve aykırı değerleri etkili biçimde modellemek ve tespit etmek için özel yöntemler gerektirir.
@@ -1942,7 +1950,7 @@ Modified: 2026-10-20
 
 One of the precious metals, Data.
 Baha Erdoğan
-Artificial intelligence
+Technology
 Buy a television today and the specification sheet will tell you about the panel and the processor. What it will not tell you is that the set reports back — what you watched, for how long, and when you stopped. That data is worth more to the manufacturer than the margin on the hardware, and the same trade now sits underneath most consumer technology. Still, few truly understand what lies beneath the surface of these marvels. Let's take something familiar: the television. A technology so ingrained in our lives, yet so mystifying in its function. How does it process millions of color pixels per second and render moving visuals with precision and clarity from a distant signal source? The answer lies in a powerful, often overlooked element: data.
 The journey toward understanding technology often begins with curiosity. But as we peel back the layers, it becomes clear that data is the cornerstone of modern innovation. Whether it's the signal transmitted to your TV, the apps on your smartphone, or the algorithms driving artificial intelligence, data fuels it all.
 Why Data Is So Valuable
@@ -1982,7 +1990,7 @@ Modified: 2026-10-20
 
 Kıymetli madenlerden biri, Veri.
 Baha Erdoğan
-Yapay Zekâ
+Teknoloji
 Hızlı teknolojik yenilik ve dijital dönüşüm çağında yapay zekâ, akıllı cihazlar, makine öğrenimi gibi yükselen teknolojilerle çevriliyiz. Bu yenilikler yaşam ve çalışma biçimimizi dönüştürürken her saniye eşi benzeri görülmemiş miktarda bilgi üretiyor. Ancak bu mucizelerin altında ne yattığını çok azımız gerçekten biliyor. Tanıdık bir örnek düşünelim: televizyon. Hayatımıza işlemiş bu teknoloji, uzaktaki bir sinyalden saniyede milyonlarca rengi işleyip kusursuz hareketli görüntüler üretebiliyor. Cevap çoğu zaman göz ardı edilen güçlü bir öğede saklı: veri.
 Teknolojiyi anlama yolculuğu merakla başlar. Katmanları soydukça modern inovasyonun köşe taşının veri olduğu ortaya çıkar. Televizyona giden sinyal, akıllı telefonunuzdaki uygulamalar, yapay zekâyı çalıştıran algoritmalar—hepsinin yakıtı veridir.
 Veri Neden Bu Kadar Değerli?
@@ -2010,7 +2018,7 @@ Veri, dijital yaşamımızın kurulduğu temeldir. İnsan deneyimiyle makine anl
 Önümüzdeki yıllarda önem kazanacak teknolojiler—YZ’den kuantuma, akıllı şehirlere—verinin kalitesine, çeşitliliğine ve etik yönetimine dayanacaktır.
 Telefonunuz yüzünüzle açıldığında ya da YZ asistanınız favori kahve siparişinizi hatırladığında şunu hatırlayın:
 Bu bir sihir değil. Modern dünyayı çalıştıran gizli mücevher—veri.
-Yorum Bırakın
+Yorum Yapın
 Yorumlar
 
 ---
@@ -2024,7 +2032,7 @@ Modified: 2026-10-20
 
 Why High Value-Per-Kilogram Exports Are the Key to National Prosperity
 Baha Erdoğan
-Economy
+Finance
 In recent years, I've become increasingly fixated on one particular metric: export revenue per kilogram. But not just as an economic number—rather, as a deep indicator of national well-being. It's not just about putting more money in the pockets of workers and business owners. Increasing the unit value of our exports—producing and selling goods with higher added value—can generate ripple effects across the economy, society, and even the environment.
 Let's explore this through a deliberately challenging example: cheese production.
 Suppose you're a cheesemaker. If the cheese you produce is of exceptional quality, with recognized brand value, domestic and international buyers will naturally be willing to pay a premium for it. Over time, what you offer ceases to be "just cheese." It becomes part of a broader consumer experience—one that includes taste, quality, prestige, and even the subtle image benefits it offers.
@@ -2065,7 +2073,7 @@ Modified: 2026-10-20
 
 İhracatta Kilogram Başına Değer Neden Refahın Anahtarıdır?
 Baha Erdoğan
-Economy
+Ekonomi
 In recent years, I've become increasingly fixated on one particular metric: export revenue per kilogram. But not just as an economic number—rather, as a deep indicator of national well-being. It's not just about putting more money in the pockets of workers and business owners. Increasing the unit value of our exports—producing and selling goods with higher added value—can generate ripple effects across the economy, society, and even the environment.
 Let's explore this through a deliberately challenging example: cheese production.
 Suppose you're a cheesemaker. If the cheese you produce is of exceptional quality, with recognized brand value, domestic and international buyers will naturally be willing to pay a premium for it. Over time, what you offer ceases to be "just cheese." It becomes part of a broader consumer experience—one that includes taste, quality, prestige, and even the subtle image benefits it offers.
@@ -2154,6 +2162,6 @@ Tarihi öğrenmeye gerçekten zaman ayırmak, sessiz bir güç kazandırır. Dah
 Son Söz: Yavaşlayıp Daha Fazla Öğrenmek
 Evet, hız çağında yaşıyoruz. Ama bilmeye değer olan her şey aceleye gelmez. En yararlı ve anlamlı bilgi, geriye bakmaktan gelir; böylece daha net ve özgüvenle ilerleriz.
 Tarih yalnızca geçmiş değildir. Buraya nasıl geldiğimizi ve bir dahaki sefere neyi farklı yapabileceğimizi anlamaktır.
-Yorum Bırakın
+Yorum Yapın
 Yorumlar
 

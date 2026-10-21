@@ -534,6 +534,128 @@ async function unifyBlogTemplates() {
 }
 
 /**
+ * Put every string around the article into the article's language.
+ *
+ * These widgets were hand-copied between pages, so each page carried whatever
+ * its donor had: Turkish articles with "Leave a Reply" and "Submit Comment",
+ * German ones with "Search" and "Tags", and the Agentic AI series box on the
+ * Turkish pages linking to the English articles under English titles. The
+ * post-meta was the same story — "Technology" on AI articles, "Economy" on a
+ * Turkish page, and a comment count hardcoded to 0 that nothing ever updated.
+ */
+async function localiseArticleChrome() {
+    const B = require('./tools/blog-render.js');
+    const { parse } = require('node-html-parser');
+    const pages = collectPages();
+
+    const L = {
+        en: {
+            search: 'Search', placeholder: 'Search for...', recent: 'Recent Posts', tags: 'Tags',
+            series: 'Follow the Series', part: 'Part', current: 'Current',
+            leave: 'Leave a Reply', comments: 'Comments', name: 'Name *', email: 'Email *', comment: 'Comment *',
+            submit: 'Submit Comment', ok: 'Your comment has been submitted. Thank you!',
+            fail: 'There was an error submitting your comment. Please try again.',
+        },
+        tr: {
+            search: 'Ara', placeholder: 'Blogda ara...', recent: 'Son Yazılar', tags: 'Etiketler',
+            series: 'Seriyi Takip Et', part: 'Bölüm', current: 'Bu yazı',
+            leave: 'Yorum Yapın', comments: 'Yorumlar', name: 'Ad *', email: 'E-posta *', comment: 'Yorum *',
+            submit: 'Yorumu Gönder', ok: 'Yorumunuz gönderildi. Teşekkürler!',
+            fail: 'Yorum gönderilirken bir hata oluştu. Lütfen tekrar deneyin.',
+        },
+        de: {
+            search: 'Suche', placeholder: 'Suchen...', recent: 'Neueste Beiträge', tags: 'Schlagwörter',
+            series: 'Zur Serie', part: 'Teil', current: 'Aktuell',
+            leave: 'Kommentar hinterlassen', comments: 'Kommentare', name: 'Name *', email: 'E-Mail *', comment: 'Kommentar *',
+            submit: 'Kommentar senden', ok: 'Dein Kommentar wurde gesendet. Danke!',
+            fail: 'Beim Senden deines Kommentars ist ein Fehler aufgetreten. Bitte versuche es erneut.',
+        },
+    };
+
+    // The Agentic AI series, in reading order, as translation-group keys.
+    const SERIES = ['agenticaiexplained', 'agenticaivsgenai', 'agenticaitechdepth', 'typesofagenticai'];
+    const SERIES_TITLES = new Set(Object.values(L).map((l) => l.series.toLowerCase()));
+
+    const byGroup = new Map();
+    for (const [file, meta] of pages) {
+        if (NOT_ARTICLES.has(file)) continue;
+        byGroup.set(`${groupKeyOf(file)}:${meta.lang}`, meta);
+    }
+
+    const ICON_USER = '<svg aria-hidden="true" class="icon" fill="none" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" xmlns="http://www.w3.org/2000/svg"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>';
+    const ICON_TAG = '<svg aria-hidden="true" class="icon" fill="none" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" xmlns="http://www.w3.org/2000/svg"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" x2="7.01" y1="7" y2="7"></line></svg>';
+
+    let touched = 0;
+    for (const [file, meta] of pages) {
+        if (NOT_ARTICLES.has(file)) continue;
+        const l = L[meta.lang] || L.en;
+        const root = parse(await readFileAsync(file, 'utf8'));
+        const set = (sel, text) => root.querySelectorAll(sel).forEach((n) => n.set_content(B.esc(text)));
+
+        const postMeta = root.querySelector('.post-meta');
+        if (postMeta) {
+            postMeta.querySelectorAll('ul').forEach((n) => n.remove());
+            postMeta.insertAdjacentHTML('beforeend',
+                `<ul><li>${ICON_USER} <a href="index.html#about">Baha Erdoğan</a></li>` +
+                (meta.categoryLabel ? `<li>${ICON_TAG} <span class="tag">${B.esc(meta.categoryLabel)}</span></li>` : '') +
+                `</ul>`);
+        }
+
+        set('.sidebar-search .sidebar-title', l.search);
+        root.querySelectorAll('#search-input').forEach((n) => {
+            n.setAttribute('placeholder', l.placeholder);
+            n.setAttribute('aria-label', l.placeholder);
+        });
+        root.querySelectorAll('.sidebar-search .btn-search').forEach((n) => n.setAttribute('aria-label', l.search));
+        set('.widget-tags .sidebar-title', l.tags);
+        root.querySelectorAll('.widget-sidebar').forEach((w) => {
+            const title = w.querySelector('.sidebar-title');
+            if (title && w.querySelector('.list-sidebar') && !SERIES_TITLES.has(title.text.trim().toLowerCase())
+                && /recent|son yaz|neueste/i.test(title.text)) title.set_content(B.esc(l.recent));
+        });
+
+        // Series box: regenerated from the series list, in this page's language.
+        const seriesBox = root.querySelectorAll('.widget-sidebar')
+            .find((w) => SERIES_TITLES.has((w.querySelector('.sidebar-title')?.text || '').trim().toLowerCase()));
+        const pos = SERIES.indexOf(groupKeyOf(file));
+        if (pos >= 0) {
+            const items = SERIES.map((key, i) => {
+                const m = byGroup.get(`${key}:${meta.lang}`);
+                const label = `<strong>${B.esc(l.part)} ${i + 1}:</strong>`;
+                if (!m) return `<li>${label}</li>`;
+                const badge = i === pos ? ` <span class="badge badge-primary">${B.esc(l.current)}</span>` : '';
+                return `<li>${label} <a href="${B.esc(m.file)}">${B.esc(B.displayTitle(m))}</a>${badge}</li>`;
+            }).join('');
+            const html = `<div class="widget-sidebar"><h3 class="sidebar-title">${B.esc(l.series)}</h3>` +
+                `<div class="sidebar-content"><ul class="list-sidebar">${items}</ul></div></div>`;
+            if (seriesBox) seriesBox.replaceWith(parse(html));
+            else root.querySelector('.widget-tags')?.insertAdjacentHTML('beforebegin', html);
+        } else if (seriesBox) {
+            seriesBox.remove();
+        }
+
+        const form = root.querySelector('#comment-form');
+        if (form) {
+            const h = form.parentNode.querySelector('h3');
+            if (h) h.set_content(B.esc(l.leave));
+            set('#comment-success', l.ok);
+            set('#comment-error', l.fail);
+            set('label[for="comment-name"]', l.name);
+            set('label[for="comment-email"]', l.email);
+            set('label[for="comment-text"]', l.comment);
+            form.querySelectorAll('button[type="submit"]').forEach((b) => b.set_content(B.esc(l.submit)));
+        }
+        const list = root.querySelector('#comments-container');
+        const listHeading = list && list.parentNode.querySelector('h3');
+        if (listHeading) listHeading.set_content(B.esc(l.comments));
+
+        await writeFileAsync(file, root.toString(), 'utf8');
+        touched++;
+    }
+    console.log(`  localised sidebar, series box, comment form and post-meta on ${touched} article pages`);
+}
+
+/**
  * Article page furniture: table of contents, share links, previous/next and
  * related articles.
  *
@@ -1791,6 +1913,11 @@ async function fixVisibleBreadcrumbs() {
 async function ensureFooterAndLegalLink() {
     const LABEL = { en: 'Privacy Policy', tr: 'Gizlilik Politikası', de: 'Datenschutz' };
     const HREF = { en: 'privacy.html', tr: 'privacy-tr.html', de: 'privacy-de.html' };
+    const COPYRIGHT = {
+        en: '&copy; Copyright <strong>Baha Erdoğan</strong>. All Rights Reserved',
+        tr: '&copy; <strong>Baha Erdoğan</strong>. Tüm hakları saklıdır.',
+        de: '&copy; <strong>Baha Erdoğan</strong>. Alle Rechte vorbehalten.',
+    };
 
     const footerFor = (inner) =>
         `<footer><div class="container"><div class="row"><div class="col-sm-12">`
@@ -1804,7 +1931,7 @@ async function ensureFooterAndLegalLink() {
         const before = html;
         const lang = langOf(file);
         const link = `<p class="legal-link"><a href="${HREF[lang]}">${LABEL[lang]}</a></p>`;
-        const copyright = '<p class="copyright">&copy; Copyright <strong>Baha Erdoğan </strong>All Rights Reserved</p>';
+        const copyright = `<p class="copyright">${COPYRIGHT[lang]}</p>`;
 
         if (!/<footer[\s>]/i.test(html)) {
             // Footer belongs after the main landmark, not inside it.
@@ -1816,6 +1943,8 @@ async function ensureFooterAndLegalLink() {
             html = html.replace(/(<p class="copyright">[\s\S]*?<\/p>)/, `$1${link}`);
             linked++;
         }
+        // Turkish and German pages said "All Rights Reserved" in English.
+        html = html.replace(/<p class="copyright">[\s\S]*?<\/p>/, copyright);
 
         if (html !== before) await writeFileAsync(file, html, 'utf8');
     }
@@ -1849,8 +1978,12 @@ async function generateCSP() {
         "img-src 'self' data: https:",
         "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net",
         "font-src 'self' data: https://cdn.jsdelivr.net",
-        `script-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://cdn.jsdelivr.net ${[...hashes].sort().join(' ')}`,
-        "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://comment-handler.baha-erdogann.workers.dev",
+        // Wildcards follow Google's GA4 CSP guide: hits may go to regional
+        // endpoints such as region1.google-analytics.com. The cloudflareinsights
+        // hosts are Cloudflare Web Analytics, which Cloudflare injects into every
+        // page and which counts visitors without cookies or consent.
+        `script-src 'self' https://*.googletagmanager.com https://www.google-analytics.com https://cdn.jsdelivr.net https://static.cloudflareinsights.com ${[...hashes].sort().join(' ')}`,
+        "connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://cloudflareinsights.com https://comment-handler.baha-erdogann.workers.dev",
         "frame-ancestors 'self'",
         "base-uri 'self'",
         "form-action 'self'",
@@ -2015,6 +2148,9 @@ async function build() {
 
         console.log('Unifying blog post templates...');
         await unifyBlogTemplates();
+
+        console.log('Localising article chrome...');
+        await localiseArticleChrome();
 
         console.log('Generating sitemap and robots.txt...');
         await generateSitemapAndRobots();
