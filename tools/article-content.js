@@ -137,8 +137,13 @@ function apply(dir, files) {
       if (img) img.setAttribute('alt', fields.h1);
     }
     if (fields.tags) {
+      const tags = fields.tags.split(',').map((t) => t.trim()).filter(Boolean);
       const ul = root.querySelector('.widget-tags ul');
-      if (ul) ul.set_content(fields.tags.split(',').map((t) => `<li><span class="tag">${esc(t.trim())}</span></li>`).join(''));
+      if (ul) ul.set_content(tags.map((t) => `<li><span class="tag">${esc(t)}</span></li>`).join(''));
+      // Kept in step with the visible tags; a cloned page otherwise carries
+      // its template's keywords ("Netflix, TikTok" on an article about Ergenekon).
+      const kw = root.querySelector('meta[name="keywords"]');
+      if (kw) kw.setAttribute('content', tags.join(', '));
     }
     // A cloned page must not stay noindexed just because its template was.
     if (fields['create-from']) root.querySelectorAll('meta[name="robots"]').forEach((m) => m.remove());

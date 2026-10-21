@@ -12,133 +12,133 @@
       <link>https://bahaerdogan.com/WhyBuildingAiStartupIsHard.html</link>
       <guid isPermaLink="true">https://bahaerdogan.com/WhyBuildingAiStartupIsHard.html</guid>
       <pubDate>Tue, 20 Oct 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[Why do most AI startups fail in production? An engineering look at vibe coding, inference unit economics, RAG architecture, and real-world system design.]]></description>
+      <description><![CDATA[Why most AI startups fail once they meet production: vibe coding, inference costs nobody calculated, weak teams, short runways, and the "wrapper" trap. Notes from consulting for early-stage founders.]]></description>
     </item>
     <item>
       <title><![CDATA[Will Artificial Intelligence Replace My Job?]]></title>
       <link>https://bahaerdogan.com/ai-and-human-job-competition.html</link>
       <guid isPermaLink="true">https://bahaerdogan.com/ai-and-human-job-competition.html</guid>
       <pubDate>Sat, 09 Aug 2025 00:00:00 GMT</pubDate>
-      <description><![CDATA[Will AI replace your job? A practical look at feasibility and cost, safe professions, and the global impact of automation.]]></description>
+      <description><![CDATA[Will AI take your job? Two questions answer most of it: is it feasible, and what does it cost? Which jobs are safer, which are at risk, and why automation may bring factories back to rich countries.]]></description>
     </item>
     <item>
       <title><![CDATA[Types of Agentic AI and How to Build Your First Agent]]></title>
       <link>https://bahaerdogan.com/TypesOfAgenticAi.html</link>
       <guid isPermaLink="true">https://bahaerdogan.com/TypesOfAgenticAi.html</guid>
       <pubDate>Tue, 29 Jul 2025 00:00:00 GMT</pubDate>
-      <description><![CDATA[Comprehensive guide to types of Agentic AI and how to build your first AI agent. Learn about task agents, interface agents, reflection agents, planner agents, and multi-agent systems.]]></description>
+      <description><![CDATA[The five common types of AI agents, what each one is good for and where each one breaks, plus a practical path to building your first agent.]]></description>
     </item>
     <item>
       <title><![CDATA[What Are AI Agents or Agentic AI?]]></title>
       <link>https://bahaerdogan.com/AgenticAiExplained.html</link>
       <guid isPermaLink="true">https://bahaerdogan.com/AgenticAiExplained.html</guid>
       <pubDate>Sun, 27 Jul 2025 00:00:00 GMT</pubDate>
-      <description><![CDATA[Explore the foundation of autonomous artificial intelligence. Learn about AI agents, their architecture, and how they represent the next evolution in intelligent technology.]]></description>
+      <description><![CDATA[An AI agent doesn't just answer questions. It plans, uses tools and checks its own work. How agentic AI works, where it helps, and where it breaks.]]></description>
     </item>
     <item>
-      <title><![CDATA[Agentic AI in Depth: Technical Structures, Planning Models, and Autonomous Orchestration]]></title>
+      <title><![CDATA[Agentic AI in Depth: Planning Models, Memory and Orchestration]]></title>
       <link>https://bahaerdogan.com/AgenticAiTechDepth.html</link>
       <guid isPermaLink="true">https://bahaerdogan.com/AgenticAiTechDepth.html</guid>
       <pubDate>Sun, 27 Jul 2025 00:00:00 GMT</pubDate>
-      <description><![CDATA[A deep technical dive into agentic AI: planning models, memory systems, orchestration layers, and autonomous architectures powering next-gen AI systems.]]></description>
+      <description><![CDATA[Part 3 of the agentic AI series: how agents plan (BDI, ReAct, ReWOO), how they use tools and memory, and the orchestration patterns that keep them reliable in production.]]></description>
     </item>
     <item>
       <title><![CDATA[Agentic AI vs Generative AI: Architectural Differences and Chatbot Impact]]></title>
       <link>https://bahaerdogan.com/AgenticAivsGenAi.html</link>
       <guid isPermaLink="true">https://bahaerdogan.com/AgenticAivsGenAi.html</guid>
       <pubDate>Sun, 27 Jul 2025 00:00:00 GMT</pubDate>
-      <description><![CDATA[Explore the critical distinctions between agentic AI and generative AI, their architectural foundations, and their real-world impact on autonomous AI chatbot systems.]]></description>
+      <description><![CDATA[Generative AI writes an answer; agentic AI runs a loop until a task is done. The architectural differences, the trade-offs in production, and what changes for chatbots.]]></description>
     </item>
     <item>
       <title><![CDATA[From Prediction to Impact: What Artificial Intelligence Actually Means for You]]></title>
       <link>https://bahaerdogan.com/WhatAiMeansToYou.html</link>
       <guid isPermaLink="true">https://bahaerdogan.com/WhatAiMeansToYou.html</guid>
       <pubDate>Tue, 13 May 2025 00:00:00 GMT</pubDate>
-      <description><![CDATA[Explore how artificial intelligence and machine learning impact your daily life and decisions, and why understanding AI is no longer optional.]]></description>
+      <description><![CDATA[AI already shapes your feed, your bank's fraud checks and your doctor's scans. What machine learning actually does in everyday life, what it costs, and how to stay in control.]]></description>
     </item>
     <item>
       <title><![CDATA[The Role of Artificial Intelligence in Defense Technologies]]></title>
       <link>https://bahaerdogan.com/AI-Defense.html</link>
       <guid isPermaLink="true">https://bahaerdogan.com/AI-Defense.html</guid>
       <pubDate>Thu, 25 Jul 2024 00:00:00 GMT</pubDate>
-      <description><![CDATA[Explore the transformative role of artificial intelligence in modern defense technologies. Learn about AI applications in military systems, cybersecurity, and national security.]]></description>
+      <description><![CDATA[Defense software is among the best-protected in the world. What happens to that protection when attackers, and defenders, have AI? Passwords, encryption and a shifting balance of power.]]></description>
     </item>
     <item>
-      <title><![CDATA[The Ergenekon Epic]]></title>
+      <title><![CDATA[The Ergenekon Epic: An Ancient Turkish Legend]]></title>
       <link>https://bahaerdogan.com/ErgenekonEpic.html</link>
       <guid isPermaLink="true">https://bahaerdogan.com/ErgenekonEpic.html</guid>
       <pubDate>Thu, 25 Jul 2024 00:00:00 GMT</pubDate>
-      <description><![CDATA[Explore the ancient Turkish legend of Ergenekon, a tale of survival, rebirth, and the origins of the Turkish people. Learn about this important piece of Turkish cultural heritage.]]></description>
+      <description><![CDATA[The Ergenekon epic retold in plain English: a defeated people hidden in a mountain valley for four hundred years, an iron mountain melted with seventy bellows, and a grey wolf that leads them out.]]></description>
     </item>
     <item>
-      <title><![CDATA[Mac Shortcuts Guide]]></title>
+      <title><![CDATA[Mac Keyboard Shortcuts: A Practical Guide for macOS]]></title>
       <link>https://bahaerdogan.com/MacShortcuts.html</link>
       <guid isPermaLink="true">https://bahaerdogan.com/MacShortcuts.html</guid>
       <pubDate>Thu, 25 Jul 2024 00:00:00 GMT</pubDate>
-      <description><![CDATA[A comprehensive guide to essential Mac keyboard shortcuts for improved productivity. Learn system-wide shortcuts, Finder commands, and application-specific shortcuts.]]></description>
+      <description><![CDATA[The Mac keyboard shortcuts worth learning first, especially if you're coming from Windows: editing, Finder, screenshots, windows, text navigation, Terminal and code editors.]]></description>
     </item>
     <item>
-      <title><![CDATA[The Oğuz Kağan Epic]]></title>
+      <title><![CDATA[The Oğuz Kağan Epic: An Ancient Turkish Legend]]></title>
       <link>https://bahaerdogan.com/OguzKaganEpic.html</link>
       <guid isPermaLink="true">https://bahaerdogan.com/OguzKaganEpic.html</guid>
       <pubDate>Thu, 25 Jul 2024 00:00:00 GMT</pubDate>
-      <description><![CDATA[Discover the epic tale of Oğuz Kağan, one of the most important legends in Turkish mythology. Learn about the origins of the Turkish people and their cultural heritage.]]></description>
+      <description><![CDATA[The legend of Oğuz Kağan, the mythical ancestor of the Oghuz Turks, retold in plain English: a child who refused milk, the beast in the forest, two wives from the sky and the lake, the grey wolf, and the golden bow and silver arrows.]]></description>
     </item>
     <item>
       <title><![CDATA[From Netflix to TikTok: How AI Knows What You Like]]></title>
       <link>https://bahaerdogan.com/AlgorithmsExplained.html</link>
       <guid isPermaLink="true">https://bahaerdogan.com/AlgorithmsExplained.html</guid>
       <pubDate>Tue, 11 Jun 2024 00:00:00 GMT</pubDate>
-      <description><![CDATA[How recommendation systems like Netflix and TikTok work using AI and machine learning.]]></description>
+      <description><![CDATA[How recommendation systems at Netflix, TikTok and Spotify decide what to show you, explained without math: collaborative filtering, content-based filtering, and why your feed gets repetitive.]]></description>
     </item>
     <item>
       <title><![CDATA[Are AI Models Making Us Earn Money We Don't Deserve?]]></title>
       <link>https://bahaerdogan.com/DeservingMoney.html</link>
       <guid isPermaLink="true">https://bahaerdogan.com/DeservingMoney.html</guid>
       <pubDate>Tue, 11 Jun 2024 00:00:00 GMT</pubDate>
-      <description><![CDATA[Explore the ethical implications of AI-generated income. Are we earning money we don't deserve through AI models? A thought-provoking analysis of AI's impact on work and compensation.]]></description>
+      <description><![CDATA[When AI does in minutes what used to take a day, is your salary still deserved? Why that feeling is understandable, and why tools have never made skilled work worth less.]]></description>
     </item>
     <item>
       <title><![CDATA[How to Estimate Object Speed from Video]]></title>
       <link>https://bahaerdogan.com/DistanceCalculatingMethods.html</link>
       <guid isPermaLink="true">https://bahaerdogan.com/DistanceCalculatingMethods.html</guid>
       <pubDate>Tue, 11 Jun 2024 00:00:00 GMT</pubDate>
-      <description><![CDATA[Learn how to estimate object speed from video using computer vision techniques without prior information or calibration. Comprehensive guide with practical examples.]]></description>
+      <description><![CDATA[Can you measure how fast something moves in a video without a calibrated camera or a known reference? Structure from Motion, depth networks and tracking, and where the missing scale comes from.]]></description>
     </item>
     <item>
       <title><![CDATA[What's Machine Learning, Really?]]></title>
       <link>https://bahaerdogan.com/MachineLearning-Explained.html</link>
       <guid isPermaLink="true">https://bahaerdogan.com/MachineLearning-Explained.html</guid>
       <pubDate>Tue, 11 Jun 2024 00:00:00 GMT</pubDate>
-      <description><![CDATA[A comprehensive explanation of machine learning, its types, and how it actually works - beyond the hype and misconceptions. Learn about supervised, unsupervised, and reinforcement learning.]]></description>
+      <description><![CDATA[Machine learning doesn't learn the way people do. It fits a mathematical function to data. A plain explanation of how that works, the three main types, and why the limits matter.]]></description>
     </item>
     <item>
-      <title><![CDATA[Anomaly Detection in Machine Learning]]></title>
+      <title><![CDATA[Anomaly Detection in Machine Learning: Methods and Math]]></title>
       <link>https://bahaerdogan.com/MachineLearningAnomalyDetection.html</link>
       <guid isPermaLink="true">https://bahaerdogan.com/MachineLearningAnomalyDetection.html</guid>
       <pubDate>Tue, 11 Jun 2024 00:00:00 GMT</pubDate>
-      <description><![CDATA[A comprehensive technical overview of anomaly detection in machine learning, including methodologies, mathematical foundations, and practical implementation examples.]]></description>
+      <description><![CDATA[How machine learning finds the rare data points that don't fit: supervised, unsupervised and semi-supervised methods, the math behind them, and the problems you run into in practice.]]></description>
     </item>
     <item>
       <title><![CDATA[One of the Precious Metals: Data]]></title>
       <link>https://bahaerdogan.com/PreciousMetalData.html</link>
       <guid isPermaLink="true">https://bahaerdogan.com/PreciousMetalData.html</guid>
       <pubDate>Tue, 11 Jun 2024 00:00:00 GMT</pubDate>
-      <description><![CDATA[Explore why data is considered one of the most valuable resources in the modern world. Learn about data science, analysis, and its impact on business and technology.]]></description>
+      <description><![CDATA[Why data has become one of the most valuable resources of our time: what makes it different from oil or gold, why AI depends on it, and who gets to own it.]]></description>
     </item>
     <item>
       <title><![CDATA[Why High Value-Per-Kilogram Exports Are the Key to National Prosperity]]></title>
       <link>https://bahaerdogan.com/ValuePerKilogramForProsperity.html</link>
       <guid isPermaLink="true">https://bahaerdogan.com/ValuePerKilogramForProsperity.html</guid>
       <pubDate>Tue, 11 Jun 2024 00:00:00 GMT</pubDate>
-      <description><![CDATA[An opinion on why high value-per-kilogram exports are the key to national prosperity.]]></description>
+      <description><![CDATA[Why export value per kilogram says more about a country's prosperity than GDP does: a cheese example, the trap of cheap high-volume exports, India and Japan compared, and the window Türkiye has now.]]></description>
     </item>
     <item>
-      <title><![CDATA[Why is Knowing History Important?]]></title>
+      <title><![CDATA[Why Is Knowing History Important?]]></title>
       <link>https://bahaerdogan.com/WhyToLearnHistory.html</link>
       <guid isPermaLink="true">https://bahaerdogan.com/WhyToLearnHistory.html</guid>
       <pubDate>Tue, 11 Jun 2024 00:00:00 GMT</pubDate>
-      <description><![CDATA[Discover why understanding history is crucial in today's world. Learn how historical knowledge shapes our present and future, and why it's essential for personal and societal growth.]]></description>
+      <description><![CDATA[A quick search can tell you almost anything, but it can't give you judgement. Why knowing history, not just looking things up, makes for better decisions, clearer thinking and fewer repeated mistakes.]]></description>
     </item>
   </channel>
 </rss>

@@ -23,13 +23,6 @@ const EXCLUDED = new Set([
   'BlogTemplate.html',
   'BlogTemplateTR.html',
   'BlogTemplateDE.html',
-  // German translations that are still placeholders.
-  'DistanceCalculatingMethodsDE.html',
-  'MachineLearning-ExplainedDE.html',
-  'MachineLearningAnomalyDetectionDE.html',
-  'AgenticAiTechDepthDE.html',
-  'TypesOfAgenticAiDE.html',
-  'ValuePerKilogramForProsperityDE.html',
 ]);
 
 const NOT_ARTICLES = new Set([
