@@ -3874,6 +3874,9 @@ section.route, .sect-4, .sect-pt4 { padding-top: var(--space-2xl); padding-botto
   font-size: .85rem;
   color: var(--text-muted);
   border-top: 1px dashed var(--border);
+  /* German compounds ("Speicherverwaltung") are wider than a pillar column. */
+  hyphens: auto;
+  overflow-wrap: break-word;
 }
 
 .article-diagram .dg-pillar li:first-child { border-top: 0; }
@@ -3996,6 +3999,8 @@ section.route, .sect-4, .sect-pt4 { padding-top: var(--space-2xl); padding-botto
   background: var(--surface-sunken);
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
+  hyphens: auto;
+  overflow-wrap: break-word;
 }
 
 .article-diagram .dg-node + .dg-node::before {

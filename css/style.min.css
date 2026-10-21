@@ -680,7 +680,7 @@ footer .credits a{color:var(--brand-ink)}
 .dg-pillar{padding:.8rem .9rem;background:var(--surface);border:1px solid var(--border-strong);border-top:4px solid var(--brand);border-radius:var(--radius-sm)}
 .dg-pillar>strong{display:block;margin-bottom:.35rem;font-size:1.05rem}
 .article-diagram .dg-pillar ul{margin:0;padding:0;list-style:none}
-.article-diagram .dg-pillar li{padding:.3rem 0;font-size:.85rem;color:var(--text-muted);border-top:1px dashed var(--border)}
+.article-diagram .dg-pillar li{padding:.3rem 0;font-size:.85rem;color:var(--text-muted);border-top:1px dashed var(--border);hyphens:auto;overflow-wrap:break-word}
 .article-diagram .dg-pillar li:first-child{border-top:0}
 .dg-stack__base{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.4rem .75rem;padding:.75rem 1rem;background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--radius-sm)}
 .dg-stack__base .dg-kicker{margin:0}
@@ -698,7 +698,7 @@ footer .credits a{color:var(--brand-ink)}
 .dg-lane__label{display:block;margin-bottom:.5rem;font-size:.85rem;font-weight:600;color:var(--text)}
 .dg-lane__label em{margin-left:.35rem;font-style:normal;font-weight:400;color:var(--text-subtle)}
 .article-diagram .dg-flow{display:grid;grid-template-columns:minmax(0,1fr);row-gap:1.4rem;margin:0;padding:0;list-style:none}
-.article-diagram .dg-node{position:relative;display:flex;flex-direction:column;justify-content:center;padding:.5rem .7rem;font-size:.85rem;font-weight:500;text-align:center;color:var(--text);background:var(--surface-sunken);border:1px solid var(--border-strong);border-radius:var(--radius-sm)}
+.article-diagram .dg-node{position:relative;display:flex;flex-direction:column;justify-content:center;padding:.5rem .7rem;font-size:.85rem;font-weight:500;text-align:center;color:var(--text);background:var(--surface-sunken);border:1px solid var(--border-strong);border-radius:var(--radius-sm);hyphens:auto;overflow-wrap:break-word}
 .article-diagram .dg-node+.dg-node::before{content:"↓";position:absolute;top:-1.4rem;left:0;right:0;line-height:1.4rem;color:var(--text-subtle)}
 .article-diagram .dg-node--model{background:var(--brand-wash);border-color:var(--brand)}
 .article-diagram .dg-node--store{background:var(--surface);border:1.5px dashed var(--brand-ink)}

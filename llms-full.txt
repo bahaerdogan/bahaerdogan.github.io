@@ -262,7 +262,7 @@ Lernen und Schreiben. Schreibassistenten und Sprach-Apps geben sofort Rückmeldu
 Logistik und Landwirtschaft. Paketdienste prognostizieren die Nachfrage und planen Routen; Landwirte erkennen mit Drohnenbildern und Modellen Pflanzenkrankheiten, bevor sie sich ausbreiten.
 Was ein Modell in einer App kostet
 Machine Learning in Alltagsprodukten einzusetzen ist vor allem eine Frage von Kompromissen, und als Nutzer spürst du sie, auch wenn du sie nicht siehst. Der erste betrifft die Geschwindigkeit. Ein Modell auf deinem Handy antwortet in wenigen Millisekunden, und deine Daten verlassen das Gerät nie, aber das Modell muss klein sein. Ein großes Modell in der Cloud kann viel mehr, doch jede Anfrage geht über das Netz. Das kostet spürbar Zeit und bedeutet, dass deine Daten auf dem Server von jemand anderem landen.
-Wo das Modell läuft Typische Verzögerung Datenschutz Wichtigste Grenze
+Wo das Modell läuftTypische VerzögerungDatenschutzWichtigste Grenze
 Auf dem Gerät (Core ML, ONNX Runtime)
 Unter 10 ms
 Daten bleiben auf dem Handy
@@ -416,19 +416,171 @@ Kommentare
 
 ---
 
-# On-Device AI: Yapay Zeka Servisten Yazılıma Dönüşürken
+# On-Device-KI: Wenn KI vom Dienst zur Software wird
+
+URL: https://bahaerdogan.com/on-device-ai-de.html
+Language: de
+Published: 2026-10-21
+Modified: 2026-10-21
+
+Wenn KI kein Dienst mehr ist: Notizen eines Ingenieurs zu On-Device-KI
+Baha Erdoğan
+KI
+Vielleicht schauen wir in ein paar Jahren auf diese Zeit zurück und sagen: Da hat alles angefangen. Mit On-Device-Modellen können große Firmen genauso wie Einzelentwickler Produkte bauen, ohne die Datenschutzsorgen, die entstehen, sobald Nutzerdaten auf einen Server wandern.
+Ich sage gleich vorweg: Ganz so weit sind wir meiner Meinung nach noch nicht. Aber ich glaube nicht, dass man falsch liegt, wenn man in den nächsten Jahren eine Welle von Apps für ganz bestimmte Aufgaben erwartet. Was Kosten und dezentrale KI angeht, erleben wir gerade wichtige Tage.
+Je seltener sich On-Device-Modelle etwas ausdenken, desto eher könnte sich KI nicht mehr wie ein „Dienst“ anfühlen, sondern wie gewöhnliche „Software“, die einfach auf deinem Rechner installiert ist. Dieser Gedanke ist mir in den letzten Wochen klarer geworden, während ich mit den neuen kleinen offenen Modellen herumprobiert und die Übersichtsarbeit von Wang und Kollegen zu On-Device-KI gelesen habe. Dieser Beitrag liegt irgendwo dazwischen: ein bisschen Literatur, ein bisschen Notizen aus der Praxis.
+Was genau ist On-Device-KI?
+Ganz einfach gesagt bedeutet On-Device-KI, dass das Modell die Inferenz direkt auf dem Gerät ausführt, statt die Daten in die Cloud zu schicken. Ob das Gerät ein Smartphone, eine Uhr, ein Auto, ein Sensor in der Fabrikhalle oder ein Laptop ist, spielt keine Rolle. Die Literatur nennt drei Gemeinsamkeiten dieser Modelle: Sie antworten in Echtzeit, sie müssen mit begrenzter Rechenleistung, wenig Speicher und wenig Energie auskommen, und weil die Daten lokal bleiben, stärken sie den Datenschutz.
+Warum das Thema gerade jetzt so wichtig wird, fasst eine Gartner-Prognose von vor einigen Jahren gut zusammen: Bis 2025 sollten rund 75 % der Daten, die Unternehmen erzeugen, außerhalb klassischer Rechenzentren entstehen. Wenn Daten ohnehin am Rand des Netzes (Edge) entstehen, ergibt es wegen Latenz, Bandbreite und Kosten immer weniger Sinn, alles in die Zentrale zu schaffen und dort zu verarbeiten.
+Auf der anderen Seite steht die Modellgröße. GPT-3 mit 175 Milliarden Parametern brauchte rund 800 GB Speicher, und so ein Modell auf ein Smartphone zu bringen, war undenkbar. Heute gibt es Sprachmodelle, die von Anfang an für Geräte entworfen wurden, etwa Gemma 2B und Llama 3.2 1B, und sogar multimodale Modelle mit weniger als einer Milliarde Parametern. Der Abstand ist viel schneller geschrumpft, als ich erwartet hätte.
+Cloud oder Gerät? Es kommt auf den Trade-off an
+Auf dem Gerät zu rechnen ist nicht umsonst: Was du bei Latenz und Datenschutz gewinnst, zahlst du bei Skalierung und Wartung zurück.
+AspektAuf dem Gerät (on-device)In der Cloud
+Rechenleistung
+Durch die Hardware des Geräts begrenzt, Optimierung ist Pflicht
+Trägt große, komplexe Modelle problemlos
+Latenz
+Niedrig, kein Umweg übers Netz
+Hängt vom Netz ab, riskant bei zeitkritischen Aufgaben
+Datenschutz
+Daten verlassen das Gerät nicht
+Daten gehen an einen Server, die Angriffsfläche wächst
+Skalierung
+Die Hardware ist, was sie ist
+Ressourcen wachsen mit dem Bedarf
+Updates und Wartung
+Verteilung auf Tausende Geräte ist mühsam
+Zentral verwaltet
+Kostenmodell
+Die Inferenzkosten trägt das Gerät des Nutzers
+Bezahlung pro Anfrage oder pro Token
+Offline-Betrieb
+Ja
+Nein
+In der Praxis sehe ich, dass diese Tabelle keine Entweder-oder-Entscheidung ist. Die gesündesten Architekturen sind hybrid: Was latenz- oder datenschutzkritisch ist, bleibt auf dem Gerät, und was wirklich rechenintensiv ist, geht in die Cloud. Die Literatur nennt das Cloud-Edge-Kollaboration oder Offloading; in der Praxis fängt es oft mit einem kleinen Router-Modell auf dem Gerät an.
+Drei Ebenen, um ein Modell aufs Gerät zu bringen: Daten, Modell, System
+Die für mich nützlichste Idee der Übersichtsarbeit ist, die Optimierung nicht auf einen einzigen Trick zu stützen, sondern auf drei Ebenen zu verteilen: die Daten, das Modell und das System, das es ausführt. Vernachlässigst du eine davon, bleibt das, was du auf den anderen beiden gewonnen hast, oft auf der Strecke.
+Ziel Schnelle, private und effiziente Inferenz Im eigenen Budget des Geräts
+Ebene 1 Daten
+Rauschen filtern
+Dimensionsreduktion
+Sensorfusion
+32 → 8 Bit Genauigkeit
+Ebene 2 Modell
+Quantisierung
+Pruning
+Wissensdestillation
+Low-Rank, NAS
+Ebene 3 System
+Inferenz-Frameworks
+NPU, GPU, CPU
+Scheduling
+Speicherverwaltung
+Grenzen RechenleistungSpeicherAkkuWärme
+Unten die Grenzen, oben das Ziel: Wenn eine der drei Ebenen dazwischen schwächelt, können die anderen beiden die Last nicht allein tragen.
+Daten: die Arbeit verringern, bevor sie anfällt
+„Garbage in, garbage out“ gilt auf dem Gerät noch härter, weil jedes überflüssige Datum Rechenzeit und Akku kostet. Verrauschte Messungen aussortieren, per Dimensionsreduktion nur aussagekräftige Merkmale behalten, die Daten mehrerer Sensoren zusammenführen und die Genauigkeit von 32 auf 8 Bit senken: Das sind die wichtigsten Werkzeuge dieser Ebene. Jedes hat seinen Preis. Wer zu aggressiv filtert, wirft mit dem Rauschen auch wertvolles Signal weg.
+Modell: dieselbe Arbeit mit weniger Parametern
+Über diese Ebene wird am meisten gesprochen:
+Quantisierung: Gewichte von 32-Bit-Gleitkommazahlen auf 8-Bit-Ganzzahlen oder noch weiter reduzieren. Das spart viel Speicher und bringt Tempo; übertreibst du es, sinkt die Genauigkeit, und nicht jede Hardware unterstützt jedes Format.
+Pruning: Unwichtige Gewichte oder Neuronen entfernen. Verfahren wie DropNet berichten, die Komplexität eines Netzes um bis zu 90 % zu senken, ohne Genauigkeit einzubüßen, aber starkes Pruning erfordert meist ein erneutes Training.
+Wissensdestillation (Knowledge Distillation): Ein kleines „Schüler“-Modell lernt von den Ausgaben eines großen „Lehrer“-Modells. Auch die kleinen Versionen von Gemma 2 und Llama 3.2 wurden auf diese Weise trainiert.
+Low-Rank-Zerlegung und Parameter-Sharing: Gewichtsmatrizen durch kleinere Matrizen annähern oder dieselben Gewichte in mehreren Schichten verwenden.
+Hardwarebewusste Architektursuche (NAS): Die Architektur direkt am Latenz- und Energiebudget des Zielgeräts ausrichten.
+Am besten wirken diese Techniken zusammen. Das klassische Beispiel ist Deep Compression: Pruning, Quantisierung und Huffman-Kodierung in einer Pipeline, die das Netz deutlich verkleinert.
+Auch das Architekturdesign selbst macht viel aus, und die MobileNet-Reihe zeigt das schön. V1 erreicht auf ImageNet 70,6 % Genauigkeit mit 569 Millionen Multiply-Accumulate-Operationen (MACs), V2 kommt mit 300 Millionen auf 72 %, V3 mit etwa 219 Millionen auf 75,2 %. Die Kosten der Architektursuche haben einen ähnlichen Weg genommen: NASNet-A verbrauchte 48.000 GPU-Stunden, das hardwarebewusste ProxylessNAS erreicht eine etwas höhere Genauigkeit (74,6 %) in rund 200 GPU-Stunden.
+Am spannendsten finde ich zurzeit den Ansatz „ein Modell, viele Budgets“. Once-for-All (OFA) trainiert ein Netz einmal und leitet daraus Teilnetze für verschiedene Geräte ab; DynaBERT passt Breite und Tiefe von BERT an die Ressourcen des Geräts an. Dieselbe Idee sehen wir heute bei Embedding-Modellen in Form von Matryoshka Representation Learning (MRL).
+Ein gutes Beispiel ist Googles Anfang Oktober veröffentlichtes EmbeddingGemma 2: Du kannst seine 768-dimensionalen Vektoren bis auf 128 Dimensionen kürzen und die Bild- und Audio-Encoder je nach Bedarf hinzunehmen oder weglassen. Grob überschlagen belegt ein float32-Index für eine Galerie mit 50.000 Fotos bei 768 Dimensionen etwa 154 MB, bei 128 Dimensionen 26 MB. Ein einziges Modell auszuliefern, das jedes Gerät auf sein eigenes Budget zuschneidet, ist für mich die pragmatischste Antwort auf die Vielfalt der Geräte.
+System: Software und Hardware zusammen denken
+Auf der Softwareseite schlagen Inferenz-Frameworks die Brücke zwischen Modell und Hardware. TensorFlow Lite (heute LiteRT) und PyTorch Mobile, das zunehmend von ExecuTorch abgelöst wird, konvertieren und optimieren Modelle für Mobilgeräte; ONNX Runtime, OpenVINO, TensorRT, NCNN, MNN und Apache TVM konzentrieren sich auf schnelle Inferenz auf unterschiedlicher Hardware. Mit den Sprachmodellen sind llama.cpp, MLX und Ollama dazugekommen.
+Bei der Hardware verteilen sich die Optionen auf CPU, GPU, NPU, FPGA und ASIC. Die CPU ist überall vorhanden, aber für KI-Aufgaben ineffizient; die GPU ist stark bei paralleler Arbeit, aber stromhungrig; das FPGA ist flexibel, aber aufwendig in der Entwicklung; ASICs und NPUs bieten für bestimmte Aufgaben unschlagbare Effizienz und verzichten dafür auf Flexibilität. Dass inzwischen fast jedes Smartphone oberhalb der Mittelklasse eine NPU hat, ist die Entwicklung, die das Gleichgewicht in der Praxis wirklich verschoben hat.
+Wo On-Device-KI wirklich einen Unterschied macht
+Wenn ich mir die Anwendungsfelder ansehe, läuft es immer auf eines von drei Dingen hinaus: Aufgaben, bei denen Millisekunden zählen, Daten, die das Gerät nicht verlassen sollen, und Umgebungen, in denen man sich auf die Verbindung nicht verlassen kann.
+BereichTypische AufgabeWarum auf dem Gerät?
+Autonomes Fahren
+Objekterkennung, Spur- und Tempoentscheidungen
+Keine Zeit, auf den Weg in die Cloud und zurück zu warten
+Gesundheits-Wearables
+Puls, Herzrhythmus und Blutdruck überwachen
+Gesundheitsdaten sind sensibel, der Akku ist knapp
+Industrielles IoT
+Vorausschauende Wartung, Linienüberwachung
+Bandbreite ist teuer, die Linie darf nicht stehen
+Smart Home
+Thermostat, Kamera, Automatisierung
+Bild und Ton aus der Wohnung sollen die Wohnung nicht verlassen
+Smart Farming
+Bewässerung und Düngung optimieren
+Schwache Verbindung auf dem Feld
+Smartphone
+Sprachassistent, Fotobearbeitung, persönliche Suche
+Sofortige Antwort, persönliche Daten
+Dazu kommt ein rechtlicher Vorteil: Wenn die Daten das Gerät nie verlassen, vereinfacht sich ein großer Teil der Fragen rund um die DSGVO schon in der Entwurfsphase.
+Die interessanteste Ergänzung dieser Liste im letzten Jahr ist für mich die multimodale Suche. Kleine Embedding-Modelle, die Text, Bilder, Audio und Video in denselben Vektorraum legen, machen es möglich, alles von der Fotogalerie bis zur Besprechungsaufnahme auf dem Gerät zu indexieren und zu durchsuchen. Kommt ein kleines Sprachmodell dazu, entsteht eine RAG-Pipeline (Retrieval-Augmented Generation), die komplett lokal läuft:
+Cloud Nur der erste Download der Modelle
+Auf dem Gerät
+Indexierung einmalig, im Hintergrund
+Fotos, Dokumente, Audio, Video
+Embedding-Modell
+Lokaler Vektorindex
+Abfrage sofort
+Frage des Nutzers
+Dasselbe Embedding-Modell
+Ähnlichkeitssuche im Index
+Kleines Sprachmodell gefundene Inhalte + Frage
+Antwort
+Die Indexierung läuft einmal im Hintergrund. Bei einer Abfrage wandelt dasselbe Embedding-Modell die Frage in einen Vektor um, und das lokale Sprachmodell nutzt die gefundenen Inhalte als Kontext; eine Netzverbindung braucht es nur für den ersten Download der Modelle.
+Auf dem Papier leicht, in der Praxis schwer
+In Benchmark-Tabellen sieht alles gut aus; die eigentlichen Probleme beginnen, wenn das Modell auf echte Geräte und zu echten Nutzern kommt.
+Gerätevielfalt. Gleiches Modell, gleiches Framework, anderes Smartphone: In einer Messung, die die Übersichtsarbeit zitiert, braucht ResNet50 mit PyTorch Mobile auf einem Galaxy S10e 333 ms, auf einem Oppo R17 1.260 ms. Das ist ungefähr der Faktor vier. Die Zahl, die du auf einem Flaggschiff misst, sagt wenig darüber, was deine Nutzer im Schnitt erleben.
+Energie und Wärme. Der Akku ist die am meisten unterschätzte Grenze von On-Device-KI. Ein Modell, das im Hintergrund Tausende Dateien verarbeitet, leert den Akku und heizt das Gerät auf, bis es seine Leistung drosselt (Thermal Throttling). Einfache Entscheidungen beim Scheduling, etwa die Arbeit nur zu erledigen, während das Gerät lädt und nicht benutzt wird, bringen oft mehr als das Modell selbst.
+Updates und Wartung. In der Cloud tauschst du das Modell einmal aus; auf Geräten leben Dutzende Versionen weiter. Bei Embedding-basierten Systemen wird es noch schwieriger: Vektoren verschiedener Modelle sind nicht miteinander kompatibel, also muss der gesamte Index des Nutzers neu aufgebaut werden, sobald sich das Modell ändert.
+Der Preis bei der Genauigkeit. Jede Komprimierungstechnik gibt etwas auf. Selbst wenn die durchschnittliche Genauigkeit gleich bleibt, musst du hinschauen, bei welchen Beispielen du verlierst. Bei Sprachen, die in Trainingsdaten weniger vertreten sind, Türkisch zum Beispiel, kommst du um Tests mit deinen eigenen Daten nicht herum, wenn du keine Überraschungen erleben willst.
+Sicherheit. Dass die Daten auf dem Gerät bleiben, ist gut für den Datenschutz, aber für sich genommen keine Garantie: Das Gerät kann gestohlen werden, Schadsoftware kann sich einnisten, und die Gewichte eines in die App eingebetteten Modells lassen sich extrahieren. In der Literatur gelten vertrauenswürdige Ausführungsumgebungen (TEE), homomorphe Verschlüsselung und föderiertes Lernen (Federated Learning) als die wichtigsten Ansätze, um diese Lücken zu schließen.
+Kleine Modelle erfinden immer noch Dinge. Auf der generativen Seite halluzinieren kleine Sprachmodelle leichter als ihre großen Verwandten. Eine gute Retrieval-Schicht senkt dieses Risiko, beseitigt es aber nicht. Genau das meinte ich am Anfang, als ich davon sprach, dass sich die Modelle seltener etwas ausdenken.
+Die nächsten Jahre: Trends, die ich beobachte
+Am meisten erwarte ich davon, dass Foundation-Modelle kleiner werden. Die Idee, ein großes Modell mit breiten Daten vorzutrainieren und es dann per Fine-Tuning an eine bestimmte Aufgabe anzupassen, kommt jetzt auf Geräteebene an. Das ist auch der Grund, warum ich eine Welle von Apps für ganz bestimmte Aufgaben erwarte: Das große Modell trägt das allgemeine Wissen, das kleine Modell auf dem Gerät muss nur seine eigene Aufgabe gut erledigen.
+Auch hybride Architekturen werden reifer. 5G und was danach kommt, machen die Arbeitsteilung zwischen Gerät und Cloud flexibler. Wenn das Gerät die erste Auswahl trifft und nur das Nötige verschickt, sinken Latenz, Bandbreite und Kosten gleichzeitig.
+Am schwierigsten ist meiner Meinung nach das Lernen auf dem Gerät. Heute führen die meisten Systeme nur die Inferenz lokal aus, trainiert wird weiterhin in der Cloud. Modelle, die sich direkt auf dem Gerät an die Gewohnheiten des Nutzers anpassen, und föderiertes Lernen sehen nach dem nächsten Schritt aus, aber mit den Grenzen bei Speicher und Energie ist das ein viel härteres Problem als Inferenz.
+Außerdem werden zwei Debatten lauter. Die eine dreht sich um Energie: Effiziente Modelle und sparsame Beschleuniger werden nicht mehr nur wegen der Akkulaufzeit diskutiert, sondern auch wegen des Stromverbrauchs von Rechenzentren, und eine Architektur, in der nicht jede Anfrage in ein Rechenzentrum geht, hat dabei die besseren Karten. Die andere dreht sich um Kontrolle. Bias und Erklärbarkeit kleiner Modelle sind zu einem eigenen Forschungsfeld geworden, und ein Modell, das auf dem Gerät des Nutzers läuft, lässt sich schwerer prüfen. Tests und Transparenz müssen deshalb von Anfang an eingeplant werden, nicht erst nachträglich.
+Wenn KI vom Dienst zur Software wird
+Niemand hält SQLite für einen „Dienst“. Es läuft auf fast jedem Smartphone und in fast jedem Browser, aber niemand besorgt sich dafür einen API-Schlüssel, zahlt eine Rechnung oder fragt sich, wohin seine Daten gehen. Es ist einfach eine gewöhnliche Komponente, die mit der App kommt.
+Dass KI-Modelle an denselben Punkt kommen, scheint mir gar nicht so weit weg, und die Forschung schaut in dieselbe Richtung. Die auf der MobiCom 2024 veröffentlichte Arbeit „Mobile Foundation Model as Firmware“ schlägt vor, das Foundation-Modell als fest im Gerät verankerte Infrastrukturschicht zu verstehen, statt als etwas, das jede App einzeln mitbringt. Auch für Entwickler ändert sich die Rechnung: Die Inferenzkosten wandern auf das Gerät des Nutzers, und die Abrechnung pro Token fällt weg.
+Für mich ist das die greifbarste Form der Debatte um dezentrale KI: Die Gewichte des Modells sind offen, und die Hardware, auf der es läuft, steckt in der Tasche des Nutzers. Sobald generative Modelle zuverlässig genug sind, wird „meine App hat KI“ so alltäglich klingen wie heute „meine App hat eine Datenbank“. Bis dahin rate ich dir, dir ein kleines, konkretes Problem zu suchen und diese Werkzeuge schon jetzt kennenzulernen.
+Häufige Fragen
+Was ist On-Device-KI?
+Ein KI-Modell führt die Inferenz direkt auf einem Smartphone, Computer, Auto oder IoT-Gerät aus, ohne die Daten in die Cloud zu schicken. Kennzeichnend sind geringe Latenz, die Fähigkeit, mit begrenzten Ressourcen auszukommen, und dass die Daten lokal bleiben.
+Ist Edge AI dasselbe wie On-Device-KI?
+Ähnlich, aber nicht dasselbe. Edge AI ist der weitere Oberbegriff dafür, die Verarbeitung an einen beliebigen Punkt nahe der Datenquelle zu verlagern (Edge-Server, Gateways, Geräte); On-Device-KI meint den Fall, in dem die Arbeit direkt auf dem Endgerät des Nutzers passiert.
+Wie bekommt man ein KI-Modell auf ein Gerät?
+Meist durch eine Kombination mehrerer Techniken: Quantisierung, Pruning, Wissensdestillation und effizientes Architekturdesign. Dazu kommen ein passendes Inferenz-Framework und Hardwarebeschleuniger wie eine NPU.
+Läuft ein großes Sprachmodell auf dem Smartphone?
+Kleine Sprachmodelle schon. Modelle mit 1 bis 3 Milliarden Parametern laufen mit Quantisierung auf aktuellen Smartphones, aber Tempo, Akkuverbrauch und Antwortqualität schwanken je nach Gerät stark.
+Garantiert On-Device-KI den Datenschutz?
+Für sich allein nicht. Wenn die Daten das Gerät nicht verlassen, sinkt das Risiko, aber die Sicherheit des Geräts, der Schutz des Modells und die Frage, wie die App Daten speichert, müssen trotzdem eigens behandelt werden.
+Quellen und weiterführende Literatur
+Wang, X. et al. (2025). Empowering Edge Intelligence: A Comprehensive Survey on On-Device AI Models. ACM Computing Surveys. arXiv:2503.06027
+Luo, C. et al. (2020). Comparison and Benchmarking of AI Models and Frameworks on Mobile Devices. arXiv:2005.05085
+Yuan, J. et al. (2024). Mobile Foundation Model as Firmware. MobiCom 2024.
+Google DeepMind (6. Oktober 2026). Ankündigung von EmbeddingGemma 2 und Model Card.
+Kommentar hinterlassen
+Kommentare
+
+---
+
+# On-Device AI: Yapay Zekâ Servisten Yazılıma Dönüşürken
 
 URL: https://bahaerdogan.com/on-device-ai-tr.html
 Language: tr
 Published: 2026-10-21
 Modified: 2026-10-21
 
-Yapay Zeka Servis Olmaktan Çıkarken: On-Device AI Üzerine Bir Mühendis Notu
+Yapay Zekâ Servis Olmaktan Çıkarken: On-Device AI Üzerine Bir Mühendis Notu
 Baha Erdoğan
 Yapay Zekâ
-Bugünler, birkaç yıl sonra dönüp baktığımızda "aslında her şey o zaman başlamıştı" diyeceğimiz bir dönüşümün ilk günleri olabilir. On-device modeller sayesinde hem büyük firmalar hem de tek başına uygulama geliştiren biri, kullanıcı verisini bir sunucuya taşımanın getirdiği privacy kaygısını yaşamadan ürün geliştirebilir hale geliyor.
+Bugünler, birkaç yıl sonra dönüp baktığımızda "aslında her şey o zaman başlamıştı" diyeceğimiz bir dönüşümün ilk günleri olabilir. On-device modeller sayesinde hem büyük firmalar hem de tek başına uygulama geliştiren biri, kullanıcı verisini bir sunucuya taşımanın getirdiği gizlilik kaygısını yaşamadan ürün geliştirebilir hale geliyor.
 Tam olarak yeterli noktada olduğumuza henüz inanmıyorum, bunu baştan söyleyeyim. Ama spesifik görevler için özelleştirilmiş uygulamaların önümüzdeki dönemde patlama yapmasını beklemek bence hata olmaz. Hem maliyet hem de merkeziyetsiz AI açısından önemli günlerden geçiyoruz.
-On-device modeller daha az saçmaladıkça yapay zeka bir "servis" olmaktan çıkıp bilgisayarımızda kurulu duran sıradan bir "yazılım" gibi algılanmaya başlayabilir. Bu fikir son haftalarda hem yeni çıkan küçük açık modelleri kurcalarken hem de Wang ve arkadaşlarının on-device AI üzerine hazırladığı kapsamlı derlemeyi okurken kafamda iyice netleşti. Bu yazı o ikisinin arasında bir yerde duruyor: biraz literatür, biraz sahadan not.
+On-device modeller daha az saçmaladıkça yapay zekâ bir "servis" olmaktan çıkıp bilgisayarımızda kurulu duran sıradan bir "yazılım" gibi algılanmaya başlayabilir. Bu fikir son haftalarda hem yeni çıkan küçük açık modelleri kurcalarken hem de Wang ve arkadaşlarının on-device AI üzerine hazırladığı kapsamlı derlemeyi okurken kafamda iyice netleşti. Bu yazı o ikisinin arasında bir yerde duruyor: biraz literatür, biraz sahadan not.
 On-device AI tam olarak ne demek?
 En sade tanımıyla on-device AI, modelin veriyi buluta göndermeden çıkarımı (inference) doğrudan cihaz üzerinde yapması. Telefon, saat, araç, fabrikadaki bir sensör ya da laptop olması fark etmiyor. Literatürde bu modellerin üç ortak özelliği öne çıkıyor: gerçek zamanlı yanıt vermeleri, kısıtlı işlem gücü, bellek ve enerjiyle yetinmek zorunda olmaları ve veriyi yerelde tuttukları için gizliliği güçlendirmeleri.
 Konunun neden şimdi bu kadar önem kazandığını Gartner'ın birkaç yıl önceki bir öngörüsü iyi özetliyor: 2025 itibarıyla kurumların ürettiği verinin yaklaşık %75'i geleneksel veri merkezlerinin dışında doğacaktı. Veri zaten kenarda (edge) üretiliyorsa, hepsini merkeze taşıyıp orada işlemek gecikme, bant genişliği ve maliyet açısından giderek anlamsızlaşıyor.
@@ -493,7 +645,7 @@ Son dönemde en çok ilgimi çeken eğilim ise "tek model, birçok bütçe" yakl
 Örneğin Google'ın Ekim başında yayınladığı EmbeddingGemma 2, 768 boyutlu vektörünü 128 boyuta kadar kırpmanıza ve görsel ya da ses encoder'larını ihtiyaca göre ekleyip çıkarmanıza izin veriyor. Kaba bir hesapla 50 bin fotoğraflık bir galerinin float32 indeksi 768 boyutta yaklaşık 154 MB, 128 boyutta 26 MB tutuyor. Tek bir model dağıtıp her cihazın kendi bütçesine göre kesmesi, cihaz çeşitliliği sorununa bence en pragmatik cevap.
 Sistem: yazılım ve donanımı birlikte düşünmek
 Yazılım tarafında model ile donanım arasındaki köprüyü çıkarım çatıları kuruyor. TensorFlow Lite (bugünkü adıyla LiteRT) ve yerini giderek ExecuTorch'a bırakan PyTorch Mobile modeli mobil için dönüştürüp optimize ediyor; ONNX Runtime, OpenVINO, TensorRT, NCNN, MNN ve Apache TVM ise farklı donanımlarda hızlı çıkarıma odaklanıyor. Dil modelleri döneminde bu listeye llama.cpp, MLX ve Ollama da eklendi.
-Donanımda seçenekler CPU, GPU, NPU, FPGA ve ASIC arasında dağılıyor. CPU her yerde var ama yapay zeka işlerinde verimsiz, GPU paralel işte güçlü ama enerjiye aç, FPGA esnek ama geliştirmesi zahmetli; ASIC ve NPU ise belirli işlerde rakipsiz verim sunup esneklikten feragat ediyor. Orta segmentin üstündeki telefonların neredeyse hepsinde artık bir NPU bulunması, sahadaki dengeyi değiştiren asıl gelişme.
+Donanımda seçenekler CPU, GPU, NPU, FPGA ve ASIC arasında dağılıyor. CPU her yerde var ama yapay zekâ işlerinde verimsiz, GPU paralel işte güçlü ama enerjiye aç, FPGA esnek ama geliştirmesi zahmetli; ASIC ve NPU ise belirli işlerde rakipsiz verim sunup esneklikten feragat ediyor. Orta segmentin üstündeki telefonların neredeyse hepsinde artık bir NPU bulunması, sahadaki dengeyi değiştiren asıl gelişme.
 On-device AI nerede gerçekten fark yaratıyor?
 Uygulama alanlarına baktığımda ortak payda hep aynı üç şeyden biri çıkıyor: milisaniyelerin önemli olduğu işler, verinin dışarı çıkmaması gereken işler ve bağlantının güvenilmez olduğu ortamlar.
 AlanTipik görevNeden cihazda?
@@ -533,27 +685,26 @@ Yanıt
 Kâğıt üstünde kolay, sahada zor
 Benchmark tablolarında her şey yolunda görünür; asıl sorunlar model gerçek cihazlara ve gerçek kullanıcılara dağıtıldığında başlar.
 Cihaz çeşitliliği. Aynı model, aynı framework, farklı telefon: derlemede aktarılan bir ölçümde ResNet50, PyTorch Mobile ile Galaxy S10e'de 333 ms sürerken Oppo R17'de 1.260 ms sürüyor. Bu yaklaşık dört kat fark demek. Amiral gemisi bir telefonda ölçtüğünüz rakam, kullanıcılarınızın ortalama deneyimini temsil etmiyor.
-Enerji ve ısı. Pil, cihaz üzerindeki yapay zekanın en sessiz ama en acımasız kısıtı. Arka planda binlerce dosyayı işleyen bir model hem şarjı eritir hem de cihazı ısıtıp performansını düşürür (thermal throttling). İşi şarjdayken ve cihaz boştayken yapmak gibi basit zamanlama kararları çoğu zaman modelin kendisinden daha fazla fark yaratıyor.
+Enerji ve ısı. Pil, cihazdaki yapay zekânın en çok hafife alınan kısıtı. Arka planda binlerce dosyayı işleyen bir model hem şarjı eritir hem de cihazı ısıtıp performansını düşürür (thermal throttling). İşi şarjdayken ve cihaz boştayken yapmak gibi basit zamanlama kararları çoğu zaman modelin kendisinden daha fazla fark yaratıyor.
 Güncelleme ve bakım. Bulutta modeli bir kez değiştirirsiniz; cihazda ise onlarca farklı sürüm sahada yaşamaya devam eder. Embedding tabanlı sistemlerde iş daha da zorlaşıyor: farklı modellerin vektörleri birbiriyle uyumlu olmadığı için model değiştiğinde kullanıcının bütün indeksi baştan oluşturulmak zorunda.
 Doğruluk bedeli. Sıkıştırma tekniklerinin hepsi bir şeylerden feragat ediyor. Ortalama doğruluk aynı kalsa bile kaybın hangi örneklerde yaşandığına bakmak gerekiyor; Türkçe gibi eğitim verisinde daha az temsil edilen dillerde sürpriz yaşamamak için kendi verinizle test etmek şart.
 Güvenlik. Verinin cihazda kalması gizlilik için iyi ama tek başına garanti değil: cihaz çalınabilir, kötü amaçlı yazılım bulaşabilir, uygulamaya gömülü modelin ağırlıkları dışarı çıkarılabilir. Literatürde güvenilir çalışma ortamları (TEE), homomorfik şifreleme ve federe öğrenme (federated learning) bu açıkları kapatmak için öne çıkan yaklaşımlar.
 Küçük modeller hâlâ uyduruyor. Üretken tarafta küçük dil modelleri büyük kuzenlerine göre daha kolay halüsinasyon görüyor. İyi bir retrieval katmanı bu riski azaltır ama sıfırlamaz. Girişte "daha az saçmaladıkça" derken kastettiğim tam olarak bu.
 Önümüzdeki birkaç yıl: izlediğim eğilimler
-Temel modellerin küçülmesi. Büyük bir modeli geniş veriyle önceden eğitip sonra belirli bir göreve ince ayarla (fine-tuning) uyarlama fikri artık cihaz ölçeğine iniyor. Spesifik görevler için özelleştirilmiş uygulamaların patlama yapacağını düşünmemin sebebi de bu: genel bilgiyi büyük model taşıyor, cihazdaki küçük model yalnızca kendi işini iyi yapıyor.
-Hibrit mimariler ve hızlı ağlar. 5G ve sonrası, cihaz ile bulut arasındaki iş bölümünü daha esnek hale getiriyor. Cihaz ilk filtreyi yapıp sadece gerekeni gönderdiğinde gecikme, bant genişliği ve maliyet aynı anda düşüyor.
-Cihazda öğrenme. Bugün çoğu sistem yalnızca çıkarımı cihazda yapıyor, eğitim hâlâ bulutta. Kullanıcının alışkanlıklarına cihazın kendisinde uyum sağlayan modeller ve federe öğrenme bir sonraki büyük adım gibi duruyor; ama bellek ve enerji kısıtları düşünüldüğünde bu, çıkarımdan çok daha zor bir problem.
-Yeşil yapay zeka. Verimli modeller ve düşük güçlü hızlandırıcılar artık yalnızca pil ömrü için değil, enerji tüketimi ve karbon ayak izi için de konuşuluyor. Her sorgunun bir veri merkezine gitmediği bir mimari, bu tartışmada da elini güçlendiriyor.
-Etik ve adalet. Küçük modellerde önyargı ve açıklanabilirlik ayrı bir araştırma başlığına dönüştü. Model cihazda çalıştığında denetlemek de zorlaşıyor; bu yüzden şeffaflık ve test süreçlerinin en baştan tasarlanması gerekiyor.
-Yapay zeka servisten yazılıma dönüşürken
+En çok beklediğim değişiklik temel modellerin küçülmesi. Büyük bir modeli geniş veriyle önceden eğitip sonra ince ayarla (fine-tuning) belirli bir göreve uyarlama fikri artık cihaz ölçeğine iniyor. Spesifik görevler için yazılmış uygulamaların patlama yapacağını düşünmemin sebebi de bu: genel bilgiyi büyük model taşıyor, cihazdaki küçük model yalnızca kendi işini iyi yapıyor.
+Hibrit mimariler de olgunlaşıyor. 5G ve sonrası, cihaz ile bulut arasındaki iş bölümünü daha esnek hale getiriyor. Cihaz ilk elemeyi yapıp yalnızca gerekeni gönderdiğinde gecikme, bant genişliği ve maliyet aynı anda düşüyor.
+Bence en zoru cihazda öğrenme. Bugün çoğu sistem yalnızca çıkarımı cihazda yapıyor, eğitim hâlâ bulutta. Kullanıcının alışkanlıklarına cihazın kendisinde uyum sağlayan modeller ve federe öğrenme bir sonraki adım gibi duruyor, ama bellek ve enerji kısıtları düşünüldüğünde bu, çıkarımdan çok daha zor bir problem.
+Bir de giderek büyüyen iki tartışma var. Biri enerji: verimli modeller ve düşük güçlü hızlandırıcılar artık yalnızca pil ömrü için değil, veri merkezlerinin tükettiği enerji için de konuşuluyor ve her sorgunun bir veri merkezine gitmediği bir mimari bu tartışmada avantajlı. Diğeri denetim. Küçük modellerde önyargı ve açıklanabilirlik ayrı bir araştırma konusu oldu ve model kullanıcının cihazında çalıştığında onu denetlemek de zorlaşıyor. Test ve şeffaflık süreçlerini sonradan eklemek yerine en baştan tasarlamak gerekiyor.
+Yapay zekâ servisten yazılıma dönüşürken
 SQLite'ı kimse bir "servis" olarak düşünmez. Neredeyse her telefonda ve tarayıcıda çalışıyor ama kimse onun için API anahtarı almıyor, fatura ödemiyor ya da verisinin nereye gittiğini merak etmiyor. Uygulamanın içinde gelen sıradan bir bileşen, o kadar.
-Yapay zeka modellerinin de bu konuma gelmesi bana hiç uzak görünmüyor ve akademi de aynı yöne bakıyor. MobiCom 2024'te yayımlanan "Mobile Foundation Model as Firmware" çalışması, temel modeli her uygulamanın ayrı ayrı paketlediği bir şey yerine cihaza gömülü bir altyapı katmanı olarak düşünmeyi öneriyor. Geliştirici açısından hesap da değişiyor: çıkarım maliyeti kullanıcının cihazına geçiyor, token başına kesilen bir fatura kalmıyor.
-Merkeziyetsiz AI tartışmasının en somut karşılığı da bence bu: modelin ağırlıkları açık, çalıştığı donanım kullanıcının cebinde. Üretken modeller de yeterince güvenilir hale geldiğinde "uygulamamda yapay zeka var" demek, bugün "uygulamamda veritabanı var" demek kadar sıradan gelecek. O güne kadar yapılacak en akıllıca şey, küçük ve spesifik problemlerle başlayıp bu araçları şimdiden tanımak.
+Yapay zekâ modellerinin de bu konuma gelmesi bana hiç uzak görünmüyor ve akademi de aynı yöne bakıyor. MobiCom 2024'te yayımlanan "Mobile Foundation Model as Firmware" çalışması, temel modeli her uygulamanın ayrı ayrı paketlediği bir şey yerine cihaza gömülü bir altyapı katmanı olarak düşünmeyi öneriyor. Geliştirici açısından hesap da değişiyor: çıkarım maliyeti kullanıcının cihazına geçiyor, token başına kesilen bir fatura kalmıyor.
+Merkeziyetsiz AI tartışmasının en somut karşılığı da bence bu: modelin ağırlıkları açık, çalıştığı donanım kullanıcının cebinde. Üretken modeller de yeterince güvenilir hale geldiğinde "uygulamamda yapay zekâ var" demek, bugün "uygulamamda veritabanı var" demek kadar sıradan gelecek. O güne kadar benim önerim, küçük ve spesifik bir problem seçip bu araçları şimdiden tanımaya başlamak.
 Sık sorulan sorular
 On-device AI nedir?
-Yapay zeka modelinin veriyi buluta göndermeden, çıkarımı doğrudan telefon, bilgisayar, araç veya IoT cihazı üzerinde yapmasıdır. Öne çıkan özellikleri düşük gecikme, kısıtlı kaynakla çalışabilmesi ve verinin yerelde kalmasıdır.
+Yapay zekâ modelinin veriyi buluta göndermeden, çıkarımı doğrudan telefon, bilgisayar, araç veya IoT cihazı üzerinde yapmasıdır. Öne çıkan özellikleri düşük gecikme, kısıtlı kaynakla çalışabilmesi ve verinin yerelde kalmasıdır.
 Edge AI ile on-device AI aynı şey mi?
 Yakın ama aynı değil. Edge AI, işlemi veri kaynağına yakın her noktaya (kenar sunucular, ağ geçitleri, cihazlar) taşıyan daha geniş bir şemsiye; on-device AI ise işin doğrudan son kullanıcı cihazında yapıldığı durumu anlatıyor.
-Bir yapay zeka modeli cihaza nasıl sığdırılır?
+Bir yapay zekâ modeli cihaza nasıl sığdırılır?
 Genellikle birkaç teknik birlikte kullanılır: kuantizasyon, budama, bilgi damıtma ve verimli mimari tasarımı. Bunlara uygun bir çıkarım çatısı ve NPU gibi donanım hızlandırıcılar eşlik eder.
 Telefonda büyük dil modeli çalışır mı?
 Küçük dil modelleri çalışıyor. 1 ile 3 milyar parametre aralığındaki modeller kuantizasyonla güncel telefonlarda çalıştırılabiliyor; ancak hız, pil tüketimi ve cevap kalitesi cihaza göre ciddi biçimde değişiyor.
@@ -566,6 +717,156 @@ Yuan, J. ve ark. (2024). Mobile Foundation Model as Firmware. MobiCom 2024.
 Google DeepMind (6 Ekim 2026). EmbeddingGemma 2 duyurusu ve model kartı.
 Yorum Yapın
 Yorumlar
+
+---
+
+# On-Device AI: When AI Turns from a Service into Software
+
+URL: https://bahaerdogan.com/on-device-ai.html
+Language: en
+Published: 2026-10-21
+Modified: 2026-10-21
+
+When AI Stops Being a Service: An Engineer's Notes on On-Device AI
+Baha Erdoğan
+AI
+A few years from now we may look back at this period and say that this is where it all started. With on-device models, a large company and a solo developer alike can build products without the privacy worries that come with sending user data to a server.
+Let me say up front that I don't think we're quite there yet. But I don't think it's wrong to expect a wave of apps built for specific tasks over the next few years. When it comes to cost and to decentralised AI, these are important days.
+Once on-device models stop making things up so often, AI may stop feeling like a "service" and start feeling like ordinary "software" that simply sits installed on your computer. That idea became much clearer to me over the past few weeks, while I was playing with the new small open models and reading the survey on on-device AI by Wang and colleagues. This post sits somewhere between the two: a bit of literature, a bit of notes from the field.
+What exactly is on-device AI?
+Put simply, on-device AI means the model runs inference directly on the device instead of sending the data to the cloud. It doesn't matter whether that device is a phone, a watch, a car, a sensor on a factory floor or a laptop. The literature points to three things these models have in common: they respond in real time, they have to make do with limited compute, memory and energy, and because the data stays local, they strengthen privacy.
+A Gartner forecast from a few years ago sums up why this matters now: by 2025, around 75% of the data enterprises generate would be created outside traditional data centres. If data is already being produced at the edge, moving all of it to the centre and processing it there makes less and less sense in terms of latency, bandwidth and cost.
+On the other side is model size. GPT-3, with 175 billion parameters, needed about 800 GB of storage, and putting a model like that on a phone was out of the question. Today there are language models designed for devices from the start, such as Gemma 2B and Llama 3.2 1B, and even multimodal models under a billion parameters. The gap closed much faster than I expected.
+Cloud or device? It comes down to trade-offs
+Running on the device isn't free: what you gain in latency and privacy, you pay back in scaling and maintenance.
+AspectOn-deviceCloud-based
+Compute
+Limited by the device's hardware; optimisation is a must
+Handles large, complex models comfortably
+Latency
+Low, no network round trip
+Depends on the network; risky for time-critical work
+Privacy
+Data never leaves the device
+Data goes to a server; the attack surface grows
+Scaling
+Fixed by the hardware you have
+Resources grow with demand
+Updates and maintenance
+Rolling out to thousands of devices is tedious
+Managed from one place
+Cost model
+Inference cost sits on the user's device
+Pay per request or per token
+Offline use
+Yes
+No
+What I see in practice is that this table isn't an either/or choice. The healthiest architectures are hybrid: work that is sensitive to latency or privacy stays on the device, and the genuinely heavy work goes to the cloud. The literature calls this cloud-edge collaboration or offloading; in practice it often starts with a small router model on the device.
+Three layers of fitting a model on a device: data, model, system
+To me the most useful idea in the survey is to spread the optimisation across three layers instead of relying on a single trick: the data, the model, and the system that runs it. Neglect one of them and much of what you gained in the other two tends to be left on the table.
+Goal Fast, private, efficient inference Within the device's own budget
+Layer 1 Data
+Noise filtering
+Dimensionality reduction
+Sensor fusion
+32 → 8-bit precision
+Layer 2 Model
+Quantization
+Pruning
+Knowledge distillation
+Low-rank, NAS
+Layer 3 System
+Inference frameworks
+NPU, GPU, CPU
+Scheduling
+Memory management
+Constraints ComputeMemoryBatteryHeat
+Constraints at the bottom, the goal at the top: when one of the three layers in between is weak, the other two can't carry the load on their own.
+Data: cutting the work before it starts
+"Garbage in, garbage out" hurts more on a device, because every unnecessary piece of data costs both compute and battery. Filtering out noisy measurements, keeping only meaningful features through dimensionality reduction, merging data from several sensors and lowering precision from 32 to 8 bits are the main tools in this layer. Each has a price: filter too aggressively and you throw away valuable signal along with the noise.
+Model: doing the same job with fewer parameters
+This is the layer people talk about most:
+Quantization: Reducing weights from 32-bit floating point to 8-bit integers or lower. The memory and speed gains are large; push it too far and accuracy drops, and not every piece of hardware supports every format.
+Pruning: Removing unimportant weights or neurons. Methods such as DropNet report cutting network complexity by up to 90% without hurting accuracy, but heavy pruning usually needs retraining.
+Knowledge distillation: Training a small "student" model on the outputs of a large "teacher". The small versions of Gemma 2 and Llama 3.2 used this approach in training too.
+Low-rank factorisation and parameter sharing: Approximating weight matrices with smaller ones, or reusing the same weights across layers.
+Hardware-aware architecture search (NAS): Searching for an architecture directly against the latency and energy budget of the target device.
+These techniques work best together. The classic example is Deep Compression, which chains pruning, quantization and Huffman coding into one pipeline and shrinks the network considerably.
+Architecture design itself makes a big difference, and the MobileNet series tells that story well. V1 reaches 70.6% accuracy on ImageNet with 569 million multiply-accumulate operations (MACs); V2 gets to 72% with 300 million, and V3 to 75.2% with about 219 million. The cost of architecture search followed a similar path: NASNet-A burned 48,000 GPU hours, while the hardware-aware ProxylessNAS reaches slightly higher accuracy (74.6%) in about 200 GPU hours.
+The trend I find most interesting lately is "one model, many budgets". Once-for-All (OFA) trains a network once and extracts sub-networks for different devices from it; DynaBERT adjusts BERT's width and depth to the resources of the device. Today we see the same idea in embedding models through Matryoshka Representation Learning (MRL).
+Google's EmbeddingGemma 2, released at the start of October, is a good example. It lets you cut its 768-dimensional vectors down to 128 dimensions and add or drop the image and audio encoders as needed. As a rough calculation, a float32 index for a gallery of 50,000 photos takes about 154 MB at 768 dimensions and 26 MB at 128. Shipping one model and letting each device trim it to its own budget is, to me, the most pragmatic answer to device diversity.
+System: thinking about software and hardware together
+On the software side, inference frameworks build the bridge between the model and the hardware. TensorFlow Lite (now called LiteRT) and PyTorch Mobile, which is steadily giving way to ExecuTorch, convert and optimise models for mobile; ONNX Runtime, OpenVINO, TensorRT, NCNN, MNN and Apache TVM focus on fast inference across different hardware. With language models, llama.cpp, MLX and Ollama joined the list.
+On the hardware side the options are CPU, GPU, NPU, FPGA and ASIC. The CPU is everywhere but inefficient for AI work; the GPU is strong at parallel work but hungry for power; the FPGA is flexible but laborious to develop for; ASICs and NPUs offer unmatched efficiency for specific tasks and give up flexibility in return. That almost every phone above the mid-range now has an NPU is the development that really shifted the balance in practice.
+Where on-device AI really makes a difference
+When I look at the application areas, the common thread always comes down to one of three things: work where milliseconds matter, data that shouldn't leave the device, and places where the connection can't be trusted.
+AreaTypical taskWhy on the device?
+Autonomous driving
+Object detection, lane and speed decisions
+No time to wait for a round trip to the cloud
+Wearable health
+Tracking heart rate, rhythm and blood pressure
+Health data is sensitive, battery is limited
+Industrial IoT
+Predictive maintenance, line monitoring
+Bandwidth is expensive, the line must not stop
+Smart home
+Thermostats, cameras, automation
+Video and audio from inside the home shouldn't leave it
+Smart farming
+Optimising irrigation and fertilising
+Weak connectivity in the field
+Smartphones
+Voice assistant, photo processing, personal search
+Instant response, personal data
+There is a legal upside too: when data never leaves the device, many of the questions raised by the GDPR (or KVKK, its Turkish counterpart) get simpler as early as the design stage.
+The most interesting addition to this list in the past year, to me, is multimodal search. Small embedding models that put text, images, audio and video into the same vector space make it possible to index and query everything on the device, from your photo gallery to meeting recordings. Add a small language model and you get a RAG (retrieval-augmented generation) pipeline that runs entirely locally:
+Cloud Only the first model download
+On the device
+Indexing once, in the background
+Photos, documents, audio, video
+Embedding model
+Local vector index
+Query instant
+The user's question
+Same embedding model
+Similarity search in the index
+Small language model retrieved content + question
+Answer
+Indexing happens once, in the background. At query time the same embedding model turns the question into a vector, and the local language model uses the retrieved content as context; the network is only needed for the first model download.
+Easy on paper, hard in the field
+In benchmark tables everything looks fine; the real problems start when the model reaches real devices and real users.
+Device diversity. Same model, same framework, different phone: in one measurement cited in the survey, ResNet50 on PyTorch Mobile takes 333 ms on a Galaxy S10e and 1,260 ms on an Oppo R17. That's roughly a fourfold difference. The number you measure on a flagship doesn't tell you what your average user will experience.
+Energy and heat. The battery is the most underestimated constraint of on-device AI. A model working through thousands of files in the background drains the charge and heats the device until it slows itself down (thermal throttling). Simple scheduling decisions, like doing the work while the phone is charging and idle, often make more difference than the model itself.
+Updates and maintenance. In the cloud you change the model once; on devices, dozens of different versions keep living in the field. Embedding-based systems make it harder still: vectors from different models aren't compatible with each other, so when the model changes, the user's entire index has to be rebuilt from scratch.
+The cost in accuracy. Every compression technique gives something up. Even when average accuracy holds, you need to look at which examples you're losing. For languages that are less represented in training data, Turkish among them, testing on your own data is the only way to avoid surprises.
+Security. Keeping data on the device is good for privacy, but it isn't a guarantee on its own: the device can be stolen, malware can get in, and the weights of a model shipped inside an app can be extracted. In the literature, trusted execution environments (TEEs), homomorphic encryption and federated learning are the main approaches to closing these gaps.
+Small models still make things up. On the generative side, small language models hallucinate more easily than their bigger cousins. A good retrieval layer reduces that risk but doesn't remove it. This is exactly what I meant at the start about models making things up less often.
+The next few years: trends I'm watching
+The change I'm most looking forward to is foundation models getting smaller. The idea of pre-training a large model on broad data and then adapting it to a specific task with fine-tuning is now coming down to device scale. It's also why I expect a wave of apps built for specific tasks: the large model carries the general knowledge, and the small one on the device only has to do its own job well.
+Hybrid architectures are maturing as well. 5G and whatever follows it make the split of work between device and cloud more flexible. When the device does the first pass and sends only what's needed, latency, bandwidth and cost all drop at once.
+The hardest of these, I think, is learning on the device. Today most systems only run inference locally; training still happens in the cloud. Models that adapt to a user's habits on the device itself, along with federated learning, look like the next step, but given the memory and energy limits it's a much harder problem than inference.
+Two debates are also getting louder. One is about energy: efficient models and low-power accelerators are now discussed not just for battery life but for the power data centres consume, and an architecture where not every query goes to a data centre has the stronger hand there. The other is about oversight. Bias and explainability in small models have become a research area of their own, and a model running on the user's device is harder to audit. Testing and transparency have to be designed in from the start rather than added later.
+When AI turns from a service into software
+Nobody thinks of SQLite as a "service". It runs on almost every phone and in almost every browser, yet nobody gets an API key for it, pays a bill for it or wonders where their data goes. It's just an ordinary component that ships inside the app.
+AI models reaching the same place doesn't seem far off to me, and academia is looking in the same direction. The "Mobile Foundation Model as Firmware" paper, published at MobiCom 2024, proposes treating the foundation model as an infrastructure layer built into the device, rather than something every app packages separately. The maths changes for developers too: the inference cost moves to the user's device, and the per-token bill goes away.
+For me this is the most concrete form the decentralised AI debate takes: the model's weights are open, and the hardware it runs on is in the user's pocket. Once generative models are reliable enough, saying "my app has AI in it" will sound as ordinary as "my app has a database" does today. Until then, my advice is to pick a small, specific problem and start getting to know these tools now.
+Frequently asked questions
+What is on-device AI?
+It means an AI model runs inference directly on a phone, computer, car or IoT device without sending the data to the cloud. Its defining traits are low latency, the ability to work within limited resources, and data that stays local.
+Is edge AI the same as on-device AI?
+Close, but not the same. Edge AI is the broader umbrella for moving processing to any point near the data source (edge servers, gateways, devices); on-device AI describes the case where the work happens directly on the end user's device.
+How do you fit an AI model on a device?
+Usually by combining several techniques: quantization, pruning, knowledge distillation and efficient architecture design. A suitable inference framework and hardware accelerators such as an NPU complete the picture.
+Can a large language model run on a phone?
+Small language models can. Models in the 1 to 3 billion parameter range run on current phones with quantization, but speed, battery use and answer quality vary a lot from device to device.
+Does on-device AI guarantee privacy?
+Not on its own. Keeping data on the device lowers the risk, but device security, protecting the model and how the app stores data still have to be dealt with separately.
+Sources and further reading
+Wang, X. et al. (2025). Empowering Edge Intelligence: A Comprehensive Survey on On-Device AI Models. ACM Computing Surveys. arXiv:2503.06027
+Luo, C. et al. (2020). Comparison and Benchmarking of AI Models and Frameworks on Mobile Devices. arXiv:2005.05085
+Yuan, J. et al. (2024). Mobile Foundation Model as Firmware. MobiCom 2024.
+Google DeepMind (6 October 2026). EmbeddingGemma 2 announcement and model card.
 
 ---
 
@@ -814,7 +1115,7 @@ Selbstkontrolle: jedes Ergebnis prüfen, etwa gegen ein Schema oder einen Test, 
 Nimm eine Reiseanfrage. Ein generativer Assistent schlägt ein paar Flüge vor. Ein Agent sucht Flüge, prüft die Visabestimmungen, gleicht die Optionen mit deinem Kalender ab, bucht das Ticket nach deiner Bestätigung und bucht dich um, wenn der Flug ausfällt.
 Der Preis im Betrieb
 Diese zusätzlichen Fähigkeiten gibt es nicht umsonst. Die Tabelle fasst zusammen, was sich typischerweise ändert. Die genauen Werte hängen vom Modell und von der Aufgabe ab.
-Generative KI Agentic AI
+Generative KIAgentic AI
 Latenz
 Ein Modellaufruf, meist ein bis zwei Sekunden
 Mehrere Aufrufe in einer Schleife, oft 5 bis 30 Sekunden oder mehr
@@ -927,7 +1228,7 @@ Kamerabewegung herausrechnen. Bewegt sich die Kamera, schätzt man die Bewegung 
 Maßstab einbringen. Nutze, was verfügbar ist: eine bekannte Objektgröße, die Höhe der Kamera über der Straße, Fluchtpunktgeometrie oder ein metrisches Tiefenmodell.
 Ergebnis glätten. Geschwindigkeiten aus einzelnen Bildpaaren sind verrauscht. Passe eine glatte Bahn an oder mittle über ein Zeitfenster.
 Welcher Ansatz wann?
-Technik Funktioniert am besten, wenn Typisches Versagen
+TechnikFunktioniert am besten, wennTypisches Versagen
 Structure from Motion
 die Kamera sich bewegt und die Szene viel Textur hat
 Reine Drehung, kaum Parallaxe, strukturlose Flächen
@@ -1097,7 +1398,7 @@ Planungsagenten nehmen ein Ziel mit vielen Schritten und legen den Weg fest: ein
 Hier arbeiten mehrere Agenten mit unterschiedlichen Rollen zusammen und stimmen sich über Nachrichten oder einen gemeinsamen Speicher ab. Denk an ein Rechercheteam, in dem ein Agent sucht, einer liest und einer schreibt, oder an eine Gruppe von Coding-Agenten, die ein Feature unter sich aufteilen. CrewAI und AutoGen sind die üblichen Einstiegspunkte. Das skaliert gut für große Aufgaben, doch dann wird die Koordination selbst zum schwierigen Teil. Ohne klare Rollen und eine Regel, wann Schluss ist, drehen sich Agenten im Kreis, machen doppelte Arbeit oder entfernen sich vom ursprünglichen Ziel.
 Die Bausteine eines minimalen Agenten
 Egal welche Art du baust, es tauchen immer dieselben Bausteine auf. Die Tabelle zeigt sie mit einigen verbreiteten Optionen. Das ist keine Empfehlungsliste, sondern eine Landkarte.
-Baustein Aufgabe Verbreitete Optionen
+BausteinAufgabeVerbreitete Optionen
 Sprachmodell
 Schlussfolgern und Text erzeugen
 Modelle von OpenAI, Anthropic, Google oder Mistral oder Open-Weight-Modelle, die du selbst betreibst
@@ -1133,7 +1434,7 @@ Kontrolliere die Werkzeuge. Gib jedem Werkzeug ausdrückliche Berechtigungen und
 Teste zuerst in einer Simulation. Lass den Agenten gegen nachgebildete Werkzeuge und aufgezeichnete Szenarien laufen, bevor er echten Systemen nahekommt.
 Framework oder eigener Code?
 Früher oder später musst du entscheiden, ob du bei einem High-Level-Framework wie LangChain oder AutoGen bleibst oder die Schicht für das Werkzeug-Routing selbst schreibst. Beides ist vernünftig, es kostet nur unterschiedliche Dinge.
-Framework Eigener Router
+FrameworkEigener Router
 Einstieg
 Schnell; die meisten Wrapper gibt es schon
 Langsamer; Zustandsverwaltung und Schemas schreibst du selbst
@@ -1320,7 +1621,7 @@ Planner agents take a goal with many steps and work out the route: coordinating 
 Here several agents with different roles work together, coordinated through messages or shared memory. Think of a research team where one agent searches, one reads and one writes, or a group of coding agents splitting up a feature. CrewAI and AutoGen are the usual starting points. The approach scales well to big tasks, but coordination becomes the hard part. Without clear roles and a rule for when to stop, agents loop, duplicate each other's work or drift away from the original goal.
 The parts of a minimal agent
 Whichever type you build, the same building blocks show up. The table lists them with some common options. It isn't a list of recommendations, just a map of the territory.
-Part What it does Common options
+PartWhat it doesCommon options
 Language model
 Reasoning and text generation
 Models from OpenAI, Anthropic, Google or Mistral, or open-weight models you host yourself
@@ -1356,7 +1657,7 @@ Govern the tools. Give every tool explicit permissions and log every call.
 Test in simulation first. Run the agent against mocked tools and recorded scenarios before it gets anywhere near real systems.
 Framework or your own code?
 Sooner or later you'll have to decide whether to stay on a high-level framework such as LangChain or AutoGen, or to write the tool-routing layer yourself. Both are reasonable choices; they just cost different things.
-Framework Your own router
+FrameworkYour own router
 Getting started
 Fast; most of the wrappers already exist
 Slower; you write the state handling and schemas yourself
@@ -1399,7 +1700,7 @@ Planlayıcı ajanlar çok adımlı bir hedefi alıp izlenecek yolu belirler: bir
 Burada farklı rollere sahip birkaç ajan, mesajlar ya da ortak bir bellek üzerinden koordine olarak birlikte çalışır. Bir ajanın arama yaptığı, birinin okuduğu, birinin de yazdığı bir araştırma ekibini ya da bir özelliği aralarında paylaşan bir grup kodlama ajanını düşünün. Başlangıç noktası genellikle CrewAI ve AutoGen olur. Bu yaklaşım büyük görevlere iyi ölçeklenir ama asıl zor kısım koordinasyonun kendisi hâline gelir. Net roller ve ne zaman durulacağına dair bir kural yoksa ajanlar döngüye girer, birbirinin işini tekrarlar ya da asıl hedeften uzaklaşır.
 En basit ajanın parçaları
 Hangi türü kurarsanız kurun, karşınıza aynı yapı taşları çıkar. Tablo bunları bazı yaygın seçeneklerle birlikte listeliyor. Bir öneri listesi değil, yalnızca arazinin haritası.
-Parça Ne işe yarar? Yaygın seçenekler
+ParçaNe işe yarar?Yaygın seçenekler
 Dil modeli
 Akıl yürütme ve metin üretimi
 OpenAI, Anthropic, Google ya da Mistral modelleri veya kendi sunucunuzda çalıştırdığınız açık ağırlıklı modeller
@@ -1435,7 +1736,7 @@ Araçları denetleyin. Her araca açık yetkiler tanımlayın ve her çağrıyı
 Önce simülasyonda test edin. Ajanı gerçek sistemlere yaklaştırmadan önce taklit araçlarla ve kayıtlı senaryolarla çalıştırın.
 Framework mü, kendi kodunuz mu?
 Er ya da geç LangChain ya da AutoGen gibi üst seviye bir framework'te mi kalacağınıza, yoksa araç yönlendirme katmanını kendiniz mi yazacağınıza karar vermeniz gerekecek. İkisi de makul tercihler; yalnızca farklı bedelleri var.
-Framework Kendi yönlendiriciniz
+FrameworkKendi yönlendiriciniz
 Başlangıç hızı
 Hızlı; sarmalayıcıların çoğu zaten hazır
 Daha yavaş; durum yönetimini ve şemaları kendiniz yazarsınız
@@ -1675,7 +1976,7 @@ Reflection: checking each result, against a schema or a test for example, and ch
 Take a travel request. A generative assistant suggests a few flights. An agent searches for flights, checks the visa requirements, compares the options with your calendar, books the ticket once you confirm, and rebooks you if the flight gets cancelled.
 The trade-offs in production
 None of that extra capability comes free. The table summarises what typically changes when you move from one to the other. Exact figures depend on the model and the task.
-Generative AI Agentic AI
+Generative AIAgentic AI
 Latency
 One model call, usually a second or two
 Several calls in a loop, often 5 to 30 seconds or more
@@ -1734,7 +2035,7 @@ Bellek: o anki oturumun durumu ve kullanıcı tercihleri gibi daha kalıcı bilg
 Bir seyahat isteğini düşünün. Üretken bir asistan birkaç uçuş önerir. Bir ajan ise uçuşları arar, vize gerekliliklerini kontrol eder, seçenekleri takviminizle karşılaştırır, siz onay verince bileti alır ve uçuş iptal olursa sizi başka bir uçuşa aktarır.
 Üretim ortamında ödenen bedel
 Bu ek yeteneklerin hiçbiri bedava değil. Aşağıdaki tablo, birinden diğerine geçerken genellikle neyin değiştiğini özetliyor. Kesin rakamlar modele ve göreve göre değişir.
-Üretken Yapay Zekâ Agentic AI
+Üretken Yapay ZekâAgentic AI
 Gecikme
 Tek model çağrısı, genellikle bir iki saniye
 Döngü içinde birkaç çağrı, çoğu zaman 5 ila 30 saniye ya da daha fazla
@@ -1791,7 +2092,7 @@ Learning and writing. Writing assistants and language apps give instant feedback
 Logistics and farming. Carriers forecast demand and plan routes; farmers use drone images and models to spot crop disease before it spreads.
 What it costs to put a model in an app
 Using machine learning in everyday products is mostly a matter of trade-offs, and you feel them as a user even when you can't see them. The first is speed. A model running on your phone answers in a few milliseconds and your data never leaves the device, but the model has to be small. A large model in the cloud is far more capable, yet every request travels over the network, which adds a noticeable delay and means your data ends up on someone else's server.
-Where the model runs Typical delay Privacy Main limitation
+Where the model runsTypical delayPrivacyMain limitation
 On the device (Core ML, ONNX Runtime)
 Under 10 ms
 Data stays on the phone
@@ -1843,7 +2144,7 @@ Ulaşım. Navigasyon uygulamaları trafiği öngörüyor, araç çağırma uygul
 Lojistik ve tarım. Kargo şirketleri talebi öngörüp rota planlıyor; çiftçiler drone görüntüleri ve modeller sayesinde ürün hastalıklarını yayılmadan fark ediyor.
 Bir modeli uygulamaya koymanın bedeli
 Makine öğrenimini gündelik ürünlerde kullanmak büyük ölçüde bir ödünleşim meselesi ve kullanıcı olarak bunları göremeseniz de hissedersiniz. İlki hız. Telefonunuzda çalışan bir model birkaç milisaniyede cevap verir ve verileriniz cihazdan hiç çıkmaz, ama modelin küçük olması gerekir. Buluttaki büyük bir model çok daha yeteneklidir; fakat her istek ağ üzerinden gider, bu da fark edilir bir gecikme ekler ve verilerinizin başkasının sunucusuna gitmesi demektir.
-Model nerede çalışıyor? Tipik gecikme Gizlilik Başlıca sınır
+Model nerede çalışıyor?Tipik gecikmeGizlilikBaşlıca sınır
 Cihazın üzerinde (Core ML, ONNX Runtime)
 10 ms'nin altında
 Veri telefonda kalır
@@ -2483,7 +2784,7 @@ Remove camera motion. If the camera moves, estimate the background motion with o
 Bring in scale. Use whatever you have: a known object size, the camera's height above the road, vanishing-point geometry, or a metric depth model.
 Smooth the result. Speeds computed from single pairs of frames are noisy, so fit a smooth trajectory or average over a window.
 Which approach when?
-Technique Works best when Typical failure
+TechniqueWorks best whenTypical failure
 Structure from Motion
 The camera moves and the scene has plenty of texture
 Pure rotation, very little parallax, blank surfaces
@@ -2547,7 +2848,7 @@ Kamera hareketini çıkar. Kamera hareket ediyorsa arka planın hareketini optik
 Ölçeği ekle. Elinizde ne varsa kullanın: bilinen bir nesne boyutu, kameranın yoldan yüksekliği, kaçış noktası geometrisi ya da metrik bir derinlik modeli.
 Sonucu yumuşat. Tek kare çiftlerinden hesaplanan hızlar gürültülüdür; düzgün bir yörünge oturtun ya da bir pencere üzerinden ortalama alın.
 Hangi yaklaşım ne zaman?
-Teknik En iyi çalıştığı durum Tipik başarısızlık
+TeknikEn iyi çalıştığı durumTipik başarısızlık
 Structure from Motion
 Kamera hareket ediyor ve sahnede bol doku var
 Yalnızca dönme hareketi, çok az paralaks, düz yüzeyler
