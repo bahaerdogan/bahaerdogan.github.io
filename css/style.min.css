@@ -669,3 +669,42 @@ footer .credits a{color:var(--brand-ink)}
 .about-profile__header{flex-direction:column;text-align:center}
 .about-links{grid-template-columns:1fr}
 }
+.article-diagram{margin:var(--space-md) 0;padding:var(--space-sm);background:var(--surface-sunken);border:1px solid var(--border);border-radius:var(--radius-md);color:var(--text);line-height:1.35}
+.article-diagram figcaption{margin-top:var(--space-sm);font-size:.9rem;line-height:1.55;color:var(--text-muted)}
+.article-diagram strong{color:var(--text)}
+.article-diagram .dg-kicker{display:block;margin-bottom:.2rem;font-size:.7rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-subtle)}
+.article-diagram .dg-note{display:block;margin-top:.15rem;font-size:.78rem;font-weight:400;color:var(--text-muted)}
+.dg-stack__goal{padding:.85rem 1rem;text-align:center;background:var(--brand-wash);border:1px solid var(--brand);border-radius:var(--radius-sm)}
+.dg-stack__goal strong{font-size:1.05rem}
+.dg-stack__pillars{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.6rem;margin:.6rem 0}
+.dg-pillar{padding:.8rem .9rem;background:var(--surface);border:1px solid var(--border-strong);border-top:4px solid var(--brand);border-radius:var(--radius-sm)}
+.dg-pillar>strong{display:block;margin-bottom:.35rem;font-size:1.05rem}
+.article-diagram .dg-pillar ul{margin:0;padding:0;list-style:none}
+.article-diagram .dg-pillar li{padding:.3rem 0;font-size:.85rem;color:var(--text-muted);border-top:1px dashed var(--border)}
+.article-diagram .dg-pillar li:first-child{border-top:0}
+.dg-stack__base{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.4rem .75rem;padding:.75rem 1rem;background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--radius-sm)}
+.dg-stack__base .dg-kicker{margin:0}
+.dg-chips{display:flex;flex-wrap:wrap;justify-content:center;gap:.4rem}
+.dg-chips>span{padding:.2rem .7rem;font-size:.82rem;background:var(--surface-sunken);border:1px solid var(--border);border-radius:var(--radius-pill)}
+@media (max-width:575.98px){
+.dg-stack__pillars{grid-template-columns:1fr}
+.article-diagram .dg-pillar ul{display:flex;flex-wrap:wrap;gap:.1rem 1rem}
+.article-diagram .dg-pillar li{padding:.1rem 0;border-top:0}
+}
+.dg-rag__cloud{position:relative;width:max-content;max-width:100%;margin:0 auto 1.4rem;padding:.5rem .9rem;font-size:.85rem;text-align:center;background:var(--surface);border:1px dashed var(--border-strong);border-radius:var(--radius-sm)}
+.dg-rag__cloud::after{content:"";position:absolute;left:50%;bottom:calc(-1.4rem - 1px);height:1.4rem;border-left:2px dashed var(--border-strong)}
+.dg-rag__device{position:relative;display:grid;gap:1.1rem;padding:1.5rem 1rem 1rem;background:var(--surface);border:2px solid var(--brand);border-radius:var(--radius-md)}
+.dg-rag__device-label{position:absolute;top:-.75rem;left:1rem;padding:.1rem .65rem;font-size:.72rem;font-weight:600;color:var(--brand-contrast);background:var(--brand-ink);border-radius:var(--radius-pill)}
+.dg-lane__label{display:block;margin-bottom:.5rem;font-size:.85rem;font-weight:600;color:var(--text)}
+.dg-lane__label em{margin-left:.35rem;font-style:normal;font-weight:400;color:var(--text-subtle)}
+.article-diagram .dg-flow{display:grid;grid-template-columns:minmax(0,1fr);row-gap:1.4rem;margin:0;padding:0;list-style:none}
+.article-diagram .dg-node{position:relative;display:flex;flex-direction:column;justify-content:center;padding:.5rem .7rem;font-size:.85rem;font-weight:500;text-align:center;color:var(--text);background:var(--surface-sunken);border:1px solid var(--border-strong);border-radius:var(--radius-sm)}
+.article-diagram .dg-node+.dg-node::before{content:"↓";position:absolute;top:-1.4rem;left:0;right:0;line-height:1.4rem;color:var(--text-subtle)}
+.article-diagram .dg-node--model{background:var(--brand-wash);border-color:var(--brand)}
+.article-diagram .dg-node--store{background:var(--surface);border:1.5px dashed var(--brand-ink)}
+.article-diagram .dg-node--out{font-weight:600;color:var(--brand-contrast);background:var(--brand-ink);border-color:var(--brand-ink)}
+@media (min-width:992px){
+.article-diagram .dg-flow{grid-template-columns:repeat(5,minmax(0,1fr));column-gap:1.5rem}
+.article-diagram .dg-node{padding:.6rem .45rem;font-size:.8rem}
+.article-diagram .dg-node+.dg-node::before{content:"→";top:50%;left:-1.5rem;right:auto;width:1.5rem;text-align:center;transform:translateY(-50%)}
+}

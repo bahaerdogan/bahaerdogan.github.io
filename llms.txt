@@ -10,6 +10,7 @@
 
 ## Publications & Engineering Notes
 
+- [On-Device AI: Yapay Zeka Servisten Yazılıma Dönüşürken](https://bahaerdogan.com/on-device-ai-tr.html) — On-device yapay zeka neden önemli? Model sıkıştırma, donanım, gizlilik ve sahadaki gerçek sorunlara bir mühendis gözüyle kapsamlı bakış.
 - [Why Building an AI Startup Is So Hard: Production Reality](https://bahaerdogan.com/WhyBuildingAiStartupIsHard.html) — Why do most AI startups fail in production? An engineering look at vibe coding, inference unit economics, RAG architecture, and real-world system design.
 - [Bir Yapay Zeka Start-up’ı Oluşturmak Neden Zor?](https://bahaerdogan.com/WhyBuildingAiStartupIsHardTR.html) — Bir yapay zekâ start-up’ı kurmak neden zor? Vibe coding yanılgısı, birim maliyetler, sistem mimarisi ve üretim ortamındaki mühendislik gerçekleri.
 - [Die Rolle der Künstlichen Intelligenz in Verteidigungstechnologien](https://bahaerdogan.com/AI-DefenseDE.html) — Verständlicher Überblick über den Einsatz von KI in modernen Verteidigungs- und Sicherheitssystemen – Chancen, Risiken, Perspektiven.

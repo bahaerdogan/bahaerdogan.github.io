@@ -93,6 +93,7 @@ const CATEGORY_OF_GROUP = {
   'whataimeanstoyou': 'AI',
   'ai-and-human-job-competition': 'AI',
   'ai-defense': 'AI',
+  'on-device-ai': 'AI',
   // Technology
   'distancecalculatingmethods': 'Technology',
   'algorithmsexplained': 'Technology',
