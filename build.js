@@ -984,7 +984,7 @@ async function restorePhotoHero() {
 
         const sliderText = root.querySelector('.text-slider-items')?.text
             || root.querySelector('.hero-modern__roles')?.getAttribute('data-roles')
-            || 'Computer Engineer,AI R&D Specialist,Problem Solver';
+            || 'Computer Engineer,AI/ML Engineer,Problem Solver';
         const roles = sliderText.split(',').map((r) => r.trim()).filter(Boolean);
 
         const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
@@ -1211,7 +1211,7 @@ async function generateRSS() {
         '<?xml version="1.0" encoding="UTF-8"?>',
         '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">',
         '  <channel>',
-        '    <title>Baha Erdoğan — Engineering Notes</title>',
+        '    <title>Baha Erdoğan: Engineering Notes</title>',
         `    <link>${BASE_URL}/</link>`,
         `    <atom:link href="${BASE_URL}/feed.xml" rel="self" type="application/rss+xml" />`,
         '    <description>Articles on AI, computer vision, engineering and technology.</description>',
@@ -1505,7 +1505,7 @@ async function generateLlmsTxt() {
 
     const header = [
         '# Baha Erdoğan',
-        '> Computer Engineer & AI R&D Specialist at Huawei R&D.',
+        '> AI/ML engineer building applied AI systems, from computer vision to LLM tooling. Writes about AI, technology, history and economics.',
         '',
         `- Website: ${BASE_URL}`,
         '- Author: Baha Erdoğan',
@@ -1521,7 +1521,8 @@ async function generateLlmsTxt() {
         ...header,
         '## Publications & Engineering Notes',
         '',
-        ...articles.map(a => `- [${a.title}](${a.url}) — ${a.description || 'No description available.'}`),
+        // "- [name](url): notes" is the list format the llms.txt proposal specifies.
+        ...articles.map(a => `- [${a.title}](${a.url}): ${a.description || 'No description available.'}`),
         ''
     ].join('\n');
     await writeFileAsync('llms.txt', index, 'utf8');
@@ -1734,11 +1735,13 @@ async function removeDeadAnchors() {
  */
 async function normaliseNavigation() {
     const LABELS = {
-        en: ['Home', 'About', 'Blog', 'Experience', 'Projects', 'Voluntary', 'Contact'],
-        tr: ['Ana Sayfa', 'Hakkında', 'Blog', 'Deneyim', 'Projeler', 'Gönüllülük', 'İletişim'],
-        de: ['Startseite', 'Über mich', 'Blog', 'Erfahrung', 'Projekte', 'Ehrenamt', 'Kontakt'],
+        en: ['Home', 'About', 'Blog', 'Contact'],
+        tr: ['Ana Sayfa', 'Hakkında', 'Blog', 'İletişim'],
+        de: ['Startseite', 'Über mich', 'Blog', 'Kontakt'],
     };
-    const SECTIONS = ['home', 'about', 'blog', 'experience', 'projects', 'voluntary', 'contact'];
+    // The CV sections (experience, projects, skills, education, voluntary) were
+    // replaced by a career summary in #about, so they no longer get nav entries.
+    const SECTIONS = ['home', 'about', 'blog', 'contact'];
 
     // Operated on the raw string, not a parsed tree: node-html-parser re-serialises
     // the switcher's inline SVG (`<circle/>` becomes `<circle></circle>`), so the

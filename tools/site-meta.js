@@ -43,8 +43,9 @@ const PERSON = {
   givenName: 'Baha',
   familyName: 'Erdoğan',
   url: BASE_URL,
-  jobTitle: 'Computer Engineer & AI R&D Specialist',
-  worksFor: { '@type': 'Organization', name: 'Huawei R&D', url: 'https://www.huawei.com' },
+  jobTitle: 'AI/ML Engineer',
+  worksFor: { '@type': 'Organization', name: 'AkademiSa Danışmanlık' },
+  alumniOf: { '@type': 'CollegeOrUniversity', name: 'Bahçeşehir University' },
   sameAs: [
     'https://www.linkedin.com/in/bahaerdogan/',
     'https://github.com/bahaerdogan',

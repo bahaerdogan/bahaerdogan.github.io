@@ -93,7 +93,7 @@ const CHECKS = [
   ['M1', 'llms-full.txt differs from llms.txt',
     () => read('llms.txt') !== read('llms-full.txt') && read('llms-full.txt').length > 50000, true],
   ['M1b', 'llms.txt entries have descriptions',
-    () => read('llms.txt').split('\n').filter((l) => l.startsWith('- [') && !l.includes(' — ')).length, 0],
+    () => read('llms.txt').split('\n').filter((l) => l.startsWith('- [') && !l.includes('): ')).length, 0],
 
   // The real invariant is that every lastmod is a *commit* date, not a clock
   // reading. "More than one distinct value" was only a proxy, and it is wrong:
